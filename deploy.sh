@@ -28,7 +28,7 @@ cp -r ../javachen-blog/_site/* .
 
 git add --all ./*
 git commit -m "$msg"
-git push origin gitcafe-pages
+git push origin master
 
 echo `date`
 exit 0
