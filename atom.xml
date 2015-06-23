@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-06-23T15:03:39+08:00</updated>
+  <updated>2015-06-23T19:41:30+08:00</updated>
   <id></id>
   <author>
     <name>Junez</name>
   </author>
-
   
   <entry>
     <title>Scala中的对象</title>
