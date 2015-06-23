@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>RHEL系统安装MySql - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2014/04/06/install-mysql-on-rhel-system.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2014/04/04/introduction-to-broadleaf-commerce.html" title="BroadleafCommerce介绍"><i class="fa fa-angle-double-left"></i>&nbsp;BroadleafCommerce介绍</a></li>
+                
+                
+                <li class="next"><a href="/2014/04/06/mysql-config-for-master-slave-replication.html" title="RHEL系统安装MySQL主备环境">RHEL系统安装MySQL主备环境&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> RHEL系统安装MySql  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2014.04.06 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <h1 id="环境说明">环境说明</h1>
+
+<ul>
+<li>操作系统:linux6.4</li>
+<li>MySql版本：percona 5.6.14</li>
+<li>rpm包下载地址：<a href="http://www.percona.com/downloads/Percona-Server-5.6/LATEST/RPM/rhel6/x86_64">http://www.percona.com/downloads/Percona-Server-5.6/LATEST/RPM/rhel6/x86_64</a></li>
+</ul>
+
+<h1 id="安装步骤">安装步骤</h1>
+
+<h2 id="1.-安装所需要的rpm包">1. 安装所需要的rpm包</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">rpm -ivh Percona-Server-shared-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
+rpm -ivh Percona-Server-client-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
+rpm -ivh Percona-Server-server-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
+</code></pre></div>
+<p><strong>注意:</strong></p>
+
+<p>第三个包依赖前2个包，第三个包安装时可能会报错，需要将系统中原先的mysql-libs卸载（<code class="prettyprint">yum remove mysql-libs</code>）</p>
+
+<p>没有yum使用<code class="prettyprint">rpm -e --nodeps</code>的方式卸载安装包，可以使用<code class="prettyprint">rpm -qa | grep mysql</code>的方式查看安装的包</p>
+
+<h2 id="2.-启动mysql">2. 启动mysql</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">#service mysql start 
+</code></pre></div>
+<p>停止：stop 重启：restart，查看状态：status</p>
+
+<h2 id="3.-设置远程登录">3. 设置远程登录</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">#mysql
+mysql&gt; grant all PRIVILEGES on test.* to test@&#39;%&#39; identified by &#39;test&#39;;
+mysql&gt;flush privileges;
+</code></pre></div>
+<p>将test数据库的权限授予test用户，登录密码是test，%代表所有ip。</p>
+
+<h2 id="4.-配置文件">4. 配置文件</h2>
+
+<p>rpm包默认配置启动文件模板<code class="prettyprint">/usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf</code>，可以将他拷贝到<code class="prettyprint">/etc/my.cnf</code>作为配置文件使用。</p>
+
+<p>配置文件修改举例：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
+$ vim /etc/my.cnf           #将需要修改的参数做如下填写
+[mysqld]
+# These are commonly set, remove the # and set as required.
+# basedir = .....
+# datadir = .....
+# port = .....
+# server_id = .....
+# socket = .....
+innodb_file_format=barracuda
+innodb_file_per_table=true
+innodb_large_prefix=on
+</code></pre></div>
+<p>上面参数作用，可以解决建索引时<code class="prettyprint">Specified key was too long; max key length is 767 bytes</code>的报错，拓展支持的最大索引长度，如使用上述功能建表时加<code class="prettyprint">ROW_FORMAT=DYNAMIC</code></p>
+
+<p>数据目录默认：<code class="prettyprint">/var/lib/mysql/</code></p>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2014/04/06/install-mysql-on-rhel-system.html">http://blog.javachen.com/2014/04/06/install-mysql-on-rhel-system.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2014/04/06/install-mysql-on-rhel-system.html">RHEL系统安装MySql</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#database">database</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#mysql">mysql</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2014/04/06/install-mysql-on-rhel-system.html" data-url="http://blog.javachen.com/2014/04/06/install-mysql-on-rhel-system.html" data-title="RHEL系统安装MySql"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center">Copyright <i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2014/04/06/install-mysql-on-rhel-system.html'
+      });
+      </script>
+  </body>
+</html>

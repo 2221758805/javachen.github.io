@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>手动安装Cloudera Hive CDH - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2013/03/24/manual-install-Cloudera-hive-CDH.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2013/03/24/manual-install-Cloudera-hbase-CDH.html" title="手动安装Cloudera HBase CDH"><i class="fa fa-angle-double-left"></i>&nbsp;手动安装Cloudera HBase CDH</a></li>
+                
+                
+                <li class="next"><a href="/2013/03/29/install-impala.html" title="安装Impala过程">安装Impala过程&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> 手动安装Cloudera Hive CDH  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2013.03.24 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>本文主要记录手动安装Cloudera Hive集群过程，环境设置及Hadoop安装过程见<a href="/2013/03/24/manual-install-Cloudera-Hadoop-CDH.html">手动安装Cloudera Hadoop CDH</a>,参考这篇文章，hadoop各个组件和jdk版本如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    hadoop-2.0.0-cdh4.6.0
+    hbase-0.94.15-cdh4.6.0
+    hive-0.10.0-cdh4.6.0
+    jdk1.6.0_38
+</code></pre></div>
+<p>hadoop各组件可以在<a href="http://archive.cloudera.com/cdh4/cdh/4/">这里</a>下载。</p>
+
+<p>集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    192.168.0.1        desktop1     NameNode、Hive、ResourceManager、impala
+    192.168.0.2        desktop2     SSNameNode
+    192.168.0.3        desktop3     DataNode、HBase、NodeManager、impala
+    192.168.0.4        desktop4     DataNode、HBase、NodeManager、impala
+    192.168.0.5        desktop5     DataNode、HBase、NodeManager、impala
+    192.168.0.6        desktop6     DataNode、HBase、NodeManager、impala
+    192.168.0.7        desktop7     DataNode、HBase、NodeManager、impala
+</code></pre></div>
+<h1 id="安装hive">安装hive</h1>
+
+<p>hive安装在desktop1上，<strong>注意</strong>：hive默认是使用derby数据库保存元数据，这里替换为postgresql，下面会提到postgresql的安装说明，并且需要拷贝postgres的jdbc jar文件导hive的lib目录下。</p>
+
+<p>上传<code class="prettyprint">hive-0.10.0-cdh4.6.0.tar</code>到desktop1的<code class="prettyprint">/opt</code>，并解压缩。</p>
+
+<h1 id="安装postgres">安装postgres</h1>
+
+<h2 id="创建数据库">创建数据库</h2>
+
+<p>这里创建数据库metastore并创建hiveuser用户，其密码为redhat。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    bash# sudo -u postgres psql
+    bash$ psql
+    postgres=# CREATE USER hiveuser WITH PASSWORD &#39;redhat&#39;;
+    postgres=# CREATE DATABASE metastore owner=hiveuser;
+    postgres=# GRANT ALL privileges ON DATABASE metastore TO hiveuser;
+    postgres=# \q;
+</code></pre></div>
+<h2 id="初始化数据库">初始化数据库</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">psql  -U hiveuser -d metastore
+ \i /opt/hive-0.10.0-cdh4.6.0/scripts/metastore/upgrade/postgres/hive-schema-0.10.0.postgres.sql 
+</code></pre></div>
+<p>编辑postgresql配置文件(<code class="prettyprint">/opt/PostgreSQL/9.1/data/pg_hba.conf</code>)，修改访问权限</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">host    all             all             0.0.0.0/0            md5
+</code></pre></div>
+<p>修改postgresql.conf</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    standard_conforming_strings = of
+</code></pre></div>
+<h2 id="重起postgres">重起postgres</h2>
+
+<p>拷贝postgres的jdbc驱动到<code class="prettyprint">/opt/hive-0.10.0-cdh4.6.0/lib</code>目录。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">su -c &#39;/opt/PostgreSQL/9.1/bin/pg_ctl -D /opt/PostgreSQL/9.1/data restart&#39; postgres
+</code></pre></div>
+<h1 id="修改配置文件">修改配置文件</h1>
+
+<h2 id="hive-site.xml">hive-site.xml</h2>
+
+<p>注意修改下面配置文件中postgres数据库的密码，注意配置<code class="prettyprint">hive.aux.jars.path</code>，在hive集成hbase时候需要从该路径家在hbase的一些jar文件。</p>
+
+<p>hive-site.xml文件内容如下：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;configuration&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionURL<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>jdbc:postgresql://127.0.0.1/metastore<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionDriverName<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>org.postgresql.Driver<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionUserName<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>hiveuser<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionPassword<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>redhat<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+ <span class="nt">&lt;name&gt;</span>mapred.job.tracker<span class="nt">&lt;/name&gt;</span>
+ <span class="nt">&lt;value&gt;</span>desktop1:8031<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+ <span class="nt">&lt;name&gt;</span>mapreduce.framework.name<span class="nt">&lt;/name&gt;</span>
+ <span class="nt">&lt;value&gt;</span>yarn<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.aux.jars.path<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>file:///opt/hive-0.10.0-cdh4.6.0/lib/zookeeper-3.4.5-cdh4.6.0.jar,
+    file:///opt/hive-0.10.0-cdh4.6.0/lib/hive-hbase-handler-0.10.0-cdh4.6.0.jar,
+    file:///opt/hive-0.10.0-cdh4.6.0/lib/hbase-0.94.15-cdh4.6.0.jar,
+    file:///opt/hive-0.10.0-cdh4.6.0/lib/guava-11.0.2.jar<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.metastore.warehouse.dir<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>/opt/data/warehouse-${user.name}<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.exec.scratchdir<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>/opt/data/hive-${user.name}<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.querylog.location<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>/opt/data/querylog-${user.name}<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.support.concurrency<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.zookeeper.quorum<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>desktop3,desktop4,desktop5,desktop6,desktop7<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.hwi.listen.host<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>desktop1<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.hwi.listen.port<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>9999<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>hive.hwi.war.file<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>lib/hive-hwi-0.10.0-cdh4.6.0.war<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>
+<h2 id="环境变量">环境变量</h2>
+
+<p>参考<a href="/hadoop/2013/03/24/manual-install-Cloudera-Hadoop-CDH.html">手动安装Cloudera Hadoop CDH</a>中环境变量的设置。</p>
+
+<h2 id="启动hive">启动hive</h2>
+
+<p>在启动完之后，执行一些sql语句可能会提示错误，如何解决错误可以参考<a href="http://kicklinux.com/hive-deploy/">Hive安装与配置</a>。</p>
+
+<h2 id="hive与hbase集成">hive与hbase集成</h2>
+
+<p>在<code class="prettyprint">hive-site.xml</code>中配置<code class="prettyprint">hive.aux.jars.path</code>,在环境变量中配置hadoop、mapreduce的环境变量</p>
+
+<h1 id="异常说明">异常说明</h1>
+
+<h2 id="异常1：">异常1：</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">FAILED: Error in metadata: MetaException(message:org.apache.hadoop.hbase.ZooKeeperConnectionException: An error is preventing HBase from connecting to ZooKeeper
+</code></pre></div>
+<p>原因：hadoop配置文件没有zk</p>
+
+<h2 id="异常2">异常2</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">FAILED: Error in metadata: MetaException(message:Got exception: org.apache.hadoop.hive.metastore.api.MetaException javax.jdo.JDODataStoreException: Error executing JDOQL query &quot;SELECT &quot;THIS&quot;.&quot;TBL_NAME&quot; AS NUCORDER0 FROM &quot;TBLS&quot; &quot;THIS&quot; LEFT OUTER JOIN &quot;DBS&quot; &quot;THIS_DATABASE_NAME&quot; ON &quot;THIS&quot;.&quot;DB_ID&quot; = &quot;THIS_DATABASE_NAME&quot;.&quot;DB_ID&quot; WHERE &quot;THIS_DATABASE_NAME&quot;.&quot;NAME&quot; = ? AND (LOWER(&quot;THIS&quot;.&quot;TBL_NAME&quot;) LIKE ? ESCAPE &#39;\\&#39; ) ORDER BY NUCORDER0 &quot; : ERROR: invalid escape string 建议：Escape string must be empty or one character..
+</code></pre></div>
+<p>参考：<a href="https://issues.apache.org/jira/browse/HIVE-3994">https://issues.apache.org/jira/browse/HIVE-3994</a></p>
+
+<h2 id="异常3，以下语句没反应">异常3，以下语句没反应</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">select count(*) from hive_userinfo
+</code></pre></div>
+<h2 id="异常4">异常4</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">zookeeper.ClientCnxn (ClientCnxn.java:logStartConnect(966)) - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (无法定位登录配置)
+</code></pre></div>
+<p>原因：hive中没有设置zk</p>
+
+<h2 id="异常5">异常5</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase 中提示：WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+</code></pre></div>
+<p>原因：cloudera hadoop lib中没有hadoop的native jar</p>
+
+<h2 id="异常6">异常6</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: org/apache/hadoop/mapreduce/v2/app/MRAppMaster
+</code></pre></div>
+<p>原因：classpath没有配置正确，检查环境变量以及yarn的classpath</p>
+
+<h1 id="参考文章">参考文章</h1>
+
+<ul>
+<li><a href="http://kicklinux.com/hive-deploy/">Hive安装与配置</a></li>
+<li><a href="https://ccp.cloudera.com/display/CDH4DOC/Hive+Installation">Hive Installation</a></li>
+</ul>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2013/03/24/manual-install-Cloudera-hive-CDH.html">http://blog.javachen.com/2013/03/24/manual-install-Cloudera-hive-CDH.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2013/03/24/manual-install-Cloudera-hive-CDH.html">手动安装Cloudera Hive CDH</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#hive">hive</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#hadoop">hadoop</a>
+                          
+                            <a class="btn btn-default btn-xs" href="/tags.html#hive">hive</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2013/03/24/manual-install-Cloudera-hive-CDH.html" data-url="http://blog.javachen.com/2013/03/24/manual-install-Cloudera-hive-CDH.html" data-title="手动安装Cloudera Hive CDH"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center">Copyright <i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2013/03/24/manual-install-Cloudera-hive-CDH.html'
+      });
+      </script>
+  </body>
+</html>

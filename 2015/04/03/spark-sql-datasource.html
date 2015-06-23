@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Spark SQL中的数据源 - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2015/04/03/spark-sql-datasource.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/03/30/spark-test-in-local-mode.html" title="Spark本地模式运行"><i class="fa fa-angle-double-left"></i>&nbsp;Spark本地模式运行</a></li>
+                
+                
+                <li class="next"><a href="/2015/04/17/spark-mllib-collaborative-filtering.html" title="Spark MLlib中的协同过滤">Spark MLlib中的协同过滤&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Spark SQL中的数据源  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2015.04.03 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>Spark 支持通过 DataFrame 来操作大量的数据源，包括外部文件（如 json、avro、parquet、sequencefile 等等）、hive、关系数据库、cassandra 等等。</p>
+
+<p>本文测试环境为 Spark 1.3。</p>
+
+<h1 id="加载和保存文件">加载和保存文件</h1>
+
+<p>最简单的方式是调用 load 方法加载文件，默认的格式为 parquet，你可以修改 <code class="prettyprint">spark.sql.sources.default</code> 指定默认的格式：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">df</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;age&quot;</span><span class="o">).</span><span class="n">save</span><span class="o">(</span><span class="s">&quot;namesAndAges.parquet&quot;</span><span class="o">)</span>
+</code></pre></div>
+<p>你也可以收到指定数据源，使用全路径名称，如：<code class="prettyprint">org.apache.spark.sql.parquet</code>，对于内置的数据源，你也可以使用简称，如：<code class="prettyprint">json</code>、<code class="prettyprint">parquet</code>、<code class="prettyprint">jdbc</code>。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">df</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">&quot;people.json&quot;</span><span class="o">,</span> <span class="s">&quot;json&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;age&quot;</span><span class="o">).</span><span class="n">save</span><span class="o">(</span><span class="s">&quot;namesAndAges.parquet&quot;</span><span class="o">,</span> <span class="s">&quot;parquet&quot;</span><span class="o">)</span>
+</code></pre></div>
+<p>保存操作还可以指定保存模式，用于处理文件已经存在的情况下如何操作。</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Scala/Java</th>
+<th style="text-align: left">Python</th>
+<th style="text-align: left">含义</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">SaveMode.ErrorIfExists (default)</td>
+<td style="text-align: left">&quot;error&quot; (default)</td>
+<td style="text-align: left">如果存在，则报错</td>
+</tr>
+<tr>
+<td style="text-align: left">SaveMode.Append</td>
+<td style="text-align: left">&quot;append&quot;</td>
+<td style="text-align: left">追加模式</td>
+</tr>
+<tr>
+<td style="text-align: left">SaveMode.Overwrite</td>
+<td style="text-align: left">&quot;overwrite&quot;</td>
+<td style="text-align: left">覆盖模式</td>
+</tr>
+<tr>
+<td style="text-align: left">SaveMode.Ignore</td>
+<td style="text-align: left">&quot;ignore&quot;</td>
+<td style="text-align: left">忽略，类似 SQL 中的 <code class="prettyprint">CREATE TABLE IF NOT EXISTS</code></td>
+</tr>
+</tbody></table>
+
+<h1 id="parquet-数据源">Parquet 数据源</h1>
+
+<h2 id="加载数据">加载数据</h2>
+
+<p>Spark SQL 支持读写 Parquet文件。</p>
+
+<p>Scala:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// sqlContext from the previous example is used in this example.</span>
+<span class="c1">// This is used to implicitly convert an RDD to a DataFrame.</span>
+<span class="k">import</span> <span class="nn">sqlContext.implicits._</span>
+
+<span class="k">val</span> <span class="n">people</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Person</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span> <span class="c1">// An RDD of case class objects, from the previous example.</span>
+
+<span class="c1">// The RDD is implicitly converted to a DataFrame by implicits, allowing it to be stored using Parquet.</span>
+<span class="n">people</span><span class="o">.</span><span class="n">saveAsParquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">)</span>
+
+<span class="c1">// Read in the parquet file created above.  Parquet files are self-describing so the schema is preserved.</span>
+<span class="c1">// The result of loading a Parquet file is also a DataFrame.</span>
+<span class="k">val</span> <span class="n">parquetFile</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">parquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">)</span>
+
+<span class="c1">//Parquet files can also be registered as tables and then used in SQL statements.</span>
+<span class="n">parquetFile</span><span class="o">.</span><span class="n">registerTempTable</span><span class="o">(</span><span class="s">&quot;parquetFile&quot;</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">teenagers</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;SELECT name FROM parquetFile WHERE age &gt;= 13 AND age &lt;= 19&quot;</span><span class="o">)</span>
+<span class="n">teenagers</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">t</span> <span class="k">=&gt;</span> <span class="s">&quot;Name: &quot;</span> <span class="o">+</span> <span class="n">t</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="n">collect</span><span class="o">().</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div>
+<p>Java:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// sqlContext from the previous example is used in this example.</span>
+
+<span class="n">DataFrame</span> <span class="n">schemaPeople</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// The DataFrame from the previous example.</span>
+
+<span class="c1">// DataFrames can be saved as Parquet files, maintaining the schema information.</span>
+<span class="n">schemaPeople</span><span class="o">.</span><span class="na">saveAsParquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">);</span>
+
+<span class="c1">// Read in the Parquet file created above.  Parquet files are self-describing so the schema is preserved.</span>
+<span class="c1">// The result of loading a parquet file is also a DataFrame.</span>
+<span class="n">DataFrame</span> <span class="n">parquetFile</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="na">parquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">);</span>
+
+<span class="c1">//Parquet files can also be registered as tables and then used in SQL statements.</span>
+<span class="n">parquetFile</span><span class="o">.</span><span class="na">registerTempTable</span><span class="o">(</span><span class="s">&quot;parquetFile&quot;</span><span class="o">);</span>
+<span class="n">DataFrame</span> <span class="n">teenagers</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="na">sql</span><span class="o">(</span><span class="s">&quot;SELECT name FROM parquetFile WHERE age &gt;= 13 AND age &lt;= 19&quot;</span><span class="o">);</span>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">teenagerNames</span> <span class="o">=</span> <span class="n">teenagers</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Row</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">call</span><span class="o">(</span><span class="n">Row</span> <span class="n">row</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&quot;Name: &quot;</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}).</span><span class="na">collect</span><span class="o">();</span>
+</code></pre></div>
+<p>Python:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># sqlContext from the previous example is used in this example.</span>
+
+<span class="n">schemaPeople</span> <span class="c"># The DataFrame from the previous example.</span>
+
+<span class="c"># DataFrames can be saved as Parquet files, maintaining the schema information.</span>
+<span class="n">schemaPeople</span><span class="o">.</span><span class="n">saveAsParquetFile</span><span class="p">(</span><span class="s">&quot;people.parquet&quot;</span><span class="p">)</span>
+
+<span class="c"># Read in the Parquet file created above.  Parquet files are self-describing so the schema is preserved.</span>
+<span class="c"># The result of loading a parquet file is also a DataFrame.</span>
+<span class="n">parquetFile</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">parquetFile</span><span class="p">(</span><span class="s">&quot;people.parquet&quot;</span><span class="p">)</span>
+
+<span class="c"># Parquet files can also be registered as tables and then used in SQL statements.</span>
+<span class="n">parquetFile</span><span class="o">.</span><span class="n">registerTempTable</span><span class="p">(</span><span class="s">&quot;parquetFile&quot;</span><span class="p">);</span>
+<span class="n">teenagers</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s">&quot;SELECT name FROM parquetFile WHERE age &gt;= 13 AND age &lt;= 19&quot;</span><span class="p">)</span>
+<span class="n">teenNames</span> <span class="o">=</span> <span class="n">teenagers</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="s">&quot;Name: &quot;</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">teenName</span> <span class="ow">in</span> <span class="n">teenNames</span><span class="o">.</span><span class="n">collect</span><span class="p">():</span>
+  <span class="k">print</span> <span class="n">teenName</span>
+</code></pre></div>
+<p>SQL:</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="n">parquetTable</span>
+<span class="k">USING</span> <span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">spark</span><span class="p">.</span><span class="k">sql</span><span class="p">.</span><span class="n">parquet</span>
+<span class="k">OPTIONS</span> <span class="p">(</span>
+  <span class="n">path</span> <span class="ss">&quot;examples/src/main/resources/people.parquet&quot;</span>
+<span class="p">)</span>
+
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">parquetTable</span>
+</code></pre></div>
+<h2 id="自动发现分区">自动发现分区</h2>
+
+<p>Parquet 数据源可以自动识别分区目录以及分区列的类型，目前支持数据类型和字符串类型。</p>
+
+<p>例如，对于这样一个目录结构，有两个分区字段：gender、country。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">path
+└── to
+    └── table
+        ├── gender=male
+        │   ├── ...
+        │   │
+        │   ├── country=US
+        │   │   └── data.parquet
+        │   ├── country=CN
+        │   │   └── data.parquet
+        │   └── ...
+        └── gender=female
+            ├── ...
+            │
+            ├── country=US
+            │   └── data.parquet
+            ├── country=CN
+            │   └── data.parquet
+            └── ...
+</code></pre></div>
+<p>将 path/to/table 路径传递给 SQLContext.parquetFile 或 SQLContext.load 时，Spark SQL 将会字段获取分区信息，并返回 DataFrame 的 schema 如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">root
+|-- name: string (nullable = true)
+|-- age: long (nullable = true)
+|-- gender: string (nullable = true)
+|-- country: string (nullable = true)
+</code></pre></div>
+<h2 id="schema-自动扩展">schema 自动扩展</h2>
+
+<p>Parquet 还支持 schema 自动扩展。</p>
+
+<p>Scala:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// sqlContext from the previous example is used in this example.</span>
+<span class="c1">// This is used to implicitly convert an RDD to a DataFrame.</span>
+<span class="k">import</span> <span class="nn">sqlContext.implicits._</span>
+
+<span class="c1">// Create a simple DataFrame, stored into a partition directory</span>
+<span class="k">val</span> <span class="n">df1</span> <span class="k">=</span> <span class="n">sparkContext</span><span class="o">.</span><span class="n">makeRDD</span><span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="o">)).</span><span class="n">toDF</span><span class="o">(</span><span class="s">&quot;single&quot;</span><span class="o">,</span> <span class="s">&quot;double&quot;</span><span class="o">)</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">saveAsParquetFile</span><span class="o">(</span><span class="s">&quot;data/test_table/key=1&quot;</span><span class="o">)</span>
+
+<span class="c1">// Create another DataFrame in a new partition directory,</span>
+<span class="c1">// adding a new column and dropping an existing column</span>
+<span class="k">val</span> <span class="n">df2</span> <span class="k">=</span> <span class="n">sparkContext</span><span class="o">.</span><span class="n">makeRDD</span><span class="o">(</span><span class="mi">6</span> <span class="n">to</span> <span class="mi">10</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="o">)).</span><span class="n">toDF</span><span class="o">(</span><span class="s">&quot;single&quot;</span><span class="o">,</span> <span class="s">&quot;triple&quot;</span><span class="o">)</span>
+<span class="n">df2</span><span class="o">.</span><span class="n">saveAsParquetFile</span><span class="o">(</span><span class="s">&quot;data/test_table/key=2&quot;</span><span class="o">)</span>
+
+<span class="c1">// Read the partitioned table</span>
+<span class="k">val</span> <span class="n">df3</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">parquetFile</span><span class="o">(</span><span class="s">&quot;data/test_table&quot;</span><span class="o">)</span>
+<span class="n">df3</span><span class="o">.</span><span class="n">printSchema</span><span class="o">()</span>
+
+<span class="c1">// The final schema consists of all 3 columns in the Parquet files together</span>
+<span class="c1">// with the partiioning column appeared in the partition directory paths.</span>
+<span class="c1">// root</span>
+<span class="c1">// |-- single: int (nullable = true)</span>
+<span class="c1">// |-- double: int (nullable = true)</span>
+<span class="c1">// |-- triple: int (nullable = true)</span>
+<span class="c1">// |-- key : int (nullable = true)</span>
+</code></pre></div>
+<p>Python:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># sqlContext from the previous example is used in this example.</span>
+
+<span class="c"># Create a simple DataFrame, stored into a partition directory</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>\
+                                   <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">Row</span><span class="p">(</span><span class="n">single</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">double</span><span class="o">=</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&quot;data/test_table/key=1&quot;</span><span class="p">,</span> <span class="s">&quot;parquet&quot;</span><span class="p">)</span>
+
+<span class="c"># Create another DataFrame in a new partition directory,</span>
+<span class="c"># adding a new column and dropping an existing column</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+                                   <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">Row</span><span class="p">(</span><span class="n">single</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">triple</span><span class="o">=</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">df2</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&quot;data/test_table/key=2&quot;</span><span class="p">,</span> <span class="s">&quot;parquet&quot;</span><span class="p">)</span>
+
+<span class="c"># Read the partitioned table</span>
+<span class="n">df3</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">parquetFile</span><span class="p">(</span><span class="s">&quot;data/test_table&quot;</span><span class="p">)</span>
+<span class="n">df3</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+
+<span class="c"># The final schema consists of all 3 columns in the Parquet files together</span>
+<span class="c"># with the partiioning column appeared in the partition directory paths.</span>
+<span class="c"># root</span>
+<span class="c"># |-- single: int (nullable = true)</span>
+<span class="c"># |-- double: int (nullable = true)</span>
+<span class="c"># |-- triple: int (nullable = true)</span>
+<span class="c"># |-- key : int (nullable = true)</span>
+</code></pre></div>
+<h2 id="配置参数">配置参数</h2>
+
+<ul>
+<li><code class="prettyprint">spark.sql.parquet.binaryAsString</code>：默认为 false，是否将 binary 当做字符串处理</li>
+<li><code class="prettyprint">spark.sql.parquet.int96AsTimestamp</code>：默认为 true</li>
+<li><code class="prettyprint">spark.sql.parquet.cacheMetadata</code> ：默认为 true，是否缓存元数据</li>
+<li><code class="prettyprint">spark.sql.parquet.compression.codec</code>：默认为 gzip，支持的值：uncompressed, snappy, gzip, lzo</li>
+<li><code class="prettyprint">spark.sql.parquet.filterPushdown</code>：默认为 false</li>
+<li><code class="prettyprint">spark.sql.hive.convertMetastoreParquet</code>：默认为 false </li>
+</ul>
+
+<h1 id="json-数据源">JSON 数据源</h1>
+
+<p>Spark SQL 能够自动识别 JSON 数据的 schema ，SQLContext 中有两个方法处理 JSON：</p>
+
+<ul>
+<li><code class="prettyprint">jsonFile</code>：从一个 JSON 目录中加载数据，JSON 文件中每一行为一个 JSON 对象。</li>
+<li><code class="prettyprint">jsonRDD</code>：从一个 RDD 中加载数据，RDD 的每一个元素为一个 JSON 对象的字符串。</li>
+</ul>
+
+<p>一个 Scala 的例子如下：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// sc is an existing SparkContext.</span>
+<span class="k">val</span> <span class="n">sqlContext</span> <span class="k">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="nc">SQLContext</span><span class="o">(</span><span class="n">sc</span><span class="o">)</span>
+
+<span class="c1">// A JSON dataset is pointed to by path.</span>
+<span class="c1">// The path can be either a single text file or a directory storing text files.</span>
+<span class="k">val</span> <span class="n">path</span> <span class="k">=</span> <span class="s">&quot;people.json&quot;</span>
+<span class="c1">// Create a DataFrame from the file(s) pointed to by path</span>
+<span class="k">val</span> <span class="n">people</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">jsonFile</span><span class="o">(</span><span class="n">path</span><span class="o">)</span>
+
+<span class="c1">// The inferred schema can be visualized using the printSchema() method.</span>
+<span class="n">people</span><span class="o">.</span><span class="n">printSchema</span><span class="o">()</span>
+<span class="c1">// root</span>
+<span class="c1">//  |-- age: integer (nullable = true)</span>
+<span class="c1">//  |-- name: string (nullable = true)</span>
+
+<span class="c1">// Register this DataFrame as a table.</span>
+<span class="n">people</span><span class="o">.</span><span class="n">registerTempTable</span><span class="o">(</span><span class="s">&quot;people&quot;</span><span class="o">)</span>
+
+<span class="c1">// SQL statements can be run by using the sql methods provided by sqlContext.</span>
+<span class="k">val</span> <span class="n">teenagers</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;SELECT name FROM people WHERE age &gt;= 13 AND age &lt;= 19&quot;</span><span class="o">)</span>
+
+<span class="c1">// Alternatively, a DataFrame can be created for a JSON dataset represented by</span>
+<span class="c1">// an RDD[String] storing one JSON object per string.</span>
+<span class="k">val</span> <span class="n">anotherPeopleRDD</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="o">(</span>
+  <span class="s">&quot;&quot;&quot;{&quot;name&quot;:&quot;Yin&quot;,&quot;address&quot;:{&quot;city&quot;:&quot;Columbus&quot;,&quot;state&quot;:&quot;Ohio&quot;}}&quot;&quot;&quot;</span> <span class="o">::</span> <span class="nc">Nil</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">anotherPeople</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">jsonRDD</span><span class="o">(</span><span class="n">anotherPeopleRDD</span><span class="o">)</span>
+</code></pre></div>
+<h1 id="hive-数据源">Hive 数据源</h1>
+
+<p>Spark SQL 支持读和写 Hive 中的数据。Spark  源码本身不包括 Hive，故编译时候需要添加  <code class="prettyprint">-Phive</code> 和 <code class="prettyprint">-Phive-thriftserver</code> 开启对 Hive 的支持。另外，Hive assembly jar 需要存在于每一个 worker 节点上，因为他们需要 SerDes 去访问存在于 Hive 中的数据。</p>
+
+<p>Scala:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// sc is an existing SparkContext.</span>
+<span class="k">val</span> <span class="n">sqlContext</span> <span class="k">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">hive</span><span class="o">.</span><span class="nc">HiveContext</span><span class="o">(</span><span class="n">sc</span><span class="o">)</span>
+
+<span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;CREATE TABLE IF NOT EXISTS src (key INT, value STRING)&quot;</span><span class="o">)</span>
+<span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;LOAD DATA LOCAL INPATH &#39;examples/src/main/resources/kv1.txt&#39; INTO TABLE src&quot;</span><span class="o">)</span>
+
+<span class="c1">// Queries are expressed in HiveQL</span>
+<span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;FROM src SELECT key, value&quot;</span><span class="o">).</span><span class="n">collect</span><span class="o">().</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div>
+<p>Java:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// sc is an existing JavaSparkContext.</span>
+<span class="n">HiveContext</span> <span class="n">sqlContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">spark</span><span class="o">.</span><span class="na">sql</span><span class="o">.</span><span class="na">hive</span><span class="o">.</span><span class="na">HiveContext</span><span class="o">(</span><span class="n">sc</span><span class="o">);</span>
+
+<span class="n">sqlContext</span><span class="o">.</span><span class="na">sql</span><span class="o">(</span><span class="s">&quot;CREATE TABLE IF NOT EXISTS src (key INT, value STRING)&quot;</span><span class="o">);</span>
+<span class="n">sqlContext</span><span class="o">.</span><span class="na">sql</span><span class="o">(</span><span class="s">&quot;LOAD DATA LOCAL INPATH &#39;examples/src/main/resources/kv1.txt&#39; INTO TABLE src&quot;</span><span class="o">);</span>
+
+<span class="c1">// Queries are expressed in HiveQL.</span>
+<span class="n">Row</span><span class="o">[]</span> <span class="n">results</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="na">sql</span><span class="o">(</span><span class="s">&quot;FROM src SELECT key, value&quot;</span><span class="o">).</span><span class="na">collect</span><span class="o">();</span>
+</code></pre></div>
+<p>Python:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># sc is an existing SparkContext.</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">HiveContext</span>
+<span class="n">sqlContext</span> <span class="o">=</span> <span class="n">HiveContext</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+
+<span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s">&quot;CREATE TABLE IF NOT EXISTS src (key INT, value STRING)&quot;</span><span class="p">)</span>
+<span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s">&quot;LOAD DATA LOCAL INPATH &#39;examples/src/main/resources/kv1.txt&#39; INTO TABLE src&quot;</span><span class="p">)</span>
+
+<span class="c"># Queries can be expressed in HiveQL.</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s">&quot;FROM src SELECT key, value&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</code></pre></div>
+<h1 id="jdbc-数据源">JDBC 数据源</h1>
+
+<p>Spark SQL 支持通过 JDBC 访问关系数据库，这需要用到 <a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.JdbcRDD">JdbcRDD</a>。为了访问某一个关系数据库，需要将其驱动添加到 classpath，例如：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">SPARK_CLASSPATH=postgresql-9.3-1102-jdbc41.jar bin/spark-shell
+</code></pre></div>
+<p>访问 jdbc 数据源需要提供以下参数：</p>
+
+<ul>
+<li>url</li>
+<li>dbtable</li>
+<li>driver</li>
+<li>partitionColumn, lowerBound, upperBound, numPartitions</li>
+</ul>
+
+<p>Scala 示例：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">jdbcDF</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">&quot;jdbc&quot;</span><span class="o">,</span> <span class="nc">Map</span><span class="o">(</span>
+  <span class="s">&quot;url&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;jdbc:postgresql:dbserver&quot;</span><span class="o">,</span>
+  <span class="s">&quot;dbtable&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;schema.tablename&quot;</span><span class="o">))</span>
+</code></pre></div>
+<p>Java:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+<span class="n">options</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;url&quot;</span><span class="o">,</span> <span class="s">&quot;jdbc:postgresql:dbserver&quot;</span><span class="o">);</span>
+<span class="n">options</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;dbtable&quot;</span><span class="o">,</span> <span class="s">&quot;schema.tablename&quot;</span><span class="o">);</span>
+
+<span class="n">DataFrame</span> <span class="n">jdbcDF</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="s">&quot;jdbc&quot;</span><span class="o">,</span> <span class="n">options</span><span class="o">)</span>
+</code></pre></div>
+<p>Python:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;jdbc&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&quot;jdbc:postgresql:dbserver&quot;</span><span class="p">,</span> <span class="n">dbtable</span><span class="o">=</span><span class="s">&quot;schema.tablename&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>SQL:</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="n">jdbcTable</span>
+<span class="k">USING</span> <span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">spark</span><span class="p">.</span><span class="k">sql</span><span class="p">.</span><span class="n">jdbc</span>
+<span class="k">OPTIONS</span> <span class="p">(</span>
+  <span class="n">url</span> <span class="ss">&quot;jdbc:postgresql:dbserver&quot;</span><span class="p">,</span>
+  <span class="n">dbtable</span> <span class="ss">&quot;schema.tablename&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<h1 id="访问-avro">访问 Avro</h1>
+
+<p>这不是 Spark 内置的数据源，要想访问 Avro 数据源 ，需要做些处理。这部分内容可以参考 <a href="http://blog.javachen.com/2015/03/24/how-to-load-some-avro-data-into-spark.html">如何将Avro数据加载到Spark</a> 和 <a href="http://www.infoobjects.com/spark-with-avro.html">Spark with Avro</a>。</p>
+
+<h1 id="访问-cassandra">访问 Cassandra</h1>
+
+<p>TODO</p>
+
+<h1 id="测试">测试</h1>
+
+<h2 id="spark-和-parquet">Spark 和 Parquet</h2>
+
+<p>参考上面的例子，将 people.txt 文件加载到 Spark：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">sqlContext.implicits._</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">People</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">people</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">&quot;people.txt&quot;</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">)).</span><span class="n">map</span><span class="o">(</span><span class="n">p</span> <span class="k">=&gt;</span> <span class="nc">People</span><span class="o">(</span><span class="n">p</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="n">p</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">trim</span><span class="o">.</span><span class="n">toInt</span><span class="o">)).</span><span class="n">toDF</span><span class="o">()</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">people</span><span class="o">.</span><span class="n">registerTempTable</span><span class="o">(</span><span class="s">&quot;people&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">teenagers</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;SELECT name FROM people WHERE age &gt;= 13 AND age &lt;= 19&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">teenagers</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">t</span> <span class="k">=&gt;</span> <span class="s">&quot;Name: &quot;</span> <span class="o">+</span> <span class="n">t</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="n">collect</span><span class="o">().</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div>
+<p>然后，将 people 这个 DataFrame 转换为 parquet 格式：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">people</span><span class="o">.</span><span class="n">saveAsParquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">parquetFile</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">parquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">)</span>
+</code></pre></div>
+<p>另外，也可以从 hive 中加载 parquet 格式的文件。</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">people_parquet</span> <span class="k">like</span> <span class="n">people</span> <span class="n">stored</span> <span class="k">as</span> <span class="n">parquet</span><span class="p">;</span>
+<span class="n">hive</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="n">overwrite</span> <span class="k">table</span> <span class="n">people_parquet</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">people</span><span class="p">;</span>
+</code></pre></div>
+<p>使用 HiveContext 来从 hive 中加载 parquet 文件，这里不再需要定义一个 case class ，因为 parquet 中已经包含了文件的 schema。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">hc</span> <span class="k">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">hive</span><span class="o">.</span><span class="nc">HiveContext</span><span class="o">(</span><span class="n">sc</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">hc.implicits._</span>
+<span class="n">scala</span><span class="o">&gt;</span><span class="k">val</span> <span class="n">peopleRDD</span> <span class="k">=</span> <span class="n">hc</span><span class="o">.</span><span class="n">parquetFile</span><span class="o">(</span><span class="s">&quot;people.parquet&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">peopleRDD</span><span class="o">.</span><span class="n">registerAsTempTable</span><span class="o">(</span><span class="s">&quot;pp&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span><span class="k">val</span> <span class="n">teenagers</span> <span class="k">=</span> <span class="n">hc</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">&quot;SELECT name FROM pp WHERE age &gt;= 13 AND age &lt;= 19&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span><span class="n">teenagers</span><span class="o">.</span><span class="n">collect</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div>
+<p>注意到 impala 中处理 parquet 文件时，会将字符串保存为 Binary，为了修正这个问题，可以添加下面一行代码：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">setConf</span><span class="o">(</span><span class="s">&quot;spark.sql.parquet.binaryAsString&quot;</span><span class="o">,</span><span class="s">&quot;true&quot;</span><span class="o">)</span>
+</code></pre></div>
+<h2 id="sparksql-join">SparkSql Join</h2>
+
+<p>下面是两个表左外连接的例子：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span><span class="k">import</span> <span class="nn">sqlContext.implicits._</span>
+<span class="n">scala</span><span class="o">&gt;</span><span class="k">import</span> <span class="nn">org.apache.spark.sql.catalyst.plans._</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Dept</span><span class="o">(</span><span class="n">dept_id</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span><span class="n">dept_name</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">dept</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span> <span class="o">(</span><span class="s">&quot;DEPT01&quot;</span><span class="o">,</span><span class="s">&quot;Information Technology&quot;</span><span class="o">),</span> <span class="o">(</span><span class="s">&quot;DEPT02&quot;</span><span class="o">,</span><span class="s">&quot;WHITE HOUSE&quot;</span><span class="o">),(</span><span class="s">&quot;DEPT03&quot;</span><span class="o">,</span><span class="s">&quot;EX-PRESIDENTS OFFICE&quot;</span><span class="o">),(</span><span class="s">&quot;DEPT04&quot;</span><span class="o">,</span><span class="s">&quot;SALES&quot;</span><span class="o">))).</span><span class="n">map</span><span class="o">(</span> <span class="n">d</span> <span class="k">=&gt;</span> <span class="nc">Dept</span><span class="o">(</span><span class="n">d</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span><span class="n">d</span><span class="o">.</span><span class="n">_2</span><span class="o">)).</span><span class="n">toDF</span><span class="o">.</span><span class="n">as</span><span class="o">(</span> <span class="s">&quot;dept&quot;</span> <span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Emp</span><span class="o">(</span><span class="n">first_name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span><span class="n">last_name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span><span class="n">dept_id</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">emp</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span> <span class="o">(</span><span class="s">&quot;Rishi&quot;</span><span class="o">,</span><span class="s">&quot;Yadav&quot;</span><span class="o">,</span><span class="s">&quot;DEPT01&quot;</span><span class="o">),(</span><span class="s">&quot;Barack&quot;</span><span class="o">,</span><span class="s">&quot;Obama&quot;</span><span class="o">,</span><span class="s">&quot;DEPT02&quot;</span><span class="o">),(</span><span class="s">&quot;Bill&quot;</span><span class="o">,</span><span class="s">&quot;Clinton&quot;</span><span class="o">,</span><span class="s">&quot;DEPT04&quot;</span><span class="o">))).</span><span class="n">map</span><span class="o">(</span> <span class="n">e</span> <span class="k">=&gt;</span> <span class="nc">Emp</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span><span class="n">e</span><span class="o">.</span><span class="n">_2</span><span class="o">,</span><span class="n">e</span><span class="o">.</span><span class="n">_3</span><span class="o">)).</span><span class="n">toDF</span><span class="o">.</span><span class="n">as</span><span class="o">(</span><span class="s">&quot;emp&quot;</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">alldepts</span> <span class="k">=</span> <span class="n">dept</span><span class="o">.</span><span class="n">join</span><span class="o">(</span><span class="n">emp</span><span class="o">,</span><span class="n">dept</span><span class="o">(</span><span class="s">&quot;dept_id&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="n">emp</span><span class="o">(</span><span class="s">&quot;dept_id&quot;</span><span class="o">),</span> <span class="s">&quot;left_outer&quot;</span><span class="o">).</span><span class="n">select</span><span class="o">(</span><span class="s">&quot;dept.dept_id&quot;</span><span class="o">,</span><span class="s">&quot;dept_name&quot;</span><span class="o">,</span><span class="s">&quot;first_name&quot;</span><span class="o">,</span><span class="s">&quot;last_name&quot;</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">alldepts</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+<span class="o">[</span><span class="kt">DEPT01</span>,<span class="kt">Information</span> <span class="kt">Technology</span>,<span class="kt">Rishi</span>,<span class="kt">Yadav</span><span class="o">]</span>
+<span class="o">[</span><span class="kt">DEPT02</span>,<span class="kt">WHITE</span> <span class="kt">HOUSE</span>,<span class="kt">Barack</span>,<span class="kt">Obama</span><span class="o">]</span>
+<span class="o">[</span><span class="kt">DEPT04</span>,<span class="kt">SALES</span>,<span class="kt">Bill</span>,<span class="kt">Clinton</span><span class="o">]</span>
+<span class="o">[</span><span class="kt">DEPT03</span>,<span class="kt">EX-PRESIDENTS</span> <span class="kt">OFFICE</span>,<span class="kt">null</span>,<span class="kt">null</span><span class="o">]</span>
+</code></pre></div>
+<p>支持的连接类型有：<code class="prettyprint">inner</code>、<code class="prettyprint">outer</code>、<code class="prettyprint">left_outer</code>、<code class="prettyprint">right_outer</code>、<code class="prettyprint">semijoin</code>。</p>
+
+<h1 id="参考文章">参考文章</h1>
+
+<ul>
+<li><a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#dataframes">Spark SQL and DataFrame Guide</a></li>
+<li><a href="http://endymecy.gitbooks.io/spark-programming-guide-zh-cn/content/spark-sql/README.html">Spark 编程指南简体中文版-Spark SQL</a></li>
+<li><a href="http://www.infoobjects.com/spark-cookbook/">spark-cookbook</a></li>
+</ul>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2015/04/03/spark-sql-datasource.html">http://blog.javachen.com/2015/04/03/spark-sql-datasource.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2015/04/03/spark-sql-datasource.html">Spark SQL中的数据源</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#spark">spark</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#spark-sql">spark-sql</a>
+                          
+                            <a class="btn btn-default btn-xs" href="/tags.html#spark">spark</a>
+                          
+                            <a class="btn btn-default btn-xs" href="/tags.html#avro">avro</a>
+                          
+                            <a class="btn btn-default btn-xs" href="/tags.html#parquet">parquet</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2015/04/03/spark-sql-datasource.html" data-url="http://blog.javachen.com/2015/04/03/spark-sql-datasource.html" data-title="Spark SQL中的数据源"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center">Copyright <i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2015/04/03/spark-sql-datasource.html'
+      });
+      </script>
+  </body>
+</html>

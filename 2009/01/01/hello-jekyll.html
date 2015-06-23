@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Hello Jekyll! - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2009/01/01/hello-jekyll.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous disabled"><a href="#"><i class="fa fa-angle-double-left"></i>Prev</a></li>
+                
+                
+                <li class="next"><a href="/2009/10/22/ext_readxml_in_bjsasc_wuzi.html" title="Extjs读取xml文件生成动态表格和表单">Extjs读取xml文件生成动态表格和表单&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Hello Jekyll!  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2009.01.01 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <h1 id="1.-标题与文字格式">1. 标题与文字格式</h1>
+
+<h2 id="标题">标题</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># 测试 h1
+## 测试 h2
+### 测试 h3
+#### 测试 h4
+##### 测试 h5
+###### 测试 h6
+</code></pre></div>
+<p>效果：</p>
+
+<h1 id="测试-h1">测试 h1</h1>
+
+<h2 id="测试-h2">测试 h2</h2>
+
+<h3 id="测试-h3">测试 h3</h3>
+
+<h4 id="测试-h4">测试 h4</h4>
+
+<h5 id="测试-h5">测试 h5</h5>
+
+<h6 id="测试-h6">测试 h6</h6>
+
+<h2 id="文字格式">文字格式</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**这是文字粗体格式**
+*这是文字斜体格式*
+~~在文字上添加删除线~~
+</code></pre></div>
+<p><strong>这是文字粗体格式</strong><br>
+<em>这是文字斜体格式</em><br>
+<del>在文字上添加删除线</del></p>
+
+<h1 id="2.-列表">2. 列表</h1>
+
+<h2 id="无序列表">无序列表</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">* 项目1
+* 项目2
+* 项目3
+</code></pre></div>
+<ul>
+<li>项目1</li>
+<li>项目2</li>
+<li>项目3</li>
+</ul>
+
+<h2 id="有序列表">有序列表</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">1. 项目1
+2. 项目2
+3. 项目3
+   * 项目1
+   * 项目2
+</code></pre></div>
+<ol>
+<li>项目1</li>
+<li>项目2</li>
+<li>项目3
+
+<ul>
+<li>项目1</li>
+<li>项目2</li>
+</ul></li>
+</ol>
+
+<h1 id="3.-代码">3. 代码</h1>
+
+<p>测试行代码： <code class="prettyprint">code</code></p>
+
+<p>测试段落代码：</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">/* hello world demo */</span>
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="n">int</span> <span class="n">main</span><span class="p">(</span><span class="n">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="nb">printf</span><span class="p">(</span><span class="s2">&quot;Hello, World!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h1 id="4.-表格">4. 表格</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">|head1|head2|head3|head4
+|---|:---|---:|:---:|
+|row1text1|row1text2|row1text3|row1text4
+|row2text1|row2text2|row2text3|row2text4
+|row3text1|row3text2|row3text3|row3text4
+|row4text1|row4text2|row4text3|row4text4
+</code></pre></div>
+<p>效果如下：</p>
+
+<table><thead>
+<tr>
+<th>head1</th>
+<th style="text-align: left">head2</th>
+<th style="text-align: right">head3</th>
+<th style="text-align: center">head4</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>row1text1</td>
+<td style="text-align: left">row1text2</td>
+<td style="text-align: right">row1text3</td>
+<td style="text-align: center">row1text4</td>
+</tr>
+<tr>
+<td>row2text1</td>
+<td style="text-align: left">row2text2</td>
+<td style="text-align: right">row2text3</td>
+<td style="text-align: center">row2text4</td>
+</tr>
+<tr>
+<td>row3text1</td>
+<td style="text-align: left">row3text2</td>
+<td style="text-align: right">row3text3</td>
+<td style="text-align: center">row3text4</td>
+</tr>
+<tr>
+<td>row4text1</td>
+<td style="text-align: left">row4text2</td>
+<td style="text-align: right">row4text3</td>
+<td style="text-align: center">row4text4</td>
+</tr>
+</tbody></table>
+
+<h1 id="5.-其他">5. 其他</h1>
+
+<h2 id="图片">图片</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">![图片名称](http://javachen-rs.qiniudn.com/images/loading.gif)
+</code></pre></div>
+<p><img src="http://javachen-rs.qiniudn.com/images/loading.gif" alt="图片名称"></p>
+
+<h2 id="链接">链接</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[链接名称](http://blog.javachen.com)
+&lt;http://blog.javachen.com&gt;
+</code></pre></div>
+<p><a href="http://blog.javachen.com">链接名称</a><br>
+<a href="http://blog.javachen.com">http://blog.javachen.com</a></p>
+
+<h2 id="引用">引用</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&gt; 第一行引用文字
+&gt; 第二行引用文字
+</code></pre></div>
+<blockquote>
+<p>第一行引用文字<br>
+第二行引用文字</p>
+</blockquote>
+
+<h2 id="水平线">水平线</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">***
+</code></pre></div>
+<hr>
+
+<h1 id="6.-其他资料">6. 其他资料</h1>
+
+<ul>
+<li><a href="http://havee.me/internet/2013-11/jekyll-liquid-designers.html">Jekyll 扩展的 Liquid 设计</a></li>
+<li><a href="http://havee.me/internet/2013-07/jekyll-liquid-extensions.html">Jekyll 扩展的 Liquid 模板</a></li>
+</ul>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2009/01/01/hello-jekyll.html">http://blog.javachen.com/2009/01/01/hello-jekyll.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2009/01/01/hello-jekyll.html">Hello Jekyll!</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#others">others</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#jekyll">jekyll</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2009/01/01/hello-jekyll.html" data-url="http://blog.javachen.com/2009/01/01/hello-jekyll.html" data-title="Hello Jekyll!"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center">Copyright <i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2009/01/01/hello-jekyll.html'
+      });
+      </script>
+  </body>
+</html>
