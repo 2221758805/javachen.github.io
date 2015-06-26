@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>重装Linux-Mint系统之后 - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2014/01/09/after-reinstall-the-system.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2014/01/08/hive-ha-by-haproxy.html" title="Hive使用HAProxy配置HA"><i class="fa fa-angle-double-left"></i>&nbsp;Hive使用HAProxy配置HA</a></li>
+                
+                
+                <li class="next"><a href="/2014/01/11/how-to-create-a-django-site.html" title="如何创建一个Django网站">如何创建一个Django网站&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> 重装Linux-Mint系统之后  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2014.01.09 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>本文主要记录重装Linux-Mint系统之后的一些软件安装和环境变量配置。</p>
+
+<h1 id="安装常用工具">安装常用工具</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
+</code></pre></div>
+<h1 id="挂载exfat格式磁盘">挂载exfat格式磁盘</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install exfat-fuse exfat-utils
+</code></pre></div>
+<h1 id="安装ibus">安装ibus</h1>
+
+<p>在终端输入命令:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo add-apt-repository ppa:shawn-p-huang/ppa
+sudo apt-get update
+sudo apt-get install ibus-gtk ibus-pinyin
+</code></pre></div>
+<p>启用IBus框架:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">im-switch -s ibus
+</code></pre></div>
+<p>启动ibus：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">ibus-daemon
+</code></pre></div>
+<h1 id="安装gedit-markdown">安装gedit-markdown</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget https://gitorious.org/projets-divers/gedit-markdown/archive/master.zip
+unzip master.zip
+cd projets-divers-gedit-markdown
+./gedit-markdown.sh install
+</code></pre></div>
+<h1 id="安装wiz">安装wiz</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo add-apt-repository ppa:wiznote-team
+sudo apt-get update
+sudo apt-get install wiznote
+</code></pre></div>
+<h1 id="安装-oh-my-zsh">安装 oh-my-zsh</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install zsh
+</code></pre></div>
+<p>把默认 Shell 换为 zsh。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">chsh -s /bin/zsh
+</code></pre></div>
+<p>然后用下面的两句（任选其一）可以自动安装 oh-my-zsh：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+</code></pre></div>
+<p>编辑<code class="prettyprint">~/.zshrc</code>：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">echo &#39;source ~/.bashrc&#39; &gt;&gt;~/.zshrc
+echo &#39;source ~/.bash_profile&#39; &gt;&gt;~/.zshrc
+</code></pre></div>
+<h1 id="博客相关">博客相关</h1>
+
+<h2 id="安装ruby">安装Ruby</h2>
+
+<p>通过rvm安装ruby：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">curl -L get.rvm.io | bash -s stable
+source ~/.bash_profile
+sed -i -e &#39;s/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g&#39; ~/.rvm/config/db
+</code></pre></div>
+<p>安装rvm:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install clang -y
+rvm install 1.9.3 --with-gcc=clang
+rvm --default 1.9.3
+</code></pre></div>
+<h2 id="安装jekyll">安装jekyll</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">gem update --system
+gem install rdoc jekyll redcarpet
+</code></pre></div>
+<h2 id="安装七牛同步脚本">安装七牛同步脚本</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget http://devtools.qiniudn.com/linux_amd64/qiniu-devtools.zip
+unzip qiniu-devtools.zip
+mv _package_linux_amd64/* /usr/bin/
+source ~/.bashrc
+</code></pre></div>
+<h2 id="更新ssh-key">更新ssh-key</h2>
+
+<p>更新github和gitcafe的ssh-key</p>
+
+<h1 id="安装-virtualbox">安装 virtualbox</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install virtualbox-4.3
+</code></pre></div>
+<h1 id="安装fortune-zh">安装fortune-zh</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install fortune-zh
+</code></pre></div>
+<p><code class="prettyprint">/usr/bin/mint-fortune</code> 中调用语句改为:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/games/fortune 70% tang300 30% song100 <span class="p">|</span> <span class="nv">$command</span> -f <span class="nv">$cow</span> -n
+</code></pre></div>
+<p>这里的70%与30%是显示唐诗与宋词的概率。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">gsettings set com.linuxmint.terminal show-fortunes true
+</code></pre></div>
+<h1 id="修改分区权限">修改分区权限</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo chown -R june:june /chan
+</code></pre></div>
+<h1 id="重命名home下目录">重命名home下目录</h1>
+
+<p>先手动重命名:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">文档   ---&gt;  projects
+音乐   ---&gt;  app
+图片   ---&gt;  codes
+视频   ---&gt;  workspace
+下载   ---&gt;  downloads
+</code></pre></div>
+<p>然后,删除这些目录,建立软连接:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">rm -rf projects app codes workspace downloads
+ln -s /chan/app  ~/app
+ln -s /chan/codes   ~/codes
+ln -s /chan/projects  ~/projects
+ln -s /chan/workspace  ~/workspace
+ln -s /chan/downloads    ~/downloads
+</code></pre></div>
+<h1 id="安装开发环境">安装开发环境</h1>
+
+<p>配置ant、maven和ivy仓库</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">chmod +x /chan/app/apache/apache-maven-3.0.5/bin/mvn
+chmod +x /chan/app/apache/apache-ant-1.9.4/bin/ant
+
+rm -rf /home/june/.ivy2/cache /home/june/.m2/repository
+mkdir -p /home/june/.ivy2 /home/june/.m2
+ln -s /chan/app/repository/cache/  /home/june/.ivy2/cache
+ln -s /chan/app/repository/m2/  /home/june/.m2/repository
+</code></pre></div>
+<p>安装jdk1.6</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/pool/contrib/o/oracle-j2sdk1.6/oracle-j2sdk1.6_1.6.0+update31_amd64.deb
+dpkg -i oracle-j2sdk1.6_1.6.0+update31_amd64.deb
+</code></pre></div>
+<p>配置环境变量：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo mkdir -p /usr/java/
+sudo ln -s /usr/lib/jvm/j2sdk1.6-oracle /usr/java/latest
+sudo update-alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5
+sudo update-alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 5
+sudo update-alternatives --set java /usr/java/latest/bin/java
+
+
+if [ -f ~/.bashrc ] ; then
+    sed -i &#39;/^export[[:space:]]\{1,\}JAVA_HOME[[:space:]]\{0,\}=/d&#39; ~/.bashrc
+    sed -i &#39;/^export[[:space:]]\{1,\}CLASSPATH[[:space:]]\{0,\}=/d&#39; ~/.bashrc
+    sed -i &#39;/^export[[:space:]]\{1,\}PATH[[:space:]]\{0,\}=/d&#39; ~/.bashrc
+fi
+echo &quot;export JAVA_HOME=/usr/java/latest&quot; &gt;&gt; ~/.bashrc
+echo &quot;export CLASSPATH=.:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar&quot;&gt;&gt;~/.bashrc
+echo &quot;export MVN_HOME=/chan/app/apache/apache-maven-3.0.5&quot; &gt;&gt; ~/.bashrc
+
+echo &quot;export ANT_HOME=/chan/app/apache/apache-ant-1.9.4&quot; &gt;&gt; ~/.bashrc
+echo &quot;export PATH=\$JAVA_HOME/bin:\$MVN_HOME/bin:\$ANT_HOME/bin:\$PATH&quot; &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre></div>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2014/01/09/after-reinstall-the-system.html">http://blog.javachen.com/2014/01/09/after-reinstall-the-system.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2014/01/09/after-reinstall-the-system.html">重装Linux-Mint系统之后</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#others">others</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#linux">linux</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2014/01/09/after-reinstall-the-system.html" data-url="http://blog.javachen.com/2014/01/09/after-reinstall-the-system.html" data-title="重装Linux-Mint系统之后"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2014/01/09/after-reinstall-the-system.html'
+      });
+      </script>
+  </body>
+</html>

@@ -3,11 +3,28 @@
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-06-23T19:41:30+08:00</updated>
+  <updated>2015-06-26T18:34:43+08:00</updated>
   <id></id>
   <author>
     <name>Junez</name>
   </author>
+  
+  <entry>
+    <title>spark-shell脚本分析</title>
+    <link href="/2015/06/26/spark-shell-command.html"/>
+    <updated>2015-06-26T00:00:00+08:00</updated>
+    <id>/2015/06/26/spark-shell-command.html</id>
+    <content type="html">本文主要分析spark-shell脚本的运行逻辑，涉及到spark-submit、spark-class等脚本的分析，希望通过分析脚本以了解spark中各个进程的参数、JVM参数和内存大小如何设置。
+​
+
+spark-shell
+
+使用yum安装spark之后，你可以直接在终端运行spark-shell命令，或者在spark的home目录/usr/lib/spark下运行bin/spark-shell命令，这样就可以进入到spark命令行交互模式。
+
+spark-shell 脚本是如何运行的呢？该脚本代码如下：
+#
+# Shell script for starting the Spar...</content>
+  </entry>
   
   <entry>
     <title>Scala中的对象</title>
@@ -2209,13 +2226,13 @@ sudo apt-get ins...</content>
   </entry>
   
   <entry>
-    <title>Java笔记：Java内容模型</title>
+    <title>Java笔记：Java内存模型</title>
     <link href="/2014/04/09/note-about-jvm-memery-model.html"/>
     <updated>2014-04-09T00:00:00+08:00</updated>
     <id>/2014/04/09/note-about-jvm-memery-model.html</id>
     <content type="html">1. 基本概念
 
-《深入理解Java内容模型》详细讲解了java的内存模型，这里对其中的一些基本概念做个简单的笔记。以下内容摘自 《深入理解Java内存模型》读书总结
+《深入理解Java内存模型》详细讲解了java的内存模型，这里对其中的一些基本概念做个简单的笔记。以下内容摘自 《深入理解Java内存模型》读书总结
 
 并发
 

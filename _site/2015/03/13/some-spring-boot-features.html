@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Spring Boot特性 - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2015/03/13/some-spring-boot-features.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/03/13/how-to-run-spring-boot-application.html" title="如何运行Spring Boot应用"><i class="fa fa-angle-double-left"></i>&nbsp;如何运行Spring Boot应用</a></li>
+                
+                
+                <li class="next"><a href="/2015/03/17/install-and-test-kafka.html" title="安装和测试Kafka">安装和测试Kafka&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Spring Boot特性  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2015.03.13 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <h1 id="springapplication">SpringApplication</h1>
+
+<p>SpringApplication 类是启动 Spring Boot 应用的入口类，你可以创建一个包含 <code class="prettyprint">main()</code> 方法的类，来运行 <code class="prettyprint">SpringApplication.run</code> 这个静态方法：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>运行该类会有如下输出：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::   v1.2.2.RELEASE
+</code></pre></div>
+<p>上面的输出的图案可以通过 banner.txt 文件进行定制。在你的 classpath 中添加 banner.txt 文件，可以在该文件内设置如下变量：</p>
+
+<ul>
+<li><code class="prettyprint">${application.version}</code>：MANIFEST.MF 文件中的应用版本号</li>
+<li><code class="prettyprint">${application.formatted-version}</code></li>
+<li><code class="prettyprint">${spring-boot.version}</code>：你正在使用的 Spring Boot 版本号</li>
+<li><code class="prettyprint">${spring-boot.formatted-version}</code></li>
+</ul>
+
+<p>上面这些变量也可以通过 application.properties  来设置，后面再作介绍。</p>
+
+<p>此外，你还可以通过代码进行设置：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span> <span class="n">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SpringApplication</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">app</span><span class="o">.</span><span class="na">setShowBanner</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+    <span class="n">app</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>或者使用流式 API:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">new</span> <span class="nf">SpringApplicationBuilder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">showBanner</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">sources</span><span class="o">(</span><span class="n">Parent</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">child</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+</code></pre></div>
+<p>SpringApplication 启动过程会触发一些事件，你可以针对这些事件通过 <code class="prettyprint">SpringApplication.addListeners(…​)</code> 添加一些监听器:</p>
+
+<ul>
+<li>ApplicationStartedEvent</li>
+<li>ApplicationEnvironmentPreparedEvent</li>
+<li>ApplicationPreparedEvent</li>
+<li>ApplicationFailedEvent</li>
+</ul>
+
+<p>SpringApplication 会注册一个 shutdown hook 以便在应用退出的时候能够保证 <code class="prettyprint">ApplicationContext</code> 优雅地关闭，这样能够保证所有 Spring lifecycle 的回调都会被执行，包括 DisposableBean 接口的实现类以及 @PreDestroy 注解。</p>
+
+<p>另外，你也可以实现 org.springframework.boot.ExitCodeGenerator 接口来定义你自己的退出时候的逻辑。</p>
+
+<h1 id="externalized-configuration">Externalized Configuration</h1>
+
+<p>Spring Boot 允许你针对不同的环境配置不同的配置参数，你可以使用 properties文件、YAML 文件、环境变量或者命令行参数来修改应用的配置。你可以在代码中使用 <code class="prettyprint">@Value</code> 注解来获取配置参数的值。</p>
+
+<p>Spring Boot 使用一个特别的 <code class="prettyprint">PropertySource</code> 来按顺序加载配置，加载顺序如下：</p>
+
+<ul>
+<li>命令行参数</li>
+<li> <code class="prettyprint">java:comp/env</code> 中的 JNDI 属性</li>
+<li>Java 系统环境变量</li>
+<li>操作系统环境变量</li>
+<li><code class="prettyprint">RandomValuePropertySource</code>，随机值，使用 <code class="prettyprint">random.*</code> 来定义</li>
+<li>jar 包外的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
+<li>jar 包内的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
+<li>jar 包外的 Application 配置，如 application.properties 和 application.yml 文件</li>
+<li>jar 包内的 Application 配置，如 application.properties 和 application.yml 文件</li>
+<li>标有 @Configuration 注解的类上的 @PropertySource 注解</li>
+<li>默认值，使用 <code class="prettyprint">SpringApplication.setDefaultProperties</code> 设置的</li>
+</ul>
+
+<p>对于下面的代码：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.stereotype.*</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.*</span>
+
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBean</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&quot;${name}&quot;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+
+    <span class="c1">// ...</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>你可以在 application.properties 中定义一个 name 变量，或者在运行该 jar 时候，指定一个命令行参数（以 <code class="prettyprint">--</code> 标识），例如：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">java -jar app.jar --name<span class="o">=</span><span class="s2">&quot;Spring&quot;</span>
+</code></pre></div>
+<p>RandomValuePropertySource 类型变量的示例如下：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">my.secret</span><span class="o">=</span><span class="s">${random.value}</span>
+<span class="na">my.number</span><span class="o">=</span><span class="s">${random.int}</span>
+<span class="na">my.bignumber</span><span class="o">=</span><span class="s">${random.long}</span>
+<span class="na">my.number.less.than.ten</span><span class="o">=</span><span class="s">${random.int(10)}</span>
+<span class="na">my.number.in.range</span><span class="o">=</span><span class="s">${random.int[1024,65536]}</span>
+</code></pre></div>
+<p>SpringApplication 会在以下路径查找 <code class="prettyprint">application.properties</code> 并加载该文件：</p>
+
+<ul>
+<li><code class="prettyprint">/config</code> 目录下</li>
+<li>当前目录</li>
+<li>classpath 中 <code class="prettyprint">/config</code> 包下</li>
+<li>classpath 根路径下</li>
+</ul>
+
+<p>另外，你也可以通过 <code class="prettyprint">spring.config.location</code> 来指定 <code class="prettyprint">application.properties</code> 文件的存放路径，或者通过 <code class="prettyprint">spring.config.name</code> 指定该文件的名称，例如：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
+</code></pre></div>
+<p>或者</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ java -jar myproject.jar --spring.config.name=myproject
+</code></pre></div>
+<h1 id="profiles">Profiles</h1>
+
+<p>你可以使用 <code class="prettyprint">@Profile</code> 注解来标注应用使用的环境</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="nd">@Profile</span><span class="o">(</span><span class="s">&quot;production&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductionConfiguration</span> <span class="o">{</span>
+
+    <span class="c1">// ...</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>可以使用 <code class="prettyprint">spring.profiles.active</code> 变量来定义应用激活的 profile：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">spring.profiles.active</span><span class="o">=</span><span class="s">dev,hsqldb</span>
+</code></pre></div>
+<p>还可以通过  SpringApplication 来设置，调用 <code class="prettyprint">SpringApplication.setAdditionalProfiles(…​)</code> 代码即可。</p>
+
+<h1 id="日志">日志</h1>
+
+<p>Spring Boot 使用 Commons Logging 作为内部记录日志，你也可以使用 Java Util Logging, Log4J, Log4J2 和 Logback 来记录日志。</p>
+
+<p>默认情况下，如果你使用了 Starter POMs ，则会使用 Logback 来记录日志。</p>
+
+<p>默认情况，是输出 INFO 类型的日志，你可以通过设置命令行参数 <code class="prettyprint">--debug</code> 来设置：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar myapp.jar --debug
+</code></pre></div>
+<p>如果你的终端支持 ANSI ，则日志支持彩色输出，这个可以通过 <code class="prettyprint">spring.output.ansi.enabled</code> 设置，可配置的值有：<code class="prettyprint">ALWAYS</code>、<code class="prettyprint">DETECT</code>、<code class="prettyprint">NEVER</code>。</p>
+
+<p>可以通过 <code class="prettyprint">logging.file</code> 和 <code class="prettyprint">logging.path</code> 设置日志输出文件名称和路径。</p>
+
+<p>日志级别使用 <code class="prettyprint">logging.level.*=LEVEL</code> 来定义，例如：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">logging.level.org.springframework.web</span><span class="o">:</span> <span class="s">DEBUG</span>
+<span class="na">logging.level.org.hibernate</span><span class="o">:</span> <span class="s">ERROR</span>
+</code></pre></div>
+<p>Spring Boot 通过 <code class="prettyprint">logging.config</code> 来定义日志的配置文件存放路径，对于不同的日志系统，配置文件的名称不同：</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Logging</th>
+<th style="text-align: left">System   Customization</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Logback</td>
+<td style="text-align: left">logback.xml or logback.groovy</td>
+</tr>
+<tr>
+<td style="text-align: left">Log4j</td>
+<td style="text-align: left">log4j.properties or log4j.xml</td>
+</tr>
+<tr>
+<td style="text-align: left">Log4j2</td>
+<td style="text-align: left">log4j2.xml</td>
+</tr>
+<tr>
+<td style="text-align: left">JDK (Java Util Logging)</td>
+<td style="text-align: left">logging.properties</td>
+</tr>
+</tbody></table>
+
+<h1 id="生产环境的一些特性">生产环境的一些特性</h1>
+
+<p><code class="prettyprint">spring-boot-actuator</code> 模块提供了一些生产环境的特性，使用 <code class="prettyprint">spring-boot-starter-actuator</code> 这个 Starter POM 可以开启该特性。</p>
+
+<p>对于 Maven ，添加</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencies&gt;</span>
+</code></pre></div>
+<p>对于 Gradle，添加</p>
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">compile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-actuator&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<h1 id="参考文章">参考文章</h1>
+
+<ul>
+<li><a href="http://docs.spring.io/spring-boot/docs/1.2.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
+</ul>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2015/03/13/some-spring-boot-features.html">http://blog.javachen.com/2015/03/13/some-spring-boot-features.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2015/03/13/some-spring-boot-features.html">Spring Boot特性</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#java">java</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#java">java</a>
+                          
+                            <a class="btn btn-default btn-xs" href="/tags.html#spring+boot">spring boot</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2015/03/13/some-spring-boot-features.html" data-url="http://blog.javachen.com/2015/03/13/some-spring-boot-features.html" data-title="Spring Boot特性"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2015/03/13/some-spring-boot-features.html'
+      });
+      </script>
+  </body>
+</html>

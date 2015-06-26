@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>如何在CDH5上运行Spark应用 - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/02/03/spark-programming-guide.html" title="Spark编程指南笔记"><i class="fa fa-angle-double-left"></i>&nbsp;Spark编程指南笔记</a></li>
+                
+                
+                <li class="next"><a href="/2015/02/10/reading-list-2015-02.html" title="Reading List 2015-02">Reading List 2015-02&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> 如何在CDH5上运行Spark应用  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2015.02.04 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <blockquote>
+<p>这篇文章参考 <a href="http://blog.cloudera.com/blog/2014/04/how-to-run-a-simple-apache-spark-app-in-cdh-5/">How-to: Run a Simple Apache Spark App in CDH 5</a> 编写而成，没有完全参照原文翻译，而是重新进行了整理，例如：spark 版本改为 <code class="prettyprint">1.3.0</code>，添加了 Python 版的程序。</p>
+</blockquote>
+
+<h1 id="创建-maven-工程">创建 maven 工程</h1>
+
+<p>使用下面命令创建一个普通的 maven 工程：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn archetype:generate -DgroupId<span class="o">=</span>com.cloudera.sparkwordcount -DartifactId<span class="o">=</span>sparkwordcount -DarchetypeArtifactId<span class="o">=</span>maven-archetype-quickstart -DinteractiveMode<span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+<p>在 sparkwordcount 目录下添加 scala 源文件目录和相应的包目录：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir -p sparkwordcount/src/main/scala/com/cloudera/sparkwordcount
+</code></pre></div>
+<p>修改 pom.xml 添加 scala 和 spark 依赖：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.scala-lang<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>scala-library<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>2.10.4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>spark-core_2.10<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>1.3.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>spark-sql_2.10<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>1.3.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+  <span class="nt">&lt;/dependencies&gt;</span>
+</code></pre></div>
+<p>添加编译 scala 的插件：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;plugin&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.scala-tools<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>maven-scala-plugin<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;executions&gt;</span>
+        <span class="nt">&lt;execution&gt;</span>
+          <span class="nt">&lt;goals&gt;</span>
+            <span class="nt">&lt;goal&gt;</span>compile<span class="nt">&lt;/goal&gt;</span>
+            <span class="nt">&lt;goal&gt;</span>testCompile<span class="nt">&lt;/goal&gt;</span>
+          <span class="nt">&lt;/goals&gt;</span>
+        <span class="nt">&lt;/execution&gt;</span>
+      <span class="nt">&lt;/executions&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span>
+</code></pre></div>
+<p>添加 scala 编译插件需要的仓库：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;pluginRepositories&gt;</span>
+  <span class="nt">&lt;pluginRepository&gt;</span>
+    <span class="nt">&lt;id&gt;</span>scala-tools.org<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Scala-tools Maven2 Repository<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;url&gt;</span>http://scala-tools.org/repo-releases<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;/pluginRepository&gt;</span>
+<span class="nt">&lt;/pluginRepositories&gt;</span>
+</code></pre></div>
+<p>另外，添加 cdh hadoop 的仓库：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;repositories&gt;</span>
+    <span class="nt">&lt;repository&gt;</span>
+      <span class="nt">&lt;id&gt;</span>scala-tools.org<span class="nt">&lt;/id&gt;</span>
+      <span class="nt">&lt;name&gt;</span>Scala-tools Maven2 Repository<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;url&gt;</span>http://scala-tools.org/repo-releases<span class="nt">&lt;/url&gt;</span>
+    <span class="nt">&lt;/repository&gt;</span>
+    <span class="nt">&lt;repository&gt;</span>
+      <span class="nt">&lt;id&gt;</span>maven-hadoop<span class="nt">&lt;/id&gt;</span>
+      <span class="nt">&lt;name&gt;</span>Hadoop Releases<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;url&gt;</span>https://repository.cloudera.com/content/repositories/releases/<span class="nt">&lt;/url&gt;</span>
+    <span class="nt">&lt;/repository&gt;</span>
+    <span class="nt">&lt;repository&gt;</span>
+      <span class="nt">&lt;id&gt;</span>cloudera-repos<span class="nt">&lt;/id&gt;</span>
+      <span class="nt">&lt;name&gt;</span>Cloudera Repos<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;url&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="nt">&lt;/url&gt;</span>
+    <span class="nt">&lt;/repository&gt;</span>
+  <span class="nt">&lt;/repositories&gt;</span>
+</code></pre></div>
+<p>运行下面命令检查工程是否能够成功编译：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mvn package
+</code></pre></div>
+<h1 id="编写示例代码">编写示例代码</h1>
+
+<p>以 <a href="http://wiki.apache.org/hadoop/WordCount">WordCount</a> 为例，该程序需要完成以下逻辑：</p>
+
+<ul>
+<li>读一个输入文件</li>
+<li>统计每个单词出现次数</li>
+<li>过滤少于一定次数的单词</li>
+<li>对剩下的单词统计每个字母出现次数</li>
+</ul>
+
+<p>在 MapReduce 中，上面的逻辑需要两个 MapReduce 任务，而在 Spark 中，只需要一个简单的任务，并且代码量会少 90%。</p>
+
+<p>编写Scala 程序如下：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">org.apache.spark.SparkContext</span>
+<span class="k">import</span> <span class="nn">org.apache.spark.SparkContext._</span>
+<span class="k">import</span> <span class="nn">org.apache.spark.SparkConf</span>
+
+<span class="k">object</span> <span class="nc">SparkWordCount</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">sc</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SparkContext</span><span class="o">(</span><span class="k">new</span> <span class="nc">SparkConf</span><span class="o">().</span><span class="n">setAppName</span><span class="o">(</span><span class="s">&quot;Spark Count&quot;</span><span class="o">))</span>
+    <span class="k">val</span> <span class="n">threshold</span> <span class="k">=</span> <span class="n">args</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toInt</span>
+
+    <span class="c1">// split each document into words</span>
+    <span class="k">val</span> <span class="n">tokenized</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="n">args</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">))</span>
+
+    <span class="c1">// count the occurrence of each word</span>
+    <span class="k">val</span> <span class="n">wordCounts</span> <span class="k">=</span> <span class="n">tokenized</span><span class="o">.</span><span class="n">map</span><span class="o">((</span><span class="k">_</span><span class="o">,</span> <span class="mi">1</span><span class="o">)).</span><span class="n">reduceByKey</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
+
+    <span class="c1">// filter out words with less than threshold occurrences</span>
+    <span class="k">val</span> <span class="n">filtered</span> <span class="k">=</span> <span class="n">wordCounts</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span> <span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="k">=</span> <span class="n">threshold</span><span class="o">)</span>
+
+    <span class="c1">// count characters</span>
+    <span class="k">val</span> <span class="n">charCounts</span> <span class="k">=</span> <span class="n">filtered</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_1</span><span class="o">.</span><span class="n">toCharArray</span><span class="o">).</span><span class="n">map</span><span class="o">((</span><span class="k">_</span><span class="o">,</span> <span class="mi">1</span><span class="o">)).</span><span class="n">reduceByKey</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
+
+    <span class="nc">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="o">(</span><span class="n">charCounts</span><span class="o">.</span><span class="n">collect</span><span class="o">().</span><span class="n">mkString</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Spark 使用懒执行的策略，意味着只有当<code class="prettyprint">动作</code>执行的时候，<code class="prettyprint">转换</code>才会运行。上面例子中的<code class="prettyprint">动作</code>操作是 <code class="prettyprint">collect</code> 和 <code class="prettyprint">saveAsTextFile</code>，前者是将数据推送给客户端，后者是将数据保存到 HDFS。</p>
+
+<p>作为对比，Java 版的程序如下：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.spark.api.java.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.spark.api.java.function.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.spark.SparkConf</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">scala.Tuple2</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JavaWordCount</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">JavaSparkContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">JavaSparkContext</span><span class="o">(</span><span class="k">new</span> <span class="nf">SparkConf</span><span class="o">().</span><span class="na">setAppName</span><span class="o">(</span><span class="s">&quot;Spark Count&quot;</span><span class="o">));</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">threshold</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+
+    <span class="c1">// split each document into words</span>
+    <span class="n">JavaRDD</span> <span class="n">tokenized</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="na">textFile</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]).</span><span class="na">flatMap</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nf">FlatMapFunction</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Iterable</span> <span class="nf">call</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">));</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">);</span>
+
+    <span class="c1">// count the occurrence of each word</span>
+    <span class="n">JavaPairRDD</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">tokenized</span><span class="o">.</span><span class="na">mapToPair</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nf">PairFunction</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Tuple2</span> <span class="nf">call</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="k">new</span> <span class="nf">Tuple2</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">).</span><span class="na">reduceByKey</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nf">Function2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">call</span><span class="o">(</span><span class="n">Integer</span> <span class="n">i1</span><span class="o">,</span> <span class="n">Integer</span> <span class="n">i2</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">i1</span> <span class="o">+</span> <span class="n">i2</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">);</span>
+
+    <span class="c1">// filter out words with less than threshold occurrences</span>
+    <span class="n">JavaPairRDD</span> <span class="n">filtered</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span>
+      <span class="k">new</span> <span class="n">Function</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Boolean</span> <span class="nf">call</span><span class="o">(</span><span class="n">Tuple2</span> <span class="n">tup</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">tup</span><span class="o">.</span><span class="na">_2</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">);</span>
+
+    <span class="c1">// count characters</span>
+    <span class="n">JavaPairRDD</span> <span class="n">charCounts</span> <span class="o">=</span> <span class="n">filtered</span><span class="o">.</span><span class="na">flatMap</span><span class="o">(</span>
+      <span class="k">new</span> <span class="n">FlatMapFunction</span><span class="o">,</span> <span class="n">Character</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Iterable</span> <span class="nf">call</span><span class="o">(</span><span class="n">Tuple2</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ArrayList</span> <span class="n">chars</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ArrayList</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">_1</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
+          <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">_1</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">chars</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+          <span class="o">}</span>
+          <span class="k">return</span> <span class="n">chars</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">).</span><span class="na">mapToPair</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nf">PairFunction</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Tuple2</span> <span class="nf">call</span><span class="o">(</span><span class="n">Character</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="k">new</span> <span class="nf">Tuple2</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">).</span><span class="na">reduceByKey</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nf">Function2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">call</span><span class="o">(</span><span class="n">Integer</span> <span class="n">i1</span><span class="o">,</span> <span class="n">Integer</span> <span class="n">i2</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">i1</span> <span class="o">+</span> <span class="n">i2</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">);</span>
+
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">charCounts</span><span class="o">.</span><span class="na">collect</span><span class="o">());</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>另外，Python 版的程序如下：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+
+<span class="nb">file</span><span class="o">=</span><span class="s">&quot;inputfile.txt&quot;</span>
+<span class="n">count</span><span class="o">=</span><span class="mi">2</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="s">&quot;PythonWordCount&quot;</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">))</span> \
+                  <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  \
+                  <span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>  \
+                  <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">:</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="n">count</span><span class="p">)</span>  \
+                  <span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>  \
+                  <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  \
+                  <span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+    <span class="n">sc</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</code></pre></div>
+<h1 id="编译">编译</h1>
+
+<p>运行下面命令生成 jar：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn package
+</code></pre></div>
+<p>运行成功之后，会在 target 目录生成 sparkwordcount-0.0.1-SNAPSHOT.jar 文件。</p>
+
+<h1 id="运行">运行</h1>
+
+<p>首先，将测试文件 <a href="https://github.com/sryza/simplesparkapp/blob/master/data/inputfile.txt">inputfile.txt</a> 上传到 HDFS 上；</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget https://github.com/sryza/simplesparkapp/blob/master/data/inputfile.txt
+<span class="nv">$ </span>hadoop fs -put inputfile.txt
+</code></pre></div>
+<p>其次，将 sparkwordcount-0.0.1-SNAPSHOT.jar 上传到集群中的一个节点；然后，使用 spark-submit 脚本运行 Scala 版的程序：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>spark-submit --class com.cloudera.sparkwordcount.SparkWordCount --master <span class="nb">local </span>sparkwordcount-0.0.1-SNAPSHOT.jar inputfile.txt 2
+</code></pre></div>
+<p>或者，运行 Java 版本的程序：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>spark-submit --class com.cloudera.sparkwordcount.JavaWordCount --master <span class="nb">local </span>sparkwordcount-0.0.1-SNAPSHOT.jar inputfile.txt 2
+</code></pre></div>
+<p>对于 Python 版的程序，运行脚本为：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>spark-submit  --master <span class="nb">local </span>PythonWordCount.py
+</code></pre></div>
+<p>如果，你的集群部署的是 standalone 模式，则你可以替换 master 参数的值为 <code class="prettyprint">spark://&lt;master host&gt;:&lt;master port&gt;</code>，也可以以 Yarn 的模式运行。</p>
+
+<p>最后的 Python 版的程序运行输出结果如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">(u&#39;a&#39;, 4),(u&#39;c&#39;, 1),(u&#39;b&#39;, 1),(u&#39;e&#39;, 6),(u&#39;f&#39;, 1),(u&#39;i&#39;, 1),(u&#39;h&#39;, 1),(u&#39;l&#39;, 1),(u&#39;o&#39;, 2),(u&#39;n&#39;, 4),(u&#39;p&#39;, 2),(u&#39;r&#39;, 2),(u&#39;u&#39;, 1),(u&#39;t&#39;, 2),(u&#39;v&#39;, 1)
+</code></pre></div>
+<p>完整的代码在：<a href="https://github.com/sryza/simplesparkapp">https://github.com/sryza/simplesparkapp</a></p>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html">http://blog.javachen.com/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html">如何在CDH5上运行Spark应用</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#spark">spark</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#spark">spark</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html" data-url="http://blog.javachen.com/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html" data-title="如何在CDH5上运行Spark应用"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html'
+      });
+      </script>
+  </body>
+</html>

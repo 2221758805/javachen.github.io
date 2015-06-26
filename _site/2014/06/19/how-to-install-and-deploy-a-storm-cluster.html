@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Storm集群安装部署步骤 - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2014/06/17/note-about-effective-java.html" title="Effective Java 笔记"><i class="fa fa-angle-double-left"></i>&nbsp;Effective Java 笔记</a></li>
+                
+                
+                <li class="next"><a href="/2014/06/21/the-introduction-of-lucene.html" title="Lucene介绍">Lucene介绍&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Storm集群安装部署步骤  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2014.06.19 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>开始学习Storm，本文主要记录Storm集群安装部署步骤，不包括对Storm的介绍。</p>
+
+<p>安装storm集群，需要依赖以下组件：</p>
+
+<ul>
+<li>Zookeeper</li>
+<li>Python</li>
+<li>Zeromq</li>
+<li>Storm</li>
+<li>JDK</li>
+<li>JZMQ</li>
+</ul>
+
+<p>故安装过程根据上面的组件分为以下几步：</p>
+
+<ul>
+<li>安装JDK</li>
+<li>安装Zookeeper集群</li>
+<li>安装Python及依赖</li>
+<li>安装Storm</li>
+</ul>
+
+<p>另外，操作系统环境为：Centos6.4，安装用户为：root。</p>
+
+<h1 id="1.-安装jdk">1. 安装JDK</h1>
+
+<p>安装jdk有很多方法，可以参考文博客<a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>中的jdk安装步骤，需要说明的是下面的zookeeper集群安装方法也可以参考此文。</p>
+
+<p>不管你用什么方法，最后需要配置JAVA_HOME并检测当前jdk版本：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -version
+java version <span class="s2">&quot;1.6.0_31&quot;</span>
+Java<span class="o">(</span>TM<span class="o">)</span> SE Runtime Environment <span class="o">(</span>build 1.6.0_31-b04<span class="o">)</span>
+Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM <span class="o">(</span>build 20.6-b01, mixed mode<span class="o">)</span>
+</code></pre></div>
+<h1 id="2.-安装zookeeper集群">2. 安装Zookeeper集群</h1>
+
+<p>可以参考文博客<a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>中的Zookeeper集群安装步骤。</p>
+
+<h1 id="3.-安装python及依赖">3. 安装Python及依赖</h1>
+
+<p>一般操作系统上都安装了Python，查看当前Python版本：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>python -V
+Python 2.6.6
+</code></pre></div>
+<h2 id="3.1-下载zeromq">3.1 下载Zeromq</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget http://download.zeromq.org/zeromq-4.0.4.tar.gz
+<span class="nv">$ </span>tar zxvf zeromq-4.0.4.tar.gz
+<span class="nv">$ </span>./configure
+<span class="nv">$ </span>make <span class="p">&amp;</span> make install
+</code></pre></div>
+<h2 id="3.2-安装jzmq">3.2 安装Jzmq</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>git clone git://github.com/nathanmarz/jzmq.git
+<span class="nv">$ </span><span class="nb">cd </span>jzmq
+<span class="nv">$ </span>./autogen.sh
+<span class="nv">$ </span>./configure
+<span class="nv">$ </span>make <span class="p">&amp;</span> make install
+</code></pre></div>
+<h1 id="4.-安装storm">4. 安装Storm</h1>
+
+<p>下载稳定版本的storm，然后解压将其拷贝到/usr/lib/storm目录：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget https://github.com/downloads/nathanmarz/storm/storm-0.8.1.zip
+<span class="nv">$ </span>unzip storm-0.8.1.zip 
+<span class="nv">$ </span>mv storm-0.8.1 /usr/lib/storm
+</code></pre></div>
+<p>接下来，配置环境变量：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">export STORM_HOME=/usr/lib/storm
+export PATH=$PATH:$STORM_HOME/bin
+</code></pre></div>
+<p>建立storm存储目录：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir /tmp/storm
+</code></pre></div>
+<p>修改配置文件/usr/lib/storm/conf/storm.yaml，修改为如下：</p>
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"> <span class="l-Scalar-Plain">storm.zookeeper.servers</span><span class="p-Indicator">:</span>
+     <span class="p-Indicator">-</span> <span class="s">&quot;cdh1&quot;</span>
+     <span class="p-Indicator">-</span> <span class="s">&quot;cdh2&quot;</span>
+     <span class="p-Indicator">-</span> <span class="s">&quot;cdh3&quot;</span>
+ <span class="l-Scalar-Plain">ui.port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8081</span>
+ <span class="l-Scalar-Plain">nimbus.host</span><span class="p-Indicator">:</span> <span class="s">&quot;cdh2&quot;</span>
+ <span class="l-Scalar-Plain">storm.local.dir</span><span class="p-Indicator">:</span> <span class="s">&quot;/tmp/storm&quot;</span>
+ <span class="l-Scalar-Plain">supervisor.slots.ports</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6700</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6701</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6702</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6703</span>
+</code></pre></div>
+<p>其中，配置参数说明：</p>
+
+<ul>
+<li><code class="prettyprint">storm.zookeeper.servers</code>：Storm集群使用的Zookeeper集群地址，如果Zookeeper集群使用的不是默认端口，那么还需要<code class="prettyprint">storm.zookeeper.port</code>选项</li>
+<li><code class="prettyprint">ui.port</code>：Storm UI的服务端口</li>
+<li><code class="prettyprint">storm.local.dir</code>：Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录</li>
+<li><code class="prettyprint">java.library.path</code>: Storm使用的本地库（ZMQ和JZMQ）加载路径，默认为&quot;/usr/local/lib:/opt/local/lib:/usr/lib&quot;，一般来说ZMQ和JZMQ默认安装在<code class="prettyprint">/usr/local/lib</code>下，因此不需要配置即可。</li>
+<li><code class="prettyprint">nimbus.host</code>: Storm集群Nimbus机器地址</li>
+<li><code class="prettyprint">supervisor.slots.ports</code>: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口</li>
+</ul>
+
+<p>更多配置参数，请参考<a href="http://www.alidata.org/archives/2118">Storm配置项详解</a>。</p>
+
+<p>最后，启动Storm各个后台进程：</p>
+
+<p>主控节点上启动nimbus：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>storm nimbus &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</code></pre></div>
+<p>在Storm各个工作节点上运行：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>storm supervisor &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</code></pre></div>
+<p>在Storm主控节点上启动ui：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>storm ui &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</code></pre></div>
+<p>然后，你可以访问<a href="http://cdh2:8081/">http://cdh2:8081/</a>查看集群的worker资源使用情况、Topologies的运行状态等信息。</p>
+
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html">http://blog.javachen.com/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html">Storm集群安装部署步骤</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#hadoop">hadoop</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#storm">storm</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html" data-url="http://blog.javachen.com/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html" data-title="Storm集群安装部署步骤"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2014/06/19/how-to-install-and-deploy-a-storm-cluster.html'
+      });
+      </script>
+  </body>
+</html>

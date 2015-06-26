@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>RHEL系统下安装atlassian-jira-5 - JavaChen Blog</title>
+      <meta name="author" content="Junez"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2014/04/09/install-jira5-on-rhel-system.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+      <!-- atom & rss feed -->
+      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
+      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <p class="navbar-text visible-lg tagline">Ramblings of a coder</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              <li><a href="https://twitter.com/junezchen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2014/04/08/a-benchmark-tool-on-postgresql.html" title="PostgreSQL测试工具PGbench"><i class="fa fa-angle-double-left"></i>&nbsp;PostgreSQL测试工具PGbench</a></li>
+                
+                
+                <li class="next"><a href="/2014/04/09/note-about-jvm-memery-model.html" title="Java笔记：Java内容模型">Java笔记：Java内容模型&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> RHEL系统下安装atlassian-jira-5  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2014.04.09 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <h1 id="部署环境">部署环境</h1>
+
+<ul>
+<li>操作系统：RHEL 6.4 x86_64</li>
+<li>Jira版本：<code class="prettyprint">atlassian-jira-5.2.11-x64.bin</code></li>
+<li>安装路径:<code class="prettyprint">/opt/atlassian/jira/</code></li>
+<li>数据保存路径：<code class="prettyprint">/opt/atlassian/application-data/jira</code></li>
+<li>安装用户：jira</li>
+<li>数据库：postgresql</li>
+<li>JDK：1.6.0_43</li>
+</ul>
+
+<p>jira下载页面：<a href="https://www.atlassian.com/software/jira/download">https://www.atlassian.com/software/jira/download</a></p>
+
+<h1 id="安装步骤">安装步骤</h1>
+
+<h2 id="运行安装文件">运行安装文件</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ . atlassian-jira-5.2.11-x64.bin
+</code></pre></div>
+<p>在安装过程中会出现选项：</p>
+
+<p>确认安装</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">This will install JIRA 6.2.2 on your computer.
+OK [o, Enter], Cancel [c]
+o
+</code></pre></div>
+<p>选择安装类型－1默认安装 －2自定义安装 －3升级</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Choose the appropriate installation or upgrade option.
+Please choose one of the following:
+Express Install (use default settings) [1], Custom Install (recommended for advanced users) [2], Upgrade an existing JIRA installation [3, Enter]
+3
+</code></pre></div>
+<p>你可以选择2自定义安装路径、启动端口等等。</p>
+
+<p>接下来选择确认直到安装成功。</p>
+
+<h2 id="初始化数据库">初始化数据库</h2>
+
+<p>这里我选择PostgreSql数据库，先安装数据库，然后创建用户(jira)和数据库(jira)。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ su - postgres
+-bash-4.1$ cd
+-bash-4.1$ cd bin
+-bash-4.1$ ./psql -U postgres
+psql (9.0.3)
+Type &quot;help&quot; for help.
+
+Cannot read termcap database;
+using dumb terminal settings.
+postgres=# CREATE USER jira WITH PASSWORD &#39;redhat&#39;;
+postgres=# CREATE DATABASE jira owner=jira;
+postgres=# GRANT ALL privileges ON DATABASE jira TO jira;
+</code></pre></div>
+<p>然后打开浏览器范围jira页面：<code class="prettyprint">http://ip:8080/</code>，在该页面选择数据库类型，并填写数据库连接信息，测试是否可以ping通，接着运行下一步,在jira官网上注册一个帐号。</p>
+
+<h2 id="破解">破解</h2>
+
+<p>破解文件：</p>
+
+<ul>
+<li><a href="http://download.csdn.net/detail/royalapex/6710573">atlassian-extras-2.2.2.jar</a></li>
+<li><a href="http://download.csdn.net/detail/royalapex/6710589">atlassian-extras-2.2.2.crack</a></li>
+</ul>
+
+<p>执行以下命令覆盖原来文件：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cp atlassian-extras-2.2.2.crack /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/
+$ \cp atlassian-extras-2.2.2.jar /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/
+</code></pre></div>
+<p>检查是否可以创建issue，并查看jira版本和过期时间。</p>
+
+<h2 id="汉化">汉化</h2>
+
+<p>下载JIRA汉化包：<a href="http://download.csdn.net/detail/royalapex/6711881">JIRA-5.0-language-pack-zh_CN.jar</a>,并在jira管理页面将其上传，然后在个人设置页面，可以设置语言为中文。</p>
+
+<h2 id="jira使用">JIRA使用</h2>
+
+<p>启动：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd /opt/atlassian/jira/bin
+$ sh start-jira.sh
+</code></pre></div>
+<p>停止：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd /opt/atlassian/jira/bin
+$ sh stop-jira.sh
+</code></pre></div>
+<p>查看日志：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd /opt/atlassian/jira/bin
+$ tailf catalina.out
+</code></pre></div>
+<h2 id="修改jvm参数">修改JVM参数</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>vi /opt/atlassian/jira/bin/setenv.sh
+<span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xms1024m -Xmx2048m -XX:MaxPermSize=256m $JAVA_OPTS -Djava.awt.headless=true &quot;</span>
+</code></pre></div>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
+                        本文链接地址：<a href="/2014/04/09/install-jira5-on-rhel-system.html">http://blog.javachen.com/2014/04/09/install-jira5-on-rhel-system.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文的署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <i class="small"><a href="/2014/04/09/install-jira5-on-rhel-system.html">RHEL系统下安装atlassian-jira-5</a></i></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/categories.html#devops">devops</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-xs" href="/tags.html#jira">jira</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2014/04/09/install-jira5-on-rhel-system.html" data-url="http://blog.javachen.com/2014/04/09/install-jira5-on-rhel-system.html" data-title="RHEL系统下安装atlassian-jira-5"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">Junez</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+            <script type="text/javascript">
+                var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+            
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2014/04/09/install-jira5-on-rhel-system.html'
+      });
+      </script>
+  </body>
+</html>
