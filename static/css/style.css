@@ -1,6 +1,7 @@
 body {
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 14.5px;
+  line-height: 1.8;
+  font-family: Consolas, monaco, "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, STHeiti, "WenQuanYi Micro Hei", sans-serif;
 }
 
 @media (min-width: 992px) {
@@ -17,6 +18,12 @@ body {
 
 .navbar .container {
   width: 1170px;
+}
+
+.navbar-brand {
+  float: left;
+  padding: 20px 15px;
+  font-size: 24px;
 }
 
 a {
@@ -50,7 +57,7 @@ h4,.h4 {
 }
 
 blockquote p {
-  font-size: 14px;
+  font-size: 15.5px;
 }
 
 
@@ -93,10 +100,7 @@ blockquote p {
 #wrap ul,ol {
     margin-bottom:10px;
 }
-#wrap p,
-#wrap li {
-  line-height: 1.8;
-}
+
 #wrap hr {
     border-color:rgba(102,102,102,0.8)
 }
