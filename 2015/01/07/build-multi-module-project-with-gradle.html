@@ -307,6 +307,7 @@ mkdir -p web/src/test/java
 │   │   └── tmp
 │   │       └── jar
 │   │           └── MANIFEST.MF
+│   ├── build.gradle
 │   └── src
 │       ├── main
 │       │   └── java
@@ -336,7 +337,28 @@ mkdir -p web/src/test/java
         └── test
             └── java
 
-23 directories, 13 files
+23 directories, 14 files
+</code></pre></div>
+<p>这样，core和web模块都是gradle项目了，你也可以单独编译某一个模块，例如，编译core模块：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>core
+<span class="nv">$ </span>rm -rf build
+<span class="nv">$ </span>gradle build
+<span class="nv">$ </span>tree
+.
+├── build
+│   ├── libs
+│   │   └── core-1.0.jar
+│   └── tmp
+│       └── jar
+│           └── MANIFEST.MF
+├── build.gradle
+└── src
+    ├── main
+    │   └── java
+    └── <span class="nb">test</span>
+        └── java
+
+<span class="m">9</span> directories, <span class="m">3</span> files
 </code></pre></div>
 <h1 id="4.-一些小技巧">4. 一些小技巧</h1>
 
