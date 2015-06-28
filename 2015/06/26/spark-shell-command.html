@@ -257,6 +257,10 @@ onExit
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">exit_status</span><span class="o">=</span><span class="nv">$?</span>
 onExit
 </code></pre></div>
+<blockquote>
+<p>提示： bash 中，$? 是获取上个命令运行结果</p>
+</blockquote>
+
 <p>如果以调试模式运行spark-shell，在不加参数的情况下，输出内容为：</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">+ cygwin=false
 + case &quot;`uname`&quot; in
@@ -289,6 +293,10 @@ onExit
 + export SPARK_SUBMIT_OPTS
 + /usr/lib/spark/bin/spark-submit --class org.apache.spark.repl.Main spark-shell
 </code></pre></div>
+<blockquote>
+<p>提示：通过运行<code class="prettyprint">set -x</code>可以开启bash调试代码的特性。</p>
+</blockquote>
+
 <p>接下来就涉及到spark-submit命令的逻辑了。</p>
 
 <h1 id="spark-submit">spark-submit</h1>
