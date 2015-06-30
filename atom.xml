@@ -3,11 +3,30 @@
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-06-28T12:57:43+08:00</updated>
+  <updated>2015-06-30T10:51:20+08:00</updated>
   <id></id>
   <author>
     <name>Junez</name>
   </author>
+  
+  <entry>
+    <title>高级Bash脚本编程入门</title>
+    <link href="/2015/06/29/advanced-bash-script-programming.html"/>
+    <updated>2015-06-29T00:00:00+08:00</updated>
+    <id>/2015/06/29/advanced-bash-script-programming.html</id>
+    <content type="html">最近在看《Advanced Bash Scripting Guide》这本书，第二章举了一个清除日志的例子，来讲述如何使用Bash进行编程并聊到了一些编程规范。本文主要是基于这部分内容记录我的读书笔记并整理一些相关知识点。
+
+说到清除日志，你可以使用下面命令来完成清除/var/log下的log文件这件事情：
+cd /var/log
+cat /dev/null &amp;gt; messages 
+cat /dev/null &amp;gt; wtmp
+echo &amp;quot;Logs cleaned up.&amp;quot;
+
+
+注意：
+/var/log/messages 记录系统报错信息
+/var/log/w...</content>
+  </entry>
   
   <entry>
     <title>spark-shell脚本分析</title>
@@ -92,7 +111,7 @@ object FileMatcher {
   </entry>
   
   <entry>
-    <title>解决使用固定导航时锚点偏移问题</title>
+    <title>解决固定导航时锚点偏移问题</title>
     <link href="/2015/06/18/fix-anchor-offset-when-using-bootstrap-navbar-fixed-top.html"/>
     <updated>2015-06-18T00:00:00+08:00</updated>
     <id>/2015/06/18/fix-anchor-offset-when-using-bootstrap-navbar-fixed-top.html</id>

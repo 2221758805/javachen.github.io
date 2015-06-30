@@ -147,6 +147,9 @@
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hive -e <span class="s2">&quot;select * from tablename;&quot;</span>  2&gt; err.txt  1&gt; out.txt 
 <span class="nv">$ </span>cat err.txt <span class="p">|</span> grep <span class="s2">&quot;Time taken:&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $3,$6}&#39;</span>
 </code></pre></div>
+<p>hive 中如何避免用科学计数法表示浮点数？参考 <a href="http://www.zhihu.com/question/28887115">http://www.zhihu.com/question/28887115</a> ：</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">java_method</span><span class="p">(</span><span class="ss">&quot;String&quot;</span><span class="p">,</span> <span class="ss">&quot;format&quot;</span><span class="p">,</span> <span class="ss">&quot;%f&quot;</span><span class="p">,</span> <span class="n">my_column</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">LIMIT</span> <span class="mi">1</span>
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>
