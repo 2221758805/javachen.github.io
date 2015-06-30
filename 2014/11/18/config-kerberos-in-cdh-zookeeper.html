@@ -108,148 +108,208 @@
                     <p>关于 Hadoop 集群上配置 kerberos 以及 ldap 的过程请参考本博客以下文章：</p>
 
 <ul>
-<li><a href="/2014/11/04/config-kerberos-in-cdh-hdfs.html">HDFS配置Kerberos认证</a></li>
-<li><a href="/2014/11/05/config-kerberos-in-cdh-yarn.html">YARN配置Kerberos认证</a></li>
-<li><a href="/2014/11/06/config-kerberos-in-cdh-hive.html">Hive配置Kerberos认证</a></li>
-<li><a href="/2014/11/06/config-kerberos-in-cdh-impala.html">Impala配置Kerberos认证</a></li>
-<li><a href="/2014/11/12/config-ldap-with-kerberos-in-cdh-hadoop.html">Hadoop配置LDAP集成Kerberos</a></li>
+  <li><a href="/2014/11/04/config-kerberos-in-cdh-hdfs.html">HDFS配置Kerberos认证</a></li>
+  <li><a href="/2014/11/05/config-kerberos-in-cdh-yarn.html">YARN配置Kerberos认证</a></li>
+  <li><a href="/2014/11/06/config-kerberos-in-cdh-hive.html">Hive配置Kerberos认证</a></li>
+  <li><a href="/2014/11/06/config-kerberos-in-cdh-impala.html">Impala配置Kerberos认证</a></li>
+  <li><a href="/2014/11/12/config-ldap-with-kerberos-in-cdh-hadoop.html">Hadoop配置LDAP集成Kerberos</a></li>
 </ul>
 
 <p>参考 <a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a> 安装 hadoop 集群，集群包括三个节点，每个节点的ip、主机名和部署的组件分配如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">192.168.56.121        cdh1     NameNode、Hive、ResourceManager、HBase、impala-state-store、impala-catalog、Kerberos Server、zookeeper-server
+
+<div class="highlighter-rouge"><pre class="highlight"><code>192.168.56.121        cdh1     NameNode、Hive、ResourceManager、HBase、impala-state-store、impala-catalog、Kerberos Server、zookeeper-server
 192.168.56.122        cdh2     DataNode、SSNameNode、NodeManager、HBase、impala-server、zookeeper-server
 192.168.56.123        cdh3     DataNode、HBase、NodeManager、impala-server、zookeeper-server
-</code></pre></div>
-<h1 id="1.-配置-zookeeper-server">1. 配置 ZooKeeper Server</h1>
+</code></pre>
+</div>
 
-<h1 id="1.1-生成-keytab">1.1 生成 keytab</h1>
+<h1 id="zookeeper-server">1. 配置 ZooKeeper Server</h1>
+
+<h1 id="keytab">1.1 生成 keytab</h1>
 
 <p>在 cdh1 节点，即 KDC server 节点上执行下面命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
 
-kadmin.local -q <span class="s2">&quot;addprinc -randkey zookeeper/cdh1@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey zookeeper/cdh2@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey zookeeper/cdh3@JAVACHEN.COM &quot;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
 
-kadmin.local -q <span class="s2">&quot;xst  -k zookeeper.keytab  zookeeper/cdh1@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;xst  -k zookeeper.keytab  zookeeper/cdh2@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;xst  -k zookeeper.keytab  zookeeper/cdh3@JAVACHEN.COM &quot;</span>
-</code></pre></div>
+kadmin.local -q <span class="s2">"addprinc -randkey zookeeper/cdh1@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"addprinc -randkey zookeeper/cdh2@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"addprinc -randkey zookeeper/cdh3@JAVACHEN.COM "</span>
+
+kadmin.local -q <span class="s2">"xst  -k zookeeper.keytab  zookeeper/cdh1@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"xst  -k zookeeper.keytab  zookeeper/cdh2@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"xst  -k zookeeper.keytab  zookeeper/cdh3@JAVACHEN.COM "</span>
+</code></pre>
+</div>
+
 <p>拷贝 zookeeper.keytab 文件到其他节点的 /etc/zookeeper/conf 目录：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp zookeeper.keytab cdh1:/etc/zookeeper/conf
-<span class="nv">$ </span>scp zookeeper.keytab cdh2:/etc/zookeeper/conf
-<span class="nv">$ </span>scp zookeeper.keytab cdh3:/etc/zookeeper/conf
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp zookeeper.keytab cdh1:/etc/zookeeper/conf
+<span class="gp">$ </span>scp zookeeper.keytab cdh2:/etc/zookeeper/conf
+<span class="gp">$ </span>scp zookeeper.keytab cdh3:/etc/zookeeper/conf
+</code></pre>
+</div>
+
 <p>并设置权限，分别在 cdh1、cdh2、cdh3 上执行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ssh cdh1 <span class="s2">&quot;cd /etc/zookeeper/conf/;chown zookeeper:hadoop zookeeper.keytab ;chmod 400 *.keytab&quot;</span>
-<span class="nv">$ </span>ssh cdh2 <span class="s2">&quot;cd /etc/zookeeper/conf/;chown zookeeper:hadoop zookeeper.keytab ;chmod 400 *.keytab&quot;</span>
-<span class="nv">$ </span>ssh cdh3 <span class="s2">&quot;cd /etc/zookeeper/conf/;chown zookeeper:hadoop zookeeper.keytab ;chmod 400 *.keytab&quot;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ssh cdh1 <span class="s2">"cd /etc/zookeeper/conf/;chown zookeeper:hadoop zookeeper.keytab ;chmod 400 *.keytab"</span>
+<span class="gp">$ </span>ssh cdh2 <span class="s2">"cd /etc/zookeeper/conf/;chown zookeeper:hadoop zookeeper.keytab ;chmod 400 *.keytab"</span>
+<span class="gp">$ </span>ssh cdh3 <span class="s2">"cd /etc/zookeeper/conf/;chown zookeeper:hadoop zookeeper.keytab ;chmod 400 *.keytab"</span>
+</code></pre>
+</div>
+
 <p>由于 keytab 相当于有了永久凭证，不需要提供密码(如果修改 kdc 中的 principal 的密码，则该 keytab 就会失效)，所以其他用户如果对该文件有读权限，就可以冒充 keytab 中指定的用户身份访问 hadoop，所以 keytab 文件需要确保只对 owner 有读权限(0400)</p>
 
-<h2 id="1.2-修改-zookeeper-配置文件">1.2 修改 zookeeper 配置文件</h2>
+<h2 id="zookeeper-">1.2 修改 zookeeper 配置文件</h2>
 
 <p>在 cdh1 节点上修改 /etc/zookeeper/conf/zoo.cfg 文件，添加下面内容：</p>
-<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">authProvider.1</span><span class="o">=</span><span class="s">org.apache.zookeeper.server.auth.SASLAuthenticationProvider</span>
-<span class="na">jaasLoginRenew</span><span class="o">=</span><span class="s">3600000</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">authProvider.1</span><span class="p">=</span><span class="s">org.apache.zookeeper.server.auth.SASLAuthenticationProvider</span>
+<span class="py">jaasLoginRenew</span><span class="p">=</span><span class="s">3600000</span>
+</code></pre>
+</div>
+
 <p>将修改的上面文件同步到其他节点：cdh2、cdh3：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp /etc/zookeeper/conf/zoo.cfg cdh2:/etc/zookeeper/conf/zoo.cfg
-<span class="nv">$ </span>scp /etc/zookeeper/conf/zoo.cfg cdh3:/etc/zookeeper/conf/zoo.cfg
-</code></pre></div>
-<h2 id="1.3-创建-jaas-配置文件">1.3 创建 JAAS 配置文件</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp /etc/zookeeper/conf/zoo.cfg cdh2:/etc/zookeeper/conf/zoo.cfg
+<span class="gp">$ </span>scp /etc/zookeeper/conf/zoo.cfg cdh3:/etc/zookeeper/conf/zoo.cfg
+</code></pre>
+</div>
+
+<h2 id="jaas-">1.3 创建 JAAS 配置文件</h2>
 
 <p>在 cdh1 的配置文件目录创建 jaas.conf 文件，内容如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Server {
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Server {
   com.sun.security.auth.module.Krb5LoginModule required
   useKeyTab=true
-  keyTab=&quot;/etc/zookeeper/conf/zookeeper.keytab&quot;
+  keyTab="/etc/zookeeper/conf/zookeeper.keytab"
   storeKey=true
   useTicketCache=false
-  principal=&quot;zookeeper/cdh1@JAVACHEN.COM&quot;;
+  principal="zookeeper/cdh1@JAVACHEN.COM";
 };
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>同样，在 cdh2 和 cdh3 节点也创建该文件，<strong>注意每个节点的 principal 有所不同</strong>。</p>
 
 <p>然后，在 /etc/zookeeper/conf/ 目录创建 java.env，内容如下：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">JVMFLAGS</span><span class="o">=</span><span class="s2">&quot;-Djava.security.auth.login.config=/etc/zookeeper/conf/jaas.conf&quot;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">JVMFLAGS</span><span class="o">=</span><span class="s2">"-Djava.security.auth.login.config=/etc/zookeeper/conf/jaas.conf"</span>
+</code></pre>
+</div>
+
 <p>并将该文件同步到其他节点：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp /etc/zookeeper/conf/java.env cdh2:/etc/zookeeper/conf/java.env
-<span class="nv">$ </span>scp /etc/zookeeper/conf/java.env cdh3:/etc/zookeeper/conf/java.env
-</code></pre></div>
-<h2 id="1.4-重启服务">1.4 重启服务</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp /etc/zookeeper/conf/java.env cdh2:/etc/zookeeper/conf/java.env
+<span class="gp">$ </span>scp /etc/zookeeper/conf/java.env cdh3:/etc/zookeeper/conf/java.env
+</code></pre>
+</div>
+
+<h2 id="section">1.4 重启服务</h2>
 
 <p>依次重启，并观察日志：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">/etc/init.d/zookeeper-server restart
-</code></pre></div>
-<h1 id="2.-配置-zookeeper-client">2. 配置 ZooKeeper Client</h1>
 
-<h1 id="2.1-生成-keytab">2.1 生成 keytab</h1>
+<div class="highlighter-rouge"><pre class="highlight"><code>/etc/init.d/zookeeper-server restart
+</code></pre>
+</div>
+
+<h1 id="zookeeper-client">2. 配置 ZooKeeper Client</h1>
+
+<h1 id="keytab-1">2.1 生成 keytab</h1>
 
 <p>在 cdh1 节点，即 KDC server 节点上执行下面命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
-kadmin.local -q <span class="s2">&quot;addprinc -randkey zkcli/cdh1@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey zkcli/cdh2@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey zkcli/cdh3@JAVACHEN.COM &quot;</span>
 
-kadmin.local -q <span class="s2">&quot;xst  -k zkcli.keytab  zkcli/cdh1@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;xst  -k zkcli.keytab  zkcli/cdh2@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;xst  -k zkcli.keytab  zkcli/cdh3@JAVACHEN.COM &quot;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
+kadmin.local -q <span class="s2">"addprinc -randkey zkcli/cdh1@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"addprinc -randkey zkcli/cdh2@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"addprinc -randkey zkcli/cdh3@JAVACHEN.COM "</span>
+
+kadmin.local -q <span class="s2">"xst  -k zkcli.keytab  zkcli/cdh1@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"xst  -k zkcli.keytab  zkcli/cdh2@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"xst  -k zkcli.keytab  zkcli/cdh3@JAVACHEN.COM "</span>
+</code></pre>
+</div>
+
 <p>拷贝 zkcli.keytab 文件到其他节点的 /etc/zookeeper/conf 目录：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp zkcli.keytab cdh1:/etc/zookeeper/conf
-<span class="nv">$ </span>scp zkcli.keytab cdh2:/etc/zookeeper/conf
-<span class="nv">$ </span>scp zkcli.keytab cdh3:/etc/zookeeper/conf
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp zkcli.keytab cdh1:/etc/zookeeper/conf
+<span class="gp">$ </span>scp zkcli.keytab cdh2:/etc/zookeeper/conf
+<span class="gp">$ </span>scp zkcli.keytab cdh3:/etc/zookeeper/conf
+</code></pre>
+</div>
+
 <p>并设置权限，分别在 cdh1、cdh2、cdh3 上执行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ssh cdh1 <span class="s2">&quot;cd /etc/zookeeper/conf/;chown zookeeper:hadoop zkcli.keytab ;chmod 400 *.keytab&quot;</span>
-<span class="nv">$ </span>ssh cdh2 <span class="s2">&quot;cd /etc/zookeeper/conf/;chown zookeeper:hadoop zkcli.keytab ;chmod 400 *.keytab&quot;</span>
-<span class="nv">$ </span>ssh cdh3 <span class="s2">&quot;cd /etc/zookeeper/conf/;chown zookeeper:hadoop zkcli.keytab ;chmod 400 *.keytab&quot;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ssh cdh1 <span class="s2">"cd /etc/zookeeper/conf/;chown zookeeper:hadoop zkcli.keytab ;chmod 400 *.keytab"</span>
+<span class="gp">$ </span>ssh cdh2 <span class="s2">"cd /etc/zookeeper/conf/;chown zookeeper:hadoop zkcli.keytab ;chmod 400 *.keytab"</span>
+<span class="gp">$ </span>ssh cdh3 <span class="s2">"cd /etc/zookeeper/conf/;chown zookeeper:hadoop zkcli.keytab ;chmod 400 *.keytab"</span>
+</code></pre>
+</div>
+
 <p>由于 keytab 相当于有了永久凭证，不需要提供密码(如果修改 kdc 中的 principal 的密码，则该 keytab 就会失效)，所以其他用户如果对该文件有读权限，就可以冒充 keytab 中指定的用户身份访问 hadoop，所以 keytab 文件需要确保只对 owner 有读权限(0400)</p>
 
-<h2 id="2.2-创建-jaas-配置文件">2.2 创建 JAAS 配置文件</h2>
+<h2 id="jaas--1">2.2 创建 JAAS 配置文件</h2>
 
 <p>在 cdh1 的配置文件目录 /etc/zookeeper/conf/ 创建 client-jaas.conf 文件，内容如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Client {
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Client {
   com.sun.security.auth.module.Krb5LoginModule required
   useKeyTab=true
-  keyTab=&quot;/etc/zookeeper/conf/zkcli.keytab&quot;
+  keyTab="/etc/zookeeper/conf/zkcli.keytab"
   storeKey=true
   useTicketCache=false
-  principal=&quot;zkcli@JAVACHEN.COM&quot;;
+  principal="zkcli@JAVACHEN.COM";
 };
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>同步到其他节点：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp client-jaas.conf cdh2:/etc/zookeeper/conf
-<span class="nv">$ </span>scp client-jaas.conf cdh3:/etc/zookeeper/conf
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp client-jaas.conf cdh2:/etc/zookeeper/conf
+<span class="gp">$ </span>scp client-jaas.conf cdh3:/etc/zookeeper/conf
+</code></pre>
+</div>
+
 <p>然后，在 /etc/zookeeper/conf/ 目录创建或者修改  java.env，内容如下：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">CLIENT_JVMFLAGS</span><span class="o">=</span><span class="s2">&quot;-Djava.security.auth.login.config=/etc/zookeeper/conf/client-jaas.conf&quot;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CLIENT_JVMFLAGS</span><span class="o">=</span><span class="s2">"-Djava.security.auth.login.config=/etc/zookeeper/conf/client-jaas.conf"</span>
+</code></pre>
+</div>
+
 <blockquote>
-<p>如果，zookeeper-client 和 zookeeper-server 安装在同一个节点上，则 java.env 中的 <code class="prettyprint">java.security.auth.login.config</code> 参数会被覆盖，这一点从 zookeeper-client 命令启动日志可以看出来。</p>
+  <p>如果，zookeeper-client 和 zookeeper-server 安装在同一个节点上，则 java.env 中的 <code class="highlighter-rouge">java.security.auth.login.config</code> 参数会被覆盖，这一点从 zookeeper-client 命令启动日志可以看出来。</p>
 </blockquote>
 
 <p>并将该文件同步到其他节点：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp /etc/zookeeper/conf/java.env cdh2:/etc/zookeeper/conf/java.env
-<span class="nv">$ </span>scp /etc/zookeeper/conf/java.env cdh3:/etc/zookeeper/conf/java.env
-</code></pre></div>
-<h2 id="2.3-验证">2.3 验证</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp /etc/zookeeper/conf/java.env cdh2:/etc/zookeeper/conf/java.env
+<span class="gp">$ </span>scp /etc/zookeeper/conf/java.env cdh3:/etc/zookeeper/conf/java.env
+</code></pre>
+</div>
+
+<h2 id="section-1">2.3 验证</h2>
 
 <p>启动客户端：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>zookeeper-client -server cdh1:2181
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>zookeeper-client -server cdh1:2181
+</code></pre>
+</div>
+
 <p>创建一个 znode 节点：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">k: cdh1:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 0<span class="o">]</span> create /znode1 sasl:zkcli@JAVACHEN.COM:cdwra
+
+<div class="highlighter-rouge"><pre class="highlight"><code>k: cdh1:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 0] create /znode1 sasl:zkcli@JAVACHEN.COM:cdwra
     Created /znode1
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>验证该节点是否创建以及其 ACL：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>zk: cdh1:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 1<span class="o">]</span> getAcl /znode1
-    <span class="s1">&#39;world,&#39;</span>anyone
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>zk: cdh1:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 1] getAcl /znode1
+    <span class="s1">'world,'</span>anyone
     : cdrwa
-</code></pre></div>
+</code></pre>
+</div>
+
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>

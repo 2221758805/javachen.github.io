@@ -105,86 +105,129 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <h1 id="安装虚拟机">安装虚拟机</h1>
+                    <h1 id="section">安装虚拟机</h1>
 
 <p>使用VirtualBox安装rhel6.3，存储为30G，内存为1G，并使用复制克隆出两个新的虚拟机，这样就存在3台虚拟机，设置三台虚拟机的主机名称，如：rhel-june、rhel-june-1、rhel-june-2</p>
 
-<h1 id="配置网络">配置网络</h1>
+<h1 id="section-1">配置网络</h1>
 
 <p>a. VirtualBox全局设定-网络中添加一个新的连接：vboxnet0</p>
 
 <p>b. 设置每一个虚拟机的网络为Host-Only</p>
 
 <p>c.分别修改每个虚拟机的ip，DHCP或手动设置</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">vim /etc/sysconfig/network-scripts/ifcfg-eth0
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vim /etc/sysconfig/network-scripts/ifcfg-eth0
 vim /etc/udev/rules.d/70-persistent-net.rules  #删掉第一个，修改第二个名字为eth0
 start_udev
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>d.修改主机名</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">vim /etc/sysconfig/network
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vim /etc/sysconfig/network
+</code></pre>
+</div>
+
 <p>e.每个虚拟机中修改hosts：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">192.168.56.100 rhel-june
+
+<div class="highlighter-rouge"><pre class="highlight"><code>192.168.56.100 rhel-june
 192.168.56.101 rhel-june-1
 192.168.56.102 rhel-june-2
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>最后机器列表为：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">rhel-june:   192.168.56.100
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rhel-june:   192.168.56.100
 rhel-june-1: 192.168.56.101
 rhel-june-2: 192.168.56.102
-</code></pre></div>
-<h1 id="机群规划">机群规划</h1>
+</code></pre>
+</div>
+
+<h1 id="section-2">机群规划</h1>
 
 <p>版本：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hadoop:1.1.1
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop:1.1.1
 JDK:1.6.0_38
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>集群各节点：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">NameNode:192.168.56.100
+
+<div class="highlighter-rouge"><pre class="highlight"><code>NameNode:192.168.56.100
 NameSecondary:192.168.56.100
 DataNode:192.168.56.101
 DataNode:192.168.56.102
-</code></pre></div>
-<h1 id="安装过程">安装过程</h1>
+</code></pre>
+</div>
+
+<h1 id="section-3">安装过程</h1>
 
 <p>a.将hadoop压缩包解压缩到/opt目录</p>
 
 <p>b.修改以下配置文件：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">core-site.xml
+
+<div class="highlighter-rouge"><pre class="highlight"><code>core-site.xml
 hdfs-site.sml
 mapred-site.xml
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>c.设置master、slaves文件</p>
 
 <p>master中内容为：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    192.168.56.100
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>	192.168.56.100
+</code></pre>
+</div>
+
 <p>slaves中内容为：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    192.168.56.101
-    192.168.56.102
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>	192.168.56.101
+	192.168.56.102
+</code></pre>
+</div>
+
 <p>d.设置环境变量</p>
 
-<p>方便执行java命令及hadoop命令. 使用root登录，<code class="prettyprint">vi ~/.bash_profile</code>追加下列信息</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">export JAVA_HOME=/opt/jdk1.6.0_38
+<p>方便执行java命令及hadoop命令. 使用root登录，<code class="highlighter-rouge">vi ~/.bash_profile</code>追加下列信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export JAVA_HOME=/opt/jdk1.6.0_38
 export HADOOP_INSTALL=/opt/hadoop-1.1.1
 export PATH=$PATH:$HADOOP_INSTALL/bin:$JAVA_HOME/bin
-</code></pre></div>
-<p>e.修改hadoop脚本中<code class="prettyprint">JAVA_HOME</code>：<code class="prettyprint">/opt/hadoop-1.1.1/conf/hadoop-env.sh</code></p>
+</code></pre>
+</div>
+
+<p>e.修改hadoop脚本中<code class="highlighter-rouge">JAVA_HOME</code>：<code class="highlighter-rouge">/opt/hadoop-1.1.1/conf/hadoop-env.sh</code></p>
 
 <p>f.格式化namenode</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hadoop namenode -format
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop namenode -format
+</code></pre>
+</div>
+
 <p>g.启动hdfs集群</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh /opt/hadoop-1.1.1/bin/start-all.sh
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sh /opt/hadoop-1.1.1/bin/start-all.sh
+</code></pre>
+</div>
+
 <p>h.查看节点进程</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">jps
-</code></pre></div>
-<h1 id="查看状态">查看状态</h1>
-<div class="highlight"><pre><code class="language-text" data-lang="text">http://rhel-june:50030/
+
+<div class="highlighter-rouge"><pre class="highlight"><code>jps
+</code></pre>
+</div>
+
+<h1 id="section-4">查看状态</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://rhel-june:50030/
 http://rhel-june:50070/
-</code></pre></div>
+</code></pre>
+</div>
+
+
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">Junez</a><br/>

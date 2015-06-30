@@ -107,31 +107,41 @@
               <div id="post-text">
                     <p>本文主要记录从CDH4升级到CDH5的过程和遇到的问题，当然本文同样适用于CDH5低版本向最新版本的升级。</p>
 
-<h1 id="1.-不兼容的变化">1. 不兼容的变化</h1>
+<h1 id="section">1. 不兼容的变化</h1>
 
 <p>升级前，需要注意 cdh5 有哪些不兼容的变化，具体请参考：<a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_rn_incompatible_changes.html">Apache Hadoop Incompatible Changes</a>。</p>
 
-<h1 id="2.-升级过程">2. 升级过程</h1>
+<h1 id="section-1">2. 升级过程</h1>
 
-<h2 id="2.1.-备份数据和停止所有服务">2.1. 备份数据和停止所有服务</h2>
+<h2 id="section-2">2.1. 备份数据和停止所有服务</h2>
 
-<h3 id="2.1.1-让-namenode-进入安全模式">2.1.1 让 namenode 进入安全模式</h3>
+<h3 id="namenode-">2.1.1 让 namenode 进入安全模式</h3>
 
 <p>在NameNode或者配置了 HA 中的 active NameNode上运行下面命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo -u hdfs hdfs dfsadmin -safemode enter
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo -u hdfs hdfs dfsadmin -safemode enter
+</code></pre>
+</div>
+
 <p>保存 fsimage：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo -u hdfs hdfs dfsadmin -saveNamespace
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo -u hdfs hdfs dfsadmin -saveNamespace
+</code></pre>
+</div>
+
 <p>如果使用了kerberos，则先获取hdfs用户凭证，再执行下面代码：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kinit -k -t /etc/hadoop/conf/hdfs.keytab hdfs/cdh1@JAVACHEN.COM
-<span class="nv">$ </span>hdfs dfsadmin -safemode enter
-<span class="nv">$ </span>hdfs dfsadmin -saveNamespace
-</code></pre></div>
-<h3 id="2.1.2-备份配置文件、数据库和其他重要文件">2.1.2 备份配置文件、数据库和其他重要文件</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kinit -k -t /etc/hadoop/conf/hdfs.keytab hdfs/cdh1@JAVACHEN.COM
+<span class="gp">$ </span>hdfs dfsadmin -safemode enter
+<span class="gp">$ </span>hdfs dfsadmin -saveNamespace
+</code></pre>
+</div>
+
+<h3 id="section-3">2.1.2 备份配置文件、数据库和其他重要文件</h3>
 
 <p>根据你安装的cdh组件，可能需要备份的配置文件包括：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">/etc/hadoop/conf
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/etc/hadoop/conf
 /etc/hive/conf
 /etc/hbase/conf
 /etc/zookeeper/conf
@@ -139,149 +149,211 @@
 /etc/spark/conf
 /etc/sentry/conf
 /etc/default/impala
-</code></pre></div>
-<h3 id="2.1.3-停止所有服务">2.1.3 停止所有服务</h3>
+</code></pre>
+</div>
+
+<h3 id="section-4">2.1.3 停止所有服务</h3>
 
 <p>在每个节点上运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">for</span> x in <span class="sb">`</span><span class="nb">cd</span> /etc/init.d <span class="p">;</span> ls hadoop-*<span class="sb">`</span> <span class="p">;</span> <span class="k">do</span> sudo service <span class="nv">$x</span> stop <span class="p">;</span> <span class="k">done</span>
-<span class="k">for</span> x in <span class="sb">`</span><span class="nb">cd</span> /etc/init.d <span class="p">;</span> ls hbase-*<span class="sb">`</span> <span class="p">;</span> <span class="k">do</span> sudo service <span class="nv">$x</span> stop <span class="p">;</span> <span class="k">done</span>
-<span class="k">for</span> x in <span class="sb">`</span><span class="nb">cd</span> /etc/init.d <span class="p">;</span> ls hive-*<span class="sb">`</span> <span class="p">;</span> <span class="k">do</span> sudo service <span class="nv">$x</span> stop <span class="p">;</span> <span class="k">done</span>
-<span class="k">for</span> x in <span class="sb">`</span><span class="nb">cd</span> /etc/init.d <span class="p">;</span> ls zookeeper-*<span class="sb">`</span> <span class="p">;</span> <span class="k">do</span> sudo service <span class="nv">$x</span> stop <span class="p">;</span> <span class="k">done</span>
-<span class="k">for</span> x in <span class="sb">`</span><span class="nb">cd</span> /etc/init.d <span class="p">;</span> ls hadoop-*<span class="sb">`</span> <span class="p">;</span> <span class="k">do</span> sudo service <span class="nv">$x</span> stop <span class="p">;</span> <span class="k">done</span>
-<span class="k">for</span> x in <span class="sb">`</span><span class="nb">cd</span> /etc/init.d <span class="p">;</span> ls impala-*<span class="sb">`</span> <span class="p">;</span> <span class="k">do</span> sudo service <span class="nv">$x</span> stop <span class="p">;</span> <span class="k">done</span>
-</code></pre></div>
-<h3 id="2.1.4-在每个节点上查看进程">2.1.4 在每个节点上查看进程</h3>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ps -aef <span class="p">|</span> grep java
-</code></pre></div>
-<h2 id="2.2.-备份-hdfs-元数据（可选，防止在操作过程中对数据的误操作）">2.2. 备份 hdfs 元数据（可选，防止在操作过程中对数据的误操作）</h2>
 
-<p>a，查找本地配置的文件目录（属性名为 <code class="prettyprint">dfs.name.dir</code> 或者 <code class="prettyprint">dfs.namenode.name.dir或者hadoop.tmp.dir</code> ）</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">grep -C1 hadoop.tmp.dir /etc/hadoop/conf/hdfs-site.xml
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">for </span>x <span class="k">in</span> <span class="sb">`</span><span class="nb">cd</span> /etc/init.d ; ls hadoop-<span class="k">*</span><span class="sb">`</span> ; <span class="k">do </span>sudo service <span class="nv">$x</span> stop ; <span class="k">done
+for </span>x <span class="k">in</span> <span class="sb">`</span><span class="nb">cd</span> /etc/init.d ; ls hbase-<span class="k">*</span><span class="sb">`</span> ; <span class="k">do </span>sudo service <span class="nv">$x</span> stop ; <span class="k">done
+for </span>x <span class="k">in</span> <span class="sb">`</span><span class="nb">cd</span> /etc/init.d ; ls hive-<span class="k">*</span><span class="sb">`</span> ; <span class="k">do </span>sudo service <span class="nv">$x</span> stop ; <span class="k">done
+for </span>x <span class="k">in</span> <span class="sb">`</span><span class="nb">cd</span> /etc/init.d ; ls zookeeper-<span class="k">*</span><span class="sb">`</span> ; <span class="k">do </span>sudo service <span class="nv">$x</span> stop ; <span class="k">done
+for </span>x <span class="k">in</span> <span class="sb">`</span><span class="nb">cd</span> /etc/init.d ; ls hadoop-<span class="k">*</span><span class="sb">`</span> ; <span class="k">do </span>sudo service <span class="nv">$x</span> stop ; <span class="k">done
+for </span>x <span class="k">in</span> <span class="sb">`</span><span class="nb">cd</span> /etc/init.d ; ls impala-<span class="k">*</span><span class="sb">`</span> ; <span class="k">do </span>sudo service <span class="nv">$x</span> stop ; <span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="section-5">2.1.4 在每个节点上查看进程</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ps -aef | grep java
+</code></pre>
+</div>
+
+<h2 id="hdfs-">2.2. 备份 hdfs 元数据（可选，防止在操作过程中对数据的误操作）</h2>
+
+<p>a，查找本地配置的文件目录（属性名为 <code class="highlighter-rouge">dfs.name.dir</code> 或者 <code class="highlighter-rouge">dfs.namenode.name.dir或者hadoop.tmp.dir</code> ）</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>grep -C1 hadoop.tmp.dir /etc/hadoop/conf/hdfs-site.xml
 
 <span class="c">#或者</span>
 grep -C1 dfs.namenode.name.dir /etc/hadoop/conf/hdfs-site.xml
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>通过上面的命令，可以看到类似以下信息：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
 <span class="nt">&lt;name&gt;</span>hadoop.tmp.dir<span class="nt">&lt;/name&gt;</span>
 <span class="nt">&lt;value&gt;</span>/data/dfs/nn<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>b，对hdfs数据进行备份</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /data/dfs/nn
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">cd</span> /data/dfs/nn
 tar -cvf /root/nn_backup_data.tar .
-</code></pre></div>
-<h2 id="2.3.-更新-yum-源">2.3. 更新 yum 源</h2>
+</code></pre>
+</div>
+
+<h2 id="yum-">2.3. 更新 yum 源</h2>
 
 <p>如果你使用的是官方的远程yum源，则下载 <a href="http://archive.cloudera.com/cdh5/redhat/6/x86_64/cdh/cloudera-cdh5.repo">cloudera-cdh5.repo</a> 文件到 /etc/yum.repos.d 目录：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget http://archive.cloudera.com/cdh5/redhat/6/x86_64/cdh/cloudera-cdh5.repo -P /etc/yum.repos.d
-</code></pre></div>
-<p>如果你使用本地yum，则需要从 <a href="http://archive-primary.cloudera.com/cdh5/repo-as-tarball">http://archive-primary.cloudera.com/cdh5/repo-as-tarball</a> 下载最新的压缩包文件，然后解压到对于目录，以 CDH5.4 版本为例：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /var/ftp/pub
-<span class="nv">$ </span>rm -rf cdh
-<span class="nv">$ </span>wget http://archive-primary.cloudera.com/cdh5/repo-as-tarball/5.4.0/cdh5.4.0-centos6.tar.gz
-<span class="nv">$ </span>tar zxvf cdh5.4.0-centos6.tar.gz
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget http://archive.cloudera.com/cdh5/redhat/6/x86_64/cdh/cloudera-cdh5.repo -P /etc/yum.repos.d
+</code></pre>
+</div>
+
+<p>如果你使用本地yum，则需要从 http://archive-primary.cloudera.com/cdh5/repo-as-tarball 下载最新的压缩包文件，然后解压到对于目录，以 CDH5.4 版本为例：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /var/ftp/pub
+<span class="gp">$ </span>rm -rf cdh
+<span class="gp">$ </span>wget http://archive-primary.cloudera.com/cdh5/repo-as-tarball/5.4.0/cdh5.4.0-centos6.tar.gz
+<span class="gp">$ </span>tar zxvf cdh5.4.0-centos6.tar.gz
+</code></pre>
+</div>
+
 <p>然后，在 /etc/yum.repos.d 目录创建一个 repos 文件，指向本地yum源即可，详细过程请自行百度。</p>
 
-<h2 id="2.4.-升级组件">2.4. 升级组件</h2>
+<h2 id="section-6">2.4. 升级组件</h2>
 
 <p>在所有节点上运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo yum update hadoop* hbase* hive* zookeeper* bigtop* impala* spark* llama* lzo* sqoop* parquet* sentry* avro* mahout* -y
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo yum update hadoop<span class="k">*</span> hbase<span class="k">*</span> hive<span class="k">*</span> zookeeper<span class="k">*</span> bigtop<span class="k">*</span> impala<span class="k">*</span> spark<span class="k">*</span> llama<span class="k">*</span> lzo<span class="k">*</span> sqoop<span class="k">*</span> parquet<span class="k">*</span> sentry<span class="k">*</span> avro<span class="k">*</span> mahout<span class="k">*</span> -y
+</code></pre>
+</div>
+
 <p>启动ZooKeeper集群，如果配置了 HA，则在原来的所有 Journal Nodes 上启动 hadoop-hdfs-journalnode：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 在安装zookeeper-server的节点上运行</span>
-<span class="nv">$ </span>/etc/init.d/zookeeper-server start
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 在安装zookeeper-server的节点上运行</span>
+<span class="gp">$ </span>/etc/init.d/zookeeper-server start
 
 <span class="c"># 在安装zkfc的节点上运行</span>
-<span class="nv">$ </span>/etc/init.d/hadoop-hdfs-zkfc
+<span class="gp">$ </span>/etc/init.d/hadoop-hdfs-zkfc
 
 <span class="c"># 在安装journalnode的节点上运行</span>
-<span class="nv">$ </span>/etc/init.d/hadoop-hdfs-journalnode start
-</code></pre></div>
-<h2 id="2.5.-更新-hdfs-元数据">2.5. 更新 hdfs 元数据</h2>
+<span class="gp">$ </span>/etc/init.d/hadoop-hdfs-journalnode start
+</code></pre>
+</div>
+
+<h2 id="hdfs--1">2.5. 更新 hdfs 元数据</h2>
 
 <p>在NameNode或者配置了 HA 中的 active NameNode上运行下面命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo service hadoop-hdfs-namenode upgrade
-</code></pre></div>
-<p>查看日志，检查是否完成升级，例如查看日志中是否出现<code class="prettyprint">/var/lib/hadoop-hdfs/cache/hadoop/dfs/&lt;name&gt; is complete</code></p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo tail -f /var/log/hadoop-hdfs/hadoop-hdfs-namenode-&lt;hostname&gt;.log
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo service hadoop-hdfs-namenode upgrade
+</code></pre>
+</div>
+
+<p>查看日志，检查是否完成升级，例如查看日志中是否出现<code class="highlighter-rouge">/var/lib/hadoop-hdfs/cache/hadoop/dfs/&lt;name&gt; is complete</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo tail -f /var/log/hadoop-hdfs/hadoop-hdfs-namenode-&lt;hostname&gt;.log
+</code></pre>
+</div>
+
 <p>如果配置了 HA，在另一个 NameNode 节点上运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 输入 Y</span>
-<span class="nv">$ </span>sudo -u hdfs hdfs namenode -bootstrapStandby
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 输入 Y</span>
+<span class="gp">$ </span>sudo -u hdfs hdfs namenode -bootstrapStandby
 <span class="o">=====================================================</span>
-Re-format filesystem in Storage Directory /data/dfs/nn ? <span class="o">(</span>Y or N<span class="o">)</span>
-<span class="nv">$ </span>sudo service hadoop-hdfs-namenode start
-</code></pre></div>
+Re-format filesystem <span class="k">in </span>Storage Directory /data/dfs/nn ? <span class="o">(</span>Y or N<span class="o">)</span>
+<span class="gp">$ </span>sudo service hadoop-hdfs-namenode start
+</code></pre>
+</div>
+
 <p>启动所有的 DataNode：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo service hadoop-hdfs-datanode start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo service hadoop-hdfs-datanode start
+</code></pre>
+</div>
+
 <p>打开 web 界面查看 hdfs 文件是否都存在。</p>
 
 <p>待集群稳定运行一段时间，可以完成升级：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo -u hdfs hadoop dfsadmin -finalizeUpgrade
-</code></pre></div>
-<h2 id="2.6.-更新-yarn">2.6. 更新 YARN</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo -u hdfs hadoop dfsadmin -finalizeUpgrade
+</code></pre>
+</div>
+
+<h2 id="yarn">2.6. 更新 YARN</h2>
 
 <p>更新 YARN 需要注意以下节点：</p>
 
 <ul>
-<li><code class="prettyprint">yarn-site.xml</code> 中做如下改变：
-
-<ul>
-<li><code class="prettyprint">yarn.nodemanager.aux-services</code>的值从<code class="prettyprint">mapreduce.shuffle</code> 修改为  <code class="prettyprint">mapreduce_shuffle</code> </li>
-<li><code class="prettyprint">yarn.nodemanager.aux-services.mapreduce.shuffle.class</code> 改名为 <code class="prettyprint">yarn.nodemanager.aux-services.mapreduce_shuffle.class</code></li>
-<li><code class="prettyprint">yarn.resourcemanager.resourcemanager.connect.max.wait.secs</code> 修改为 <code class="prettyprint">yarn.resourcemanager.connect.max-wait.secs</code></li>
-<li><code class="prettyprint">yarn.resourcemanager.resourcemanager.connect.retry_interval.secs</code> 修改为 <code class="prettyprint">yarn.resourcemanager.connect.retry-interval.secs</code></li>
-<li><code class="prettyprint">yarn.resourcemanager.am. max-retries</code> 修改为 <code class="prettyprint">yarn.resourcemanager.am.max-attempts</code></li>
-<li><code class="prettyprint">yarn.application.classpath</code> 中的环境变量 <code class="prettyprint">YARN_HOME</code> 属性修改为<code class="prettyprint">HADOOP_YARN_HOME</code></li>
-</ul></li>
+  <li><code class="highlighter-rouge">yarn-site.xml</code> 中做如下改变：
+    <ul>
+      <li><code class="highlighter-rouge">yarn.nodemanager.aux-services</code>的值从<code class="highlighter-rouge">mapreduce.shuffle</code> 修改为  <code class="highlighter-rouge">mapreduce_shuffle</code></li>
+      <li><code class="highlighter-rouge">yarn.nodemanager.aux-services.mapreduce.shuffle.class</code> 改名为 <code class="highlighter-rouge">yarn.nodemanager.aux-services.mapreduce_shuffle.class</code></li>
+      <li><code class="highlighter-rouge">yarn.resourcemanager.resourcemanager.connect.max.wait.secs</code> 修改为 <code class="highlighter-rouge">yarn.resourcemanager.connect.max-wait.secs</code></li>
+      <li><code class="highlighter-rouge">yarn.resourcemanager.resourcemanager.connect.retry_interval.secs</code> 修改为 <code class="highlighter-rouge">yarn.resourcemanager.connect.retry-interval.secs</code></li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">yarn.resourcemanager.am. max-retries</code> 修改为 <code class="highlighter-rouge">yarn.resourcemanager.am.max-attempts</code></li>
+  <li><code class="highlighter-rouge">yarn.application.classpath</code> 中的环境变量 <code class="highlighter-rouge">YARN_HOME</code> 属性修改为<code class="highlighter-rouge"> HADOOP_YARN_HOME</code></li>
 </ul>
 
 <p>然后在启动 YARN 的相关服务。</p>
 
-<h2 id="2.7.-更新-hbase">2.7. 更新 HBase</h2>
+<h2 id="hbase">2.7. 更新 HBase</h2>
 
 <p>升级 HBase 之前，先启动 zookeeper。</p>
 
 <p>在启动hbase-master进程和hbase-regionserver进程之前，更新 HBase：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo -u hdfs hbase upgrade -execute
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo -u hdfs hbase upgrade -execute
+</code></pre>
+</div>
+
 <p>如果你使用了 phoenix，则请删除 HBase lib 目录下对应的 phoenix 的 jar 包。</p>
 
 <p>启动 HBase：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>service hbase-master start
-<span class="nv">$ </span>service hbase-regionserver start
-</code></pre></div>
-<h2 id="2.8.-更新-hive">2.8. 更新 hive</h2>
 
-<p>在启动hive之前，进入 <code class="prettyprint">/usr/lib/hive/bin</code> 执行下面命令升级元数据（这里元数据使用的是postgres数据库）：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /usr/lib/hive/bin
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>service hbase-master start
+<span class="gp">$ </span>service hbase-regionserver start
+</code></pre>
+</div>
+
+<h2 id="hive">2.8. 更新 hive</h2>
+
+<p>在启动hive之前，进入 <code class="highlighter-rouge">/usr/lib/hive/bin</code> 执行下面命令升级元数据（这里元数据使用的是postgres数据库）：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /usr/lib/hive/bin
 <span class="c"># ./schematool -dbType 数据库类型 -upgradeSchemaFrom 版本号</span>
 <span class="c"># 升级之前 hive 版本为 0.14.0，下面命令会运行  /usr/lib/hive/scripts/metastore/upgrade/postgres/upgrade-0.14.0-to-1.1.0.postgres.sql</span>
-<span class="nv">$ </span>./schematool -dbType postgres -upgradeSchemaFrom 0.14.0
-</code></pre></div>
+<span class="gp">$ </span>./schematool -dbType postgres -upgradeSchemaFrom 0.14.0
+</code></pre>
+</div>
+
 <p>确认 /etc/hive/conf/hive-site.xml 和 /etc/hive/conf/hive-env.sh 是否需要修改，例如 /etc/hive/conf/hive-env.sh 配置了如下参数，需要修改到 cdh-5.2 对应的版本：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 请修改到 cdh5.4对应的 jar 包</span>
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">HIVE_AUX_JARS_PATH</span><span class="o">=</span>/usr/lib/hive/lib/hive-contrib-1.1.0-cdh5.4.0.jar
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 请修改到 cdh5.4对应的 jar 包</span>
+<span class="gp">$ </span><span class="nb">export </span><span class="nv">HIVE_AUX_JARS_PATH</span><span class="o">=</span>/usr/lib/hive/lib/hive-contrib-1.1.0-cdh5.4.0.jar
+</code></pre>
+</div>
+
 <p>修改完之后，请同步到其他节点。</p>
 
 <p>然后启动 hive 服务：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>service hive-metastore start
-<span class="nv">$ </span>service hive-server2 start
-</code></pre></div>
-<h2 id="2.9-更新sentry">2.9 更新Sentry</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>service hive-metastore start
+<span class="gp">$ </span>service hive-server2 start
+</code></pre>
+</div>
+
+<h2 id="sentry">2.9 更新Sentry</h2>
 
 <p>如果你从 CDH 5.2.0 以前的版本更新到 CDH 5.2.0 以后的版本，请更新sentry的元数据库：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>bin/sentry --command schema-tool --conffile &lt;sentry-site.xml&gt; --dbType &lt;db-type&gt; --upgradeSchema
-</code></pre></div>
-<h1 id="3.-参考文章">3. 参考文章</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bin/sentry --command schema-tool --conffile &lt;sentry-site.xml&gt; --dbType &lt;db-type&gt; --upgradeSchema
+</code></pre>
+</div>
+
+<h1 id="section-7">3. 参考文章</h1>
 
 <ul>
-<li><a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_ig_upgrade_command_line.html">Upgrading Unmanaged CDH Using the Command Line</a></li>
-<li><a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_rn_incompatible_changes.html">CDH Incompatible Changes</a></li>
+  <li><a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_ig_upgrade_command_line.html">Upgrading Unmanaged CDH Using the Command Line</a></li>
+  <li><a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_rn_incompatible_changes.html">CDH Incompatible Changes</a></li>
 </ul>
 
                     <br/>

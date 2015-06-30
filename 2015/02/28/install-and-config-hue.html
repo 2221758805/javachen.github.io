@@ -110,100 +110,122 @@
 <p>安装环境：</p>
 
 <ul>
-<li>操作系统：<code class="prettyprint">CentOs6.5</code></li>
-<li>Hadoop：<code class="prettyprint">cdh5.2.0</code></li>
-<li>Hue：<code class="prettyprint">3.6.0+cdh5.2.0</code></li>
+  <li>操作系统：<code class="highlighter-rouge">CentOs6.5</code></li>
+  <li>Hadoop：<code class="highlighter-rouge">cdh5.2.0</code></li>
+  <li>Hue：<code class="highlighter-rouge">3.6.0+cdh5.2.0</code></li>
 </ul>
 
-<h1 id="安装-hue">安装 Hue</h1>
+<h1 id="hue">安装 Hue</h1>
 
-<p>在 Hadoop 集群的一个节点上安装 Hue server，这里我是在我的测试集群中的 <code class="prettyprint">cdh1</code> 节点上安装：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>yum install hue hue-server
-</code></pre></div>
-<h1 id="配置-hue">配置 Hue</h1>
+<p>在 Hadoop 集群的一个节点上安装 Hue server，这里我是在我的测试集群中的 <code class="highlighter-rouge">cdh1</code> 节点上安装：</p>
 
-<h2 id="配置hue-server">配置hue server</h2>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[desktop]</span>
-    <span class="na">http_host</span><span class="o">=</span><span class="s">cdh1</span>
-<span class="s">    http_port=8888</span>
-<span class="s">    secret_key=qpbdxoewsqlkhztybvfidtvwekftusgdlofbcfghaswuicmqp</span>
-<span class="s">    time_zone=Asia/Shanghai</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install hue hue-server
+</code></pre>
+</div>
+
+<h1 id="hue-1">配置 Hue</h1>
+
+<h2 id="hue-server">配置hue server</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[desktop]</span>
+    <span class="py">http_host</span><span class="p">=</span><span class="s">cdh1</span>
+    <span class="py">http_port</span><span class="p">=</span><span class="s">8888</span>
+    <span class="py">secret_key</span><span class="p">=</span><span class="s">qpbdxoewsqlkhztybvfidtvwekftusgdlofbcfghaswuicmqp</span>
+    <span class="py">time_zone</span><span class="p">=</span><span class="s">Asia/Shanghai</span>
+</code></pre>
+</div>
+
 <p>如果想配置 SSL，则添加下面设置：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="na">ssl_certificate</span><span class="o">=</span><span class="s">/path/to/certificate</span>
-<span class="na">ssl_private_key</span><span class="o">=</span><span class="s">/path/to/key</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">ssl_certificate</span><span class="p">=</span><span class="s">/path/to/certificate</span>
+<span class="py">ssl_private_key</span><span class="p">=</span><span class="s">/path/to/key</span>
+</code></pre>
+</div>
+
 <p>并使用下面命令生成证书：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Create a key </span>
-<span class="nv">$ </span>openssl genrsa <span class="m">1024</span> &gt; host.key 
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Create a key </span>
+<span class="gp">$ </span>openssl genrsa 1024 &gt; host.key 
 <span class="c"># Create a self-signed certificate </span>
-<span class="nv">$ </span>openssl req -new -x509 -nodes -sha1 -key host.key &gt; host.cert
-</code></pre></div>
-<h2 id="配置-db-query">配置 DB Query</h2>
+<span class="gp">$ </span>openssl req -new -x509 -nodes -sha1 -key host.key &gt; host.cert
+</code></pre>
+</div>
+
+<h2 id="db-query">配置 DB Query</h2>
 
 <p>DB Query 的相关配置在 hue.ini 中 databases 节点下面，目前共支持 sqlite, mysql, postgresql 和 oracle 四种数据库，默认使用的是 sqlite 数据库，你可以按自己的需要修改为其他的数据库。</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[[database]]</span>
-    <span class="na">engine</span><span class="o">=</span><span class="s">sqlite3</span>
-<span class="s">    name=/var/lib/hue/desktop.db</span>
-</code></pre></div>
-<h2 id="配置-hadoop-参数">配置 Hadoop 参数</h2>
 
-<h3 id="hdfs-集群配置">HDFS 集群配置</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[[database]</span><span class="err">]</span>
+    <span class="py">engine</span><span class="p">=</span><span class="s">sqlite3</span>
+    <span class="py">name</span><span class="p">=</span><span class="s">/var/lib/hue/desktop.db</span>
+</code></pre>
+</div>
+
+<h2 id="hadoop-">配置 Hadoop 参数</h2>
+
+<h3 id="hdfs-">HDFS 集群配置</h3>
 
 <p>在 hadoop.hdfs_clusters.default 节点下配置以下参数：</p>
 
 <ul>
-<li><code class="prettyprint">fs_defaultfs</code>：</li>
-<li><code class="prettyprint">logical_name</code>： NameNode 逻辑名称</li>
-<li><code class="prettyprint">webhdfs_url</code>：</li>
-<li><code class="prettyprint">security_enabled</code>：是否开启 Kerberos</li>
-<li><code class="prettyprint">hadoop_conf_dir</code>： hadoop 配置文件路径</li>
+  <li><code class="highlighter-rouge">fs_defaultfs</code>：</li>
+  <li><code class="highlighter-rouge">logical_name</code>： NameNode 逻辑名称</li>
+  <li><code class="highlighter-rouge">webhdfs_url</code>：</li>
+  <li><code class="highlighter-rouge">security_enabled</code>：是否开启 Kerberos</li>
+  <li><code class="highlighter-rouge">hadoop_conf_dir</code>： hadoop 配置文件路径</li>
 </ul>
 
 <p>完整配置如下：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[hadoop]</span>
-  <span class="k">[[hdfs_clusters]]</span>
-    <span class="k">[[[default]]]</span>
-      <span class="c1"># Enter the filesystem uri</span>
-      <span class="na">fs_defaultfs</span><span class="o">=</span><span class="s">hdfs://mycluster</span>
 
-      <span class="c1"># NameNode logical name.</span>
-      <span class="na">logical_name</span><span class="o">=</span><span class="s">mycluster</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[hadoop]</span>
+  <span class="nn">[[hdfs_clusters]</span><span class="err">]</span>
+    <span class="nn">[[[default]</span><span class="err">]]</span>
+      <span class="c"># Enter the filesystem uri
+</span>      <span class="py">fs_defaultfs</span><span class="p">=</span><span class="s">hdfs://mycluster</span>
 
-      <span class="c1"># Use WebHdfs/HttpFs as the communication mechanism.</span>
-      <span class="c1"># Domain should be the NameNode or HttpFs host.</span>
-      <span class="c1"># Default port is 14000 for HttpFs.</span>
-      <span class="c1">## webhdfs_url=http://localhost:50070/webhdfs/v1</span>
-      <span class="na">webhdfs_url</span><span class="o">=</span><span class="s">http://cdh1:14000/webhdfs/v1</span>
+      <span class="c"># NameNode logical name.
+</span>      <span class="py">logical_name</span><span class="p">=</span><span class="s">mycluster</span>
 
-      <span class="c1"># Change this if your HDFS cluster is Kerberos-secured</span>
-      <span class="na">security_enabled</span><span class="o">=</span><span class="s">true</span>
+      <span class="c"># Use WebHdfs/HttpFs as the communication mechanism.
+</span>      <span class="c"># Domain should be the NameNode or HttpFs host.
+</span>      <span class="c"># Default port is 14000 for HttpFs.
+</span>      <span class="c">## webhdfs_url=http://localhost:50070/webhdfs/v1
+</span>      <span class="py">webhdfs_url</span><span class="p">=</span><span class="s">http://cdh1:14000/webhdfs/v1</span>
 
-      <span class="na">hadoop_conf_dir</span><span class="o">=</span><span class="s">/etc/hadoop/conf</span>
-</code></pre></div>
-<h3 id="配置-webhdfs-或者-httpfs">配置 WebHDFS 或者 HttpFS</h3>
+      <span class="c"># Change this if your HDFS cluster is Kerberos-secured
+</span>      <span class="py">security_enabled</span><span class="p">=</span><span class="s">true</span>
+
+      <span class="py">hadoop_conf_dir</span><span class="p">=</span><span class="s">/etc/hadoop/conf</span>
+</code></pre>
+</div>
+
+<h3 id="webhdfs--httpfs">配置 WebHDFS 或者 HttpFS</h3>
 
 <p>Hue 可以通过下面两种方式访问 Hdfs 中的数据：</p>
 
 <ul>
-<li><code class="prettyprint">WebHDFS</code>：提供高速的数据传输，客户端直接和 DataNode 交互</li>
-<li><code class="prettyprint">HttpFS</code>：一个代理服务，方便与集群外部的系统集成</li>
+  <li><code class="highlighter-rouge">WebHDFS</code>：提供高速的数据传输，客户端直接和 DataNode 交互</li>
+  <li><code class="highlighter-rouge">HttpFS</code>：一个代理服务，方便与集群外部的系统集成</li>
 </ul>
 
 <p>两者都支持 HTTP REST API，但是 Hue 只能配置其中一种方式；对于 HDFS HA部署方式，只能使用 HttpFS。</p>
 
 <ul>
-<li>1、对于 WebHDFS 方式，在每个节点上的 hdfs-site.xml 文件添加如下配置并重启服务：</li>
+  <li>1、对于 WebHDFS 方式，在每个节点上的 hdfs-site.xml 文件添加如下配置并重启服务：</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
   <span class="nt">&lt;name&gt;</span>dfs.webhdfs.enabled<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <ul>
-<li>2、 配置 Hue 为其他用户和组的代理用户。对于 WebHDFS 方式，在 core-site.xml 添加：</li>
+  <li>2、 配置 Hue 为其他用户和组的代理用户。对于 WebHDFS 方式，在 core-site.xml 添加：</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- Hue WebHDFS proxy user setting --&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Hue WebHDFS proxy user setting --&gt;</span>
 <span class="nt">&lt;property&gt;</span>
   <span class="nt">&lt;name&gt;</span>hadoop.proxyuser.hue.hosts<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>
@@ -212,9 +234,12 @@
   <span class="nt">&lt;name&gt;</span>hadoop.proxyuser.hue.groups<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>对于 HttpFS 方式，在 /etc/hadoop-httpfs/conf/httpfs-site.xml  中添加下面配置并重启 HttpFS 进程：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- Hue HttpFS proxy user setting --&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Hue HttpFS proxy user setting --&gt;</span>
 <span class="nt">&lt;property&gt;</span>
   <span class="nt">&lt;name&gt;</span>httpfs.proxyuser.hue.hosts<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>
@@ -223,9 +248,12 @@
   <span class="nt">&lt;name&gt;</span>httpfs.proxyuser.hue.groups<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>对于 HttpFS 方式，在 core-site.xml 中添加下面配置并重启 hadoop 服务：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>  
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>  
     <span class="nt">&lt;name&gt;</span>hadoop.proxyuser.httpfs.hosts<span class="nt">&lt;/name&gt;</span>  
     <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>  
 <span class="nt">&lt;/property&gt;</span>  
@@ -233,85 +261,112 @@
     <span class="nt">&lt;name&gt;</span>hadoop.proxyuser.httpfs.groups<span class="nt">&lt;/name&gt;</span>  
     <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>  
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <ul>
-<li>3、修改 /etc/hue/conf/hue.ini 中 hadoop.hdfs_clusters.default.webhdfs_url 属性。</li>
+  <li>3、修改 /etc/hue/conf/hue.ini 中 hadoop.hdfs_clusters.default.webhdfs_url 属性。</li>
 </ul>
 
 <p>对于 WebHDFS：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="na">webhdfs_url</span><span class="o">=</span><span class="s">http://cdh1:50070/webhdfs/v1/</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">webhdfs_url</span><span class="p">=</span><span class="s">http://cdh1:50070/webhdfs/v1/</span>
+</code></pre>
+</div>
+
 <p>对于 HttpFS：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="na">webhdfs_url</span><span class="o">=</span><span class="s">http://cdh1:14000/webhdfs/v1/</span>
-</code></pre></div>
-<h3 id="yarn-集群配置">YARN 集群配置</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">webhdfs_url</span><span class="p">=</span><span class="s">http://cdh1:14000/webhdfs/v1/</span>
+</code></pre>
+</div>
+
+<h3 id="yarn-">YARN 集群配置</h3>
 
 <p>在 hadoop.yarn_clusters.default 节点下配置：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[hadoop]</span>
-  <span class="k">[[yarn_clusters]]</span>
-    <span class="k">[[[default]]]</span>
-        <span class="na">resourcemanager_host</span><span class="o">=</span><span class="s">cdh1</span>
-<span class="s">        resourcemanager_port=8032</span>
-<span class="s">        submit_to=True</span>
-<span class="s">        security_enabled=true</span>
-<span class="s">        resourcemanager_api_url=http://cdh1:8088</span>
-<span class="s">        proxy_api_url=http://cdh1:8088</span>
-<span class="s">        history_server_api_url=http://cdh1:19888</span>
-</code></pre></div>
-<h2 id="集成-hive">集成 Hive</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[hadoop]</span>
+  <span class="nn">[[yarn_clusters]</span><span class="err">]</span>
+    <span class="nn">[[[default]</span><span class="err">]]</span>
+        <span class="py">resourcemanager_host</span><span class="p">=</span><span class="s">cdh1</span>
+        <span class="py">resourcemanager_port</span><span class="p">=</span><span class="s">8032</span>
+        <span class="py">submit_to</span><span class="p">=</span><span class="s">True</span>
+        <span class="py">security_enabled</span><span class="p">=</span><span class="s">true</span>
+        <span class="py">resourcemanager_api_url</span><span class="p">=</span><span class="s">http://cdh1:8088</span>
+        <span class="py">proxy_api_url</span><span class="p">=</span><span class="s">http://cdh1:8088</span>
+        <span class="py">history_server_api_url</span><span class="p">=</span><span class="s">http://cdh1:19888</span>
+</code></pre>
+</div>
+
+<h2 id="hive">集成 Hive</h2>
 
 <p>在 beeswax 节点下配置：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[beeswax]</span>
-    <span class="na">hive_server_host</span><span class="o">=</span><span class="s">cdh1</span>
-<span class="s">    hive_server_port=10000 </span>
-<span class="s">    hive_conf_dir=/etc/hive/conf</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[beeswax]</span>
+    <span class="py">hive_server_host</span><span class="p">=</span><span class="s">cdh1</span>
+    <span class="py">hive_server_port</span><span class="p">=</span><span class="s">10000 </span>
+    <span class="py">hive_conf_dir</span><span class="p">=</span><span class="s">/etc/hive/conf</span>
+</code></pre>
+</div>
+
 <p>这里是配置为连接一个 Hive Server2 节点，如有需要可以配置负载均衡，连接一个负载节点。</p>
 
-<h2 id="集成-impala">集成 Impala</h2>
+<h2 id="impala">集成 Impala</h2>
 
 <p>在 impala 节点下配置</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[impala]</span>
-  <span class="c1"># Host of the Impala Server (one of the Impalad)</span>
-  <span class="na">server_host</span><span class="o">=</span><span class="s">cdh1</span>
 
-  <span class="c1"># Port of the Impala Server</span>
-  <span class="na">server_port</span><span class="o">=</span><span class="s">21050</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[impala]</span>
+  <span class="c"># Host of the Impala Server (one of the Impalad)
+</span>  <span class="py">server_host</span><span class="p">=</span><span class="s">cdh1</span>
 
-  <span class="c1"># Kerberos principal</span>
-  <span class="na">impala_principal</span><span class="o">=</span><span class="s">impala/cdh1@JAVACHEN.COM</span>
+  <span class="c"># Port of the Impala Server
+</span>  <span class="py">server_port</span><span class="p">=</span><span class="s">21050</span>
 
-  <span class="c1"># Turn on/off impersonation mechanism when talking to Impala</span>
-  <span class="na">impersonation_enabled</span><span class="o">=</span><span class="s">True</span>
-</code></pre></div>
+  <span class="c"># Kerberos principal
+</span>  <span class="py">impala_principal</span><span class="p">=</span><span class="s">impala/cdh1@JAVACHEN.COM</span>
+
+  <span class="c"># Turn on/off impersonation mechanism when talking to Impala
+</span>  <span class="py">impersonation_enabled</span><span class="p">=</span><span class="s">True</span>
+</code></pre>
+</div>
+
 <p>这里是配置为连接一个 Impala Server 节点，如有需要可以配置负载均衡，连接一个负载节点。</p>
 
-<p>参考 <a href="http://www.cloudera.com/content/cloudera/en/documentation/core/v5-2-x/topics/impala_authorization.html#impersonation_unique_1">Configuring Per-User Access for Hue</a> 和 <a href="http://gethue.com/use-the-impala-app-with-sentry-for-real-security/">Use the Impala App with Sentry for real security</a>，在配置 <code class="prettyprint">impersonation_enabled</code> 为 true 的情况下，还需要在 impalad 的启动参数中添加 <code class="prettyprint">authorized_proxy_user_config</code> 参数，修改 /etc/default/impala中的 IMPALA_SERVER_ARGS 添加下面一行：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="na">-authorized_proxy_user_config</span><span class="o">=</span><span class="s">hue=*  \</span>
-</code></pre></div>
-<p>另外，如果集群开启了 Kerberos，别忘了配置 <code class="prettyprint">impala_principal</code> 参数。</p>
+<p>参考 <a href="http://www.cloudera.com/content/cloudera/en/documentation/core/v5-2-x/topics/impala_authorization.html#impersonation_unique_1">Configuring Per-User Access for Hue</a> 和 <a href="http://gethue.com/use-the-impala-app-with-sentry-for-real-security/">Use the Impala App with Sentry for real security</a>，在配置 <code class="highlighter-rouge">impersonation_enabled</code> 为 true 的情况下，还需要在 impalad 的启动参数中添加 <code class="highlighter-rouge">authorized_proxy_user_config</code> 参数，修改 /etc/default/impala中的 IMPALA_SERVER_ARGS 添加下面一行：</p>
 
-<h2 id="集成-kerberos">集成 kerberos</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="err">-</span><span class="py">authorized_proxy_user_config</span><span class="p">=</span><span class="s">hue=*  </span><span class="se">\
+</span></code></pre>
+</div>
+
+<p>另外，如果集群开启了 Kerberos，别忘了配置 <code class="highlighter-rouge">impala_principal</code> 参数。</p>
+
+<h2 id="kerberos">集成 kerberos</h2>
 
 <p>首先，需要在 kerberos server 节点上生成 hue 用户的凭证，并将其拷贝到 /etc/hue/conf 目录。：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kadmin: addprinc -randkey hue/cdh1@JAVACHEN.COM
-<span class="nv">$ </span>kadmin: xst -k hue.keytab hue/cdh1@JAVACHEN.COM
 
-<span class="nv">$ </span>cp hue.keytab /etc/hue/conf/
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kadmin: addprinc -randkey hue/cdh1@JAVACHEN.COM
+<span class="gp">$ </span>kadmin: xst -k hue.keytab hue/cdh1@JAVACHEN.COM
+
+<span class="gp">$ </span>cp hue.keytab /etc/hue/conf/
+</code></pre>
+</div>
+
 <p>然后，修改 hue.ini 中 kerberos 节点：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[[kerberos]]</span>
-    <span class="c1"># Path to Hue&#39;s Kerberos keytab file</span>
-    <span class="na">hue_keytab</span><span class="o">=</span><span class="s">/etc/hue/conf/hue.keytab</span>
 
-    <span class="c1"># Kerberos principal name for Hue</span>
-    <span class="na">hue_principal</span><span class="o">=</span><span class="s">hue/cdh1@JAVACHEN.COM</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[[kerberos]</span><span class="err">]</span>
+    <span class="c"># Path to Hue's Kerberos keytab file
+</span>    <span class="py">hue_keytab</span><span class="p">=</span><span class="s">/etc/hue/conf/hue.keytab</span>
 
-    <span class="c1"># Path to kinit</span>
-    <span class="na">kinit_path</span><span class="o">=</span><span class="s">/usr/bin/kinit</span>
-</code></pre></div>
+    <span class="c"># Kerberos principal name for Hue
+</span>    <span class="py">hue_principal</span><span class="p">=</span><span class="s">hue/cdh1@JAVACHEN.COM</span>
+
+    <span class="c"># Path to kinit
+</span>    <span class="py">kinit_path</span><span class="p">=</span><span class="s">/usr/bin/kinit</span>
+</code></pre>
+</div>
+
 <p>接下来，修改 /etc/hadoop/conf/core-site.xml，添加：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!--hue kerberos--&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!--hue kerberos--&gt;</span>
 <span class="nt">&lt;property&gt;</span>
     <span class="nt">&lt;name&gt;</span>hadoop.proxyuser.hue.groups<span class="nt">&lt;/name&gt;</span>
     <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>
@@ -324,98 +379,121 @@
     <span class="nt">&lt;name&gt;</span>hue.kerberos.principal.shortname<span class="nt">&lt;/name&gt;</span>
     <span class="nt">&lt;value&gt;</span>hue<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>最后，重启 hadoop 服务。</p>
 
-<h2 id="集成-ldap">集成 LDAP</h2>
+<h2 id="ldap">集成 LDAP</h2>
 
 <p>开启 ldap 验证，使用 ldap 用户登录 hue server，修改 auth 节点：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[desktop]</span>
-    <span class="k">[[auth]]</span>
-        <span class="na">backend</span><span class="o">=</span><span class="s">desktop.auth.backend.LdapBackend</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[desktop]</span>
+    <span class="nn">[[auth]</span><span class="err">]</span>
+        <span class="py">backend</span><span class="p">=</span><span class="s">desktop.auth.backend.LdapBackend</span>
+</code></pre>
+</div>
+
 <p>另外修改 ldap 节点：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[desktop]</span>
-    <span class="k">[[ldap]]</span>
-        <span class="na">base_dn</span><span class="o">=</span><span class="s">&quot;dc=javachen,dc=com&quot;</span>
-<span class="s">        ldap_url=ldap://cdh1</span>
 
-        <span class="c1"># ldap用户登陆时自动在hue创建用户</span>
-        <span class="na">create_users_on_login</span> <span class="o">=</span> <span class="s">true</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[desktop]</span>
+    <span class="nn">[[ldap]</span><span class="err">]</span>
+        <span class="py">base_dn</span><span class="p">=</span><span class="s">"dc=javachen,dc=com"</span>
+        <span class="py">ldap_url</span><span class="p">=</span><span class="s">ldap://cdh1</span>
 
-        <span class="c1"># 开启direct bind mechanism</span>
-        <span class="na">search_bind_authentication</span><span class="o">=</span><span class="s">false</span>
+        <span class="c"># ldap用户登陆时自动在hue创建用户
+</span>        <span class="py">create_users_on_login</span> <span class="p">=</span> <span class="s">true</span>
 
-        <span class="c1"># ldap登陆用户的模板，username运行时被替换</span>
-        <span class="na">ldap_username_pattern</span><span class="o">=</span><span class="s">&quot;uid=&lt;username&gt;,ou=people,dc=javachen,dc=com&quot;</span>
-</code></pre></div>
+        <span class="c"># 开启direct bind mechanism
+</span>        <span class="py">search_bind_authentication</span><span class="p">=</span><span class="s">false</span>
+
+        <span class="c"># ldap登陆用户的模板，username运行时被替换
+</span>        <span class="py">ldap_username_pattern</span><span class="p">=</span><span class="s">"uid=&lt;username&gt;,ou=people,dc=javachen,dc=com"</span>
+</code></pre>
+</div>
+
 <p>注意：在开启ldap验证前，先普通方法创建一个ldap存在的用户，赋超级用户权限，否则无法管理hue用户。</p>
 
-<h2 id="集成-sentry">集成 Sentry</h2>
+<h2 id="sentry">集成 Sentry</h2>
 
 <p>如果 hive 和 impala 中集成了 Sentry，则需要修改 hue.ini 中的 libsentry 节点：</p>
-<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="k">[libsentry]</span>
-  <span class="c1"># Hostname or IP of server.</span>
-  <span class="na">hostname</span><span class="o">=</span><span class="s">cdh1</span>
 
-  <span class="c1"># Port the sentry service is running on.</span>
-  <span class="na">port</span><span class="o">=</span><span class="s">8038</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[libsentry]</span>
+  <span class="c"># Hostname or IP of server.
+</span>  <span class="py">hostname</span><span class="p">=</span><span class="s">cdh1</span>
 
-  <span class="c1"># Sentry configuration directory, where sentry-site.xml is located.</span>
-  <span class="na">sentry_conf_dir</span><span class="o">=</span><span class="s">/etc/sentry/conf</span>
-</code></pre></div>
+  <span class="c"># Port the sentry service is running on.
+</span>  <span class="py">port</span><span class="p">=</span><span class="s">8038</span>
+
+  <span class="c"># Sentry configuration directory, where sentry-site.xml is located.
+</span>  <span class="py">sentry_conf_dir</span><span class="p">=</span><span class="s">/etc/sentry/conf</span>
+</code></pre>
+</div>
+
 <p>另外，修改 /etc/sentry/conf/sentry-store-site.xml 确保 hue 用户可以连接 sentry：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
   <span class="nt">&lt;name&gt;</span>sentry.service.allow.connect<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>impala,hive,solr,hue<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
-<h2 id="集成-sqoop2">集成 Sqoop2</h2>
+</code></pre>
+</div>
+
+<h2 id="sqoop2">集成 Sqoop2</h2>
 
 <p>在 sqoop 节点配置 server_url 参数为 sqoop2 的地址即可。</p>
 
-<h2 id="集成-hbase">集成 HBase</h2>
+<h2 id="hbase">集成 HBase</h2>
 
 <p>在 hbase 节点配置下面参数：</p>
 
 <ul>
-<li><code class="prettyprint">truncate_limit</code>：Hard limit of rows or columns per row fetched before truncating.</li>
-<li><code class="prettyprint">hbase_clusters</code>：HBase Thrift 服务列表，例如：<code class="prettyprint">Cluster1|cdh1:9090,Cluster2|cdh2:9090</code>，默认为：<code class="prettyprint">Cluster|localhost:9090</code></li>
+  <li><code class="highlighter-rouge">truncate_limit</code>：Hard limit of rows or columns per row fetched before truncating.</li>
+  <li><code class="highlighter-rouge">hbase_clusters</code>：HBase Thrift 服务列表，例如：<code class="highlighter-rouge">Cluster1|cdh1:9090,Cluster2|cdh2:9090</code>，默认为：<code class="highlighter-rouge">Cluster|localhost:9090</code></li>
 </ul>
 
-<h2 id="集成-zookeeper">集成 Zookeeper</h2>
+<h2 id="zookeeper">集成 Zookeeper</h2>
 
 <p>在 zookeeper 节点配置下面两个参数：</p>
 
 <ul>
-<li><code class="prettyprint">host_ports</code>：zookeeper 节点列表，例如：<code class="prettyprint">localhost:2181,localhost:2182,localhost:2183</code></li>
-<li><code class="prettyprint">rest_url</code>：zookeeper 的 REST 接口，默认值为 <a href="http://localhost:9998">http://localhost:9998</a></li>
+  <li><code class="highlighter-rouge">host_ports</code>：zookeeper 节点列表，例如：<code class="highlighter-rouge">localhost:2181,localhost:2182,localhost:2183</code></li>
+  <li><code class="highlighter-rouge">rest_url</code>：zookeeper 的 REST 接口，默认值为 <a href="http://localhost:9998">http://localhost:9998</a></li>
 </ul>
 
-<h2 id="集成-oozie">集成 Oozie</h2>
+<h2 id="oozie">集成 Oozie</h2>
 
 <p>未使用，暂不记录。</p>
 
-<h1 id="管理-hue">管理 Hue</h1>
+<h1 id="hue-2">管理 Hue</h1>
 
 <p>如果配置了 kerberos，则先获取 hue 凭证：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">kinit -k -t /etc/hue/conf/hue.keytab hue/cdh1@JAVACHEN.COM
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>kinit -k -t /etc/hue/conf/hue.keytab hue/cdh1@JAVACHEN.COM
+</code></pre>
+</div>
+
 <p>启动 hue server：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>service hue start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>service hue start
+</code></pre>
+</div>
+
 <p>停止 hue server：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>service hue stop
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>service hue stop
+</code></pre>
+</div>
+
 <p>hue server 默认使用 8888 作为 web 访问端口，故需要在防火墙上开放该端口。</p>
 
 <p>你可以在 /var/log/hue 目录查看 hue 的日志，或者通过 <a href="http://cdh1:8888/logs">http://cdh1:8888/logs</a> 查看。</p>
 
-<h1 id="测试">测试</h1>
+<h1 id="section">测试</h1>
 
 <p>在开启了 LDAP 后，使用 LDAP 中的管理员用户登录 hue，根据提示向导进行设置并将 LDAP 中的用户同步到 Hue Server，然后依次测试每一个功能是否运行正常。</p>
 
-<p>关于 Hue 的使用向导，请参考 <a href="http://archive.cloudera.com/cdh5/cdh/5/hue/user-guide/index.html%E3%80%82">http://archive.cloudera.com/cdh5/cdh/5/hue/user-guide/index.html。</a></p>
+<p>关于 Hue 的使用向导，请参考 <a href="http://archive.cloudera.com/cdh5/cdh/5/hue/user-guide/index.html">http://archive.cloudera.com/cdh5/cdh/5/hue/user-guide/index.html</a>。</p>
 
 <p>Enjoy it !</p>
 

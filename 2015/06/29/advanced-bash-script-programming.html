@@ -91,7 +91,7 @@
                 <li class="previous"><a href="/2015/06/26/spark-shell-command.html" title="spark-shell脚本分析"><i class="fa fa-angle-double-left"></i>&nbsp;spark-shell脚本分析</a></li>
                 
                 
-                <li class="next disabled"><a href="#">Next <i class="fa fa-angle-double-right"></i></a></li>
+                <li class="next"><a href="/2015/06/30/jekyll-kramdown-config.html" title="Jekyll kramdown配置">Jekyll kramdown配置&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
                 
           </ul>
 
@@ -108,28 +108,35 @@
                     <p>最近在看《Advanced Bash Scripting Guide》这本书，第二章举了一个清除日志的例子，来讲述如何使用Bash进行编程并聊到了一些编程规范。本文主要是基于这部分内容记录我的读书笔记并整理一些相关知识点。</p>
 
 <p>说到清除日志，你可以使用下面命令来完成清除/var/log下的log文件这件事情：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /var/log
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">cd</span> /var/log
 cat /dev/null &gt; messages 
 cat /dev/null &gt; wtmp
-<span class="nb">echo</span> <span class="s2">&quot;Logs cleaned up.&quot;</span>
-</code></pre></div>
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
+</code></pre>
+</div>
+
 <blockquote>
-<p>注意：<br>
-/var/log/messages 记录系统报错信息<br>
+  <p>注意：<br />
+/var/log/messages 记录系统报错信息<br />
 /var/log/wtmp 记录系统登录信息</p>
 </blockquote>
 
-<p>在Bash编程时，脚本通常都是放到一个文件里面，该文件可以有后缀名也可以没有，例如，你可以将该文件命名为cleanlog，然后在文件头声明一个命令解释器，这里是<code class="prettyprint">#!/bin/bash</code>：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<p>在Bash编程时，脚本通常都是放到一个文件里面，该文件可以有后缀名也可以没有，例如，你可以将该文件命名为cleanlog，然后在文件头声明一个命令解释器，这里是<code class="highlighter-rouge"><span class="c">#!/bin/bash</span></code>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 <span class="nv">LOG_DIR</span><span class="o">=</span>/var/log
 <span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
 cat /dev/null &gt; messages
 cat /dev/null &gt; wtmp
-<span class="nb">echo</span> <span class="s2">&quot;Logs cleaned up.&quot;</span>
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
 <span class="nb">exit</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>当然，还可以使用其他的命令行解释器，例如：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
 <span class="c">#!/bin/bash</span>
 <span class="c">#!/usr/bin/perl </span>
 <span class="c">#!/usr/bin/tcl </span>
@@ -138,19 +145,22 @@ cat /dev/null &gt; wtmp
 
 <span class="c">#自删除脚本</span>
 <span class="c">#!/bin/rm</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>说明：</p>
 
 <ul>
-<li><code class="prettyprint">#!</code> 后面的路径必须真实存在，否则运行时会提示<code class="prettyprint">Command not found的错误</code>。</li>
-<li>在UNIX系统中，在<code class="prettyprint">!</code>后边需要一个空格。</li>
-<li>如果脚本中还包含有其他的<code class="prettyprint">#!</code>行，那么bash将会把它看成是一个一般的注释行。</li>
+  <li><code class="highlighter-rouge">#!</code> 后面的路径必须真实存在，否则运行时会提示<code class="highlighter-rouge">Command not found的错误</code>。</li>
+  <li>在UNIX系统中，在<code class="highlighter-rouge">!</code>后边需要一个空格。</li>
+  <li>如果脚本中还包含有其他的<code class="highlighter-rouge">#!</code>行，那么bash将会把它看成是一个一般的注释行。</li>
 </ul>
 
 <p>上面代码将/var/log定义为变量，这样会比把代码写死好很多，因为如果你可能想修改为其他目录，只需要修改变量的值就可以。</p>
 
 <p>对于/var/log目录，一般用户没有访问权限，故需要使用root用户来运行上面脚本，另外，用户不一定有修改目录的权限，所以需要增强代码，做一些判断。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
 <span class="nv">LOG_DIR</span><span class="o">=</span>/var/log
 <span class="nv">ROOT_UID</span><span class="o">=</span>0
@@ -159,38 +169,44 @@ cat /dev/null &gt; wtmp
 <span class="nv">E_NOTROOT</span><span class="o">=</span>67
 
 <span class="c"># 当然要使用root 用户来运行.</span>
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$UID&quot;</span> -ne <span class="s2">&quot;$ROOT_UID&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Must be root to run this script.&quot;</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$UID</span><span class="s2">"</span> -ne <span class="s2">"</span><span class="nv">$ROOT_UID</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Must be root to run this script."</span>
     <span class="nb">exit</span> <span class="nv">$E_NOTROOT</span>
-<span class="k">fi</span>
+<span class="k">fi
 
-<span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
+</span><span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
 
-<span class="k">if</span><span class="o">[</span> <span class="s2">&quot;$PWD&quot;</span> !<span class="o">=</span> <span class="s2">&quot;$LOG_DIR&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Can&#39;t change to $LOG_DIR.&quot;</span>
+<span class="k">if</span><span class="o">[</span> <span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"</span><span class="nv">$LOG_DIR</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Can't change to </span><span class="nv">$LOG_DIR</span><span class="s2">."</span>
     <span class="nb">exit</span> <span class="nv">$E_XCD</span>
-<span class="k">fi</span>
+<span class="k">fi
 
-cat /dev/null &gt; messages
+</span>cat /dev/null &gt; messages
 cat /dev/null &gt; wtmp
-<span class="nb">echo</span> <span class="s2">&quot;Logs cleaned up.&quot;</span>
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
 
 <span class="c">#返回0表示成功</span>
 <span class="nb">exit </span>0
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>上面代码一样定义了一些变量，然后加了两个判断，去检查脚本运行中可能出现的错误并打印错误说明。如果脚本运行错误，则程序会退出并返回一个错误码，不同类型的错误对应的错误码不一样，这样便于识别错误原因；如果脚本运行正常，则正常退出，默认返回码为0。</p>
 
-<p>对于<code class="prettyprint">cd $LOG_DIR</code>操作判断是否执行成功，更有效的做法是：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#使用或操作替代if else判断</span>
+<p>对于<code class="highlighter-rouge">cd $LOG_DIR</code>操作判断是否执行成功，更有效的做法是：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#使用或操作替代if else判断</span>
 <span class="nb">cd</span> /var/log <span class="o">||</span> <span class="o">{</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Cannot change to necessary directory.&quot;</span> &gt;<span class="p">&amp;</span>2
+    <span class="nb">echo</span> <span class="s2">"Cannot change to necessary directory."</span> &gt;&amp;2
     <span class="nb">exit</span> <span class="nv">$E_XCD</span>
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>通常，我们可能不想全部清除日志，而是保留最后几行日志，这样就需要给脚本传入参数：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
 <span class="nv">LOG_DIR</span><span class="o">=</span>/var/log
 <span class="nv">ROOT_UID</span><span class="o">=</span>0
@@ -199,26 +215,26 @@ cat /dev/null &gt; wtmp
 <span class="nv">E_NOTROOT</span><span class="o">=</span>67
 
 <span class="c"># 当然要使用root 用户来运行.</span>
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$UID&quot;</span> -ne <span class="s2">&quot;$ROOT_UID&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Must be root to run this script.&quot;</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$UID</span><span class="s2">"</span> -ne <span class="s2">"</span><span class="nv">$ROOT_UID</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Must be root to run this script."</span>
     <span class="nb">exit</span> <span class="nv">$E_NOTROOT</span>
-<span class="k">fi</span>
+<span class="k">fi
 
-<span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
+</span><span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
 
-<span class="k">if</span><span class="o">[</span> <span class="s2">&quot;$PWD&quot;</span> !<span class="o">=</span> <span class="s2">&quot;$LOG_DIR&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Can&#39;t change to $LOG_DIR.&quot;</span>
+<span class="k">if</span><span class="o">[</span> <span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"</span><span class="nv">$LOG_DIR</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Can't change to </span><span class="nv">$LOG_DIR</span><span class="s2">."</span>
     <span class="nb">exit</span> <span class="nv">$E_XCD</span>
 <span class="k">fi</span>
 
 <span class="c"># 测试是否有命令行参数，非空判断</span>
-<span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$1&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-    <span class="nv">lines</span><span class="o">=</span><span class="nv">$1</span>
-<span class="k">else</span>
-    <span class="nv">lines</span><span class="o">=</span><span class="nv">$LINES</span> <span class="c"># 默认，如果不在命令行中指定</span>
+<span class="k">if</span> <span class="o">[</span> -n <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nv">lines</span><span class="o">=</span><span class="nv">$1</span>
+<span class="k">else
+    </span><span class="nv">lines</span><span class="o">=</span><span class="nv">$LINES</span> <span class="c"># 默认，如果不在命令行中指定</span>
 <span class="k">fi</span>
 
 <span class="c"># 保存log file消息的最后部分</span>
@@ -226,34 +242,45 @@ tail -<span class="nv">$lines</span> messages &gt; mesg.temp
 mv mesg.temp messages
 
 cat /dev/null &gt; wtmp
-<span class="nb">echo</span> <span class="s2">&quot;Logs cleaned up.&quot;</span>
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
 
 <span class="c">#返回0表示成功</span>
 <span class="nb">exit </span>0
-</code></pre></div>
-<p>上面使用if else来判断是否有输入参数，一个更好的检测命令行参数的方式是使用正则表达式做判断，以检查输入参数的合法性：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">E_WRONGARGS</span><span class="o">=</span><span class="m">65</span> <span class="c"># 非数值参数(错误的参数格式)</span>
+</code></pre>
+</div>
 
-<span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
-    <span class="s2">&quot;&quot;</span> <span class="o">)</span> <span class="nv">lines</span><span class="o">=</span>50<span class="p">;;</span>
-    *<span class="o">[</span>!0-9<span class="o">]</span>*<span class="o">)</span> <span class="nb">echo</span> <span class="s2">&quot;Usage: `basename $0` file-to-cleanup&quot;</span><span class="p">;</span> <span class="nb">exit</span> <span class="nv">$E_WRONGARGS</span><span class="p">;;</span> 
-    * <span class="o">)</span> <span class="nv">lines</span><span class="o">=</span><span class="nv">$1</span><span class="p">;;</span>
+<p>上面使用if else来判断是否有输入参数，一个更好的检测命令行参数的方式是使用正则表达式做判断，以检查输入参数的合法性：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">E_WRONGARGS</span><span class="o">=</span>65 <span class="c"># 非数值参数(错误的参数格式)</span>
+
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">in</span>
+    <span class="s2">""</span> <span class="p">)</span> <span class="nv">lines</span><span class="o">=</span>50;;
+    <span class="k">*</span><span class="o">[</span>!0-9]<span class="k">*</span><span class="o">)</span> <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="sb">`</span>basename <span class="nv">$0</span><span class="sb">`</span><span class="s2"> file-to-cleanup"</span>; <span class="nb">exit</span> <span class="nv">$E_WRONGARGS</span><span class="p">;;</span> 
+    <span class="k">*</span> <span class="p">)</span> <span class="nv">lines</span><span class="o">=</span><span class="nv">$1</span><span class="p">;;</span>
 <span class="k">esac</span>
-</code></pre></div>
-<p>编写完脚本之后，你可以使用<code class="prettyprint">sh scriptname</code>或者<code class="prettyprint">bash scriptname</code>来调用这个脚本。不推荐使用<code class="prettyprint">sh &lt;scriptname</code>，因为这禁用了脚本从stdin中读数据的功能。更方便的方法是让脚本本身就具有 可执行权限，通过<code class="prettyprint">chmod</code>命令可以修改。比如:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">chmod <span class="m">555</span> scriptname  <span class="c">#允许任何人都具有可读和执行权限</span>
-</code></pre></div>
+</code></pre>
+</div>
+
+<p>编写完脚本之后，你可以使用<code class="highlighter-rouge">sh scriptname</code>或者<code class="highlighter-rouge">bash scriptname</code>来调用这个脚本。不推荐使用<code class="highlighter-rouge">sh &lt;scriptname</code>，因为这禁用了脚本从stdin中读数据的功能。更方便的方法是让脚本本身就具有 可执行权限，通过<code class="highlighter-rouge">chmod</code>命令可以修改。比如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>chmod 555 scriptname  <span class="c">#允许任何人都具有可读和执行权限</span>
+</code></pre>
+</div>
+
 <p>或者：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">chmod +rx scriptname <span class="c">#允许任何人都具有可读和执行权限 </span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>chmod +rx scriptname <span class="c">#允许任何人都具有可读和执行权限 </span>
 chmod u+rx scriptname <span class="c">#只给脚本的所有者可读和执行权限</span>
-</code></pre></div>
-<p>既然脚本已经具有了可执行权限，现在你可以使用<code class="prettyprint">./scriptname</code>来测试这个脚本了。如果这个脚本以一个<code class="prettyprint">#!</code>行开头，那么脚本将会调用合适的命令解释器来运行。</p>
+</code></pre>
+</div>
+
+<p>既然脚本已经具有了可执行权限，现在你可以使用<code class="highlighter-rouge">./scriptname</code>来测试这个脚本了。如果这个脚本以一个<code class="highlighter-rouge">#!</code>行开头，那么脚本将会调用合适的命令解释器来运行。</p>
 
 <p>这样一个简单的脚本就编写完成并能运行了，从这个例子中，我们可以学到bash编程的一些代码规范：</p>
 
 <ul>
-<li>使用变量</li>
-<li>脚本运行中，需要做一些异常判断</li>
+  <li>使用变量</li>
+  <li>脚本运行中，需要做一些异常判断</li>
 </ul>
 
 <p>除此之外，google公司还定义了一份<a href="https://google-styleguide.googlecode.com/svn/trunk/shell.xml">Shell Style Guide</a>，可以仔细阅读并约束自己去遵循这些规范。</p>

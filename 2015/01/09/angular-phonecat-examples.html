@@ -110,52 +110,65 @@
 <p>本文主要分析 AngularJS 官方网站提供的一个用于学习的示例项目 PhoneCat 的构建、测试过程以及代码的运行原理。希望能够对 PhoneCat 项目有一个更加深入全面的认识。这其中包括以下内容：</p>
 
 <ul>
-<li>该项目如何运行起来的</li>
-<li>该项目如何进行前端单元测试</li>
-<li>AngularJS 相关代码分析</li>
+  <li>该项目如何运行起来的</li>
+  <li>该项目如何进行前端单元测试</li>
+  <li>AngularJS 相关代码分析</li>
 </ul>
 
 <p><strong>以下内容如有理解不正确，欢迎指正！</strong></p>
 
-<h1 id="1.-环境搭建">1. 环境搭建</h1>
+<h1 id="section">1. 环境搭建</h1>
 
 <p>对于 PhoneCat 项目的开发环境和测试环境的搭建，官方网站上提供了详细的指导：<a href="http://docs.angularjs.org/tutorial">http://docs.angularjs.org/tutorial</a>，你可以找到一些中文的翻译。</p>
 
 <p>PhoneCat 项目的源代码托管在 GitHub 上，可以通过下面命令下载源代码：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>git clone --depth<span class="o">=</span><span class="m">20</span> https://github.com/angular/angular-phonecat.git
-</code></pre></div>
-<p><code class="prettyprint">--depth=20</code> 选项的意思为：仅下载最近20次的代码提交版本；这么做可以减少下载的文件大小，加快下载。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone --depth<span class="o">=</span>20 https://github.com/angular/angular-phonecat.git
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">--depth=20</code> 选项的意思为：仅下载最近20次的代码提交版本；这么做可以减少下载的文件大小，加快下载。</p>
 
 <blockquote>
-<p>PhoneCat 是一个 Web 应用程序，因此最好在 Web 服务器中运行，以期获得最佳结果。官方推荐安装 <a href="http://nodejs.org/download/">Node.js</a>。</p>
+  <p>PhoneCat 是一个 Web 应用程序，因此最好在 Web 服务器中运行，以期获得最佳结果。官方推荐安装 <a href="http://nodejs.org/download/">Node.js</a>。</p>
 </blockquote>
 
 <p>PhoneCat 项目的运行与测试依赖一些别的工具，可以在安装 <a href="http://www.oschina.net/p/nodejs">Node.js</a> 后通过 npm 命令来安装这些依赖包。以下命令需在 angular-phonecat 项目路径下运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>npm install
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm install
+</code></pre>
+</div>
+
 <p>运行该命令后，会在 angular-phonecat 项目路径下安装以下依赖包：</p>
 
 <ul>
-<li><code class="prettyprint">Bower</code> 包管理器</li>
-<li><code class="prettyprint">Http-Server</code> 轻量级Web服务器</li>
-<li><code class="prettyprint">Karma</code>  用于运行单元测试</li>
-<li><code class="prettyprint">Protractor</code> 用于运行端到端测试</li>
+  <li><code class="highlighter-rouge">Bower</code> 包管理器</li>
+  <li><code class="highlighter-rouge">Http-Server</code> 轻量级Web服务器</li>
+  <li><code class="highlighter-rouge">Karma</code>  用于运行单元测试</li>
+  <li><code class="highlighter-rouge">Protractor</code> 用于运行端到端测试</li>
 </ul>
 
-<p>几乎所有的 AngularJS 学习教程，都会写到用这个命令来启动服务： </p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>node scripts/web-server.js
-</code></pre></div>
+<p>几乎所有的 AngularJS 学习教程，都会写到用这个命令来启动服务：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>node scripts/web-server.js
+</code></pre>
+</div>
+
 <p>但实际上 PhoneCat 项目已经放弃使用 web-server 了，git 上取下来的的项目里没有 scripts/web-server.js 文件了。</p>
 
 <p>我们可以用下面的方式来启动工程：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>npm start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm start
+</code></pre>
+</div>
+
 <p>然后通过 <a href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html</a> 访问。</p>
 
-<h1 id="2.-依赖包介绍">2. 依赖包介绍</h1>
+<h1 id="section-1">2. 依赖包介绍</h1>
 
 <p>在克隆项目之后，目录如下：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">➜  angular-phonecat git:<span class="o">(</span>master<span class="o">)</span> ✗ tree -L 2
+
+<div class="highlighter-rouge"><pre class="highlight"><code>➜  angular-phonecat git:<span class="o">(</span>master<span class="o">)</span> ✗ tree -L 2
 .
 ├── LICENSE
 ├── README.md
@@ -178,77 +191,89 @@
     ├── protractor-conf.js
     └── unit
 
-<span class="m">20</span> directories, <span class="m">8</span> files
-</code></pre></div>
+20 directories, 8 files
+</code></pre>
+</div>
+
 <p>这个目录下存在一个文件 package.json，该文件是做什么用的呢？</p>
 
 <blockquote>
-<p>在 NodeJS 项目中，用 package.json 文件来声明项目中使用的模块，这样在新的环境部署时，只要在 package.json 文件所在的目录执行 <code class="prettyprint">npm install</code> 命令即可安装所需要的模块。</p>
+  <p>在 NodeJS 项目中，用 package.json 文件来声明项目中使用的模块，这样在新的环境部署时，只要在 package.json 文件所在的目录执行 <code class="highlighter-rouge">npm install</code> 命令即可安装所需要的模块。</p>
 </blockquote>
 
 <p>关于 package.json 中可配置的选项请参考 <a href="http://blog.csdn.net/woxueliuyun/article/details/39294375">package.json字段全解</a> 。</p>
 
 <p>从该文件可以看出 PhoneCat 的依赖：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="s2">&quot;devDependencies&quot;</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">&quot;karma&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.12.16&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;karma-chrome-launcher&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.1.4&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;karma-jasmine&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.1.5&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;protractor&quot;</span><span class="o">:</span> <span class="s2">&quot;~1.0.0&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;http-server&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.6.1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;tmp&quot;</span><span class="o">:</span> <span class="s2">&quot;0.0.23&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bower&quot;</span><span class="o">:</span> <span class="s2">&quot;^1.3.1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;shelljs&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.2.6&quot;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="s2">"devDependencies"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"karma"</span><span class="err">:</span> <span class="s2">"^0.12.16"</span><span class="p">,</span>
+    <span class="s2">"karma-chrome-launcher"</span><span class="err">:</span> <span class="s2">"^0.1.4"</span><span class="p">,</span>
+    <span class="s2">"karma-jasmine"</span><span class="err">:</span> <span class="s2">"^0.1.5"</span><span class="p">,</span>
+    <span class="s2">"protractor"</span><span class="err">:</span> <span class="s2">"~1.0.0"</span><span class="p">,</span>
+    <span class="s2">"http-server"</span><span class="err">:</span> <span class="s2">"^0.6.1"</span><span class="p">,</span>
+    <span class="s2">"tmp"</span><span class="err">:</span> <span class="s2">"0.0.23"</span><span class="p">,</span>
+    <span class="s2">"bower"</span><span class="err">:</span> <span class="s2">"^1.3.1"</span><span class="p">,</span>
+    <span class="s2">"shelljs"</span><span class="err">:</span> <span class="s2">"^0.2.6"</span>
   <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>以及一些脚本：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s2">&quot;scripts&quot;</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">&quot;postinstall&quot;</span><span class="o">:</span> <span class="s2">&quot;bower install&quot;</span><span class="p">,</span>
 
-    <span class="s2">&quot;prestart&quot;</span><span class="o">:</span> <span class="s2">&quot;npm install&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="s2">&quot;http-server -a 0.0.0.0 -p 8000&quot;</span><span class="p">,</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"postinstall"</span><span class="err">:</span> <span class="s2">"bower install"</span><span class="p">,</span>
 
-    <span class="s2">&quot;pretest&quot;</span><span class="o">:</span> <span class="s2">&quot;npm install&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;test&quot;</span><span class="o">:</span> <span class="s2">&quot;node node_modules/karma/bin/karma start test/karma.conf.js&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;test-single-run&quot;</span><span class="o">:</span> <span class="s2">&quot;node node_modules/karma/bin/karma start test/karma.conf.js  --single-run&quot;</span><span class="p">,</span>
+    <span class="s2">"prestart"</span><span class="err">:</span> <span class="s2">"npm install"</span><span class="p">,</span>
+    <span class="s2">"start"</span><span class="err">:</span> <span class="s2">"http-server -a 0.0.0.0 -p 8000"</span><span class="p">,</span>
 
-    <span class="s2">&quot;preupdate-webdriver&quot;</span><span class="o">:</span> <span class="s2">&quot;npm install&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;update-webdriver&quot;</span><span class="o">:</span> <span class="s2">&quot;webdriver-manager update&quot;</span><span class="p">,</span>
+    <span class="s2">"pretest"</span><span class="err">:</span> <span class="s2">"npm install"</span><span class="p">,</span>
+    <span class="s2">"test"</span><span class="err">:</span> <span class="s2">"node node_modules/karma/bin/karma start test/karma.conf.js"</span><span class="p">,</span>
+    <span class="s2">"test-single-run"</span><span class="err">:</span> <span class="s2">"node node_modules/karma/bin/karma start test/karma.conf.js  --single-run"</span><span class="p">,</span>
 
-    <span class="s2">&quot;preprotractor&quot;</span><span class="o">:</span> <span class="s2">&quot;npm run update-webdriver&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;protractor&quot;</span><span class="o">:</span> <span class="s2">&quot;protractor test/protractor-conf.js&quot;</span><span class="p">,</span>
+    <span class="s2">"preupdate-webdriver"</span><span class="err">:</span> <span class="s2">"npm install"</span><span class="p">,</span>
+    <span class="s2">"update-webdriver"</span><span class="err">:</span> <span class="s2">"webdriver-manager update"</span><span class="p">,</span>
 
-    <span class="s2">&quot;update-index-async&quot;</span><span class="o">:</span> <span class="s2">&quot;node -e \&quot;require(&#39;shelljs/global&#39;); sed(&#39;-i&#39;, /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, &#39;//@@NG_LOADER_START@@\\n&#39; + cat(&#39;bower_components/angular-loader/angular-loader.min.js&#39;) + &#39;\\n//@@NG_LOADER_END@@&#39;, &#39;app/index-async.html&#39;);\&quot;&quot;</span>
+    <span class="s2">"preprotractor"</span><span class="err">:</span> <span class="s2">"npm run update-webdriver"</span><span class="p">,</span>
+    <span class="s2">"protractor"</span><span class="err">:</span> <span class="s2">"protractor test/protractor-conf.js"</span><span class="p">,</span>
+
+    <span class="s2">"update-index-async"</span><span class="err">:</span> <span class="s2">"node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + cat('bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""</span>
   <span class="p">}</span>
-</code></pre></div>
-<p>从上可以看出运行 <code class="prettyprint">npm start</code> 之前会运行 <code class="prettyprint">npm install</code>，然后运行 <code class="prettyprint">http-server -a 0.0.0.0 -p 8000</code> 启动一个 web 服务器，最后是运行 <code class="prettyprint">bower install</code> 安装 bower 管理的包。</p>
+</code></pre>
+</div>
+
+<p>从上可以看出运行 <code class="highlighter-rouge">npm start</code> 之前会运行 <code class="highlighter-rouge">npm install</code>，然后运行 <code class="highlighter-rouge">http-server -a 0.0.0.0 -p 8000</code> 启动一个 web 服务器，最后是运行 <code class="highlighter-rouge">bower install</code> 安装 bower 管理的包。</p>
 
 <p>bower 管理的包由 bower.json 文件定义：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
-  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;angular-phonecat&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;A starter project for AngularJS&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;homepage&quot;</span><span class="o">:</span> <span class="s2">&quot;https://github.com/angular/angular-phonecat&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;license&quot;</span><span class="o">:</span> <span class="s2">&quot;MIT&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;private&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="s2">&quot;dependencies&quot;</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">&quot;angular&quot;</span><span class="o">:</span> <span class="s2">&quot;1.3.x&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;angular-mocks&quot;</span><span class="o">:</span> <span class="s2">&quot;1.3.x&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;jquery&quot;</span><span class="o">:</span> <span class="s2">&quot;~2.1.1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bootstrap&quot;</span><span class="o">:</span> <span class="s2">&quot;~3.1.1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;angular-route&quot;</span><span class="o">:</span> <span class="s2">&quot;1.3.x&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;angular-resource&quot;</span><span class="o">:</span> <span class="s2">&quot;1.3.x&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;angular-animate&quot;</span><span class="o">:</span> <span class="s2">&quot;1.3.x&quot;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+  <span class="s2">"name"</span><span class="err">:</span> <span class="s2">"angular-phonecat"</span><span class="p">,</span>
+  <span class="s2">"description"</span><span class="err">:</span> <span class="s2">"A starter project for AngularJS"</span><span class="p">,</span>
+  <span class="s2">"version"</span><span class="err">:</span> <span class="s2">"0.0.0"</span><span class="p">,</span>
+  <span class="s2">"homepage"</span><span class="err">:</span> <span class="s2">"https://github.com/angular/angular-phonecat"</span><span class="p">,</span>
+  <span class="s2">"license"</span><span class="err">:</span> <span class="s2">"MIT"</span><span class="p">,</span>
+  <span class="s2">"private"</span><span class="err">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="s2">"dependencies"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"angular"</span><span class="err">:</span> <span class="s2">"1.3.x"</span><span class="p">,</span>
+    <span class="s2">"angular-mocks"</span><span class="err">:</span> <span class="s2">"1.3.x"</span><span class="p">,</span>
+    <span class="s2">"jquery"</span><span class="err">:</span> <span class="s2">"~2.1.1"</span><span class="p">,</span>
+    <span class="s2">"bootstrap"</span><span class="err">:</span> <span class="s2">"~3.1.1"</span><span class="p">,</span>
+    <span class="s2">"angular-route"</span><span class="err">:</span> <span class="s2">"1.3.x"</span><span class="p">,</span>
+    <span class="s2">"angular-resource"</span><span class="err">:</span> <span class="s2">"1.3.x"</span><span class="p">,</span>
+    <span class="s2">"angular-animate"</span><span class="err">:</span> <span class="s2">"1.3.x"</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>当然，package.json 文件中还定义了一些测试相关的命令。</p>
 
 <h2 id="bower">bower</h2>
 
 <p>关于 <a href="http://bower.io/">bower</a> 的介绍，参考博客内文章：<a href="/2014/05/10/bower-intro.html">bower介绍</a>。</p>
 
-<p>在本项目中，bower 下载的包保存在 angular-phonecat/app/bower_components 目录下，依赖如下： </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">├── bower_components
+<p>在本项目中，bower 下载的包保存在 angular-phonecat/app/bower_components 目录下，依赖如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>├── bower_components
 │   ├── angular
 │   ├── angular-animate
 │   ├── angular-mocks
@@ -256,7 +281,9 @@
 │   ├── angular-route
 │   ├── bootstrap
 │   └── jquery
-</code></pre></div>
+</code></pre>
+</div>
+
 <h2 id="karma">karma</h2>
 
 <p><a href="http://karma-runner.github.io/0.12/index.html">Karma</a> 是一个 Javascript 测试运行工具，可以帮助你关闭反馈循环。Karma 可以在特定的文件被修改时运行测试，它也可以在不同的浏览器上并行测试。不同的设备可以指向 Karma 服务器来覆盖实际场景。</p>
@@ -268,34 +295,43 @@
 <p><a href="https://github.com/nodeapps/http-server">http-server</a> 是一个简单的零配置命令行 HTTP 服务器，基于 <a href="http://www.oschina.net/p/nodejs">Node.js</a>。</p>
 
 <p>在命令行中使用方式是：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>node http-server
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>node http-server
+</code></pre>
+</div>
+
 <p>在package.json 中定义方式是：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="s2">&quot;scripts&quot;</span><span class="o">:</span> <span class="p">{</span>
-     <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="s2">&quot;http-server -a 0.0.0.0 -p 8000&quot;</span><span class="p">,</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+     <span class="s2">"start"</span><span class="err">:</span> <span class="s2">"http-server -a 0.0.0.0 -p 8000"</span><span class="p">,</span>
  <span class="p">}</span>
-</code></pre></div>
-<p>支持的参数：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"> -p 端口号 <span class="o">(</span>默认 8080<span class="o">)</span>
+ <span class="err">```</span>
 
--a IP 地址 <span class="o">(</span>默认 0.0.0.0<span class="o">)</span>
+ <span class="err">支持的参数：</span>
 
--d 显示目录列表 <span class="o">(</span>默认 <span class="s1">&#39;True&#39;</span><span class="o">)</span>
+<span class="err">```</span><span class="nx">bash</span>
+ <span class="o">-</span><span class="nx">p</span> <span class="err">端口号</span> <span class="p">(</span><span class="err">默认</span> <span class="mi">8080</span><span class="p">)</span>
 
--i 显示 autoIndex <span class="o">(</span>默认 <span class="s1">&#39;True&#39;</span><span class="o">)</span>
+<span class="o">-</span><span class="nx">a</span> <span class="nx">IP</span> <span class="err">地址</span> <span class="p">(</span><span class="err">默认</span> <span class="mf">0.0</span><span class="p">.</span><span class="mf">0.0</span><span class="p">)</span>
 
--e or --ext 如果没有提供默认的文件扩展名<span class="o">(</span>默认 <span class="s1">&#39;html&#39;</span><span class="o">)</span>
+<span class="o">-</span><span class="nx">d</span> <span class="err">显示目录列表</span> <span class="p">(</span><span class="err">默认</span> <span class="s1">'True'</span><span class="p">)</span>
 
--s or --silent 禁止日志信息输出
+<span class="o">-</span><span class="nx">i</span> <span class="err">显示</span> <span class="nx">autoIndex</span> <span class="p">(</span><span class="err">默认</span> <span class="s1">'True'</span><span class="p">)</span>
 
---cors 启用 CORS 
+<span class="o">-</span><span class="nx">e</span> <span class="nx">or</span> <span class="o">--</span><span class="nx">ext</span> <span class="err">如果没有提供默认的文件扩展名</span><span class="p">(</span><span class="err">默认</span> <span class="s1">'html'</span><span class="p">)</span>
 
--o 在开始服务后打开浏览器
+<span class="o">-</span><span class="nx">s</span> <span class="nx">or</span> <span class="o">--</span><span class="nx">silent</span> <span class="err">禁止日志信息输出</span>
 
--h or --help 打印列表并退出
+<span class="o">--</span><span class="nx">cors</span> <span class="err">启用</span> <span class="nx">CORS</span> 
 
--c 为 cache-control max-age header 设置Cache <span class="nb">time</span><span class="o">(</span>秒<span class="o">)</span> ，禁用 caching, 则值设为 -1 .
-</code></pre></div>
+<span class="o">-</span><span class="nx">o</span> <span class="err">在开始服务后打开浏览器</span>
+
+<span class="o">-</span><span class="nx">h</span> <span class="nx">or</span> <span class="o">--</span><span class="nx">help</span> <span class="err">打印列表并退出</span>
+
+<span class="o">-</span><span class="nx">c</span> <span class="err">为</span> <span class="nx">cache</span><span class="o">-</span><span class="nx">control</span> <span class="nx">max</span><span class="o">-</span><span class="nx">age</span> <span class="nx">header</span> <span class="err">设置</span><span class="nx">Cache</span> <span class="nx">time</span><span class="p">(</span><span class="err">秒</span><span class="p">)</span> <span class="err">，禁用</span> <span class="nx">caching</span><span class="p">,</span> <span class="err">则值设为</span> <span class="o">-</span><span class="mi">1</span> <span class="p">.</span>
+</code></pre>
+</div>
+
 <h2 id="protractor">Protractor</h2>
 
 <p><a href="http://www.protractortest.org/">Protractor</a> 是一个端对端的测试运行工具，模拟用户交互，帮助你验证你的 Angular 应用的运行状况。</p>
@@ -311,128 +347,146 @@
 <p><a href="http://shelljs.org/">ShellJS</a> 是 <a href="http://www.oschina.net/p/nodejs">Node.js</a> 扩展，用于实现 Unix shell 命令执行，支持 Windows。</p>
 
 <p>一个示例代码：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shelljs/global&#39;</span><span class="p">);</span>
 
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">which</span><span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">))</span> <span class="p">{</span>
-  <span class="nx">echo</span><span class="p">(</span><span class="s1">&#39;Sorry, this script requires git&#39;</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">require</span><span class="p">(</span><span class="s1">'shelljs/global'</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">which</span><span class="p">(</span><span class="s1">'git'</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">echo</span><span class="p">(</span><span class="s1">'Sorry, this script requires git'</span><span class="p">);</span>
   <span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="c1">// Copy files to release dir</span>
-<span class="nx">mkdir</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;out/Release&#39;</span><span class="p">);</span>
-<span class="nx">cp</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;stuff/*&#39;</span><span class="p">,</span> <span class="s1">&#39;out/Release&#39;</span><span class="p">);</span>
+<span class="nx">mkdir</span><span class="p">(</span><span class="s1">'-p'</span><span class="p">,</span> <span class="s1">'out/Release'</span><span class="p">);</span>
+<span class="nx">cp</span><span class="p">(</span><span class="s1">'-R'</span><span class="p">,</span> <span class="s1">'stuff/*'</span><span class="p">,</span> <span class="s1">'out/Release'</span><span class="p">);</span>
 
 <span class="c1">// Replace macros in each .js file</span>
-<span class="nx">cd</span><span class="p">(</span><span class="s1">&#39;lib&#39;</span><span class="p">);</span>
-<span class="nx">ls</span><span class="p">(</span><span class="s1">&#39;*.js&#39;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">sed</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;BUILD_VERSION&#39;</span><span class="p">,</span> <span class="s1">&#39;v0.1.2&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
-  <span class="nx">sed</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="sr">/.*REMOVE_THIS_LINE.*\n/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
-  <span class="nx">sed</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="sr">/.*REPLACE_LINE_WITH_MACRO.*\n/</span><span class="p">,</span> <span class="nx">cat</span><span class="p">(</span><span class="s1">&#39;macro.js&#39;</span><span class="p">),</span> <span class="nx">file</span><span class="p">);</span>
+<span class="nx">cd</span><span class="p">(</span><span class="s1">'lib'</span><span class="p">);</span>
+<span class="nx">ls</span><span class="p">(</span><span class="s1">'*.js'</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">sed</span><span class="p">(</span><span class="s1">'-i'</span><span class="p">,</span> <span class="s1">'BUILD_VERSION'</span><span class="p">,</span> <span class="s1">'v0.1.2'</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
+  <span class="nx">sed</span><span class="p">(</span><span class="s1">'-i'</span><span class="p">,</span> <span class="sr">/.*REMOVE_THIS_LINE.*</span><span class="se">\n</span><span class="sr">/</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
+  <span class="nx">sed</span><span class="p">(</span><span class="s1">'-i'</span><span class="p">,</span> <span class="sr">/.*REPLACE_LINE_WITH_MACRO.*</span><span class="se">\n</span><span class="sr">/</span><span class="p">,</span> <span class="nx">cat</span><span class="p">(</span><span class="s1">'macro.js'</span><span class="p">),</span> <span class="nx">file</span><span class="p">);</span>
 <span class="p">});</span>
-<span class="nx">cd</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">);</span>
+<span class="nx">cd</span><span class="p">(</span><span class="s1">'..'</span><span class="p">);</span>
 
 <span class="c1">// Run external tool synchronously</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">exec</span><span class="p">(</span><span class="s1">&#39;git commit -am &quot;Auto-commit&quot;&#39;</span><span class="p">).</span><span class="nx">code</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">echo</span><span class="p">(</span><span class="s1">&#39;Error: Git commit failed&#39;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">exec</span><span class="p">(</span><span class="s1">'git commit -am "Auto-commit"'</span><span class="p">).</span><span class="nx">code</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">echo</span><span class="p">(</span><span class="s1">'Error: Git commit failed'</span><span class="p">);</span>
   <span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
-<p>在 PhoneCat 中，主要是用在下面：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s2">&quot;update-index-async&quot;</span><span class="o">:</span> <span class="s2">&quot;node -e \&quot;require(&#39;shelljs/global&#39;); sed(&#39;-i&#39;, /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, &#39;//@@NG_LOADER_START@@\\n&#39; + cat(&#39;bower_components/angular-loader/angular-loader.min.js&#39;) + &#39;\\n//@@NG_LOADER_END@@&#39;, &#39;app/index-async.html&#39;);\&quot;&quot;</span>
-</code></pre></div>
-<h1 id="3.-测试">3. 测试</h1>
+</code></pre>
+</div>
 
-<h2 id="运行单元测试">运行单元测试</h2>
+<p>在 PhoneCat 中，主要是用在下面：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s2">"update-index-async"</span><span class="err">:</span> <span class="s2">"node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + cat('bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""</span>
+</code></pre>
+</div>
+
+<h1 id="section-2">3. 测试</h1>
+
+<h2 id="section-3">运行单元测试</h2>
 
 <p>PhoneCat 项目中的单元测试是使用 Karma 来完成的，所有的单元测试用例都存放在 test/unit 目录下。可以通过执行以下命令来运行单元测试：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>npm <span class="nb">test</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm <span class="nb">test</span>
+</code></pre>
+</div>
+
 <blockquote>
-<p>值得一提的是，在运行单元测试前，计算机上必须安装 Google Chrome 浏览器，<strong>因为这里用到了 karma-chrome-launcher</strong>。</p>
+  <p>值得一提的是，在运行单元测试前，计算机上必须安装 Google Chrome 浏览器，<strong>因为这里用到了 karma-chrome-launcher</strong>。</p>
 </blockquote>
 
-<h2 id="运行端到端测试">运行端到端测试</h2>
+<h2 id="section-4">运行端到端测试</h2>
 
 <p>PhoneCat 项目使用端到端测试来保证 Web 应用的可操作性，而这个端到端测试是通过使用 Protractor 来实现的，所有的端到端测试用例都存放在test/e2e 目录下。可以通过执行以下步骤来运行端到端测试：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">//更新webdriver，此命令只需运行一次
-<span class="nv">$ </span>npm run update-webdriver
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//更新webdriver，此命令只需运行一次
+<span class="gp">$ </span>npm run update-webdriver
 //运行PhoneCat
-<span class="nv">$ </span>npm start
-</code></pre></div>
+<span class="gp">$ </span>npm start
+</code></pre>
+</div>
+
 <p>打开另一个命令行窗口，在其中运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>npm run protractor
-</code></pre></div>
-<h1 id="4.-代码分析">4. 代码分析</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm run protractor
+</code></pre>
+</div>
+
+<h1 id="section-5">4. 代码分析</h1>
 
 <p>在介绍了 PhoneCat 的运行和测试环境后，来看看 PhoneCat 的页面和 js 是怎么组织起来的。</p>
 
 <ul>
-<li>首先，从 index.html 内容可以看到 PhoneCat 页面使用 bootstrap 框架，并且引入了 jquery 以及 angular 的相关依赖，包括一些附加模块：<code class="prettyprint">路由</code>、<code class="prettyprint">动画</code>、<code class="prettyprint">资源</code>。</li>
-<li>angular 应用范围由 <code class="prettyprint">ng-app</code> 定义在 html 节点上，即作用于整个页面，其名称为 <code class="prettyprint">phonecatApp</code>。</li>
-<li>通过 <code class="prettyprint">ng-view</code> 指定加载子视图的位置，这里主要包括 <code class="prettyprint">partials/phone-list.html</code> 和 <code class="prettyprint">partials/phone-detail.html</code> 两个视图。</li>
-<li>app.js 是应用的入口，并且依赖 animations.js、controllers.js、filters.js、services.js 等文件。从这里可以看出，一个 angular 应用的 js 大概包括哪几个部分的内容。</li>
+  <li>首先，从 index.html 内容可以看到 PhoneCat 页面使用 bootstrap 框架，并且引入了 jquery 以及 angular 的相关依赖，包括一些附加模块：<code class="highlighter-rouge">路由</code>、<code class="highlighter-rouge">动画</code>、<code class="highlighter-rouge">资源</code>。</li>
+  <li>angular 应用范围由 <code class="highlighter-rouge">ng-app</code> 定义在 html 节点上，即作用于整个页面，其名称为 <code class="highlighter-rouge">phonecatApp</code>。</li>
+  <li>通过 <code class="highlighter-rouge">ng-view</code> 指定加载子视图的位置，这里主要包括 <code class="highlighter-rouge">partials/phone-list.html</code> 和 <code class="highlighter-rouge">partials/phone-detail.html</code> 两个视图。</li>
+  <li>app.js 是应用的入口，并且依赖 animations.js、controllers.js、filters.js、services.js 等文件。从这里可以看出，一个 angular 应用的 js 大概包括哪几个部分的内容。</li>
 </ul>
 
 <p>app.js 内容如下：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//JavaScript语法支持严格模式:如果在语法检测时发现语法问题，则整个代码块失效，并导致一个语法异常；如果在运行期出现了违反严格模式的代码，则抛出执行异常。</span>
-<span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">//JavaScript语法支持严格模式:如果在语法检测时发现语法问题，则整个代码块失效，并导致一个语法异常；如果在运行期出现了违反严格模式的代码，则抛出执行异常。</span>
+<span class="s1">'use strict'</span><span class="p">;</span>
 
 <span class="cm">/* App Module */</span>
 <span class="c1">//定义一个模块，模块名称和页面 ng-app 中内容一致</span>
-<span class="kd">var</span> <span class="nx">phonecatApp</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;phonecatApp&#39;</span><span class="p">,</span> <span class="p">[</span>
-  <span class="s1">&#39;ngRoute&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;phonecatAnimations&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;phonecatControllers&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;phonecatFilters&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;phonecatServices&#39;</span>
+<span class="kd">var</span> <span class="nx">phonecatApp</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'phonecatApp'</span><span class="p">,</span> <span class="p">[</span>
+  <span class="s1">'ngRoute'</span><span class="p">,</span>
+  <span class="s1">'phonecatAnimations'</span><span class="p">,</span>
+  <span class="s1">'phonecatControllers'</span><span class="p">,</span>
+  <span class="s1">'phonecatFilters'</span><span class="p">,</span>
+  <span class="s1">'phonecatServices'</span>
 <span class="p">]);</span>
 
 <span class="c1">//定义路由</span>
-<span class="nx">phonecatApp</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$routeProvider&#39;</span><span class="p">,</span>
+<span class="nx">phonecatApp</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">'$routeProvider'</span><span class="p">,</span>
   <span class="kd">function</span><span class="p">(</span><span class="nx">$routeProvider</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">$routeProvider</span><span class="p">.</span>
-      <span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/phones&#39;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;partials/phone-list.html&#39;</span><span class="p">,</span>
-        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;PhoneListCtrl&#39;</span>
+      <span class="nx">when</span><span class="p">(</span><span class="s1">'/phones'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'partials/phone-list.html'</span><span class="p">,</span>
+        <span class="na">controller</span><span class="p">:</span> <span class="s1">'PhoneListCtrl'</span>
       <span class="p">}).</span>
-      <span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/phones/:phoneId&#39;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;partials/phone-detail.html&#39;</span><span class="p">,</span>
-        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;PhoneDetailCtrl&#39;</span>
+      <span class="nx">when</span><span class="p">(</span><span class="s1">'/phones/:phoneId'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'partials/phone-detail.html'</span><span class="p">,</span>
+        <span class="na">controller</span><span class="p">:</span> <span class="s1">'PhoneDetailCtrl'</span>
       <span class="p">}).</span>
       <span class="nx">otherwise</span><span class="p">({</span>
-        <span class="nx">redirectTo</span><span class="o">:</span> <span class="s1">&#39;/phones&#39;</span>
+        <span class="na">redirectTo</span><span class="p">:</span> <span class="s1">'/phones'</span>
       <span class="p">});</span>
   <span class="p">}]);</span>
-</code></pre></div>
-<p>phonecatApp 模块依赖其他几个模块：ngRoute、phonecatAnimations、phonecatControllers、phonecatFilters、phonecatServices。</p>
+  <span class="err">```</span>
 
-<p>ngRoute 是内置的路由模块，定义路由规则：</p>
+<span class="nx">phonecatApp</span> <span class="err">模块依赖其他几个模块：</span><span class="nx">ngRoute</span><span class="err">、</span><span class="nx">phonecatAnimations</span><span class="err">、</span><span class="nx">phonecatControllers</span><span class="err">、</span><span class="nx">phonecatFilters</span><span class="err">、</span><span class="nx">phonecatServices</span><span class="err">。</span>
 
-<ul>
-<li>当访问 <code class="prettyprint">/phones</code>，由 <code class="prettyprint">PhoneListCtrl</code> 控制器处理，并且由 <code class="prettyprint">partials/phone-list.html</code> 模板渲染显示内容。</li>
-<li>当访问 <code class="prettyprint">/phones/:phoneId</code>，由 <code class="prettyprint">PhoneDetailCtrl</code> 控制器处理，并且由 <code class="prettyprint">partials/phone-detail.html</code> 模板渲染显示内容。</li>
-<li>如果不满足上面条件，则重定向到 <code class="prettyprint">/phones</code></li>
-</ul>
+<span class="nx">ngRoute</span> <span class="err">是内置的路由模块，定义路由规则：</span>
 
-<p>phonecatAnimations 模块是定义动画效果，没有真个模块不影响程序的主要功能的运行，故不分析这部分代码。</p>
+<span class="o">-</span> <span class="err">当访问</span> <span class="err">`</span><span class="o">/</span><span class="nx">phones</span><span class="err">`，由</span> <span class="err">`</span><span class="nx">PhoneListCtrl</span><span class="err">`</span> <span class="err">控制器处理，并且由</span> <span class="err">`</span><span class="nx">partials</span><span class="o">/</span><span class="nx">phone</span><span class="o">-</span><span class="nx">list</span><span class="p">.</span><span class="nx">html</span><span class="err">`</span> <span class="err">模板渲染显示内容。</span>
+<span class="o">-</span> <span class="err">当访问</span> <span class="err">`</span><span class="o">/</span><span class="nx">phones</span><span class="o">/</span><span class="err">:</span><span class="nx">phoneId</span><span class="err">`，由</span> <span class="err">`</span><span class="nx">PhoneDetailCtrl</span><span class="err">`</span> <span class="err">控制器处理，并且由</span> <span class="err">`</span><span class="nx">partials</span><span class="o">/</span><span class="nx">phone</span><span class="o">-</span><span class="nx">detail</span><span class="p">.</span><span class="nx">html</span><span class="err">`</span> <span class="err">模板渲染显示内容。</span>
+<span class="o">-</span> <span class="err">如果不满足上面条件，则重定向到</span> <span class="err">`</span><span class="o">/</span><span class="nx">phones</span><span class="err">`</span>
 
-<p>phonecatControllers 模块定义在 controllers.js 文件中：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+<span class="nx">phonecatAnimations</span> <span class="err">模块是定义动画效果，没有真个模块不影响程序的主要功能的运行，故不分析这部分代码。</span>
+
+<span class="nx">phonecatControllers</span> <span class="err">模块定义在</span> <span class="nx">controllers</span><span class="p">.</span><span class="nx">js</span> <span class="err">文件中：</span>
+
+<span class="err">```</span><span class="nx">javascript</span>
+<span class="s1">'use strict'</span><span class="p">;</span>
 
 <span class="cm">/* Controllers */</span>
-<span class="kd">var</span> <span class="nx">phonecatControllers</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;phonecatControllers&#39;</span><span class="p">,</span> <span class="p">[]);</span>
+<span class="kd">var</span> <span class="nx">phonecatControllers</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'phonecatControllers'</span><span class="p">,</span> <span class="p">[]);</span>
 
 <span class="c1">// 定义 PhoneListCtrl，并注入 Phone 对象</span>
-<span class="nx">phonecatControllers</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;PhoneListCtrl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;Phone&#39;</span><span class="p">,</span>
+<span class="nx">phonecatControllers</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'PhoneListCtrl'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'$scope'</span><span class="p">,</span> <span class="s1">'Phone'</span><span class="p">,</span>
   <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">Phone</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">$scope</span><span class="p">.</span><span class="nx">phones</span> <span class="o">=</span> <span class="nx">Phone</span><span class="p">.</span><span class="nx">query</span><span class="p">();</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">orderProp</span> <span class="o">=</span> <span class="s1">&#39;age&#39;</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">orderProp</span> <span class="o">=</span> <span class="s1">'age'</span><span class="p">;</span>
   <span class="p">}]);</span>
 
 <span class="c1">// 定义 PhoneDetailCtrl，并注入 Phone 对象和 $routeParams，$routeParams 封装了路由参数。</span>
-<span class="nx">phonecatControllers</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;PhoneDetailCtrl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;$routeParams&#39;</span><span class="p">,</span> <span class="s1">&#39;Phone&#39;</span><span class="p">,</span>
+<span class="nx">phonecatControllers</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'PhoneDetailCtrl'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'$scope'</span><span class="p">,</span> <span class="s1">'$routeParams'</span><span class="p">,</span> <span class="s1">'Phone'</span><span class="p">,</span>
   <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$routeParams</span><span class="p">,</span> <span class="nx">Phone</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">phone</span> <span class="o">=</span> <span class="nx">Phone</span><span class="p">.</span><span class="nx">get</span><span class="p">({</span><span class="nx">phoneId</span><span class="o">:</span> <span class="nx">$routeParams</span><span class="p">.</span><span class="nx">phoneId</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">phone</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">phone</span> <span class="o">=</span> <span class="nx">Phone</span><span class="p">.</span><span class="nx">get</span><span class="p">({</span><span class="na">phoneId</span><span class="p">:</span> <span class="nx">$routeParams</span><span class="p">.</span><span class="nx">phoneId</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">phone</span><span class="p">)</span> <span class="p">{</span>
       <span class="c1">//回调方法</span>
       <span class="nx">$scope</span><span class="p">.</span><span class="nx">mainImageUrl</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
     <span class="p">});</span>
@@ -441,28 +495,33 @@
       <span class="nx">$scope</span><span class="p">.</span><span class="nx">mainImageUrl</span> <span class="o">=</span> <span class="nx">imageUrl</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}]);</span>
-</code></pre></div>
-<p>phonecatFilters 模块定义在 filter.js 文件中，主要是自定义了一个过滤器 <code class="prettyprint">checkmark</code>：根据输入是否有内容判断返回 <code class="prettyprint">✓</code> 还是 <code class="prettyprint">✘</code>。</p>
+</code></pre>
+</div>
+
+<p>phonecatFilters 模块定义在 filter.js 文件中，主要是自定义了一个过滤器 <code class="highlighter-rouge">checkmark</code>：根据输入是否有内容判断返回 <code class="highlighter-rouge">✓</code> 还是 <code class="highlighter-rouge">✘</code>。</p>
 
 <p>phonecatServices 模块定义在 services.js 文件中：</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
 
 <span class="cm">/* Services */</span>
-<span class="kd">var</span> <span class="nx">phonecatServices</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;phonecatServices&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ngResource&#39;</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">phonecatServices</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'phonecatServices'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'ngResource'</span><span class="p">]);</span>
 
 <span class="c1">// 定义 Phone 服务，并提供了一个 query 方法，还包括一个内置的 get 方法。调用 get 方法实际上就是调用 query 方法，并且可以传递一个参数 phoneId</span>
-<span class="nx">phonecatServices</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;Phone&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$resource&#39;</span><span class="p">,</span>
+<span class="nx">phonecatServices</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'Phone'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'$resource'</span><span class="p">,</span>
   <span class="kd">function</span><span class="p">(</span><span class="nx">$resource</span><span class="p">){</span>
-    <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="s1">&#39;phones/:phoneId.json&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
-      <span class="nx">query</span><span class="o">:</span> <span class="p">{</span><span class="nx">method</span><span class="o">:</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span><span class="p">{</span><span class="nx">phoneId</span><span class="o">:</span><span class="s1">&#39;phones&#39;</span><span class="p">},</span> <span class="nx">isArray</span><span class="o">:</span><span class="kc">true</span><span class="p">}</span>
+    <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="s1">'phones/:phoneId.json'</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+      <span class="na">query</span><span class="p">:</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span><span class="s1">'GET'</span><span class="p">,</span> <span class="na">params</span><span class="p">:{</span><span class="na">phoneId</span><span class="p">:</span><span class="s1">'phones'</span><span class="p">},</span> <span class="na">isArray</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
     <span class="p">});</span>
   <span class="p">}]);</span>
-</code></pre></div>
-<h1 id="5.-参考文章">5. 参考文章</h1>
+</code></pre>
+</div>
+
+<h1 id="section-6">5. 参考文章</h1>
 
 <ul>
-<li><a href="http://www.lifelaf.com/blog/?p=1206">AngularJS初探：搭建PhoneCat项目的开发与测试环境</a></li>
-<li><a href="http://www.cnblogs.com/ElvinLong/p/3939938.html">Angular 实例项目 angular-phonecat 的一些问题</a></li>
+  <li><a href="http://www.lifelaf.com/blog/?p=1206">AngularJS初探：搭建PhoneCat项目的开发与测试环境</a></li>
+  <li><a href="http://www.cnblogs.com/ElvinLong/p/3939938.html">Angular 实例项目 angular-phonecat 的一些问题</a></li>
 </ul>
 
                     <br/>
