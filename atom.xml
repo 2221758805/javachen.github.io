@@ -3,11 +3,41 @@
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-07-03T11:17:49+08:00</updated>
+  <updated>2015-07-06T23:25:52+08:00</updated>
   <id></id>
   <author>
     <name>Junez</name>
   </author>
+  
+  <entry>
+    <title>Bash中的特殊字符</title>
+    <link href="/2015/07/06/bash-special-characters.html"/>
+    <updated>2015-07-06T00:00:00+08:00</updated>
+    <id>/2015/07/06/bash-special-characters.html</id>
+    <content type="html">Bash中，用在脚本和其他地方的字符叫做特殊字符。下面依次举例介绍每个字符的用途。
+
+#
+
+行首以#(#!是个例外)开头是注释。
+
+# This line is a comment.
+
+
+
+注释也可以放在于本行命令的后边。
+
+echo &quot;A comment will follow.&quot;   # 注释在这里。
+
+
+
+
+  命令是不能放在同一行上注释的后边的。因为没有办法把注释结束掉，好让同一行上后边的”代码生效”，只能够另起一行来使用下一个命令。
+
+
+在echo中转义的#是不能作为注释的，同样也可以出现在特定的参数替换结构中，或者是出现在数字常量表达式中。
+
+echo &quot;The # here...</content>
+  </entry>
   
   <entry>
     <title>Jekyll kramdown配置</title>
