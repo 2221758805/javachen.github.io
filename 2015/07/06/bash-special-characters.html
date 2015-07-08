@@ -91,7 +91,7 @@
                 <li class="previous"><a href="/2015/06/30/jekyll-kramdown-config.html" title="Jekyll kramdown配置"><i class="fa fa-angle-double-left"></i>&nbsp;Jekyll kramdown配置</a></li>
                 
                 
-                <li class="next disabled"><a href="#">Next <i class="fa fa-angle-double-right"></i></a></li>
+                <li class="next"><a href="/2015/07/07/bash-variable.html" title="Bash中的变量">Bash中的变量&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
                 
           </ul>
 
@@ -428,6 +428,15 @@ abs-book.sgml add-drive.sh agram.sh alias.sh
 <blockquote>
   <p>在括号中的命令列表，将会作为一个子shell来运行。</p>
 </blockquote>
+
+<p>例外: 在pipe中的一个大括号中的代码段可能运行在一个 子shell中。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ls | <span class="o">{</span> <span class="nb">read </span>firstline; <span class="nb">read </span>secondline; <span class="o">}</span>
+
+<span class="c">#错误. 在大括号中的代码段, 将运行到子shell中, 所以"ls"的输出将不能传递到代码块中</span>
+<span class="nb">echo</span> <span class="s2">"First line is </span><span class="nv">$firstline</span><span class="s2">; second line is </span><span class="nv">$secondline</span><span class="s2">"</span>  <span class="c"># 不能工作</span>
+</code></pre>
+</div>
 
 <p>初始化数组：</p>
 
@@ -770,6 +779,28 @@ gzip <span class="nv">$archive</span>.tar
 <h2 id="section-36"><code class="highlighter-rouge">^</code></h2>
 
 <p>行首，在正则表达式中，<code class="highlighter-rouge">^</code>表示定位到文本行的行首。</p>
+
+<h2 id="section-37">控制字符</h2>
+
+<p>修改终端或文本显示的行为。控制字符以<code class="highlighter-rouge">CONTROL + key</code>这种方式进行组合(同时按下)。控制字符也可以使用8进制或16进制表示法来进行表示，但是前边必须要加上转义符。</p>
+
+<p>控制字符比较多，这里不一一列出了。</p>
+
+<h2 id="section-38">空白</h2>
+
+<p>用来分隔函数，命令或变量。空白包含空格、tab、空行，或者是它们之间任意的组合体。在某些上下文中，比如变量赋值，空白是不被允许的，会产生语法错误。</p>
+
+<p>空行不会影响脚本的行为，因此使用空行可以很好的划分独立的函数段以增加可读性。</p>
+
+<p>特殊变量<code class="highlighter-rouge">$IFS</code>用来做一些输入命令的分隔符，默认情况下是空白。</p>
+
+<p>如果想在字符串或变量中使用空白，那么应该使用引用。例如下面例子：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">hello</span><span class="o">=</span><span class="s2">"A B  C   D"</span>
+<span class="nb">echo</span> <span class="nv">$hello</span>                  <span class="c"># A B C D</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$hello</span><span class="s2">"</span>               <span class="c"># A B  C   D</span>
+</code></pre>
+</div>
 
 
                     <br/>

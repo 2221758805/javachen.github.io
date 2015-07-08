@@ -116,6 +116,14 @@ cat /dev/null &gt; wtmp
 </code></pre>
 </div>
 
+<p>更简单的清除日志方法是：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">""</span> &gt;messages 
+<span class="c">#或者</span>
+&gt;messages 
+</code></pre>
+</div>
+
 <blockquote>
   <p>注意：<br />
 /var/log/messages 记录系统报错信息<br />

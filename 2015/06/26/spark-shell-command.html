@@ -105,9 +105,9 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>本文主要分析spark-shell脚本的运行逻辑，涉及到spark-submit、spark-class等脚本的分析，希望通过分析脚本以了解spark中各个进程的参数、JVM参数和内存大小如何设置。<br />
-​<br />
-# spark-shell</p>
+                    <p>本文主要分析spark-shell脚本的运行逻辑，涉及到spark-submit、spark-class等脚本的分析，希望通过分析脚本以了解spark中各个进程的参数、JVM参数和内存大小如何设置。</p>
+
+<h1 id="spark-shell">spark-shell</h1>
 
 <p>使用yum安装spark之后，你可以直接在终端运行spark-shell命令，或者在spark的home目录/usr/lib/spark下运行bin/spark-shell命令，这样就可以进入到spark命令行交互模式。</p>
 
@@ -202,7 +202,7 @@ onExit
 </code></pre>
 </div>
 
-<p>从上往下一步步分析，首先是判断是否为cygwin，这里用到了bash中的case语法：</p>
+<p>从上往下一步步分析，首先是判断是否为cygwin，这里用到了bash中的<code class="highlighter-rouge">case</code>语法：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">cygwin</span><span class="o">=</span><span class="nb">false
 </span><span class="k">case</span> <span class="s2">"</span><span class="sb">`</span>uname<span class="sb">`</span><span class="s2">"</span> <span class="k">in
@@ -278,7 +278,7 @@ onExit
 </div>
 
 <blockquote>
-  <p>提示： bash 中，$? 是获取上个命令运行结果</p>
+  <p>提示： bash 中，<code class="highlighter-rouge">$?</code>是获取上个命令运行结束返回的状态码</p>
 </blockquote>
 
 <p>如果以调试模式运行spark-shell，在不加参数的情况下，输出内容为：</p>
@@ -383,16 +383,20 @@ fi
 </code></pre>
 </div>
 
-<p>首先是设置SPARK_HOME，并保留原始输入参数：</p>
+<p>首先是设置<code class="highlighter-rouge">SPARK_HOME</code>，并保留原始输入参数：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">SPARK_HOME</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">"</span><span class="sb">`</span>dirname <span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="sb">`</span><span class="s2">"</span>/..; <span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>
 <span class="nv">ORIG_ARGS</span><span class="o">=(</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span><span class="o">)</span>
 </code></pre>
 </div>
 
-<p>接下来，使用while语句配合shift命令，依次判断输入参数。</p>
+<p>接下来，使用while语句配合<code class="highlighter-rouge">shift</code>命令，依次判断输入参数。</p>
 
-<p>设置SPARK_CONF_DIR变量，并判断spark-submit部署模式。</p>
+<blockquote>
+  <p>说明：shift是将输入参数位置向左移位</p>
+</blockquote>
+
+<p>设置<code class="highlighter-rouge">SPARK_CONF_DIR</code>变量，并判断spark-submit部署模式。</p>
 
 <p>如果<code class="highlighter-rouge">$SPARK_CONF_DIR/spark-defaults.conf</code>文件存在，则检查是否设置<code class="highlighter-rouge">spark.driver.extra</code>开头的和<code class="highlighter-rouge">spark.driver.memory</code>变量，如果设置了，则<code class="highlighter-rouge">SPARK_SUBMIT_BOOTSTRAP_DRIVER</code>设为1。</p>
 
@@ -406,9 +410,9 @@ fi
 
 <p>spark-class至少需要传递一个参数，如果没有，则会打印脚本使用说明<code class="highlighter-rouge">Usage: spark-class &lt;class&gt; [&lt;args&gt;]</code>。</p>
 
-<p>如果设置了SPARK_MEM变量，则提示SPARK_MEM变量过时，应该使用<code class="highlighter-rouge">spark.executor.memory</code>或者<code class="highlighter-rouge">spark.driver.memory</code>变量。</p>
+<p>如果设置了<code class="highlighter-rouge">SPARK_MEM</code>变量，则提示<code class="highlighter-rouge">SPARK_MEM</code>变量过时，应该使用<code class="highlighter-rouge">spark.executor.memory</code>或者<code class="highlighter-rouge">spark.driver.memory</code>变量。</p>
 
-<p>设置默认内存DEFAULT_MEM为512M，如果SPARK_MEM变量存在，则使用SPARK_MEM的值。</p>
+<p>设置默认内存<code class="highlighter-rouge">DEFAULT_MEM</code>为512M，如果<code class="highlighter-rouge">SPARK_MEM</code>变量存在，则使用<code class="highlighter-rouge">SPARK_MEM</code>的值。</p>
 
 <p>使用case语句判断spark-class传入的第一个参数的值：</p>
 
@@ -532,7 +536,7 @@ fi
 
 <p>判断<code class="highlighter-rouge">SPARK_SUBMIT_BOOTSTRAP_DRIVER</code>变量值，如果该值为1，则运行<code class="highlighter-rouge">org.apache.spark.deploy.SparkSubmitDriverBootstrapper</code>类，以替换原来的<code class="highlighter-rouge">org.apache.spark.deploy.SparkSubmit</code>的类，执行的脚本为<code class="highlighter-rouge">exec "$RUNNER" org.apache.spark.deploy.SparkSubmitDriverBootstrapper "$@"</code>；否则，运行java命令<code class="highlighter-rouge">exec "$RUNNER" -cp "$CLASSPATH" $JAVA_OPTS "$@"</code>。</p>
 
-<p>从最后运行的脚本可以看到，spark-class脚本的作用主要是查找java命令、计算环境变量、设置JAVA_OPTS等，至于运行的是哪个java类的main方法，取决于<code class="highlighter-rouge">SPARK_SUBMIT_BOOTSTRAP_DRIVER</code>变量的值。</p>
+<p>从最后运行的脚本可以看到，spark-class脚本的作用主要是查找java命令、计算环境变量、设置<code class="highlighter-rouge">JAVA_OPTS</code>等，至于运行的是哪个java类的main方法，取决于<code class="highlighter-rouge">SPARK_SUBMIT_BOOTSTRAP_DRIVER</code>变量的值。</p>
 
 <p>接下来，就是要分析<code class="highlighter-rouge">org.apache.spark.deploy.SparkSubmitDriverBootstrapper</code>和<code class="highlighter-rouge">org.apache.spark.deploy.SparkSubmit</code>类的运行逻辑以及两者之间的区别，这部分内容见下篇文章。</p>
 
