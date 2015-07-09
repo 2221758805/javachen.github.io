@@ -88,6 +88,20 @@
            <div class="col-md-9">
   
     <div id="home-post">
+      <h4><a href="/2014/06/12/hbase-aggregate-client.html"><strong>HBase实现简单聚合计算</strong></a>  <small>2014.06.12</small></h4>
+      <div id="home-post-text">
+         本文主要记录如何通过打补丁的方式将“hbase中实现简单聚合计算”的特性引入hbase源代码中，并介绍通过命令行和java代码的使用方法。
+      </div>
+    </div>
+   
+    <div id="home-post">
+      <h4><a href="/2014/06/09/hive-data-manipulation-language.html"><strong>Hive中数据的加载和导出</strong></a>  <small>2014.06.09</small></h4>
+      <div id="home-post-text">
+         记录 hive 的DML语法，并以实际的例子演示如何加载和导出数据
+      </div>
+    </div>
+   
+    <div id="home-post">
       <h4><a href="/2014/06/09/fetchtask-in-hive.html"><strong>Hive中的FetchTask任务</strong></a>  <small>2014.06.09</small></h4>
       <div id="home-post-text">
          Hive中有各种各样的Task任务，其中FetchTask算是最简单的一种了。FetchTask不同于MapReduce任务，它不会启动mapreduce，而是直接读取文件，输出结果。当你执行简单的`select * with limit`语句的时候，其不会运行mapreduce任务。
@@ -178,20 +192,6 @@
       </div>
     </div>
    
-    <div id="home-post">
-      <h4><a href="/2014/04/09/install-jira5-on-rhel-system.html"><strong>RHEL系统下安装atlassian-jira-5</strong></a>  <small>2014.04.09</small></h4>
-      <div id="home-post-text">
-         JIRA是Atlassian公司出品的项目与事务跟踪工具，被广泛应用于缺陷跟踪、客户服务、需求收集、流程审批、任务跟踪、项目跟踪和敏捷管理等工作领域。
-      </div>
-    </div>
-   
-    <div id="home-post">
-      <h4><a href="/2014/04/08/a-benchmark-tool-on-postgresql.html"><strong>PostgreSQL测试工具PGbench</strong></a>  <small>2014.04.08</small></h4>
-      <div id="home-post-text">
-         pgbench 是一个简单的给 PostgreSQL 做性能测试的程序。它反复运行同样的 SQL 命令序列，可能是在多个并发数据库会话上头，然后检查平均的事务速度（每秒的事务数 tps）。缺省的时候，pgbench 测试一个（松散的）接近 TPC-B 的情况，每个事务包括五个 SELECT，UPDATE，和 INSERT命令。不过，我们可以很轻松地使用自己的事务脚本文件来实现其它情况。
-      </div>
-    </div>
-   
     <!-- Pagination links -->
     <div class="pagination pull-right">
       <li><a href="/">Home</a></li>
@@ -226,7 +226,7 @@
     <li><a href="/categories.html#database">database</a>  (9)</li>
     
     
-    <li><a href="/categories.html#devops">devops</a>  (31)</li>
+    <li><a href="/categories.html#devops">devops</a>  (33)</li>
     
     
     <li><a href="/categories.html#hadoop">hadoop</a>  (44)</li>
@@ -274,6 +274,10 @@
   <h3>Recently Posts</h3>
   <ul>
     
+    <li><a href="/2015/07/09/bash-internal-variables.html" title="Bash内部变量">Bash内部变量</a></li>
+    
+    <li><a href="/2015/07/08/bash-if-else.html" title="Bash条件判断">Bash条件判断</a></li>
+    
     <li><a href="/2015/07/07/bash-variable.html" title="Bash中的变量">Bash中的变量</a></li>
     
     <li><a href="/2015/07/06/bash-special-characters.html" title="Bash中的特殊字符">Bash中的特殊字符</a></li>
@@ -293,10 +297,6 @@
     <li><a href="/2015/06/18/fix-anchor-offset-when-using-bootstrap-navbar-fixed-top.html" title="解决固定导航时锚点偏移问题">解决固定导航时锚点偏移问题</a></li>
     
     <li><a href="/2015/06/15/note-about-recommendation-system.html" title="推荐系统笔记">推荐系统笔记</a></li>
-    
-    <li><a href="/2015/06/10/collaborative-filtering-using-mahout.html" title="使用Mahout实现协同过滤">使用Mahout实现协同过滤</a></li>
-    
-    <li><a href="/2015/06/09/memory-in-spark-on-yarn.html" title="Spark On YARN内存分配">Spark On YARN内存分配</a></li>
     
   </ul>
 </section>

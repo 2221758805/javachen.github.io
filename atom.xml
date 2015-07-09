@@ -3,11 +3,64 @@
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-07-08T10:11:43+08:00</updated>
+  <updated>2015-07-09T10:13:00+08:00</updated>
   <id></id>
   <author>
     <name>Junez</name>
   </author>
+  
+  <entry>
+    <title>Bash内部变量</title>
+    <link href="/2015/07/09/bash-internal-variables.html"/>
+    <updated>2015-07-09T00:00:00+08:00</updated>
+    <id>/2015/07/09/bash-internal-variables.html</id>
+    <content type="html">Bash中存在一些内部变量。
+
+$BASH
+
+Bash的二进制程序文件的路径。
+
+$ echo $BASH
+/bin/bash
+
+
+
+$BASH_ENV
+
+这个环境变量会指向一个Bash的启动文件，当一个脚本被调用的时候，这个启动文件将会被读取。
+
+$BASH_SUBSHELL
+
+这个变量用来提示子shell的层次。这是一个Bash的新特性，直到版本3的Bash才被引入近来。
+
+#!/bin/bash
+# subshell.sh
+
+echo &quot;Subshell level OUTSIDE subshell = $BASH_SUBSHELL&quot;
+outer_variable=Outer
+
+(...</content>
+  </entry>
+  
+  <entry>
+    <title>Bash条件判断</title>
+    <link href="/2015/07/08/bash-if-else.html"/>
+    <updated>2015-07-08T00:00:00+08:00</updated>
+    <id>/2015/07/08/bash-if-else.html</id>
+    <content type="html">每个完整并且合理的程序语言都具有条件判断的功能，并且可以根据条件测试的结果做下一步的处理。Bash有test命令、各种中括号和圆括号操作，和if/then结构。
+
+条件测试
+
+if/then结构用来判断命令列表的退出状态码是否为0。
+
+有一个专有命令[ (左中括号，特殊字符)。这个命令与test命令等价，并且出于效率上的考虑，这是一个内建命令。这个命令把它的参数作为比较表达式或者作为文件测试，并且根据比较的结果来返回一个退出状态码(0 表示真，1表示假)。
+
+if  [ 0 ]      
+then
+    echo &quot;0 is true.&quot;
+else
+    echo &quot;0 is fa...</content>
+  </entry>
   
   <entry>
     <title>Bash中的变量</title>
