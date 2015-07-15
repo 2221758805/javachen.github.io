@@ -9,7 +9,7 @@ qrsync qiniu-images.conf
 
 cd _posts
 
-sed -i "" 's/\/static\/images/http:\/\/javachen\-rs\.qiniudn\.com\/images/g' */*
+sed -i "" 's/\/static\/images/http:\/\/javachen\-rs\.qiniudn\.com/g' */*
 
 cd ..
 

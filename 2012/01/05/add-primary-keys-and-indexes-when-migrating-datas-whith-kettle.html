@@ -114,13 +114,13 @@
 
 <p>下图是kettle中的一个表输出组件。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/images/2012/01/kettle-table-out.png" alt="kettle中的表输出组件" /></p>
+<p><img src="http://javachen-rs.qiniudn.com/2012/01/kettle-table-out.png" alt="kettle中的表输出组件" /></p>
 
 <p>在该组件里可以指定表名、字段等信息，并且还可以建表的sql语句。打开建表的sql语句，你可以看到该语句里只指定了字段名称和类型，没有指定主外键、约束、和索引。显然，该组件只是完成了数据的输出并没有将表的主键迁移过去。<br />
 <!--more--><br />
 下图是kettle中纬度更新/查询的组件。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/images/2012/01/kettle-look-up.png" alt="kettle中纬度更新/查询的组件" /></p>
+<p><img src="http://javachen-rs.qiniudn.com/2012/01/kettle-look-up.png" alt="kettle中纬度更新/查询的组件" /></p>
 
 <p>该组件可以指定输出表名、映射字段、纬度字段、并且指定主键（图中翻译为关键字段），该组件比表输出组件多了一个功能，即指定主键。<br />
 从上面两个组件中可以看出，kettle实际上预留了设置主键的接口，具体的接口说明需要查看api或者源代码，只是kettle没有智能的查处输入表的主键字段，而是需要用户在kettle ui界面指定一个主键名称。</p>
@@ -256,7 +256,7 @@ if (!Const.isEmpty(pksql)) {
 
 <p>最后的效果图如下：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/images/2012/01/kettle-add-primary-key-and-indexes.png" /></p>
+<p><img src="http://javachen-rs.qiniudn.com/2012/01/kettle-add-primary-key-and-indexes.png" /></p>
 
 <div class="infor">说明：
 1.以上代码使用的是jdbc的方法获取主键或索引，不同的数据库的jdbc驱动实现可能不同而且不同数据库的语法可能不同，故上面代码可能有待完善。

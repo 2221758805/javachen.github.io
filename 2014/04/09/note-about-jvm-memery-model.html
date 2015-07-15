@@ -192,7 +192,7 @@
 
 <p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域，这些区域都有各自的用途，以及创建和销毁的时间。有的区域随着虚拟机进程的启动就存在了， 有的区域则是依赖用户线程。根据《Java虚拟机规范（第二版）》，Java 虚拟机所管理的内存包含如下图的几个区域。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/images/2014/Java-Memory.png" alt="Java-Memory.png" /></p>
+<p><img src="http://javachen-rs.qiniudn.com/2014/Java-Memory.png" alt="Java-Memory.png" /></p>
 
 <p>由上图可以看出 JVM 组成如下：</p>
 
@@ -263,7 +263,7 @@
 
 <p>在 Java 中，堆被划分成两个不同的区域：新生代 ( Young )、老年代 ( Old )。新生代 ( Young ) 又被划分为三个区域：Eden、From Survivor、To Survivor。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/images/2014/jvm-heap.png" alt="jvm-heap.png" /></p>
+<p><img src="http://javachen-rs.qiniudn.com/2014/jvm-heap.png" alt="jvm-heap.png" /></p>
 
 <p>​从图中可以看出： <code class="highlighter-rouge">堆大小 = 新生代 + 老年代</code>，其中，堆的大小可以通过参数 <code class="highlighter-rouge">-Xms</code>、<code class="highlighter-rouge">-Xmx</code> 来指定。本人使用的是 JDK1.6，以下涉及的 JVM 默认值均以该版本为准。</p>
 
@@ -370,7 +370,7 @@
 
 <h1 id="section-16">3. 垃圾回收过程</h1>
 
-<p><img src="http://javachen-rs.qiniudn.com/images/2014/jvm-heap.png" alt="jvm-heap.png" /></p>
+<p><img src="http://javachen-rs.qiniudn.com/2014/jvm-heap.png" alt="jvm-heap.png" /></p>
 
 <p>JVM 采用一种<code class="highlighter-rouge">分代回收</code> (generational collection) 的策略，用较高的频率对年轻的对象进行扫描和回收，这种叫做 <code class="highlighter-rouge">minor collection</code> ，而对老对象的检查回收频率要低很多，称为 <code class="highlighter-rouge">major collection</code>。这样就不需要每次 GC 都将内存中所有对象都检查一遍。</p>
 
