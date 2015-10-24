@@ -122,7 +122,8 @@
 <p>Region的大小是一个棘手的问题，需要考量如下几个因素。</p>
 
 <ul>
-  <li>Regions是可用性和分布式的最基本单位</li>
+  <li>Region是HBase中分布式存储和负载均衡的最小单元。不同Region分布到不同RegionServer上，但并不是存储的最小单元。</li>
+  <li>Region由一个或者多个Store组成，每个store保存一个columns family，每个Strore又由一个memStore和0至多个StoreFile 组成。memStore存储在内存中， StoreFile存储在HDFS上。</li>
   <li>HBase通过将region切分在许多机器上实现分布式。也就是说，你如果有16GB的数据，只分了2个region， 你却有20台机器，有18台就浪费了。</li>
   <li>region数目太多就会造成性能下降，现在比以前好多了。但是对于同样大小的数据，700个region比3000个要好。</li>
   <li>region数目太少就会妨碍可扩展性，降低并行能力。有的时候导致压力不够分散。这就是为什么，你向一个10节点的HBase集群导入200MB的数据，大部分的节点是idle的。</li>
@@ -140,7 +141,7 @@
 <p><em>说明：</em></p>
 
 <ol>
-  <li>当region的大小超过了上面配置的值的时候，该region就会被拆分，具体的拆分策略见下文。</li>
+  <li>当region中的StoreFile大小超过了上面配置的值的时候，该region就会被拆分，具体的拆分策略见下文。</li>
   <li>上面的值也可以针对每个表单独设置，例如在hbase shell中设置：</li>
 </ol>
 

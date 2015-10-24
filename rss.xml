@@ -4,8 +4,8 @@
     <title>JavaChen Blog</title>
     <description>Ramblings of a coder</description>
     <link>http://blog.javachen.com/rss.xml</link>
-    <lastBuildDate>2015-10-24T12:13:04+08:00</lastBuildDate>
-    <pubDate>2015-10-24T12:13:04+08:00</pubDate>
+    <lastBuildDate>2015-10-24T12:14:21+08:00</lastBuildDate>
+    <pubDate>2015-10-24T12:14:21+08:00</pubDate>
     <ttl>1800</ttl>
     
     <item>
@@ -48682,7 +48682,8 @@ fi
 &lt;p&gt;Region的大小是一个棘手的问题，需要考量如下几个因素。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Regions是可用性和分布式的最基本单位&lt;/li&gt;
+  &lt;li&gt;Region是HBase中分布式存储和负载均衡的最小单元。不同Region分布到不同RegionServer上，但并不是存储的最小单元。&lt;/li&gt;
+  &lt;li&gt;Region由一个或者多个Store组成，每个store保存一个columns family，每个Strore又由一个memStore和0至多个StoreFile 组成。memStore存储在内存中， StoreFile存储在HDFS上。&lt;/li&gt;
   &lt;li&gt;HBase通过将region切分在许多机器上实现分布式。也就是说，你如果有16GB的数据，只分了2个region， 你却有20台机器，有18台就浪费了。&lt;/li&gt;
   &lt;li&gt;region数目太多就会造成性能下降，现在比以前好多了。但是对于同样大小的数据，700个region比3000个要好。&lt;/li&gt;
   &lt;li&gt;region数目太少就会妨碍可扩展性，降低并行能力。有的时候导致压力不够分散。这就是为什么，你向一个10节点的HBase集群导入200MB的数据，大部分的节点是idle的。&lt;/li&gt;
@@ -48700,7 +48701,7 @@ fi
 &lt;p&gt;&lt;em&gt;说明：&lt;/em&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;当region的大小超过了上面配置的值的时候，该region就会被拆分，具体的拆分策略见下文。&lt;/li&gt;
+  &lt;li&gt;当region中的StoreFile大小超过了上面配置的值的时候，该region就会被拆分，具体的拆分策略见下文。&lt;/li&gt;
   &lt;li&gt;上面的值也可以针对每个表单独设置，例如在hbase shell中设置：&lt;/li&gt;
 &lt;/ol&gt;
 
