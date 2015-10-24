@@ -5,7 +5,7 @@ echo `date`
 msg="update:$*"
 
 
-qrsync qiniu-images.conf
+qrsync qiniu-images.json
 
 
 cd _posts
