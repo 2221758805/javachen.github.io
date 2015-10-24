@@ -134,41 +134,36 @@
 
 <p>如果你在 Mac OS X 或 Linux下，下面两条命令可能会适用:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo easy_install virtualenv
+<pre><code>$ sudo easy_install virtualenv
 </code></pre>
-</div>
 
 <p>或更好的:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo pip install virtualenv
+<pre><code>$ sudo pip install virtualenv
 </code></pre>
-</div>
 
 <p>上述的命令会在你的系统中安装 virtualenv。它甚至可能会存在于包管理器中，如果你使用 Ubuntu ，可以尝试:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo apt-get install python-virtualenv
+<pre><code>$ sudo apt-get install python-virtualenv
 </code></pre>
-</div>
 
 <p>现在你只需要键入以下的命令来激活 virtualenv 中的 Flask:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ pip install Flask
+<pre><code>$ pip install Flask
 </code></pre>
-</div>
 
 <h2 id="section">全局安装</h2>
 
 <p>这样也是可以的，只需要以 root 权限运行 pip:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo pip install Flask
+<pre><code>$ sudo pip install Flask
 </code></pre>
-</div>
 
 <h1 id="flask-2">3. Flask入门</h1>
 
 <p>一个最小的 Flask 应用看起来是这样:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>from flask import Flask
+<pre><code>from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
@@ -178,46 +173,41 @@ def hello_world():
 if __name__ == '__main__':
     app.run()
 </code></pre>
-</div>
 
 <p>把它保存为 hello.py（或是类似的），然后用 Python 解释器来运行。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ python hello.py
+<pre><code>$ python hello.py
  * Running on http://127.0.0.1:5000/
 </code></pre>
-</div>
 
-<p>现在访问<code class="highlighter-rouge">http://127.0.0.1:5000/</code></p>
+<p>现在访问<code>http://127.0.0.1:5000/</code></p>
 
 <p>我们来解释一下上面的代码吧：</p>
 
 <ul>
   <li>第一行导入了Flask类，以便创建一个Flask应用的实例。</li>
   <li>接下来一行我们创建了一个Flask类的实例。这是一个WSGI应用实例。WSGI是”Web服务器网关接口”Web Service Gateway Interface）的缩写，同时也是架设web项目的Python标准。这一行要告诉Flask到哪里去找应用所需的静态资源和模板。在我们的例子中，我们传递了name，让Flask在当前模块内定位资源。</li>
-  <li>接着我们定义了一些关于<code class="highlighter-rouge">/</code>的路由。第一个路由是为根路径<code class="highlighter-rouge">/</code>准备的，第二个则对应于类似<code class="highlighter-rouge">/shekhar</code>、<code class="highlighter-rouge">/abc</code>之类的路径。对于<code class="highlighter-rouge">/</code>路由，我们将初始的name设定为Guest。如果用户访问 <code class="highlighter-rouge">http://localhost:5000/</code> ，那么他会看到<code class="highlighter-rouge">Hello Guest</code>。如果用户访问 <code class="highlighter-rouge">http://localhost:5000/shekhar</code> ，那么他会看到 <code class="highlighter-rouge">Hello shekhar</code>。</li>
-  <li>最后我们用 run() 函数来让应用运行在本地服务器上。 其中 <code class="highlighter-rouge">if __name__ == '__main__'</code>: 确保服务器只会在该脚本被 Python 解释器直接执行的时候才会运行，而不是作为模块导入的时候。</li>
+  <li>接着我们定义了一些关于<code>/</code>的路由。第一个路由是为根路径<code>/</code>准备的，第二个则对应于类似<code>/shekhar</code>、<code>/abc</code>之类的路径。对于<code>/</code>路由，我们将初始的name设定为Guest。如果用户访问 <code>http://localhost:5000/</code> ，那么他会看到<code>Hello Guest</code>。如果用户访问 <code>http://localhost:5000/shekhar</code> ，那么他会看到 <code>Hello shekhar</code>。</li>
+  <li>最后我们用 run() 函数来让应用运行在本地服务器上。 其中 <code>if __name__ == '__main__'</code>: 确保服务器只会在该脚本被 Python 解释器直接执行的时候才会运行，而不是作为模块导入的时候。</li>
 </ul>
 
 <p>如果你禁用了 debug 或信任你所在网络的用户，你可以简单修改调用 run() 的方法使你的服务器公开可用，如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>app.run(host='0.0.0.0')
+<pre><code>app.run(host='0.0.0.0')
 </code></pre>
-</div>
 
 <p>这会让操作系统监听所有公开的IP。</p>
 
 <p>有两种途径来启用调试模式。一种是在应用对象上设置:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>app.debug = True
+<pre><code>app.debug = True
 app.run()
 </code></pre>
-</div>
 
 <p>另一种是作为 run 方法的一个参数传入:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>app.run(debug=True)
+<pre><code>app.run(debug=True)
 </code></pre>
-</div>
 
 <h1 id="section-1">4. 总结</h1>
 
@@ -274,7 +264,7 @@ app.run()
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

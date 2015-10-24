@@ -137,35 +137,33 @@
 
 <p>如果你在 Servlet3.0 容器中使用 Resteasy，则需要添加如下依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.jboss.resteasy<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>resteasy-servlet-initializer<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>3.0.9.Final<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-servlet-initializer&lt;/artifactId&gt;
+    &lt;version&gt;3.0.9.Final&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
-</div>
 
 <p>否则，如果你在 Servlet3.0 之前的容器中使用 Resteasy，则 WEB-INF/web.xml 中需要包括如下内容：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;servlet&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>Resteasy<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;servlet-class&gt;</span>
+<pre><code class="language-xml">&lt;servlet&gt;
+    &lt;servlet-name&gt;Resteasy&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;
         org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
-    <span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>javax.ws.rs.Application<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>com.restfully.shop.services.ShoppingApplication<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-<span class="nt">&lt;/servlet&gt;</span>
+    &lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;javax.ws.rs.Application&lt;/param-name&gt;
+        &lt;param-value&gt;com.restfully.shop.services.ShoppingApplication&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/servlet&gt;
 
-<span class="nt">&lt;servlet-mapping&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>Resteasy<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/servlet-mapping&gt;</span>
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;Resteasy&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
 </code></pre>
-</div>
 
-<p>另外，还可以在 <code class="highlighter-rouge">&lt;context-param&gt;</code> 节点配置如下参数：</p>
+<p>另外，还可以在 <code>&lt;context-param&gt;</code> 节点配置如下参数：</p>
 
 <ul>
   <li>resteasy.servlet.mapping.prefix</li>
@@ -190,33 +188,31 @@
 
 <p>在 Servlet3.0 之前，你可以将 RESTEasy 配置为 ServletContextListener：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;listener&gt;</span>
-  <span class="nt">&lt;listener-class&gt;</span>
+<pre><code class="language-xml">&lt;listener&gt;
+  &lt;listener-class&gt;
      org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
-  <span class="nt">&lt;/listener-class&gt;</span>
-<span class="nt">&lt;/listener&gt;</span>
+  &lt;/listener-class&gt;
+&lt;/listener&gt;
 </code></pre>
-</div>
 
 <p>同样，在 Servlet3.0 之前，你可以将 RESTEasy 配置为 Servlet Filter：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;filter&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>Resteasy<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;filter-class&gt;</span>
+<pre><code class="language-xml">&lt;filter&gt;
+    &lt;filter-name&gt;Resteasy&lt;/filter-name&gt;
+    &lt;filter-class&gt;
         org.jboss.resteasy.plugins.server.servlet.FilterDispatcher
-    <span class="nt">&lt;/filter-class&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>javax.ws.rs.Application<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>com.restfully.shop.services.ShoppingApplication<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-<span class="nt">&lt;/filter&gt;</span>
+    &lt;/filter-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;javax.ws.rs.Application&lt;/param-name&gt;
+        &lt;param-value&gt;com.restfully.shop.services.ShoppingApplication&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
 
-<span class="nt">&lt;filter-mapping&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>Resteasy<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/filter-mapping&gt;</span>
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;Resteasy&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
 </code></pre>
-</div>
 
 <h1 id="section-2">常见的注解</h1>
 
@@ -224,30 +220,29 @@
 
 <p>一个示例代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/library"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Library</span> <span class="o">{</span>
+<pre><code class="language-java">@Path("/library")
+public class Library {
 
-   <span class="nd">@GET</span>
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"/books"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="n">String</span> <span class="n">getBooks</span><span class="o">()</span> <span class="o">{...}</span>
+   @GET
+   @Path("/books")
+   public String getBooks() {...}
 
-   <span class="nd">@GET</span>
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"/book/{isbn}"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="n">String</span> <span class="n">getBook</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"isbn"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-      <span class="c1">// search my database and get a string representation and return it</span>
-   <span class="o">}</span>
+   @GET
+   @Path("/book/{isbn}")
+   public String getBook(@PathParam("isbn") String id) {
+      // search my database and get a string representation and return it
+   }
 
-   <span class="nd">@PUT</span>
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"/book/{isbn}"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="kt">void</span> <span class="n">addBook</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"isbn"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@QueryParam</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{...}</span>
+   @PUT
+   @Path("/book/{isbn}")
+   public void addBook(@PathParam("isbn") String id, @QueryParam("name") String name) {...}
 
-   <span class="nd">@DELETE</span>
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"/book/{id}"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="kt">void</span> <span class="n">removeBook</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span> <span class="o">{...}</span>
+   @DELETE
+   @Path("/book/{id}")
+   public void removeBook(@PathParam("id") String id {...}
   
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>说明：</p>
 
@@ -259,48 +254,42 @@
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/resources"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyResource</span> <span class="o">{</span>
+<pre><code class="language-java">@Path("/resources")
+public class MyResource {
 
-   <span class="nd">@GET</span>
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"{var:.*}/stuff"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="n">String</span> <span class="n">get</span><span class="o">()</span> <span class="o">{...}</span>
-<span class="o">}</span>
+   @GET
+   @Path("{var:.*}/stuff")
+   public String get() {...}
+}
 </code></pre>
-</div>
 
 <p>下面的 GETs 请求会映射到 get() 方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /resources/stuff
+<pre><code>GET /resources/stuff
 GET /resources/foo/stuff
 GET /resources/on/and/on/stuff
 </code></pre>
-</div>
 
 <p>表达式的格式是：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>"{" variable-name [ ":" regular-expression ] "}"
+<pre><code>"{" variable-name [ ":" regular-expression ] "}"
 </code></pre>
-</div>
 
 <p>当正则表达式不存在时，类似于：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>"([]*)"
+<pre><code>"([]*)"
 </code></pre>
-</div>
 
-<p>例如， <code class="highlighter-rouge">@Path("/resources/{var}/stuff")</code>` 将会匹配下面请求：</p>
+<p>例如， <code>@Path("/resources/{var}/stuff")</code>` 将会匹配下面请求：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /resources/foo/stuff
+<pre><code>GET /resources/foo/stuff
 GET /resources/bar/stuff
 </code></pre>
-</div>
 
 <p>而不会匹配：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /resources/a/bunch/of/stuff
+<pre><code>GET /resources/a/bunch/of/stuff
 </code></pre>
-</div>
 
 <h2 id="pathparam">@PathParam</h2>
 
@@ -308,32 +297,29 @@ GET /resources/bar/stuff
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"/book/{isbn}"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBook</span><span class="p">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"isbn"</span><span class="o">)</span> <span class="n">ISBN</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+<pre><code class="language-java">@GET
+@Path("/book/{isbn}")
+public String getBook(@PathParam("isbn") ISBN id) {...}
 
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ISBN</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="n">ISBN</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span><span class="o">)</span> <span class="o">{...}</span>
-<span class="o">}</span>
+public class ISBN {
+  public ISBN(String str) {...}
+}
 </code></pre>
-</div>
 
 <p>或者：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ISBN</span> <span class="o">{</span>
- <span class="kd">public</span> <span class="kd">static</span> <span class="n">ISBN</span> <span class="n">valueOf</span><span class="o">(</span><span class="n">String</span> <span class="n">isbn</span><span class="o">)</span> <span class="o">{...}</span>
-<span class="o">}</span>
+<pre><code class="language-java">public class ISBN {
+ public static ISBN valueOf(String isbn) {...}
+}
 </code></pre>
-</div>
 
 <p>@Path 注解中可以使用 @PathParam 注解对应的参数，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"/aaa{param:b+}/{many:.*}/stuff"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getIt</span><span class="p">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"param"</span><span class="o">)</span> <span class="n">String</span> <span class="n">bs</span><span class="o">,</span> <span class="nd">@PathParam</span><span class="o">(</span><span class="s">"many"</span><span class="o">)</span> <span class="n">String</span> <span class="n">many</span><span class="o">)</span> <span class="o">{...}</span>
+<pre><code class="language-java">@GET
+@Path("/aaa{param:b+}/{many:.*}/stuff")
+public String getIt(@PathParam("param") String bs, @PathParam("many") String many) {...}
 </code></pre>
-</div>
 
 <p>对于下面的请求，对应的 param 和 many 变量如下：</p>
 
@@ -361,101 +347,91 @@ GET /resources/bar/stuff
 
 <p>另外，@PathParam 注解也可以将 URL 后面的多个参数映射到内置的 javax.ws.rs.core.PathSegment 对象，该对象定义如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PathSegment</span> <span class="o">{</span>
+<pre><code class="language-java">public interface PathSegment {
 
-    <span class="cm">/**
+    /**
      * Get the path segment.
      * &lt;p&gt;
      * @return the path segment
-     */</span>
-    <span class="n">String</span> <span class="n">getPath</span><span class="o">();</span>
-    <span class="cm">/**
+     */
+    String getPath();
+    /**
      * Get a map of the matrix parameters associated with the path segment
      * @return the map of matrix parameters
-     */</span>
-    <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">getMatrixParameters</span><span class="o">();</span>
+     */
+    MultivaluedMap&lt;String, String&gt; getMatrixParameters();
     
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>使用 PathSegment 作为参数类型：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"/book/{id}"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBook</span><span class="p">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">PathSegment</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+<pre><code class="language-java">@GET
+@Path("/book/{id}")
+public String getBook(@PathParam("id") PathSegment id) {...}
 </code></pre>
-</div>
 
 <p>则下面请求会映射到 getBook 方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET http://host.com/library/book;name=EJB 3.0;author=Bill Burke
+<pre><code>GET http://host.com/library/book;name=EJB 3.0;author=Bill Burke
 </code></pre>
-</div>
 
 <h2 id="queryparam">@QueryParam</h2>
 
 <p>对于下面的请求：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /books?num=5
+<pre><code>GET /books?num=5
 </code></pre>
-</div>
 
 <p>可以使用 @QueryParam 注解进行映射：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBooks</span><span class="p">(</span><span class="nd">@QueryParam</span><span class="o">(</span><span class="s">"num"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">...</span>
-<span class="o">}</span>
+<pre><code class="language-java">@GET
+public String getBooks(@QueryParam("num") int num) {
+...
+}
 </code></pre>
-</div>
 
 <h2 id="headerparam">@HeaderParam</h2>
 
 <p>@HeaderParam 注解用于将 HTTP header 中参数映射到方法的调用上，例如从 http header 中获取 From 变量的值映射到 from 参数上：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBooks</span><span class="p">(</span><span class="nd">@HeaderParam</span><span class="o">(</span><span class="s">"From"</span><span class="o">)</span> <span class="n">String</span> <span class="n">from</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">...</span>
-<span class="o">}</span>
+<pre><code class="language-java">@GET
+public String getBooks(@HeaderParam("From") String from) {
+...
+}
 </code></pre>
-</div>
 
 <p>同 PathParam 注解一样，方法的参数类型可以是基本类型、字符串、或者任何有一个字符串作为构造方法参数的 Java 对象、或者一个有字符串作为参数的静态方法 valueOf 的 Java 对象，例如，MediaType 对象有个 valueOf() 方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@PUT</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="p">(</span><span class="nd">@HeaderParam</span><span class="o">(</span><span class="s">"Content-Type"</span><span class="o">)</span> <span class="n">MediaType</span> <span class="n">contentType</span><span class="o">,</span> <span class="o">...)</span>
+<pre><code class="language-java">@PUT
+public void put(@HeaderParam("Content-Type") MediaType contentType, ...)
 </code></pre>
-</div>
 
 <h2 id="matrixparam">@MatrixParam</h2>
 
 <p>对于 URL 中的多参数，也可以使用 @MatrixParam 注解，例如对下面的请求，</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET http://host.com/library/book;name=EJB 3.0;author=Bill Burke
+<pre><code>GET http://host.com/library/book;name=EJB 3.0;author=Bill Burke
 </code></pre>
-</div>
 
 <p>可以使用下面代码来处理：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBook</span><span class="p">(</span><span class="nd">@MatrixParam</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="nd">@MatrixParam</span><span class="o">(</span><span class="s">"author"</span><span class="o">)</span> <span class="n">String</span> <span class="n">author</span><span class="o">)</span> <span class="o">{...}</span>
+<pre><code class="language-java">@GET
+public String getBook(@MatrixParam("name") String name, @MatrixParam("author") String author) {...}
 </code></pre>
-</div>
 
 <h2 id="cookieparam">@CookieParam</h2>
 
 <p>获取 Cookie 参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBooks</span><span class="p">(</span><span class="nd">@CookieParam</span><span class="o">(</span><span class="s">"sessionid"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">...</span>
-<span class="o">}</span>
+<pre><code class="language-java">@GET
+public String getBooks(@CookieParam("sessionid") int id) {
+...
+}
 
-<span class="nd">@GET</span>
-<span class="n">publi</span> <span class="n">cString</span> <span class="nf">getBooks</span><span class="p">(</span><span class="nd">@CookieParam</span><span class="o">(</span><span class="s">"sessionid"</span><span class="o">)</span> <span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">Cookie</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+@GET
+publi cString getBooks(@CookieParam("sessionid") javax.ws.rs.core.Cookie id) {...}
 </code></pre>
-</div>
 
 <p>同 PathParam 注解一样，方法的参数类型可以是基本类型、字符串、或者任何有一个字符串作为构造方法参数的 Java 对象、或者一个有字符串作为参数的静态方法 valueOf 的 Java 对象。</p>
 
@@ -463,40 +439,37 @@ GET /resources/bar/stuff
 
 <p>将表单中的字段映射到方法调用上，例如，对于下面的表单：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"/resources/service"</span><span class="nt">&gt;</span>
+<pre><code class="language-xml">&lt;form method="POST" action="/resources/service"&gt;
 First name: 
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"firstname"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;br&gt;</span>
+&lt;input type="text" name="firstname"&gt;
+&lt;br&gt;
 Last name: 
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"lastname"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/form&gt;</span>
+&lt;input type="text" name="lastname"&gt;
+&lt;/form&gt;
 </code></pre>
-</div>
 
 <p>通过 post 方法提交，处理该请求的方法为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NameRegistry</span> <span class="o">{</span>
+<pre><code class="language-java">@Path("/")
+public class NameRegistry {
 
-    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/resources/service"</span><span class="o">)</span>
-    <span class="nd">@POST</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">addName</span><span class="o">(</span><span class="nd">@FormParam</span><span class="o">(</span><span class="s">"firstname"</span><span class="o">)</span> <span class="n">String</span> <span class="n">first</span><span class="o">,</span> <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"lastname"</span><span class="o">)</span> <span class="n">String</span> <span class="n">last</span><span class="o">)</span> <span class="o">{...}</span>
-<span class="o">}</span>    
+    @Path("/resources/service")
+    @POST
+    public void addName(@FormParam("firstname") String first, @FormParam("lastname") String last) {...}
+}    
 </code></pre>
-</div>
 
-<p>你也可以添加 <code class="highlighter-rouge">application/x-www-form-urlencoded</code> 来反序列化 URL 中的多参数：</p>
+<p>你也可以添加 <code>application/x-www-form-urlencoded</code> 来反序列化 URL 中的多参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NameRegistry</span> <span class="o">{</span>
+<pre><code class="language-java">@Path("/")
+public class NameRegistry {
 
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"/resources/service"</span><span class="o">)</span>
-   <span class="nd">@POST</span>
-   <span class="nd">@Consumes</span><span class="o">(</span><span class="s">"application/x-www-form-urlencoded"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="kt">void</span> <span class="n">addName</span><span class="o">(</span><span class="nd">@FormParam</span><span class="o">(</span><span class="s">"firstname"</span><span class="o">)</span> <span class="n">String</span> <span class="n">first</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">form</span><span class="o">)</span> <span class="o">{...}</span>
-<span class="o">}</span>       
+   @Path("/resources/service")
+   @POST
+   @Consumes("application/x-www-form-urlencoded")
+   public void addName(@FormParam("firstname") String first, MultivaluedMap&lt;String, String&gt; form) {...}
+}       
 </code></pre>
-</div>
 
 <h2 id="form">@Form</h2>
 
@@ -504,92 +477,87 @@ Last name:
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Person</span><span class="o">{</span>
-   <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span>
-   <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+<pre><code class="language-java">public static class Person{
+   @FormParam("name")
+   private String name;
 
-   <span class="nd">@Form</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"invoice"</span><span class="o">)</span>
-   <span class="kd">private</span> <span class="n">Address</span> <span class="n">invoice</span><span class="o">;</span>
+   @Form(prefix = "invoice")
+   private Address invoice;
 
-   <span class="nd">@Form</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"shipping"</span><span class="o">)</span>
-   <span class="kd">private</span> <span class="n">Address</span> <span class="n">shipping</span><span class="o">;</span>
-<span class="o">}</span>
+   @Form(prefix = "shipping")
+   private Address shipping;
+}
 
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Address</span><span class="o">{</span>
+public static class Address{
 
-   <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"street"</span><span class="o">)</span>
-   <span class="kd">private</span> <span class="n">String</span> <span class="n">street</span><span class="o">;</span>
-<span class="o">}</span>
+   @FormParam("street")
+   private String street;
+}
 
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"person"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyResource</span><span class="o">{</span>
+@Path("person")
+public static class MyResource{
 
-   <span class="nd">@POST</span>
-   <span class="nd">@Produces</span><span class="o">(</span><span class="n">MediaType</span><span class="o">.</span><span class="na">TEXT_PLAIN</span><span class="o">)</span>
-   <span class="nd">@Consumes</span><span class="o">(</span><span class="n">MediaType</span><span class="o">.</span><span class="na">APPLICATION_FORM_URLENCODED</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="n">String</span> <span class="n">post</span><span class="o">(</span><span class="nd">@Form</span> <span class="n">Person</span> <span class="n">p</span><span class="o">){</span>
-      <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-   <span class="o">}</span>
- <span class="o">}</span>
+   @POST
+   @Produces(MediaType.TEXT_PLAIN)
+   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+   public String post(@Form Person p){
+      return p.toString();
+   }
+ }
 </code></pre>
-</div>
 
 <p>客户端可以提交下面的参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>name=bill
+<pre><code>name=bill
 invoice.street=xxx
 shipping.street=yyy
 </code></pre>
-</div>
 
 <p>另外，也可以设置 prefix 参数，映射到 map 和 list：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
-    <span class="nd">@Form</span><span class="o">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">"telephoneNumbers"</span><span class="o">)</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">TelephoneNumber</span><span class="o">&gt;</span> <span class="n">telephoneNumbers</span><span class="o">;</span>
-    <span class="nd">@Form</span><span class="o">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">"address"</span><span class="o">)</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="n">addresses</span><span class="o">;</span>
-<span class="o">}</span>
+<pre><code class="language-java">public static class Person {
+    @Form(prefix="telephoneNumbers") List&lt;TelephoneNumber&gt; telephoneNumbers;
+    @Form(prefix="address") Map&lt;String, Address&gt; addresses;
+}
 
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TelephoneNumber</span> <span class="o">{</span>
-    <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"countryCode"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">countryCode</span><span class="o">;</span>
-    <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"number"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">number</span><span class="o">;</span>
-<span class="o">}</span>
+public static class TelephoneNumber {
+    @FormParam("countryCode") private String countryCode;
+    @FormParam("number") private String number;
+}
 
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Address</span> <span class="o">{</span>
-    <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"street"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">street</span><span class="o">;</span>
-    <span class="nd">@FormParam</span><span class="o">(</span><span class="s">"houseNumber"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">houseNumber</span><span class="o">;</span>
-<span class="o">}</span>
+public static class Address {
+    @FormParam("street") private String street;
+    @FormParam("houseNumber") private String houseNumber;
+}
 
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"person"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyResource</span> <span class="o">{</span>
+@Path("person")
+public static class MyResource {
 
-    <span class="nd">@POST</span>
-    <span class="nd">@Consumes</span><span class="o">(</span><span class="n">MediaType</span><span class="o">.</span><span class="na">APPLICATION_FORM_URLENCODED</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">post</span> <span class="o">(</span><span class="nd">@Form</span> <span class="n">Person</span> <span class="n">p</span><span class="o">)</span> <span class="o">{}</span>
-<span class="o">}</span>    
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void post (@Form Person p) {}
+}    
 </code></pre>
-</div>
 
 <p>然后，提交下面的参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"telephoneNumbers[0].countryCode"</span><span class="o">,</span> <span class="s">"31"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"telephoneNumbers[0].number"</span><span class="o">,</span> <span class="s">"0612345678"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"telephoneNumbers[1].countryCode"</span><span class="o">,</span> <span class="s">"91"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"telephoneNumbers[1].number"</span><span class="o">,</span> <span class="s">"9717738723"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"address[INVOICE].street"</span><span class="o">,</span> <span class="s">"Main Street"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"address[INVOICE].houseNumber"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"address[SHIPPING].street"</span><span class="o">,</span> <span class="s">"Square One"</span><span class="o">);</span>
-<span class="n">request</span><span class="o">.</span><span class="na">addFormHeader</span><span class="o">(</span><span class="s">"address[SHIPPING].houseNumber"</span><span class="o">,</span> <span class="s">"13"</span><span class="o">);</span>
+<pre><code class="language-java">request.addFormHeader("telephoneNumbers[0].countryCode", "31");
+request.addFormHeader("telephoneNumbers[0].number", "0612345678");
+request.addFormHeader("telephoneNumbers[1].countryCode", "91");
+request.addFormHeader("telephoneNumbers[1].number", "9717738723");
+request.addFormHeader("address[INVOICE].street", "Main Street");
+request.addFormHeader("address[INVOICE].houseNumber", "2");
+request.addFormHeader("address[SHIPPING].street", "Square One");
+request.addFormHeader("address[SHIPPING].houseNumber", "13");
 </code></pre>
-</div>
 
 <h2 id="defaultvalue">@DefaultValue</h2>
 
 <p>用于设置默认值。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@GET</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">getBooks</span><span class="p">(</span><span class="nd">@QueryParam</span><span class="o">(</span><span class="s">"num"</span><span class="o">)</span> <span class="nd">@DefaultValue</span><span class="o">(</span><span class="s">"10"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{...}</span>
+<pre><code class="language-java">@GET
+public String getBooks(@QueryParam("num") @DefaultValue("10") int num) {...}
 </code></pre>
-</div>
 
 <h2 id="encoded--encoding">@Encoded 和 @Encoding</h2>
 
@@ -614,119 +582,111 @@ shipping.street=yyy
 
 <p>@Consumes 注解定义对应的方法处理的  content-type 请求类型。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Consumes</span><span class="o">(</span><span class="s">"text/*"</span><span class="o">)</span>
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"/library"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Library</span> <span class="o">{</span>
+<pre><code class="language-java">@Consumes("text/*")
+@Path("/library")
+public class Library {
 
-    <span class="nd">@POST</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">stringBook</span><span class="o">(</span><span class="n">String</span> <span class="n">book</span><span class="o">)</span> <span class="o">{...}</span>
+    @POST
+    public String stringBook(String book) {...}
 
-    <span class="nd">@Consumes</span><span class="o">(</span><span class="s">"text/xml"</span><span class="o">)</span>
-    <span class="nd">@POST</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">jaxbBook</span><span class="o">(</span><span class="n">Book</span> <span class="n">book</span><span class="o">)</span> <span class="o">{...}</span>
-<span class="o">}</span>
+    @Consumes("text/xml")
+    @POST
+    public String jaxbBook(Book book) {...}
+}
 </code></pre>
-</div>
 
 <p>当客户端发送下面请求时，stringBook() 方法会调用：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> POST /library
+<pre><code> POST /library
  content-type: text/plain
 
  thsi sis anice book
 </code></pre>
-</div>
 
 <p>当客户端发送下面请求时，jaxbBook() 方法会调用：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>POST /library
+<pre><code>POST /library
 content-type: text/xml
 
 &lt;book name="EJB 3.0" author="Bill Burke"/&gt; 
 </code></pre>
-</div>
 
 <p>@Produces 用于映射客户端的请求并匹配客户端请求的 Accept header。</p>
 
 <p>例如，对下面的代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Produces</span><span class="o">(</span><span class="s">"text/*"</span><span class="o">)</span>
-<span class="nd">@Path</span><span class="o">(</span><span class="s">"/library"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Library</span> <span class="o">{</span>
+<pre><code class="language-java">@Produces("text/*")
+@Path("/library")
+public class Library {
 
-    <span class="nd">@GET</span>
-    <span class="nd">@Produces</span><span class="o">(</span><span class="s">"application/json"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getJSON</span><span class="o">()</span> <span class="o">{...}</span>
+    @GET
+    @Produces("application/json")
+    public String getJSON() {...}
 
-    <span class="nd">@GET</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">get</span><span class="o">()</span> <span class="o">{...}</span>
-<span class="o">}</span>    
+    @GET
+    public String get() {...}
+}    
 </code></pre>
-</div>
 
 <p>则，客户端发送下面请求时，getJSON() 会被调用。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /library
+<pre><code>GET /library
 Accept: application/json
 </code></pre>
-</div>
 
 <p>可以修改 web.xml 中的配置，对 Accept 和 Accept-Language 做一些映射。例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;web-app&gt;</span>
-    <span class="nt">&lt;display-name&gt;</span>Archetype Created Web Application<span class="nt">&lt;/display-name&gt;</span>
-    <span class="nt">&lt;context-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>resteasy.media.type.mappings<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>html : text/html, json : application/json, xml : application/xml<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/context-param&gt;</span>
+<pre><code class="language-xml">&lt;web-app&gt;
+    &lt;display-name&gt;Archetype Created Web Application&lt;/display-name&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;resteasy.media.type.mappings&lt;/param-name&gt;
+        &lt;param-value&gt;html : text/html, json : application/json, xml : application/xml&lt;/param-value&gt;
+    &lt;/context-param&gt;
 
-   <span class="nt">&lt;context-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>resteasy.language.mappings<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>en : en-US, es : es, fr : fr<span class="nt">&lt;/param-value&gt;</span>
-   <span class="nt">&lt;/context-param&gt;</span>
+   &lt;context-param&gt;
+        &lt;param-name&gt;resteasy.language.mappings&lt;/param-name&gt;
+        &lt;param-value&gt;en : en-US, es : es, fr : fr&lt;/param-value&gt;
+   &lt;/context-param&gt;
 
-    <span class="nt">&lt;servlet&gt;</span>
-        <span class="nt">&lt;servlet-name&gt;</span>Resteasy<span class="nt">&lt;/servlet-name&gt;</span>
-        <span class="nt">&lt;servlet-class&gt;</span>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher<span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;/servlet&gt;</span>
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;Resteasy&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
 
-    <span class="nt">&lt;servlet-mapping&gt;</span>
-        <span class="nt">&lt;servlet-name&gt;</span>Resteasy<span class="nt">&lt;/servlet-name&gt;</span>
-        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
-    <span class="nt">&lt;/servlet-mapping&gt;</span>
-<span class="nt">&lt;/web-app&gt;</span>
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;Resteasy&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
 </code></pre>
-</div>
 
 <p>如果你调用 /foo/bar.xml.en 的 GET 请求，则等同于发送下面的请求：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /foo/bar
+<pre><code>GET /foo/bar
 Accept: application/xml
 Accept-Language: en-US
 </code></pre>
-</div>
 
 <p>另外，你也可以设置参数映射，通过参数指定 content-type。修改 web.xml：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;web-app&gt;</span>
-    <span class="nt">&lt;display-name&gt;</span>Archetype Created Web Application<span class="nt">&lt;/display-name&gt;</span>
-    <span class="nt">&lt;context-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>resteasy.media.type.param.mapping<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>someName<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/context-param&gt;</span>
+<pre><code class="language-xml">&lt;web-app&gt;
+    &lt;display-name&gt;Archetype Created Web Application&lt;/display-name&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;resteasy.media.type.param.mapping&lt;/param-name&gt;
+        &lt;param-value&gt;someName&lt;/param-value&gt;
+    &lt;/context-param&gt;
 
-    <span class="nt">&lt;servlet&gt;</span>
-        <span class="nt">&lt;servlet-name&gt;</span>Resteasy<span class="nt">&lt;/servlet-name&gt;</span>
-        <span class="nt">&lt;servlet-class&gt;</span>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher<span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;/servlet&gt;</span>
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;Resteasy&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
 
-    <span class="nt">&lt;servlet-mapping&gt;</span>
-        <span class="nt">&lt;servlet-name&gt;</span>Resteasy<span class="nt">&lt;/servlet-name&gt;</span>
-        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
-    <span class="nt">&lt;/servlet-mapping&gt;</span>
-<span class="nt">&lt;/web-app&gt;</span>
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;Resteasy&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
 </code></pre>
-</div>
 
 <p>然后，可以通过调用 http://service.foo.com/resouce?someName=application/xml 来得到一个 application/xml 的返回结果。</p>
 
@@ -734,15 +694,14 @@ Accept-Language: en-US
 
 <p>配置请求输出内容为 Gzip 压缩，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyProxy</span> <span class="o">{</span>
+<pre><code class="language-java">@Path("/")
+public interface MyProxy {
 
-   <span class="nd">@Consumes</span><span class="o">(</span><span class="s">"application/xml"</span><span class="o">)</span>
-   <span class="nd">@PUT</span>
-   <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="nd">@GZIP</span> <span class="n">Order</span> <span class="n">order</span><span class="o">);</span>
-<span class="o">}</span>
+   @Consumes("application/xml")
+   @PUT
+   public void put(@GZIP Order order);
+}
 </code></pre>
-</div>
 
 <h1 id="jax-rs-resource-locators-and-sub-resources">JAX-RS Resource Locators and Sub Resources</h1>
 
@@ -750,75 +709,70 @@ Accept-Language: en-US
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShoppingStore</span> <span class="o">{</span>
+<pre><code class="language-java">@Path("/")
+public class ShoppingStore {
 
-   <span class="nd">@Path</span><span class="o">(</span><span class="s">"/customers/{id}"</span><span class="o">)</span>
-   <span class="kd">public</span> <span class="n">Customer</span> <span class="n">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">Customer</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// Find a customer object</span>
-      <span class="k">return</span> <span class="n">cust</span><span class="o">;</span>
-   <span class="o">}</span>
-<span class="o">}</span>
+   @Path("/customers/{id}")
+   public Customer getCustomer(@PathParam("id") int id) {
+      Customer cust = ...; // Find a customer object
+      return cust;
+   }
+}
 
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Customer</span> <span class="o">{</span>
-    <span class="nd">@GET</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">get</span><span class="o">()</span> <span class="o">{...}</span>
+public class Customer {
+    @GET
+    public String get() {...}
 
-    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/address"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getAddress</span><span class="o">()</span> <span class="o">{...}</span>
+    @Path("/address")
+    public String getAddress() {...}
 
-<span class="o">}</span>
+}
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CorporateCustomer</span> <span class="kd">extends</span> <span class="n">Customer</span> <span class="o">{</span>
+public class CorporateCustomer extends Customer {
    
-    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/businessAddress"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getAddress</span><span class="o">()</span> <span class="o">{...}</span>
-<span class="o">}</span>
+    @Path("/businessAddress")
+    public String getAddress() {...}
+}
 </code></pre>
-</div>
 
 <p>访问下面的请求时，会调用 ShoppingStore 类的 getCustomer 方法，然后调用 Customer 类的 get() 方法。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /customer/123
+<pre><code>GET /customer/123
 </code></pre>
-</div>
 
 <p>类似地，下面的请求会返回 Customer 类的 getAddress() 方法的值。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /customer/123/address
+<pre><code>GET /customer/123/address
 </code></pre>
-</div>
 
 <h1 id="cors">CORS</h1>
 
 <p>在 Application 类中，注册一个单例的提供者类：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">CorsFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CorsFilter</span><span class="o">();</span>
-<span class="n">filter</span><span class="o">.</span><span class="na">getAllowedOrigins</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="s">"http://localhost"</span><span class="o">);</span>
+<pre><code class="language-java">CorsFilter filter = new CorsFilter();
+filter.getAllowedOrigins().add("http://localhost");
 </code></pre>
-</div>
 
 <h1 id="content-range-support">Content-Range Support</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Resource</span> <span class="o">{</span>
-  <span class="nd">@GET</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"file"</span><span class="o">)</span>
-  <span class="nd">@Produces</span><span class="o">(</span><span class="s">"text/plain"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">File</span> <span class="n">getFile</span><span class="o">()</span>
-  <span class="o">{</span>
-     <span class="k">return</span> <span class="n">file</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+<pre><code class="language-java">@Path("/")
+public class Resource {
+  @GET
+  @Path("file")
+  @Produces("text/plain")
+  public File getFile()
+  {
+     return file;
+  }
+}
 
-<span class="n">Response</span> <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">target</span><span class="o">(</span><span class="n">generateURL</span><span class="o">(</span><span class="s">"/file"</span><span class="o">)).</span><span class="na">request</span><span class="o">()</span>
-      <span class="o">.</span><span class="na">header</span><span class="o">(</span><span class="s">"Range"</span><span class="o">,</span> <span class="s">"1-4"</span><span class="o">).</span><span class="na">get</span><span class="o">();</span>
-<span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatus</span><span class="o">(),</span> <span class="mi">206</span><span class="o">);</span>
-<span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">response</span><span class="o">.</span><span class="na">getLength</span><span class="o">());</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Content-Range: "</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="na">getHeaderString</span><span class="o">(</span><span class="s">"Content-Range"</span><span class="o">));</span>
+Response response = client.target(generateURL("/file")).request()
+      .header("Range", "1-4").get();
+Assert.assertEquals(response.getStatus(), 206);
+Assert.assertEquals(4, response.getLength());
+System.out.println("Content-Range: " + response.getHeaderString("Content-Range"));
 </code></pre>
-</div>
 
 
                     <br/>
@@ -870,7 +824,7 @@ Accept-Language: en-US
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

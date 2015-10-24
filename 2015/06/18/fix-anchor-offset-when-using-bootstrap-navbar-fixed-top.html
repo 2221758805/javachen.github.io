@@ -105,7 +105,7 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>最近Bootstrap修改了博客主题，使其支持响应式布局，并且将导航菜单固定住，不随滚到条滚动，这样做带来的影响是<a href="/categories.html">Categories</a>和<a href="/tags.html">Tags</a>页面点击某一个分类或者标签链接时，<code class="highlighter-rouge">锚点定位必然定位于页面顶部，这样一来就会被固定住的导航遮挡</code>，例如，我在Categories页面，点击<a href="/categories.html#hbase">hbase</a>分类，锚点定位最后如下图：</p>
+                    <p>最近Bootstrap修改了博客主题，使其支持响应式布局，并且将导航菜单固定住，不随滚到条滚动，这样做带来的影响是<a href="/categories.html">Categories</a>和<a href="/tags.html">Tags</a>页面点击某一个分类或者标签链接时，<code>锚点定位必然定位于页面顶部，这样一来就会被固定住的导航遮挡</code>，例如，我在Categories页面，点击<a href="/categories.html#hbase">hbase</a>分类，锚点定位最后如下图：</p>
 
 <p><img src="/static/images/2015/fix-anchor-offset-when-using-bootstrap-navbar-fixed-top.jpg" alt="" /></p>
 
@@ -113,46 +113,42 @@
 
 <p>第一种，使用css将锚点偏移：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"target-fix"</span> <span class="nt">&gt;&lt;/a&gt;</span>
-<span class="nt">&lt;artivle&gt;</span>主体内容...<span class="nt">&lt;/article&gt;</span>
+<pre><code class="language-html">&lt;a class="target-fix" &gt;&lt;/a&gt;
+&lt;artivle&gt;主体内容...&lt;/article&gt;
 </code></pre>
-</div>
 
 <p>css如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nc">.target-fix</span> <span class="p">{</span>
-    <span class="nl">position</span><span class="p">:</span> <span class="nb">relative</span><span class="p">;</span>
-    <span class="nl">top</span><span class="p">:</span> <span class="m">-44px</span><span class="p">;</span> <span class="c">/*偏移值*/</span>
-    <span class="nl">display</span><span class="p">:</span> <span class="nb">block</span><span class="p">;</span>
-    <span class="nl">height</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
-    <span class="nl">overflow</span><span class="p">:</span> <span class="nb">hidden</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-css">.target-fix {
+    position: relative;
+    top: -44px; /*偏移值*/
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
 </code></pre>
-</div>
 
-<p>对于现代浏览器如果支持css的<code class="highlighter-rouge">:target</code>声明，可以这么设置：</p>
+<p>对于现代浏览器如果支持css的<code>:target</code>声明，可以这么设置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">article</span><span class="nc">.a-post</span><span class="nd">:target</span><span class="p">{</span>
-    <span class="nl">padding-top</span><span class="p">:</span><span class="m">44px</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-css">article.a-post:target{
+    padding-top:44px;
+}
 </code></pre>
-</div>
 
 <p>第二种，使用JavaScript去调整scroll值：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">){</span>
-     <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span>
-     <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">length</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
-         <span class="kd">var</span> <span class="nx">top</span> <span class="o">=</span> <span class="nx">target</span><span class="p">.</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span><span class="o">-</span><span class="mi">44</span><span class="p">;</span>
-         <span class="k">if</span><span class="p">(</span><span class="nx">top</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
-             <span class="nx">$</span><span class="p">(</span><span class="s1">'html,body'</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="na">scrollTop</span><span class="p">:</span><span class="nx">top</span><span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
-         <span class="p">}</span>
-     <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+<pre><code class="language-javascript">$(function(){
+  if(location.hash){
+     var target = $(location.hash);
+     if(target.length==1){
+         var top = target.offset().top-44;
+         if(top &gt; 0){
+             $('html,body').animate({scrollTop:top}, 1000);
+         }
+     }
+  }
+});
 </code></pre>
-</div>
 
 <blockquote>
   <p>注意：上面代码中的44为固定的导航所占的像素高度，根据你的实际情况做修改。</p>
@@ -160,45 +156,42 @@
 
 <p>当然，你也可以使用jquery-hashchange插件去实现上面的功能，但是需要注意jquery-hashchange是否支持你使用的JQuery版本。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-        <span class="cm">/* 绑定事件*/</span>
-        <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">hashchange</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-            <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span>
-            <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">length</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
-                 <span class="kd">var</span> <span class="nx">top</span> <span class="o">=</span> <span class="nx">target</span><span class="p">.</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span><span class="o">-</span><span class="mi">44</span><span class="p">;</span>
-                 <span class="k">if</span><span class="p">(</span><span class="nx">top</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
-                     <span class="nx">$</span><span class="p">(</span><span class="s1">'html,body'</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="na">scrollTop</span><span class="p">:</span><span class="nx">top</span><span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
-                 <span class="p">}</span>
-             <span class="p">}</span> 
-        <span class="p">});</span>
-        <span class="cm">/* 触发事件 */</span>
-        <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">hashchange</span><span class="p">();</span>
-<span class="p">});</span>
+<pre><code class="language-javascript">$(function(){
+        /* 绑定事件*/
+        $(window).hashchange(function(){
+            var target = $(location.hash);
+            if(target.length==1){
+                 var top = target.offset().top-44;
+                 if(top &gt; 0){
+                     $('html,body').animate({scrollTop:top}, 1000);
+                 }
+             } 
+        });
+        /* 触发事件 */
+        $(window).hashchange();
+});
 </code></pre>
-</div>
 
 <p>分析上面两种方法，我最后使用的是第二种方法，在core.js文件中添加如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="s1">'a[href^=#][href!=#]'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">target</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">targetOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">target</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span><span class="o">-</span><span class="mi">70</span><span class="p">;</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s1">'html,body'</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="na">scrollTop</span><span class="p">:</span> <span class="nx">targetOffset</span><span class="p">},</span> <span class="mi">400</span><span class="p">);</span>
-  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-<span class="p">});</span>
+<pre><code class="language-javascript">$('a[href^=#][href!=#]').click(function() {
+  var target = document.getElementById(this.hash.slice(1));
+  if (!target) return;
+  var targetOffset = $(target).offset().top-70;
+  $('html,body').animate({scrollTop: targetOffset}, 400);
+  return false;
+});
 </code></pre>
-</div>
 
 <p>这里，我是在链接上监听单击事件，获取目标对象的偏移，上面减去70是因为下面的css代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nf">#wrap</span> <span class="p">{</span>
-  <span class="nl">min-height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-  <span class="nl">height</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
-  <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span> <span class="nb">auto</span> <span class="m">-60px</span><span class="p">;</span>
-  <span class="nl">padding</span><span class="p">:</span> <span class="m">70px</span> <span class="m">0</span> <span class="m">60px</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-css">#wrap {
+  min-height: 100%;
+  height: auto;
+  margin: 0 auto -60px;
+  padding: 70px 0 60px;
+}
 </code></pre>
-</div>
 
 <p>刷新页面，再次点击目录或者标签，就可以正常的跳到锚点位置了。你可以点击分类<a href="/categories.html#hbase">hbase</a> 试试效果。</p>
 
@@ -206,20 +199,19 @@
 
 <p>所以，我们需要修改代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">handler</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">hash</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">target</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">targetOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">target</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span><span class="o">-</span><span class="mi">70</span><span class="p">;</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">'html,body'</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="na">scrollTop</span><span class="p">:</span> <span class="nx">targetOffset</span><span class="p">},</span> <span class="mi">400</span><span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-javascript">var handler=function(hash){
+    var target = document.getElementById(hash.slice(1));
+    if (!target) return;
+    var targetOffset = $(target).offset().top-70;
+    $('html,body').animate({scrollTop: targetOffset}, 400);
+}
 
-<span class="nx">$</span><span class="p">(</span><span class="s1">'a[href^=#][href!=#]'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">handler</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hash</span><span class="p">)</span>
-<span class="p">});</span>
+$('a[href^=#][href!=#]').click(function(){
+    handler(this.hash)
+});
 
-<span class="k">if</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">){</span> <span class="nx">handler</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">)</span> <span class="p">}</span>
+if(location.hash){ handler(location.hash) }
 </code></pre>
-</div>
 
 <p>这样，就大功告成了，希望这篇文章对你有所帮助。</p>
 
@@ -281,7 +273,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

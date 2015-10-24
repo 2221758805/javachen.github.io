@@ -175,17 +175,17 @@
 
 <ul>
   <li><a href="https://issues.apache.org/jira/browse/HDFS-5449">HDFS-5449</a>- 修股 WebHDFS 的不兼容问题</li>
-  <li><a href="https://issues.apache.org/jira/browse/HDFS-5671">HDFS-5671</a>- 修复 <code class="highlighter-rouge">DFSInputStream#getBlockReader</code> 中的 socket 泄漏</li>
-  <li><a href="https://issues.apache.org/jira/browse/HDFS-5353">HDFS-5353</a>- 启用 <code class="highlighter-rouge">dfs.encrypt.data.transfer</code> 导致 Short circuit reads 失败的问题</li>
+  <li><a href="https://issues.apache.org/jira/browse/HDFS-5671">HDFS-5671</a>- 修复 <code>DFSInputStream#getBlockReader</code> 中的 socket 泄漏</li>
+  <li><a href="https://issues.apache.org/jira/browse/HDFS-5353">HDFS-5353</a>- 启用 <code>dfs.encrypt.data.transfer</code> 导致 Short circuit reads 失败的问题</li>
   <li><a href="https://issues.apache.org/jira/browse/HDFS-5438">HDFS-5438</a>- 处理文件块报告过程中的导致数据丢失的缺陷</li>
 </ul>
 
 <h2 id="section-1">改变的行为:</h2>
 
 <ul>
-  <li>从 CDH 5 Beta 2 开始，为了让 NameNode 在一个安全的集群中启动，应该在 <code class="highlighter-rouge">hdfs-site.xml</code> 中设置 <code class="highlighter-rouge">dfs.web.authentication.kerberos.principal</code>	 属性。<a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Security-Guide/cdh5sg_topic_3_7.html#topic_3_7_unique_2">CDH 5 的安全指南</a>已经包含了这点。Cloudera Manager 管理的集群则无需显式定义这个属性。</li>
+  <li>从 CDH 5 Beta 2 开始，为了让 NameNode 在一个安全的集群中启动，应该在 <code>hdfs-site.xml</code> 中设置 <code>dfs.web.authentication.kerberos.principal</code>	 属性。<a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Security-Guide/cdh5sg_topic_3_7.html#topic_3_7_unique_2">CDH 5 的安全指南</a>已经包含了这点。Cloudera Manager 管理的集群则无需显式定义这个属性。</li>
   <li>HDFS-5037 - 启动 NameNode 的操作应该触发它进行日志滚动。当碰到 NameNode 处在安全模式时，客户端会在配置的时间范围内重试。</li>
-  <li>mkdir 命令的默认行为有了变化。从 CDH 5 Beta 2 开始，如果父目录不存在就必须使用 <code class="highlighter-rouge">-p</code> 选项，否则操作将会失败。</li>
+  <li>mkdir 命令的默认行为有了变化。从 CDH 5 Beta 2 开始，如果父目录不存在就必须使用 <code>-p</code> 选项，否则操作将会失败。</li>
 </ul>
 
 <h1 id="apache-hive">Apache Hive</h1>
@@ -195,7 +195,7 @@
 <ul>
   <li>改进的 JDBC 规范包括：
     <ul>
-      <li>改进 <code class="highlighter-rouge">getDatabaseMajorVersion()</code>, <code class="highlighter-rouge">getDatabaseMinorVersion()</code> APIs (<a href="https://issues.apache.org/jira/browse/HIVE-3181">HIVE-3181</a>)</li>
+      <li>改进 <code>getDatabaseMajorVersion()</code>, <code>getDatabaseMinorVersion()</code> APIs (<a href="https://issues.apache.org/jira/browse/HIVE-3181">HIVE-3181</a>)</li>
       <li>添加了对新的数据类型的支持:Char (<a href="https://issues.apache.org/jira/browse/HIVE-5209">HIVE-5683</a>), Decimal (<a href="https://issues.apache.org/jira/browse/HIVE-5355">HIVE-5355</a>) and Varchar (<a href="https://issues.apache.org/jira/browse/HIVE-5209">HIVE-5209</a>)</li>
       <li>现在可以在 HiveServer2 连接地址(connection URL) 中为会话指定要连接的数据库</li>
     </ul>
@@ -309,7 +309,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

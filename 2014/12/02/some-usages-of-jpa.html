@@ -113,7 +113,7 @@
 
 <h1 id="jpa-">1. JPA 历史</h1>
 
-<p>早期版本的EJB，定义持久层结合使用 <code class="highlighter-rouge">javax.ejb.EntityBean</code> 接口作为业务逻辑层。</p>
+<p>早期版本的EJB，定义持久层结合使用 <code>javax.ejb.EntityBean</code> 接口作为业务逻辑层。</p>
 
 <ul>
   <li>同时引入 EJB3.0 的持久层分离，并指定为JPA1.0（Java持久性API）。这个API规范随着 JAVA EE5 对2006年5月11日使用JSR220规范发布。</li>
@@ -125,7 +125,7 @@
 
 <p>下图显示了JPA核心类和JPA接口。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/jpa/JPA-01.png" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/jpa/JPA-01.png" alt="" /></p>
 
 <table>
   <thead>
@@ -164,7 +164,7 @@
 
 <p>在上述体系结构中，类和接口之间的关系属于javax.persistence包。下图显示了它们之间的关系。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/jpa/JPA-02.png" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/jpa/JPA-02.png" alt="" /></p>
 
 <ul>
   <li>EntityManagerFactory 和 EntityManager 的关系是1对多。这是一个工厂类 EntityManager 实例。</li>
@@ -178,256 +178,251 @@
 <h2 id="maven-">创建 maven 工程</h2>
 <p>创建一个空的 maven 工程，然后编写 pom.xml 文件，添加下面配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;properties&gt;</span>
-	<span class="nt">&lt;spring.version&gt;</span>4.1.2.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
-	<span class="nt">&lt;hibernate.version&gt;</span>4.1.9.Final<span class="nt">&lt;/hibernate.version&gt;</span>
-	<span class="nt">&lt;hibernate-jpa.version&gt;</span>2.0-cr-1<span class="nt">&lt;/hibernate-jpa.version&gt;</span>
-<span class="nt">&lt;/properties&gt;</span>
+<pre><code class="language-xml">&lt;properties&gt;
+	&lt;spring.version&gt;4.1.2.RELEASE&lt;/spring.version&gt;
+	&lt;hibernate.version&gt;4.1.9.Final&lt;/hibernate.version&gt;
+	&lt;hibernate-jpa.version&gt;2.0-cr-1&lt;/hibernate-jpa.version&gt;
+&lt;/properties&gt;
 
-<span class="nt">&lt;dependencies&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-beans<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-aop<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-context-support<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-tx<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-orm<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-jdbc<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
+&lt;dependencies&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-orm&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
 
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.hibernate.java-persistence<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>jpa-api<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${hibernate-jpa.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>hibernate-entitymanager<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${hibernate.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.hibernate.java-persistence&lt;/groupId&gt;
+		&lt;artifactId&gt;jpa-api&lt;/artifactId&gt;
+		&lt;version&gt;${hibernate-jpa.version}&lt;/version&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+		&lt;artifactId&gt;hibernate-entitymanager&lt;/artifactId&gt;
+		&lt;version&gt;${hibernate.version}&lt;/version&gt;
+	&lt;/dependency&gt;
 
-	<span class="nt">&lt;dependency&gt;</span>
-      <span class="nt">&lt;groupId&gt;</span>com.h2database<span class="nt">&lt;/groupId&gt;</span>
-      <span class="nt">&lt;artifactId&gt;</span>h2<span class="nt">&lt;/artifactId&gt;</span>
-      <span class="nt">&lt;version&gt;</span>1.3.156<span class="nt">&lt;/version&gt;</span>
-  <span class="nt">&lt;/dependency&gt;</span>
+	&lt;dependency&gt;
+      &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+      &lt;artifactId&gt;h2&lt;/artifactId&gt;
+      &lt;version&gt;1.3.156&lt;/version&gt;
+  &lt;/dependency&gt;
 
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>spring-test<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+		&lt;version&gt;${spring.version}&lt;/version&gt;
+	&lt;/dependency&gt;
 
-	<span class="nt">&lt;dependency&gt;</span>
-		<span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
-		<span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>4.11<span class="nt">&lt;/version&gt;</span>
-		<span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-	<span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencies&gt;</span>
+	&lt;dependency&gt;
+		&lt;groupId&gt;junit&lt;/groupId&gt;
+		&lt;artifactId&gt;junit&lt;/artifactId&gt;
+		&lt;version&gt;4.11&lt;/version&gt;
+		&lt;scope&gt;test&lt;/scope&gt;
+	&lt;/dependency&gt;
+&lt;/dependencies&gt;
 </code></pre>
-</div>
 
 <h2 id="section">创建实体</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">spring4</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">entity</span><span class="o">;</span>
+<pre><code class="language-java">package com.javachen.spring4.jpa.entity;
 
-<span class="kn">import</span> <span class="nn">javax.persistence.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Max</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Min</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.NotNull</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Size</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-<span class="nd">@Entity</span>
-<span class="nd">@NamedQuery</span><span class="o">(</span><span class="n">query</span> <span class="o">=</span> <span class="s">"Select e from Person e where e.id = :id"</span><span class="o">,</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">"find person by id"</span><span class="o">)</span>
-<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"T_PERSON"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+@Entity
+@NamedQuery(query = "Select e from Person e where e.id = :id",
+        name = "find person by id")
+@Table(name = "T_PERSON")
+public class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    <span class="nd">@Id</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"PERSON_ID"</span><span class="o">)</span>
-    <span class="nd">@GeneratedValue</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    @Id
+    @Column(name = "PERSON_ID")
+    @GeneratedValue
+    private Integer id;
 
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"PERSON_NAME"</span><span class="o">)</span>
-    <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">30</span><span class="o">)</span>
-    <span class="nd">@NotNull</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    @Column(name = "PERSON_NAME")
+    @Size(min = 1, max = 30)
+    @NotNull
+    private String name;
 
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"AGE"</span><span class="o">)</span>
-    <span class="nd">@Min</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-    <span class="nd">@Max</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
-    <span class="nd">@NotNull</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
+    @Column(name = "AGE")
+    @Min(1)
+    @Max(200)
+    @NotNull
+    private Integer age;
 
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"salary"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="n">Double</span> <span class="n">salary</span><span class="o">;</span>
+    @Column(name = "salary")
+    private Double salary;
 
-		<span class="c1">//省略 set、get 方法</span>
+		//省略 set、get 方法
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s">"Person [id="</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="s">", name="</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">", age="</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span> <span class="s">",salary="</span><span class="o">+</span><span class="n">salary</span><span class="o">+</span><span class="s">"]"</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    @Override
+    public String toString() {
+        return "Person [id=" + id + ", name=" + name + ", age=" + age + ",salary="+salary+"]";
+    }
+}
 </code></pre>
-</div>
 
 <h2 id="persistencexml">persistence.xml</h2>
 
 <p>在这个文件中，我们将注册数据库，并指定实体类。另外，在上述所示的包的层次结构，根据JPA的内容包含在 persistence.xml 。</p>
 
-<p>在 <code class="highlighter-rouge">src/main/resources/META-INF/</code> 目录创建一个文件，名称为 persistence.xml，内容为：</p>
+<p>在 <code>src/main/resources/META-INF/</code> 目录创建一个文件，名称为 persistence.xml，内容为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
-<span class="nt">&lt;persistence</span> <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/persistence"</span>
-    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">version=</span><span class="s">"2.0"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"</span> <span class="nt">&gt;</span>
-    <span class="nt">&lt;persistence-unit</span> <span class="na">name=</span><span class="s">"db1-unit"</span>
-                      <span class="na">transaction-type=</span><span class="s">"RESOURCE_LOCAL"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;class&gt;</span>com.javachen.spring4.jpa.entity.Person<span class="nt">&lt;/class&gt;</span>
-        <span class="nt">&lt;properties&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.connection.driver_class"</span> <span class="na">value=</span><span class="s">"net.sf.log4jdbc.DriverSpy"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.connection.url"</span> <span class="na">value=</span><span class="s">"jdbc:log4jdbc:h2:mem:example"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.connection.username"</span> <span class="na">value=</span><span class="s">"sa"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.connection.password"</span> <span class="na">value=</span><span class="s">""</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.dialect"</span> <span class="na">value=</span><span class="s">"org.hibernate.dialect.H2Dialect"</span><span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
+&lt;persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" &gt;
+    &lt;persistence-unit name="db1-unit"
+                      transaction-type="RESOURCE_LOCAL"&gt;
+        &lt;class&gt;com.javachen.spring4.jpa.entity.Person&lt;/class&gt;
+        &lt;properties&gt;
+            &lt;property name="hibernate.connection.driver_class" value="net.sf.log4jdbc.DriverSpy"/&gt;
+            &lt;property name="hibernate.connection.url" value="jdbc:log4jdbc:h2:mem:example"/&gt;
+            &lt;property name="hibernate.connection.username" value="sa"/&gt;
+            &lt;property name="hibernate.connection.password" value=""/&gt;
+            &lt;property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/&gt;
 
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.jdbc.batch_size"</span> <span class="na">value=</span><span class="s">"30"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.use_sql_comments"</span> <span class="na">value=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.hbm2ddl.auto"</span> <span class="na">value=</span><span class="s">"create"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.show_sql"</span> <span class="na">value=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.ejb.naming_strategy"</span>
-                      <span class="na">value=</span><span class="s">"org.hibernate.cfg.ImprovedNamingStrategy"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.connection.charSet"</span>
-                      <span class="na">value=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.current_session_context_class"</span> <span class="na">value=</span><span class="s">"thread"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/properties&gt;</span>
-    <span class="nt">&lt;/persistence-unit&gt;</span>
-<span class="nt">&lt;/persistence&gt;</span>
+            &lt;property name="hibernate.jdbc.batch_size" value="30" /&gt;
+            &lt;property name="hibernate.use_sql_comments" value="true" /&gt;
+            &lt;property name="hibernate.hbm2ddl.auto" value="create" /&gt;
+            &lt;property name="hibernate.show_sql" value="true" /&gt;
+            &lt;property name="hibernate.ejb.naming_strategy"
+                      value="org.hibernate.cfg.ImprovedNamingStrategy" /&gt;
+            &lt;property name="hibernate.connection.charSet"
+                      value="UTF-8" /&gt;
+            &lt;property name="hibernate.current_session_context_class" value="thread"/&gt;
+        &lt;/properties&gt;
+    &lt;/persistence-unit&gt;
+&lt;/persistence&gt;
 </code></pre>
-</div>
 
 <p>如果有多个持久化单元，则可以配置多个 persistence-unit 节点。</p>
 
 <p>以下是 persistence.xml 所有配置项的一个示例说明：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;  
 
-<span class="nt">&lt;persistence</span> <span class="na">version=</span><span class="s">"1.0"</span>  
-<span class="na">xmlns:persistence=</span><span class="s">"http://java.sun.com/xml/ns/persistence"</span>  
-<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>  
-<span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/persistence persistence_1_0.xsd "</span><span class="nt">&gt;</span>  
+&lt;persistence version="1.0"  
+xmlns:persistence="http://java.sun.com/xml/ns/persistence"  
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/persistence persistence_1_0.xsd "&gt;  
 
-<span class="c">&lt;!--
+&lt;!--
      Name属性用于定义持久化单元的名字 (name必选,空值也合法);
      transaction-type 指定事务类型(可选：JTA、RESOURCE_LOCAL)
---&gt;</span>  
-<span class="nt">&lt;persistence-unit</span> <span class="na">name=</span><span class="s">"unitName"</span> <span class="na">transaction-type=</span><span class="s">"JTA"</span><span class="nt">&gt;</span>  
+--&gt;  
+&lt;persistence-unit name="unitName" transaction-type="JTA"&gt;  
 
-   <span class="c">&lt;!-- 描述信息.(可选) --&gt;</span>  
-   <span class="nt">&lt;description&gt;</span> <span class="nt">&lt;/description&gt;</span>  
+   &lt;!-- 描述信息.(可选) --&gt;  
+   &lt;description&gt; &lt;/description&gt;  
 
-   <span class="c">&lt;!-- javax.persistence.PersistenceProvider接口的一个实现类(可选) --&gt;</span>  
-   <span class="nt">&lt;provider&gt;&lt;/provider&gt;</span>  
+   &lt;!-- javax.persistence.PersistenceProvider接口的一个实现类(可选) --&gt;  
+   &lt;provider&gt;&lt;/provider&gt;  
 
-   <span class="c">&lt;!-- Jta-data-source和 non-jta-data-source用于分别指定持久化提供商使用的JTA和/或non-JTA数据源的全局JNDI名称(可选) --&gt;</span>  
-   <span class="nt">&lt;jta-data-source&gt;</span>java:/MySqlDS<span class="nt">&lt;/jta-data-source&gt;</span>  
-   <span class="nt">&lt;non-jta-data-source&gt;&lt;/non-jta-data-source&gt;</span>  
+   &lt;!-- Jta-data-source和 non-jta-data-source用于分别指定持久化提供商使用的JTA和/或non-JTA数据源的全局JNDI名称(可选) --&gt;  
+   &lt;jta-data-source&gt;java:/MySqlDS&lt;/jta-data-source&gt;  
+   &lt;non-jta-data-source&gt;&lt;/non-jta-data-source&gt;  
 
-   <span class="c">&lt;!-- 声明orm.xml所在位置.(可选) --&gt;</span>  
-   <span class="nt">&lt;mapping-file&gt;</span>product.xml<span class="nt">&lt;/mapping-file&gt;</span>  
+   &lt;!-- 声明orm.xml所在位置.(可选) --&gt;  
+   &lt;mapping-file&gt;product.xml&lt;/mapping-file&gt;  
 
-   <span class="c">&lt;!-- 以包含persistence.xml的jar文件为基准的相对路径,添加额外的jar文件.(可选) --&gt;</span>  
-   <span class="nt">&lt;jar-file&gt;</span>../lib/model.jar<span class="nt">&lt;/jar-file&gt;</span>  
+   &lt;!-- 以包含persistence.xml的jar文件为基准的相对路径,添加额外的jar文件.(可选) --&gt;  
+   &lt;jar-file&gt;../lib/model.jar&lt;/jar-file&gt;  
 
-   <span class="c">&lt;!-- 显式列出实体类,在Java SE 环境中应该显式列出.(可选) --&gt;</span>  
-   <span class="nt">&lt;class&gt;</span>com.domain.User<span class="nt">&lt;/class&gt;</span>  
+   &lt;!-- 显式列出实体类,在Java SE 环境中应该显式列出.(可选) --&gt;  
+   &lt;class&gt;com.domain.User&lt;/class&gt;  
 
-   <span class="c">&lt;!-- 声明是否扫描jar文件中标注了@Enity类加入到上下文.若不扫描,则如下:(可选) --&gt;</span>  
-   <span class="nt">&lt;exclude-unlisted-classes/&gt;</span>  
+   &lt;!-- 声明是否扫描jar文件中标注了@Enity类加入到上下文.若不扫描,则如下:(可选) --&gt;  
+   &lt;exclude-unlisted-classes/&gt;  
 
-   <span class="c">&lt;!--   厂商专有属性(可选)   --&gt;</span>  
-   <span class="nt">&lt;properties&gt;</span>  
-    <span class="c">&lt;!-- hibernate.hbm2ddl.auto= create-drop / create / update --&gt;</span>  
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.hbm2ddl.auto"</span> <span class="na">value=</span><span class="s">"update"</span> <span class="nt">/&gt;</span>  
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.show_sql"</span> <span class="na">value=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>  
-   <span class="nt">&lt;/properties&gt;</span>  
+   &lt;!--   厂商专有属性(可选)   --&gt;  
+   &lt;properties&gt;  
+    &lt;!-- hibernate.hbm2ddl.auto= create-drop / create / update --&gt;  
+    &lt;property name="hibernate.hbm2ddl.auto" value="update" /&gt;  
+    &lt;property name="hibernate.show_sql" value="true" /&gt;  
+   &lt;/properties&gt;  
 
-<span class="nt">&lt;/persistence-unit&gt;</span>  
+&lt;/persistence-unit&gt;  
 
-<span class="nt">&lt;/persistence&gt;</span>
+&lt;/persistence&gt;
 </code></pre>
-</div>
 
 <h2 id="section-1">持久化操作</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">spring4</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">entity</span><span class="o">;</span>
+<pre><code class="language-java">package com.javachen.spring4.jpa.entity;
 
-<span class="kn">import</span> <span class="nn">javax.persistence.EntityManager</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.EntityManagerFactory</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Persistence</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Query</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import java.util.List;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonTest</span> <span class="o">{</span>
+public class PersonTest {
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">EntityManagerFactory</span> <span class="n">emfactory</span> <span class="o">=</span> <span class="n">Persistence</span><span class="o">.</span>
-                <span class="n">createEntityManagerFactory</span><span class="o">(</span> <span class="s">"db1-unit"</span> <span class="o">);</span>
-        <span class="n">EntityManager</span> <span class="n">entitymanager</span> <span class="o">=</span> <span class="n">emfactory</span><span class="o">.</span>
-                <span class="n">createEntityManager</span><span class="o">(</span> <span class="o">);</span>
-        <span class="n">entitymanager</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span> <span class="o">).</span><span class="na">begin</span><span class="o">(</span> <span class="o">);</span>
+    public static void main(String[] args) {
+        EntityManagerFactory emfactory = Persistence.
+                createEntityManagerFactory( "db1-unit" );
+        EntityManager entitymanager = emfactory.
+                createEntityManager( );
+        entitymanager.getTransaction( ).begin( );
 
-        <span class="n">Person</span> <span class="n">person</span><span class="o">=</span><span class="k">new</span> <span class="n">Person</span><span class="o">();</span>
-        <span class="n">person</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">18</span><span class="o">);</span>
-        <span class="n">person</span><span class="o">.</span><span class="na">setSalary</span><span class="o">(</span><span class="mi">121</span><span class="n">d</span><span class="o">);</span>
-        <span class="n">person</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"zhangsan"</span><span class="o">);</span>
+        Person person=new Person();
+        person.setAge(18);
+        person.setSalary(121d);
+        person.setName("zhangsan");
 
-        <span class="n">entitymanager</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span> <span class="n">person</span> <span class="o">);</span>
-        <span class="n">entitymanager</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span> <span class="o">).</span><span class="na">commit</span><span class="o">(</span> <span class="o">);</span>
+        entitymanager.persist( person );
+        entitymanager.getTransaction( ).commit( );
 
-        <span class="n">entitymanager</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-        <span class="n">emfactory</span><span class="o">.</span><span class="na">close</span><span class="o">(</span> <span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+        entitymanager.close();
+        emfactory.close( );
+    }
+}
 </code></pre>
-</div>
 
-<p>在上面的代码中 <code class="highlighter-rouge">createEntityManagerFactory()</code> 通过提供我们在 persistent.xml 文件提供持久化单元相同唯一的名称创建一个持久性单元。 EntityManagerFactory对象将由usingcreateEntityManager()方法创建entitymanger实例。 EntityManager对象创建 entitytransactioninstance 事务管理。通过使用 EntityManager 对象，我们可以持久化实体到数据库中。</p>
+<p>在上面的代码中 <code>createEntityManagerFactory()</code> 通过提供我们在 persistent.xml 文件提供持久化单元相同唯一的名称创建一个持久性单元。 EntityManagerFactory对象将由usingcreateEntityManager()方法创建entitymanger实例。 EntityManager对象创建 entitytransactioninstance 事务管理。通过使用 EntityManager 对象，我们可以持久化实体到数据库中。</p>
 
 <h1 id="jpql">3. JPQL</h1>
 
@@ -439,97 +434,93 @@
 
 <p>示例代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">EntityManagerFactory</span> <span class="n">emfactory</span> <span class="o">=</span> <span class="n">Persistence</span><span class="o">.</span>
-                <span class="n">createEntityManagerFactory</span><span class="o">(</span> <span class="s">"db1-unit"</span> <span class="o">);</span>
-<span class="n">EntityManager</span> <span class="n">entitymanager</span> <span class="o">=</span> <span class="n">emfactory</span><span class="o">.</span>
-        <span class="n">createEntityManager</span><span class="o">(</span> <span class="o">);</span>
-<span class="n">entitymanager</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span> <span class="o">).</span><span class="na">begin</span><span class="o">(</span> <span class="o">);</span>
+<pre><code class="language-java">EntityManagerFactory emfactory = Persistence.
+                createEntityManagerFactory( "db1-unit" );
+EntityManager entitymanager = emfactory.
+        createEntityManager( );
+entitymanager.getTransaction( ).begin( );
 
-<span class="c1">//Scalar function</span>
-<span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="n">entitymanager</span><span class="o">.</span>
-        <span class="n">createQuery</span><span class="o">(</span><span class="s">"Select UPPER(e.name) from Person e"</span><span class="o">);</span>
-<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">=</span><span class="n">query</span><span class="o">.</span><span class="na">getResultList</span><span class="o">();</span>
+//Scalar function
+Query query = entitymanager.
+        createQuery("Select UPPER(e.name) from Person e");
+List&lt;String&gt; list=query.getResultList();
 
-<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="nl">e:</span><span class="n">list</span><span class="o">){</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Person name :"</span><span class="o">+</span><span class="n">e</span><span class="o">);</span>
-<span class="o">}</span>
+for(String e:list){
+    System.out.println("Person name :"+e);
+}
 
-<span class="c1">//Aggregate function</span>
-<span class="n">Query</span> <span class="n">query1</span> <span class="o">=</span> <span class="n">entitymanager</span><span class="o">.</span>
-        <span class="n">createQuery</span><span class="o">(</span><span class="s">"Select MAX(e.salary) from Person e"</span><span class="o">);</span>
-<span class="n">Double</span> <span class="n">result</span><span class="o">=(</span><span class="n">Double</span><span class="o">)</span> <span class="n">query1</span><span class="o">.</span><span class="na">getSingleResult</span><span class="o">();</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Max Person Salary :"</span><span class="o">+</span><span class="n">result</span><span class="o">);</span>
+//Aggregate function
+Query query1 = entitymanager.
+        createQuery("Select MAX(e.salary) from Person e");
+Double result=(Double) query1.getSingleResult();
+System.out.println("Max Person Salary :"+result);
 
 
-<span class="n">entitymanager</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-<span class="n">emfactory</span><span class="o">.</span><span class="na">close</span><span class="o">(</span> <span class="o">);</span>
+entitymanager.close();
+emfactory.close( );
 </code></pre>
-</div>
 
 <h2 id="section-3">3.2 命名查询</h2>
 
 <p>@NamedQuery 注解被定义为一个预定义的查询字符串，它是不可改变的查询。@NamedQuery 注解加在实体之上，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Entity</span>
-<span class="nd">@NamedQuery</span><span class="o">(</span><span class="n">query</span> <span class="o">=</span> <span class="s">"Select e from Person e where e.id = :id"</span><span class="o">,</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">"find person by id"</span><span class="o">)</span>
-<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"T_PERSON"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-<span class="o">}</span>
+<pre><code class="language-java">@Entity
+@NamedQuery(query = "Select e from Person e where e.id = :id",
+        name = "find person by id")
+@Table(name = "T_PERSON")
+public class Person implements Serializable {
+}
 </code></pre>
-</div>
 
 <p>命名查询使用方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.EntityManager</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.EntityManagerFactory</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Persistence</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Query</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.yiibai.eclipselink.entity.Employee</span><span class="o">;</span>
+<pre><code class="language-java">import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import com.yiibai.eclipselink.entity.Employee;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NamedQueries</span><span class="o">{</span>
-   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">args</span> <span class="o">){</span>
-   	<span class="n">EntityManagerFactory</span> <span class="n">emfactory</span> <span class="o">=</span> <span class="n">Persistence</span><span class="o">.</span>
-   		<span class="n">createEntityManagerFactory</span><span class="o">(</span> <span class="s">"db1-unit"</span> <span class="o">);</span>
-   	<span class="n">EntityManager</span> <span class="n">entitymanager</span> <span class="o">=</span> <span class="n">emfactory</span><span class="o">.</span>
-   		<span class="n">createEntityManager</span><span class="o">();</span>
-   	<span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="n">entitymanager</span><span class="o">.</span><span class="na">createNamedQuery</span><span class="o">(</span>
-   		<span class="s">"find person by id"</span><span class="o">);</span>
-   	<span class="n">query</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
-   	<span class="n">List</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">getResultList</span><span class="o">(</span> <span class="o">);</span>
-   	<span class="k">for</span><span class="o">(</span> <span class="n">Person</span> <span class="nl">e:</span><span class="n">list</span> <span class="o">){</span>
-   		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Person ID :"</span><span class="o">+</span><span class="n">e</span><span class="o">.</span><span class="na">getId</span><span class="o">(</span> <span class="o">));</span>
-   		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\t Person Name :"</span><span class="o">+</span><span class="n">e</span><span class="o">.</span><span class="na">getName</span><span class="o">(</span> <span class="o">));</span>
-   	<span class="o">}</span>
-   <span class="o">}</span>
-<span class="o">}</span>
+public class NamedQueries{
+   public static void main( String[ ] args ){
+   	EntityManagerFactory emfactory = Persistence.
+   		createEntityManagerFactory( "db1-unit" );
+   	EntityManager entitymanager = emfactory.
+   		createEntityManager();
+   	Query query = entitymanager.createNamedQuery(
+   		"find person by id");
+   	query.setParameter("id", 1);
+   	List&lt;Person&gt; list = query.getResultList( );
+   	for( Person e:list ){
+   		System.out.print("Person ID :"+e.getId( ));
+   		System.out.println("\t Person Name :"+e.getName( ));
+   	}
+   }
+}
 </code></pre>
-</div>
 
 <h2 id="section-4">3.3 动态查询</h2>
 
 <p>下面使用简单的条件<strong>动态查询</strong>返回数据源中的实体类的所有实例。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">EntityManager</span> <span class="n">em</span> <span class="o">=</span> <span class="o">...;</span>
-<span class="n">CriteriaBuilder</span> <span class="n">cb</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="na">getCriteriaBuilder</span><span class="o">();</span>
-<span class="n">CriteriaQuery</span><span class="o">&lt;</span><span class="n">Entity</span> <span class="kd">class</span><span class="err">&gt;</span> <span class="nc">cq</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="n">Entity</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-<span class="n">Root</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span> <span class="n">from</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Entity</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-<span class="n">cq</span><span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">Entity</span><span class="o">);</span>
-<span class="n">TypedQuery</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="n">cq</span><span class="o">);</span>
-<span class="n">List</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span> <span class="n">allitems</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">getResultList</span><span class="o">();</span>
+<pre><code class="language-java">EntityManager em = ...;
+CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery&lt;Entity class&gt; cq = cb.createQuery(Entity.class);
+Root&lt;Entity&gt; from = cq.from(Entity.class);
+cq.select(Entity);
+TypedQuery&lt;Entity&gt; q = em.createQuery(cq);
+List&lt;Entity&gt; allitems = q.getResultList();
 </code></pre>
-</div>
 
 <p>查询演示了基本的步骤来创建一个标准。</p>
 
 <ul>
-  <li><code class="highlighter-rouge">EntityManager</code> 实例被用来创建一个 CriteriaBuilder 对象。</li>
-  <li><code class="highlighter-rouge">CriteriaQuery</code> 实例是用来创建一个查询对象。这个查询对象的属性将与该查询的细节进行修改。</li>
-  <li><code class="highlighter-rouge">CriteriaQuery.form</code> 方法被调用来设置查询根。</li>
-  <li><code class="highlighter-rouge">CriteriaQuery.select</code> 被调用来设置结果列表类型。</li>
-  <li><code class="highlighter-rouge">TypedQuery&lt;T&gt;</code> 实例是用来准备一个查询执行和指定的查询结果的类型。</li>
-  <li>在 <code class="highlighter-rouge">TypedQuery&lt;T&gt;</code> 对象 getResultList 方法来执行查询。该查询返回实体的集合，结果存储在一个列表中。</li>
+  <li><code>EntityManager</code> 实例被用来创建一个 CriteriaBuilder 对象。</li>
+  <li><code>CriteriaQuery</code> 实例是用来创建一个查询对象。这个查询对象的属性将与该查询的细节进行修改。</li>
+  <li><code>CriteriaQuery.form</code> 方法被调用来设置查询根。</li>
+  <li><code>CriteriaQuery.select</code> 被调用来设置结果列表类型。</li>
+  <li><code>TypedQuery&lt;T&gt;</code> 实例是用来准备一个查询执行和指定的查询结果的类型。</li>
+  <li>在 <code>TypedQuery&lt;T&gt;</code> 对象 getResultList 方法来执行查询。该查询返回实体的集合，结果存储在一个列表中。</li>
 </ul>
 
 <h1 id="section-5">4. 实体映射关系</h1>
@@ -584,11 +575,11 @@
     </tr>
     <tr>
       <td>@SequenceGenerator</td>
-      <td style="text-align: left">指定在 <code class="highlighter-rouge">@GeneratedValue</code> 注解中指定的属性的值。它创建了一个序列。</td>
+      <td style="text-align: left">指定在 <code>@GeneratedValue</code> 注解中指定的属性的值。它创建了一个序列。</td>
     </tr>
     <tr>
       <td>@TableGenerator</td>
-      <td style="text-align: left">指定在 <code class="highlighter-rouge">@GeneratedValue</code> 批注指定属性的值发生器。它创造了的值生成的表。</td>
+      <td style="text-align: left">指定在 <code>@GeneratedValue</code> 批注指定属性的值发生器。它创造了的值生成的表。</td>
     </tr>
     <tr>
       <td>@AccessType</td>
@@ -633,30 +624,30 @@
   </tbody>
 </table>
 
-<p>1、 <code class="highlighter-rouge">@OneToOne</code>：</p>
+<p>1、 <code>@OneToOne</code>：</p>
 
 <p>一对一映射注解，双向的一对一关系需要在关系维护端(owner side)的 @OneToOne 注解中添加 mappedBy 属性，建表时在关系被维护端(inverse side)建立外键指向关系维护端的主键列。</p>
 
-<p><strong>用法：</strong><code class="highlighter-rouge">@OneToOne(optional=true,casecade=CasecadeType.ALL,mappedBy=”被维护端外键”)</code></p>
+<p><strong>用法：</strong><code>@OneToOne(optional=true,casecade=CasecadeType.ALL,mappedBy=”被维护端外键”)</code></p>
 
-<p>2、 <code class="highlighter-rouge">@OneToMany</code>：</p>
+<p>2、 <code>@OneToMany</code>：</p>
 
 <p>一对多映射注解，双向一对多关系中，一端是关系维护端(owner side)，只能在一端添加 mapped 属性。多端是关系被维护端(inverse side)。建表时在关系被维护端(多端)建立外键指向关系维护端(一端)的主键列。</p>
 
-<p><strong>用法：</strong> <code class="highlighter-rouge">@OneToMany(mappedBy = "维护端(一端)主键", cascade=CascadeType.ALL)</code></p>
+<p><strong>用法：</strong> <code>@OneToMany(mappedBy = "维护端(一端)主键", cascade=CascadeType.ALL)</code></p>
 
 <blockquote>
   <p><strong>注意：</strong><br />
-在Hibernate中有个术语叫做维护关系反转，即由对方维护关联关系，使用 <code class="highlighter-rouge">inverse=false</code> 来表示关系维护放，在JPA的注解中，mappedBy就相当于inverse=false，即由mappedBy来维护关系。</p>
+在Hibernate中有个术语叫做维护关系反转，即由对方维护关联关系，使用 <code>inverse=false</code> 来表示关系维护放，在JPA的注解中，mappedBy就相当于inverse=false，即由mappedBy来维护关系。</p>
 </blockquote>
 
-<p>3、<code class="highlighter-rouge">＠ManyToOne</code>：</p>
+<p>3、<code>＠ManyToOne</code>：</p>
 
 <p>多对一映射注解，在双向的一对多关系中，一端一方使用 @OneToMany 注解，多端的一方使用 @ManyToOne 注解。多对一注解用法很简单，它不用维护关系。</p>
 
-<p><strong>用法：</strong> <code class="highlighter-rouge">@ManyToOne(optional = false, fetch = FetchType.EAGER)</code></p>
+<p><strong>用法：</strong> <code>@ManyToOne(optional = false, fetch = FetchType.EAGER)</code></p>
 
-<p>4、 <code class="highlighter-rouge">@ManyToMany</code>：</p>
+<p>4、 <code>@ManyToMany</code>：</p>
 
 <p>多对多映射，采取中间表连接的映射策略，建立的中间关系表分别引入两边的主键作为外键，形成两个多对一关系。</p>
 
@@ -665,8 +656,8 @@
 <p><strong>用法：</strong></p>
 
 <ul>
-  <li>关系维护端——&gt; <code class="highlighter-rouge">@ManyToMany(mappedBy="另一方的关系引用属性")</code></li>
-  <li>关系被维护端——&gt; <code class="highlighter-rouge">@ManyToMany(cascade=CascadeType.ALL ,fetch = FetchType.Lazy)</code></li>
+  <li>关系维护端——&gt; <code>@ManyToMany(mappedBy="另一方的关系引用属性")</code></li>
+  <li>关系被维护端——&gt; <code>@ManyToMany(cascade=CascadeType.ALL ,fetch = FetchType.Lazy)</code></li>
 </ul>
 
 <h2 id="section-7">4.2 实体关联映射策略</h2>
@@ -677,13 +668,13 @@
 
 <p>一对一关联映射中，主键关联策略不会在两个关联实体对应的数据库表中添加外键字段，两个实体的表公用同一个主键(主键相同)，其中一个实体的主键既是主键又是外键。</p>
 
-<p><strong>主键关联映射：</strong>在实体关联属性或方法上添加 @OneToOne 注解的同时添加 <code class="highlighter-rouge">@PrimaryKeyJoinColumn</code> 注解(在一对一注解关联映射的任意一端实体添加即可)。</p>
+<p><strong>主键关联映射：</strong>在实体关联属性或方法上添加 @OneToOne 注解的同时添加 <code>@PrimaryKeyJoinColumn</code> 注解(在一对一注解关联映射的任意一端实体添加即可)。</p>
 
 <p><strong>(2).一对一唯一外键关联：</strong></p>
 
 <p>一对一关联关系映射中，唯一外键关联策略会在其中一个实体对应数据库表中添加外键字段指向另一个实体表的主键，也是一对一映射关系中最常用的映射策略。</p>
 
-<p>唯一外键关联：在关联属性或字段上添加 @OneToOne 注解的同时添加 <code class="highlighter-rouge">@JoinColumn(name=”数据表列名”，unique=true)</code> 注解。</p>
+<p>唯一外键关联：在关联属性或字段上添加 @OneToOne 注解的同时添加 <code>@JoinColumn(name=”数据表列名”，unique=true)</code> 注解。</p>
 
 <h3 id="section-9">4.2.2 一对多关联映射</h3>
 
@@ -724,17 +715,15 @@
 
 <p>a.在父类实体的 @Entity 注解下添加如下的注解：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Inheritance</span><span class="o">(</span><span class="n">Strategy</span><span class="o">=</span><span class="n">InheritanceType</span><span class="o">.</span><span class="na">SINGLE_TABLE</span><span class="o">)</span>  
-<span class="nd">@DiscriminatorColumn</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"辨别字段列名"</span><span class="o">)</span>  
-<span class="nd">@DiscriminatorValue</span><span class="o">(</span><span class="err">父类实体辨别字段列值</span><span class="o">)</span>  
+<pre><code class="language-java">@Inheritance(Strategy=InheritanceType.SINGLE_TABLE)  
+@DiscriminatorColumn(name="辨别字段列名")  
+@DiscriminatorValue(父类实体辨别字段列值)  
 </code></pre>
-</div>
 
 <p>b.在子类实体的 @Entity 注解下添加如下的注解：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@DiscriminatorValue</span><span class="o">(</span><span class="err">子类实体辨别字段列值</span><span class="o">)</span>  
+<pre><code class="language-java">@DiscriminatorValue(子类实体辨别字段列值)  
 </code></pre>
-</div>
 
 <h3 id="joined-">4.3.2 Joined 策略：</h3>
 
@@ -742,9 +731,8 @@
 
 <p>具体做法：只需在父类实体的 @Entity 注解下添加如下注解：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Inheritance</span><span class="o">(</span><span class="n">Strategy</span><span class="o">=</span><span class="n">InheritanceType</span><span class="o">.</span><span class="na">JOINED</span><span class="o">)</span>  
+<pre><code class="language-java">@Inheritance(Strategy=InheritanceType.JOINED)  
 </code></pre>
-</div>
 
 <p>子类实体不需要特殊说明。</p>
 
@@ -754,9 +742,8 @@
 
 <p>具体做法：只需在父类实体的 @Entity 注解下添加如下注解：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Inheritance</span><span class="o">(</span><span class="n">Strategy</span><span class="o">=</span><span class="n">InheritanceType</span><span class="o">.</span><span class="na">TABLE_PER_CLASS</span><span class="o">)</span>  
+<pre><code class="language-java">@Inheritance(Strategy=InheritanceType.TABLE_PER_CLASS)  
 </code></pre>
-</div>
 
 <p>子类实体不需要特殊说明。</p>
 
@@ -818,7 +805,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

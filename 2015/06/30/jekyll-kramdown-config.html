@@ -107,11 +107,10 @@
               <div id="post-text">
                     <p>之前博客是使用的redcarpet的markdown语法，其在_config.yml中的配置方式为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">markdown</span><span class="pi">:</span> <span class="s">redcarpet</span>
-<span class="s">redcarpet</span><span class="pi">:</span>
-    <span class="s">extensions</span><span class="pi">:</span> <span class="pi">[</span> <span class="s2">"</span><span class="s">fenced_code_blocks"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">hard_wrap"</span><span class="pi">,</span><span class="s2">"</span><span class="s">autolink"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">tables"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">strikethrough"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">superscript"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">with_toc_data"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">highlight"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">prettify"</span><span class="pi">,</span><span class="s2">"</span><span class="s">no_intra_emphasis"</span><span class="pi">]</span>
+<pre><code class="language-yaml">markdown: redcarpet
+redcarpet:
+    extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
 </code></pre>
-</div>
 
 <p>这种配置支持使用 ``` 高亮代码块、自动链接、表格等特性。</p>
 
@@ -123,68 +122,61 @@
 
 <p>安装kramdown：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install kramdown
+<pre><code class="language-bash">$ gem install kramdown
 </code></pre>
-</div>
 
 <p>在_config.yml中的配置方式为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">markdown</span><span class="pi">:</span> <span class="s">kramdown</span>
-<span class="s">kramdown</span><span class="pi">:</span>
-  <span class="s">input</span><span class="pi">:</span>  <span class="s">GFM</span>
-  <span class="s">use_coderay</span><span class="pi">:</span> <span class="s">true</span>
+<pre><code class="language-yaml">markdown: kramdown
+kramdown:
+  input:  GFM
+  use_coderay: true
 </code></pre>
-</div>
 
 <p>在编写文章时，插入下面代码，渲染之后就可以生成TOC了：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>* TOC
+<pre><code>* TOC
 {:toc}
 </code></pre>
-</div>
 
 <p>krmadown支持和github一样的语法高亮，用三个 ```，但是需要安装coderay，而github pages上不支持coderay，所以该方式无法搞定，可行的解决方法是上传本地编译好的html。如果是本地或者自己的空间，可以安装coderay。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install coderay
+<pre><code class="language-bash">$ gem install coderay
 </code></pre>
-</div>
 
 <p>使用 ``` 引用代码块：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AdView</span> <span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<pre><code class="language-python">class AdView (object):
+    def __init__ (self, name = None):
+        self.name = name
 
-    <span class="k">def</span> <span class="nf">test</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'admin'</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">else</span>
-            <span class="k">return</span> <span class="bp">True</span>
+    def test (self):
+        if self.name == 'admin':
+            return False
+        else
+            return True
 </code></pre>
-</div>
 
 <p>更多语法，见<a href="http://blog.will6run.com/tool/2014/11/22/kramdown/">kramdown语法小记</a>。</p>
 
 <p>最后的配置为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">kramdown</span><span class="pi">:</span>
-  <span class="s">input</span><span class="pi">:</span> <span class="s">GFM</span>
-  <span class="s">extensions</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">autolink</span>
-    <span class="pi">-</span> <span class="s">footnotes</span>
-    <span class="pi">-</span> <span class="s">smart</span>
-  <span class="s">use_coderay</span><span class="pi">:</span> <span class="s">true</span>
-  <span class="s">syntax_highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
-  <span class="s">coderay</span><span class="pi">:</span>
-    <span class="s">coderay_line_numbers</span><span class="pi">:</span>  <span class="s">nil</span>
+<pre><code class="language-yaml">kramdown:
+  input: GFM
+  extensions:
+    - autolink
+    - footnotes
+    - smart
+  use_coderay: true
+  syntax_highlighter: rouge
+  coderay:
+    coderay_line_numbers:  nil
 </code></pre>
-</div>
 
 <p>coderay支持的语言有限，并且rouge兼容Pygments，故这里使用rouge：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install rouge
+<pre><code class="language-bash">$ gem install rouge
 </code></pre>
-</div>
 
 <h1 id="section">参考文章</h1>
 
@@ -249,7 +241,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

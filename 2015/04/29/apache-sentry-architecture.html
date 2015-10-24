@@ -121,21 +121,21 @@
   <li>符合规范（例如SOX，PCI，HIPAA，EAL3）</li>
 </ul>
 
-<p>在Sentry诞生之前，对于授权有两种备选解决方案：<code class="highlighter-rouge">粗粒度级的HDFS授权</code>和<code class="highlighter-rouge">咨询授权</code>，但它们并不符合典型的规范和数据安全需求，原因如下：</p>
+<p>在Sentry诞生之前，对于授权有两种备选解决方案：<code>粗粒度级的HDFS授权</code>和<code>咨询授权</code>，但它们并不符合典型的规范和数据安全需求，原因如下：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">粗粒度级的HDFS授权</code>：安全访问和授权的基本机制被HDFS文件模型的粒度所限制。五级授权是粗粒度的，因为没有对文件内数据的访问控制：用户要么可以访问整个文件，要么什么都看不到。另外，HDFS权限模式不允许多个组对同一数据集有不同级别的访问权限。</li>
-  <li><code class="highlighter-rouge">咨询授权</code>：咨询授权在Hive中是一个很少使用的机制，旨在使用户能够自我监管，以防止意外删除或重写数据。这是一种“自服务”模式，因为用户可以为自己授予任何权限。因此，一旦恶意用户通过认证，它不能阻止其对敏感数据的访问。</li>
+  <li><code>粗粒度级的HDFS授权</code>：安全访问和授权的基本机制被HDFS文件模型的粒度所限制。五级授权是粗粒度的，因为没有对文件内数据的访问控制：用户要么可以访问整个文件，要么什么都看不到。另外，HDFS权限模式不允许多个组对同一数据集有不同级别的访问权限。</li>
+  <li><code>咨询授权</code>：咨询授权在Hive中是一个很少使用的机制，旨在使用户能够自我监管，以防止意外删除或重写数据。这是一种“自服务”模式，因为用户可以为自己授予任何权限。因此，一旦恶意用户通过认证，它不能阻止其对敏感数据的访问。</li>
 </ul>
 
 <p>通过引进Sentry，Hadoop目前可在以下方面满足企业和政府用户的RBAC需求：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">安全授权</code>：Sentry可以控制数据访问，并对已通过验证的用户提供数据访问特权。</li>
-  <li><code class="highlighter-rouge">细粒度访问控制</code>：Sentry支持细粒度的Hadoop数据和元数据访问控制。在Hive和Impala中Sentry的最初发行版本中，Sentry在服务器、数据库、表和视图范围提供了不同特权级别的访问控制，包括查找、插入等，允许管理员使用视图限制对行或列的访问。管理员也可以通过Sentry和带选择语句的视图或UDF，根据需要在文件内屏蔽数据。</li>
-  <li><code class="highlighter-rouge">基于角色的管理</code>：Sentry通过基于角色的授权简化了管理，你可以轻易将访问同一数据集的不同特权级别授予多个组。</li>
-  <li><code class="highlighter-rouge">多租户管理</code>：Sentry允许为委派给不同管理员的不同数据集设置权限。在Hive/Impala的情况下，Sentry可以在数据库/schema级别进行权限管理。</li>
-  <li><code class="highlighter-rouge">统一平台</code>：Sentry为确保数据安全，提供了一个统一平台，使用现有的Hadoop Kerberos实现安全认证。同时，通过Hive或Impala访问数据时可以使用同样的Sentry协议。未来，Sentry协议会被扩展到其它组件。</li>
+  <li><code>安全授权</code>：Sentry可以控制数据访问，并对已通过验证的用户提供数据访问特权。</li>
+  <li><code>细粒度访问控制</code>：Sentry支持细粒度的Hadoop数据和元数据访问控制。在Hive和Impala中Sentry的最初发行版本中，Sentry在服务器、数据库、表和视图范围提供了不同特权级别的访问控制，包括查找、插入等，允许管理员使用视图限制对行或列的访问。管理员也可以通过Sentry和带选择语句的视图或UDF，根据需要在文件内屏蔽数据。</li>
+  <li><code>基于角色的管理</code>：Sentry通过基于角色的授权简化了管理，你可以轻易将访问同一数据集的不同特权级别授予多个组。</li>
+  <li><code>多租户管理</code>：Sentry允许为委派给不同管理员的不同数据集设置权限。在Hive/Impala的情况下，Sentry可以在数据库/schema级别进行权限管理。</li>
+  <li><code>统一平台</code>：Sentry为确保数据安全，提供了一个统一平台，使用现有的Hadoop Kerberos实现安全认证。同时，通过Hive或Impala访问数据时可以使用同样的Sentry协议。未来，Sentry协议会被扩展到其它组件。</li>
 </ul>
 
 <h1 id="section-2">如何工作</h1>
@@ -147,10 +147,10 @@
 <p>Sentry授权包括以下几种角色：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">资源</code>。可能是<code class="highlighter-rouge">Server</code>、<code class="highlighter-rouge">Database</code>、<code class="highlighter-rouge">Table</code>、或者<code class="highlighter-rouge">URL</code>（例如：HDFS或者本地路径）。Sentry1.5中支持对<code class="highlighter-rouge">列</code>进行授权。</li>
-  <li><code class="highlighter-rouge">权限</code>。授权访问某一个资源的规则。</li>
-  <li><code class="highlighter-rouge">角色</code>。角色是一系列权限的集合。</li>
-  <li><code class="highlighter-rouge">用户和组</code>。一个组是一系列用户的集合。Sentry 的组映射是可以扩展的。默认情况下，Sentry使用Hadoop的组映射（可以是操作系统组或者LDAP中的组）。Sentry允许你将用户和组进行关联，你可以将一系列的用户放入到一个组中。Sentry不能直接给一个用户或组授权，需要将权限授权给角色，角色可以授权给一个组而不是一个用户。</li>
+  <li><code>资源</code>。可能是<code>Server</code>、<code>Database</code>、<code>Table</code>、或者<code>URL</code>（例如：HDFS或者本地路径）。Sentry1.5中支持对<code>列</code>进行授权。</li>
+  <li><code>权限</code>。授权访问某一个资源的规则。</li>
+  <li><code>角色</code>。角色是一系列权限的集合。</li>
+  <li><code>用户和组</code>。一个组是一系列用户的集合。Sentry 的组映射是可以扩展的。默认情况下，Sentry使用Hadoop的组映射（可以是操作系统组或者LDAP中的组）。Sentry允许你将用户和组进行关联，你可以将一系列的用户放入到一个组中。Sentry不能直接给一个用户或组授权，需要将权限授权给角色，角色可以授权给一个组而不是一个用户。</li>
 </ul>
 
 <h1 id="section-3">架构</h1>
@@ -175,21 +175,20 @@
 
 <p>基于文件的提供者使用的是ini格式的文件保存元数据信息，这个文件可以是一个本地文件或者HDFS文件。下面是一个例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nn">[groups]</span>
-<span class="c"># Assigns each Hadoop group to its set of roles
-</span><span class="py">manager</span> <span class="p">=</span> <span class="s">analyst_role, junior_analyst_role</span>
-<span class="py">analyst</span> <span class="p">=</span> <span class="s">analyst_role</span>
+<pre><code class="language-ini">[groups]
+# Assigns each Hadoop group to its set of roles
+manager = analyst_role, junior_analyst_role
+analyst = analyst_role
 
-<span class="py">admin</span> <span class="p">=</span> <span class="s">admin_role</span>
-<span class="nn">[roles]</span>
-<span class="py">analyst_role</span> <span class="p">=</span> <span class="s">server=server1-&gt;db=analyst1, </span><span class="se">\
-</span>   <span class="s">server=server1-&gt;db=jranalyst1-&gt;table=*-&gt;action=select, </span><span class="se">\
-</span>   <span class="s">server=server1-&gt;uri=hdfs://ha-nn-uri/landing/analyst1, </span><span class="se">\
-</span>   <span class="s">server=server1-&gt;db=default-&gt;table=tab2</span>
-<span class="c"># Implies everything on server1.
-</span><span class="py">admin_role</span> <span class="p">=</span> <span class="s">server=server1</span>
+admin = admin_role
+[roles]
+analyst_role = server=server1-&gt;db=analyst1, \
+   server=server1-&gt;db=jranalyst1-&gt;table=*-&gt;action=select, \
+   server=server1-&gt;uri=hdfs://ha-nn-uri/landing/analyst1, \
+   server=server1-&gt;db=default-&gt;table=tab2
+# Implies everything on server1.
+admin_role = server=server1
 </code></pre>
-</div>
 
 <p>基于文件的方式不易于使用程序修改，在修改过程中会存在资源竞争，不利于维护。Hive和Impala需要提供工业标准的SQL接口来管理授权策略，要求能够使用编程的方式进行管理。</p>
 
@@ -292,7 +291,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

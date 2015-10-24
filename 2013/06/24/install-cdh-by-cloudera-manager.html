@@ -107,7 +107,7 @@
               <div id="post-text">
                     <h1 id="section">1 方法一</h1>
 
-<p>你可以从<a href="https://ccp.cloudera.com/display/SUPPORT/Downloads">https://ccp.cloudera.com/display/SUPPORT/Downloads</a>下载<code class="highlighter-rouge">cloudera-manager-installer.bin</code>，然后修改执行权限并执行该脚本。</p>
+<p>你可以从<a href="https://ccp.cloudera.com/display/SUPPORT/Downloads">https://ccp.cloudera.com/display/SUPPORT/Downloads</a>下载<code>cloudera-manager-installer.bin</code>，然后修改执行权限并执行该脚本。</p>
 
 <p>该脚本中配置的rhel6的yum源为：<a href="http://archive.cloudera.com/cm4/redhat/6/x86_64/cm/4/">http://archive.cloudera.com/cm4/redhat/6/x86_64/cm/4/</a>，下载的过程必须连网并且rpm的过程会非常慢，这种方法对虚拟机或者是无法连网的内网机器来说根本无法使用。</p>
 
@@ -115,19 +115,18 @@
 
 <h1 id="section-1">2 方法二</h1>
 
-<p>这里还有一种方法，就是手动下载<code class="highlighter-rouge">Cloudera Manager</code>的yum tar包，在虚拟机中搭建一个本地yum源，然后修改hosts文件，使<code class="highlighter-rouge">archive.cloudera.com</code>域名映射到本地ip。</p>
+<p>这里还有一种方法，就是手动下载<code>Cloudera Manager</code>的yum tar包，在虚拟机中搭建一个本地yum源，然后修改hosts文件，使<code>archive.cloudera.com</code>域名映射到本地ip。</p>
 
 <h1 id="section-2">3 方法三</h1>
-<p>出于好奇，想破解<code class="highlighter-rouge">cloudera-manager-installer.bin</code>，然后看看其中做了哪些操作。通过以下脚本即可解压该文件：</p>
+<p>出于好奇，想破解<code>cloudera-manager-installer.bin</code>，然后看看其中做了哪些操作。通过以下脚本即可解压该文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mv cloudera-manager-installer.bin cloudera-manager-installer.zip
-<span class="gp">$ </span>unzip cloudera-manager-installer.zip 
+<pre><code class="language-bash">$ mv cloudera-manager-installer.bin cloudera-manager-installer.zip
+$ unzip cloudera-manager-installer.zip 
 </code></pre>
-</div>
 
 <p>解压之后的目录如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ll
+<pre><code class="language-bash">$ ll
 总用量 512
 -rwxrwxr-x. 1 june june 501698 5月  25 09:53 cloudera-manager-installer.zip
 drwxr-xr-x. 2 june june   4096 5月  23 03:05 data
@@ -135,80 +134,73 @@ drwxr-xr-x. 2 june june   4096 5月  22 21:48 guis
 drwxr-xr-x. 2 june june   4096 5月  22 21:48 meta
 drwxr-xr-x. 2 june june   4096 5月  22 21:48 scripts
 </code></pre>
-</div>
 
-<p>查看解压之后的文件可以看到安装脚本是用lua编写并用MojoSetup编译的，从<code class="highlighter-rouge">scripts/config.lua</code>脚本中大概可以看出安装脚本的执行过程。</p>
+<p>查看解压之后的文件可以看到安装脚本是用lua编写并用MojoSetup编译的，从<code>scripts/config.lua</code>脚本中大概可以看出安装脚本的执行过程。</p>
 
 <p>整理下该脚本逻辑，主要是做了以下操作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install -y jdk.x86_64 
-<span class="gp">$ </span>yum install -y cloudera-manager-server 
-<span class="gp">$ </span>yum install -y cloudera-manager-server-db
-<span class="gp">$ </span>/etc/init.d/cloudera-scm-server start
-<span class="gp">$ </span>/etc/init.d/cloudera-scm-server-db start
+<pre><code class="language-bash">$ yum install -y jdk.x86_64 
+$ yum install -y cloudera-manager-server 
+$ yum install -y cloudera-manager-server-db
+$ /etc/init.d/cloudera-scm-server start
+$ /etc/init.d/cloudera-scm-server-db start
 </code></pre>
-</div>
 
 <p>知道了上面这点之后，就可以在本地的cloudera-manager yum中，执行以上操作完成cloudera-manager的安装，安装成功之后查看7180端口是否打开：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>netstat -na| grep 7180
+<pre><code class="language-bash">$ netstat -na| grep 7180
 </code></pre>
-</div>
 
-<p>通过浏览器访问<code class="highlighter-rouge">http://IP:7180</code>登录cloudera manager界面：用户名/密码：<code class="highlighter-rouge">admin/admin</code>,按照界面提示完成hadoop集群安装。</p>
+<p>通过浏览器访问<code>http://IP:7180</code>登录cloudera manager界面：用户名/密码：<code>admin/admin</code>,按照界面提示完成hadoop集群安装。</p>
 
 <h1 id="section-3">卸载</h1>
 
 <p>执行以下命令，可以卸载并删除相应的文件和目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>yum remove -y hadoop hbase hive zookeeper hue oozie sqoop flume
-yum remove cloudera<span class="k">*</span>
+<pre><code class="language-bash">yum remove -y hadoop hbase hive zookeeper hue oozie sqoop flume
+yum remove cloudera*
 
-rm -rf /usr/lib/<span class="o">{</span>hadoop,hbase,oozie<span class="o">}</span>
-rm -rf /etc/<span class="o">{</span>hadoop,hadoop-httpfs,hbase,hive,zookeeper<span class="o">}</span>
-rm -rf /etc/<span class="o">{</span>hadoop,hadoop-httpfs,hbase,hive,zookeeper,sqoop,oozie,flume<span class="o">}</span>
+rm -rf /usr/lib/{hadoop,hbase,oozie}
+rm -rf /etc/{hadoop,hadoop-httpfs,hbase,hive,zookeeper}
+rm -rf /etc/{hadoop,hadoop-httpfs,hbase,hive,zookeeper,sqoop,oozie,flume}
 rm -rf /etc/cloudera-scm-agent/
 rm -rf /tmp/hadoop-hive/ /usr/share/hue/  /var/log/hive/
-rm -rf /var/log/hadoop-<span class="k">*</span>
+rm -rf /var/log/hadoop-*
 rm -rf /var/log/hbase/
 rm -rf /var/log/zookeeper/
-rm -rf /var/log/cloudera-scm-<span class="k">*</span>
+rm -rf /var/log/cloudera-scm-*
 rm -rf /var/log/flume-ng/
 rm -rf /var/log/hue
-rm -rf /usr/share/doc/oozie<span class="k">*</span>
+rm -rf /usr/share/doc/oozie*
 rm -rf /etc/hue/ /etc/rc.d/init.d/hue
 </code></pre>
-</div>
 
 <h1 id="section-4">5 排错</h1>
 <p>在执行下面一个命令时候可能会出现如下异常</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>/etc/init.d/cloudera-scm-server-db start
+<pre><code class="language-bash">$ /etc/init.d/cloudera-scm-server-db start
 </code></pre>
-</div>
 <p>异常信息如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>root@cdh1 cloudera-scm-server-db]# /etc/init.d/cloudera-scm-server-db start
-属于此数据库系统的文件宿主为用户 <span class="s2">"cloudera-scm"</span>.
+<pre><code class="language-bash">[root@cdh1 cloudera-scm-server-db]# /etc/init.d/cloudera-scm-server-db start
+属于此数据库系统的文件宿主为用户 "cloudera-scm".
 此用户也必须为服务器进程的宿主.
 数据库簇将带有 locale en_US.UTF8 初始化.
-缺省的文本搜索配置将会被设置到<span class="s2">"english"</span>
+缺省的文本搜索配置将会被设置到"english"
 
-修复已存在目录 /var/lib/cloudera-scm-server-db/data 的权限 ... initdb: 无法改变目录 <span class="s2">"/var/lib/cloudera-scm-server-db/data"</span> 的权限: 权限不够
+修复已存在目录 /var/lib/cloudera-scm-server-db/data 的权限 ... initdb: 无法改变目录 "/var/lib/cloudera-scm-server-db/data" 的权限: 权限不够
 Could not initialize database server.
-  This usually means that your PostgreSQL installation failed or isn<span class="s1">'t working properly.
+  This usually means that your PostgreSQL installation failed or isn't working properly.
   PostgreSQL is installed using the set of repositories found on this machine. Please
   ensure that PostgreSQL can be installed. Please also uninstall any other instances of
   PostgreSQL and then try again., giving up
-</span></code></pre>
-</div>
+</code></pre>
 
 <p>这时候，请执行如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>su -s /bin/bash cloudera-scm -c <span class="s2">"touch /var/log/cloudera-scm-server/db.log; /usr/share/cmf/bin/initialize_embedded_db.sh /var/lib/cloudera-scm-server-db/data /var/log/cloudera-scm-server/db.log"</span>
-<span class="gp">$ </span>su -s /bin/bash cloudera-scm -c <span class="s2">"pg_ctl start -w -D /var/lib/cloudera-scm-server-db/data -l /var/log/cloudera-scm-server/db.log"</span>
+<pre><code class="language-bash">$ su -s /bin/bash cloudera-scm -c "touch /var/log/cloudera-scm-server/db.log; /usr/share/cmf/bin/initialize_embedded_db.sh /var/lib/cloudera-scm-server-db/data /var/log/cloudera-scm-server/db.log"
+$ su -s /bin/bash cloudera-scm -c "pg_ctl start -w -D /var/lib/cloudera-scm-server-db/data -l /var/log/cloudera-scm-server/db.log"
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -261,7 +253,7 @@ Could not initialize database server.
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

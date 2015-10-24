@@ -114,59 +114,56 @@
 <p>在 MLlib 中的实现类为org.apache.spark.mllib.recommendation.ALS.scala，其有如下的参数:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">numUserBlocks</code>：是用于并行化计算的分块个数 (设置为-1，为自动配置)。</li>
-  <li><code class="highlighter-rouge">numProductBlocks</code>：是用于并行化计算的分块个数 (设置为-1，为自动配置)。</li>
-  <li><code class="highlighter-rouge">rank</code>：是模型中隐语义因子的个数。</li>
-  <li><code class="highlighter-rouge">iterations</code>：是迭代的次数，推荐值：10-20。</li>
-  <li><code class="highlighter-rouge">lambda</code>：惩罚函数的因数，是ALS的正则化参数，推荐值：0.01。</li>
-  <li><code class="highlighter-rouge">implicitPrefs</code>：决定了是用显性反馈ALS的版本还是用适用隐性反馈数据集的版本。</li>
-  <li><code class="highlighter-rouge">alpha</code>：是一个针对于隐性反馈 ALS 版本的参数，这个参数决定了偏好行为强度的基准。</li>
-  <li><code class="highlighter-rouge">seed</code>：随机种子</li>
+  <li><code>numUserBlocks</code>：是用于并行化计算的分块个数 (设置为-1，为自动配置)。</li>
+  <li><code>numProductBlocks</code>：是用于并行化计算的分块个数 (设置为-1，为自动配置)。</li>
+  <li><code>rank</code>：是模型中隐语义因子的个数。</li>
+  <li><code>iterations</code>：是迭代的次数，推荐值：10-20。</li>
+  <li><code>lambda</code>：惩罚函数的因数，是ALS的正则化参数，推荐值：0.01。</li>
+  <li><code>implicitPrefs</code>：决定了是用显性反馈ALS的版本还是用适用隐性反馈数据集的版本。</li>
+  <li><code>alpha</code>：是一个针对于隐性反馈 ALS 版本的参数，这个参数决定了偏好行为强度的基准。</li>
+  <li><code>seed</code>：随机种子</li>
 </ul>
 
 <p>可以调整这些参数，不断优化结果，使均方差变小。比如：iterations越多，lambda较小，均方差会较小，推荐结果较优。</p>
 
 <p>提供以下方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">run</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">])</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
+<pre><code class="language-scala">def run(ratings: RDD[Rating]): MatrixFactorizationModel
 
-<span class="k">def</span> <span class="n">train</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span><span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">lambda</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span><span class="n">blocks</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
-<span class="k">def</span> <span class="n">train</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span><span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">lambda</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span><span class="n">blocks</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
-<span class="k">def</span> <span class="n">train</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span> <span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">lambda</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
-<span class="k">def</span> <span class="n">train</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span> <span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
+def train(ratings: RDD[Rating],rank: Int,iterations: Int,lambda: Double,blocks: Int,seed: Long): MatrixFactorizationModel
+def train(ratings: RDD[Rating],rank: Int,iterations: Int,lambda: Double,blocks: Int): MatrixFactorizationModel
+def train(ratings: RDD[Rating], rank: Int, iterations: Int, lambda: Double): MatrixFactorizationModel
+def train(ratings: RDD[Rating], rank: Int, iterations: Int): MatrixFactorizationModel
 
-<span class="k">def</span> <span class="n">trainImplicit</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span><span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">lambda</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span><span class="n">blocks</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">alpha</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
-<span class="k">def</span> <span class="n">trainImplicit</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span><span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">lambda</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span><span class="n">blocks</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span><span class="n">alpha</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
-<span class="k">def</span> <span class="n">trainImplicit</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span> <span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">lambda</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">alpha</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
-<span class="k">def</span> <span class="n">trainImplicit</span><span class="o">(</span><span class="n">ratings</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">],</span> <span class="n">rank</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">iterations</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span>
+def trainImplicit(ratings: RDD[Rating],rank: Int,iterations: Int,lambda: Double,blocks: Int,alpha: Double,seed: Long): MatrixFactorizationModel
+def trainImplicit(ratings: RDD[Rating],rank: Int,iterations: Int,lambda: Double,blocks: Int,alpha: Double): MatrixFactorizationModel
+def trainImplicit(ratings: RDD[Rating], rank: Int, iterations: Int, lambda: Double, alpha: Double): MatrixFactorizationModel
+def trainImplicit(ratings: RDD[Rating], rank: Int, iterations: Int): MatrixFactorizationModel
 </code></pre>
-</div>
 
 <p>以上所有方法需要一个参数Rating，其为一个包括三个元素的 case class：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Rating</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">product</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">rating</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span>
+<pre><code class="language-scala">case class Rating(user: Int, product: Int, rating: Double)
 </code></pre>
-</div>
 
 <p>另外，以上方法均返回MatrixFactorizationModel类型的对象，提供以下方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/** Predict the rating of one user for one product. */</span>
-<span class="k">def</span> <span class="n">predict</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">product</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Double</span>
+<pre><code class="language-scala">/** Predict the rating of one user for one product. */
+def predict(user: Int, product: Int): Double
 
-<span class="cm">/**Predict the rating of many users for many products.*/</span>
-<span class="k">def</span> <span class="n">predict</span><span class="o">(</span><span class="n">usersProducts</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">)])</span><span class="k">:</span> <span class="kt">RDD</span><span class="o">[</span><span class="kt">Rating</span><span class="o">]</span>
+/**Predict the rating of many users for many products.*/
+def predict(usersProducts: RDD[(Int, Int)]): RDD[Rating]
 
-<span class="c1">// Recommends products to a user.
-</span><span class="k">def</span> <span class="n">recommendProducts</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">num</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Rating</span><span class="o">]</span>
+// Recommends products to a user.
+def recommendProducts(user: Int, num: Int): Array[Rating]
 
-<span class="c1">//Recommends users to a product.
-</span><span class="k">def</span> <span class="n">recommendUsers</span><span class="o">(</span><span class="n">product</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">num</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Rating</span><span class="o">]</span>
+//Recommends users to a product.
+def recommendUsers(product: Int, num: Int): Array[Rating]
 
-<span class="k">def</span> <span class="n">save</span><span class="o">(</span><span class="n">sc</span><span class="k">:</span> <span class="kt">SparkContext</span><span class="o">,</span> <span class="n">path</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span>
+def save(sc: SparkContext, path: String): Unit
 
-<span class="k">def</span> <span class="n">load</span><span class="o">(</span><span class="n">sc</span><span class="k">:</span> <span class="kt">SparkContext</span><span class="o">,</span> <span class="n">path</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">MatrixFactorizationModel</span> <span class="o">=</span>
+def load(sc: SparkContext, path: String): MatrixFactorizationModel =
 </code></pre>
-</div>
 
 <h2 id="vs-">隐性反馈 vs 显性反馈</h2>
 
@@ -181,143 +178,140 @@
 
 <p>为了测试简单，使用Spark本地运行模式进行测试。下面代码可以在spark-shell中运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">org.apache.spark.mllib.recommendation.ALS</span>
-<span class="k">import</span> <span class="nn">org.apache.spark.mllib.recommendation.MatrixFactorizationModel</span>
-<span class="k">import</span> <span class="nn">org.apache.spark.mllib.recommendation.Rating</span>
+<pre><code class="language-scala">import org.apache.spark.mllib.recommendation.ALS
+import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
+import org.apache.spark.mllib.recommendation.Rating
 
-<span class="c1">// Load and parse the data
-</span><span class="k">val</span> <span class="n">data</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"data/mllib/als/test.data"</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">ratings</span> <span class="k">=</span> <span class="n">data</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="sc">','</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Array</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">item</span><span class="o">,</span> <span class="n">rate</span><span class="o">)</span> <span class="k">=&gt;</span>
-    <span class="nc">Rating</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="n">toInt</span><span class="o">,</span> <span class="n">item</span><span class="o">.</span><span class="n">toInt</span><span class="o">,</span> <span class="n">rate</span><span class="o">.</span><span class="n">toDouble</span><span class="o">)</span>
-  <span class="o">})</span>
+// Load and parse the data
+val data = sc.textFile("data/mllib/als/test.data")
+val ratings = data.map(_.split(',') match { case Array(user, item, rate) =&gt;
+    Rating(user.toInt, item.toInt, rate.toDouble)
+  })
 
-<span class="c1">// Build the recommendation model using ALS
-</span><span class="k">val</span> <span class="n">rank</span> <span class="k">=</span> <span class="mi">10</span>
-<span class="k">val</span> <span class="n">numIterations</span> <span class="k">=</span> <span class="mi">20</span>
-<span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">ALS</span><span class="o">.</span><span class="n">train</span><span class="o">(</span><span class="n">ratings</span><span class="o">,</span> <span class="n">rank</span><span class="o">,</span> <span class="n">numIterations</span><span class="o">,</span> <span class="mf">0.01</span><span class="o">)</span>
+// Build the recommendation model using ALS
+val rank = 10
+val numIterations = 20
+val model = ALS.train(ratings, rank, numIterations, 0.01)
 
-<span class="c1">// Evaluate the model on rating data
-</span><span class="k">val</span> <span class="n">usersProducts</span> <span class="k">=</span> <span class="n">ratings</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Rating</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">,</span> <span class="n">rate</span><span class="o">)</span> <span class="k">=&gt;</span>
-  <span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">)</span>
-<span class="o">}</span>
-<span class="k">val</span> <span class="n">predictions</span> <span class="k">=</span> 
-  <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="o">(</span><span class="n">usersProducts</span><span class="o">).</span><span class="n">map</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Rating</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">,</span> <span class="n">rate</span><span class="o">)</span> <span class="k">=&gt;</span> 
-    <span class="o">((</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">),</span> <span class="n">rate</span><span class="o">)</span>
-  <span class="o">}</span>
-<span class="k">val</span> <span class="n">ratesAndPreds</span> <span class="k">=</span> <span class="n">ratings</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Rating</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">,</span> <span class="n">rate</span><span class="o">)</span> <span class="k">=&gt;</span> 
-  <span class="o">((</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">),</span> <span class="n">rate</span><span class="o">)</span>
-<span class="o">}.</span><span class="n">join</span><span class="o">(</span><span class="n">predictions</span><span class="o">)</span>
-<span class="k">val</span> <span class="nc">MSE</span> <span class="k">=</span> <span class="n">ratesAndPreds</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="k">case</span> <span class="o">((</span><span class="n">user</span><span class="o">,</span> <span class="n">product</span><span class="o">),</span> <span class="o">(</span><span class="n">r1</span><span class="o">,</span> <span class="n">r2</span><span class="o">))</span> <span class="k">=&gt;</span> 
-  <span class="k">val</span> <span class="n">err</span> <span class="k">=</span> <span class="o">(</span><span class="n">r1</span> <span class="o">-</span> <span class="n">r2</span><span class="o">)</span>
-  <span class="n">err</span> <span class="o">*</span> <span class="n">err</span>
-<span class="o">}.</span><span class="n">mean</span><span class="o">()</span>
-<span class="n">println</span><span class="o">(</span><span class="s">"Mean Squared Error = "</span> <span class="o">+</span> <span class="nc">MSE</span><span class="o">)</span>
+// Evaluate the model on rating data
+val usersProducts = ratings.map { case Rating(user, product, rate) =&gt;
+  (user, product)
+}
+val predictions = 
+  model.predict(usersProducts).map { case Rating(user, product, rate) =&gt; 
+    ((user, product), rate)
+  }
+val ratesAndPreds = ratings.map { case Rating(user, product, rate) =&gt; 
+  ((user, product), rate)
+}.join(predictions)
+val MSE = ratesAndPreds.map { case ((user, product), (r1, r2)) =&gt; 
+  val err = (r1 - r2)
+  err * err
+}.mean()
+println("Mean Squared Error = " + MSE)
 
-<span class="c1">// Save and load model
-</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="o">(</span><span class="n">sc</span><span class="o">,</span> <span class="s">"myModelPath"</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">sameModel</span> <span class="k">=</span> <span class="nc">MatrixFactorizationModel</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="n">sc</span><span class="o">,</span> <span class="s">"myModelPath"</span><span class="o">)</span>
+// Save and load model
+model.save(sc, "myModelPath")
+val sameModel = MatrixFactorizationModel.load(sc, "myModelPath")
 </code></pre>
-</div>
 
 <h2 id="java">Java示例</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">scala.Tuple2</span><span class="o">;</span>
+<pre><code class="language-java">import scala.Tuple2;
 
-<span class="kn">import</span> <span class="nn">org.apache.spark.api.java.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.spark.api.java.function.Function</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.spark.mllib.recommendation.ALS</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.spark.mllib.recommendation.MatrixFactorizationModel</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.spark.mllib.recommendation.Rating</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.spark.SparkConf</span><span class="o">;</span>
+import org.apache.spark.api.java.*;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.mllib.recommendation.ALS;
+import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
+import org.apache.spark.mllib.recommendation.Rating;
+import org.apache.spark.SparkConf;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JavaALS</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SparkConf</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SparkConf</span><span class="o">().</span><span class="na">setAppName</span><span class="o">(</span><span class="s">"Collaborative Filtering Example"</span><span class="o">);</span>
-    <span class="n">JavaSparkContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JavaSparkContext</span><span class="o">(</span><span class="n">conf</span><span class="o">);</span>
+public class JavaALS {
+  public static void main(String[] args) {
+    SparkConf conf = new SparkConf().setAppName("Collaborative Filtering Example");
+    JavaSparkContext sc = new JavaSparkContext(conf);
 
-    <span class="c1">// Load and parse the data</span>
-    <span class="n">String</span> <span class="n">path</span> <span class="o">=</span> <span class="s">"data/mllib/als/test.data"</span><span class="o">;</span>
-    <span class="n">JavaRDD</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="na">textFile</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
-    <span class="n">JavaRDD</span><span class="o">&lt;</span><span class="n">Rating</span><span class="o">&gt;</span> <span class="n">ratings</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">map</span><span class="o">(</span>
-      <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Rating</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="n">Rating</span> <span class="n">call</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">String</span><span class="o">[]</span> <span class="n">sarray</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">);</span>
-          <span class="k">return</span> <span class="k">new</span> <span class="n">Rating</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">sarray</span><span class="o">[</span><span class="mi">0</span><span class="o">]),</span> <span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">sarray</span><span class="o">[</span><span class="mi">1</span><span class="o">]),</span> 
-                            <span class="n">Double</span><span class="o">.</span><span class="na">parseDouble</span><span class="o">(</span><span class="n">sarray</span><span class="o">[</span><span class="mi">2</span><span class="o">]));</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">);</span>
+    // Load and parse the data
+    String path = "data/mllib/als/test.data";
+    JavaRDD&lt;String&gt; data = sc.textFile(path);
+    JavaRDD&lt;Rating&gt; ratings = data.map(
+      new Function&lt;String, Rating&gt;() {
+        public Rating call(String s) {
+          String[] sarray = s.split(",");
+          return new Rating(Integer.parseInt(sarray[0]), Integer.parseInt(sarray[1]), 
+                            Double.parseDouble(sarray[2]));
+        }
+      }
+    );
 
-    <span class="c1">// Build the recommendation model using ALS</span>
-    <span class="kt">int</span> <span class="n">rank</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
-    <span class="kt">int</span> <span class="n">numIterations</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
-    <span class="kt">float</span> <span class="n">lambda</span> <span class="o">=</span> <span class="mf">0.01</span><span class="o">;</span>
-    <span class="n">MatrixFactorizationModel</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ALS</span><span class="o">.</span><span class="na">train</span><span class="o">(</span><span class="n">JavaRDD</span><span class="o">.</span><span class="na">toRDD</span><span class="o">(</span><span class="n">ratings</span><span class="o">),</span> <span class="n">rank</span><span class="o">,</span> <span class="n">numIterations</span><span class="o">,</span> <span class="n">lambda</span><span class="o">);</span> 
+    // Build the recommendation model using ALS
+    int rank = 10;
+    int numIterations = 20;
+    float lambda = 0.01;
+    MatrixFactorizationModel model = ALS.train(JavaRDD.toRDD(ratings), rank, numIterations, lambda); 
 
-    <span class="c1">// Evaluate the model on rating data</span>
-    <span class="n">JavaRDD</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;&gt;</span> <span class="n">userProducts</span> <span class="o">=</span> <span class="n">ratings</span><span class="o">.</span><span class="na">map</span><span class="o">(</span>
-      <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Rating</span><span class="o">,</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">call</span><span class="o">(</span><span class="n">Rating</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">return</span> <span class="k">new</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;(</span><span class="n">r</span><span class="o">.</span><span class="na">user</span><span class="o">(),</span> <span class="n">r</span><span class="o">.</span><span class="na">product</span><span class="o">());</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">);</span>
-    <span class="n">JavaPairRDD</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">predictions</span> <span class="o">=</span> <span class="n">JavaPairRDD</span><span class="o">.</span><span class="na">fromJavaRDD</span><span class="o">(</span>
-      <span class="n">model</span><span class="o">.</span><span class="na">predict</span><span class="o">(</span><span class="n">JavaRDD</span><span class="o">.</span><span class="na">toRDD</span><span class="o">(</span><span class="n">userProducts</span><span class="o">)).</span><span class="na">toJavaRDD</span><span class="o">().</span><span class="na">map</span><span class="o">(</span>
-        <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Rating</span><span class="o">,</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-          <span class="kd">public</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">call</span><span class="o">(</span><span class="n">Rating</span> <span class="n">r</span><span class="o">){</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;(</span>
-              <span class="k">new</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;(</span><span class="n">r</span><span class="o">.</span><span class="na">user</span><span class="o">(),</span> <span class="n">r</span><span class="o">.</span><span class="na">product</span><span class="o">()),</span> <span class="n">r</span><span class="o">.</span><span class="na">rating</span><span class="o">());</span>
-          <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">));</span>
-    <span class="n">JavaRDD</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">ratesAndPreds</span> <span class="o">=</span> 
-      <span class="n">JavaPairRDD</span><span class="o">.</span><span class="na">fromJavaRDD</span><span class="o">(</span><span class="n">ratings</span><span class="o">.</span><span class="na">map</span><span class="o">(</span>
-        <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Rating</span><span class="o">,</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-          <span class="kd">public</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">call</span><span class="o">(</span><span class="n">Rating</span> <span class="n">r</span><span class="o">){</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Double</span><span class="o">&gt;(</span>
-              <span class="k">new</span> <span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;(</span><span class="n">r</span><span class="o">.</span><span class="na">user</span><span class="o">(),</span> <span class="n">r</span><span class="o">.</span><span class="na">product</span><span class="o">()),</span> <span class="n">r</span><span class="o">.</span><span class="na">rating</span><span class="o">());</span>
-          <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">)).</span><span class="na">join</span><span class="o">(</span><span class="n">predictions</span><span class="o">).</span><span class="na">values</span><span class="o">();</span>
-    <span class="kt">double</span> <span class="n">MSE</span> <span class="o">=</span> <span class="n">JavaDoubleRDD</span><span class="o">.</span><span class="na">fromRDD</span><span class="o">(</span><span class="n">ratesAndPreds</span><span class="o">.</span><span class="na">map</span><span class="o">(</span>
-      <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;,</span> <span class="n">Object</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="n">Object</span> <span class="n">call</span><span class="o">(</span><span class="n">Tuple2</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">pair</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">Double</span> <span class="n">err</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="na">_1</span><span class="o">()</span> <span class="o">-</span> <span class="n">pair</span><span class="o">.</span><span class="na">_2</span><span class="o">();</span>
-          <span class="k">return</span> <span class="n">err</span> <span class="o">*</span> <span class="n">err</span><span class="o">;</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">).</span><span class="na">rdd</span><span class="o">()).</span><span class="na">mean</span><span class="o">();</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Mean Squared Error = "</span> <span class="o">+</span> <span class="n">MSE</span><span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+    // Evaluate the model on rating data
+    JavaRDD&lt;Tuple2&lt;Object, Object&gt;&gt; userProducts = ratings.map(
+      new Function&lt;Rating, Tuple2&lt;Object, Object&gt;&gt;() {
+        public Tuple2&lt;Object, Object&gt; call(Rating r) {
+          return new Tuple2&lt;Object, Object&gt;(r.user(), r.product());
+        }
+      }
+    );
+    JavaPairRDD&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt; predictions = JavaPairRDD.fromJavaRDD(
+      model.predict(JavaRDD.toRDD(userProducts)).toJavaRDD().map(
+        new Function&lt;Rating, Tuple2&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt;&gt;() {
+          public Tuple2&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt; call(Rating r){
+            return new Tuple2&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt;(
+              new Tuple2&lt;Integer, Integer&gt;(r.user(), r.product()), r.rating());
+          }
+        }
+    ));
+    JavaRDD&lt;Tuple2&lt;Double, Double&gt;&gt; ratesAndPreds = 
+      JavaPairRDD.fromJavaRDD(ratings.map(
+        new Function&lt;Rating, Tuple2&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt;&gt;() {
+          public Tuple2&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt; call(Rating r){
+            return new Tuple2&lt;Tuple2&lt;Integer, Integer&gt;, Double&gt;(
+              new Tuple2&lt;Integer, Integer&gt;(r.user(), r.product()), r.rating());
+          }
+        }
+    )).join(predictions).values();
+    double MSE = JavaDoubleRDD.fromRDD(ratesAndPreds.map(
+      new Function&lt;Tuple2&lt;Double, Double&gt;, Object&gt;() {
+        public Object call(Tuple2&lt;Double, Double&gt; pair) {
+          Double err = pair._1() - pair._2();
+          return err * err;
+        }
+      }
+    ).rdd()).mean();
+    System.out.println("Mean Squared Error = " + MSE);
+  }
+}
 </code></pre>
-</div>
 
 <h2 id="python">Python示例</h2>
 
 <p>下面代码可以在 pyspark 中运行下面代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark.mllib.recommendation</span> <span class="kn">import</span> <span class="n">ALS</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<pre><code class="language-python">from pyspark.mllib.recommendation import ALS
+from numpy import array
 
-<span class="c"># Load and parse the data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s">"data/mllib/als/test.data"</span><span class="p">)</span>
-<span class="n">ratings</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)]))</span>
+# Load and parse the data
+data = sc.textFile("data/mllib/als/test.data")
+ratings = data.map(lambda line: array([float(x) for x in line.split(',')]))
 
-<span class="c"># Build the recommendation model using Alternating Least Squares</span>
-<span class="n">rank</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">numIterations</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ALS</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ratings</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">numIterations</span><span class="p">)</span>
+# Build the recommendation model using Alternating Least Squares
+rank = 10
+numIterations = 20
+model = ALS.train(ratings, rank, numIterations)
 
-<span class="c"># Evaluate the model on training data</span>
-<span class="n">testdata</span> <span class="o">=</span> <span class="n">ratings</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
-<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predictAll</span><span class="p">(</span><span class="n">testdata</span><span class="p">)</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="p">((</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-<span class="n">ratesAndPreds</span> <span class="o">=</span> <span class="n">ratings</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="p">((</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
-<span class="n">MSE</span> <span class="o">=</span> <span class="n">ratesAndPreds</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">ratesAndPreds</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="s">"Mean Squared Error = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">MSE</span><span class="p">))</span>
+# Evaluate the model on training data
+testdata = ratings.map(lambda p: (int(p[0]), int(p[1])))
+predictions = model.predictAll(testdata).map(lambda r: ((r[0], r[1]), r[2]))
+ratesAndPreds = ratings.map(lambda r: ((r[0], r[1]), r[2])).join(predictions)
+MSE = ratesAndPreds.map(lambda r: (r[1][0] - r[1][1])**2).reduce(lambda x, y: x + y)/ratesAndPreds.count()
+print("Mean Squared Error = " + str(MSE))
 </code></pre>
-</div>
 
 <h1 id="section-2">总结</h1>
 
@@ -399,7 +393,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

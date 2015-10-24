@@ -123,64 +123,58 @@
 
 <p>让我们来看一个例子，创建一个 Avro schema 并生成一些数据。在一个真实案例的例子中，组织机构通常有一些更加普通的格式，例如 XML，的数据，并且他们需要通过一些工具例如  <a href="http://www.infoq.com/articles/AVROSchemaJAXB">JAXB</a> 将他们的数据转换成 Avro。我们来使用<a href="http://www.michael-noll.com/blog/2013/03/17/reading-and-writing-avro-files-from-the-command-line/">这个例子</a>，其中 twitter.avsc 如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-   </span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"record"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"twitter_schema"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"namespace"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"com.miguno.avro"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"fields"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">     </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"username"</span><span class="p">,</span><span class="w">
-               </span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"doc"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"Name of the user account on Twitter.com"</span><span class="w">   </span><span class="p">},</span><span class="w">
-         </span><span class="p">{</span><span class="w">
-             </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tweet"</span><span class="p">,</span><span class="w">
-             </span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-             </span><span class="nt">"doc"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"The content of the user's Twitter message"</span><span class="w">   </span><span class="p">},</span><span class="w">
-         </span><span class="p">{</span><span class="w">
-             </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"timestamp"</span><span class="p">,</span><span class="w">
-             </span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"long"</span><span class="p">,</span><span class="w">
-             </span><span class="nt">"doc"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"Unix epoch time in seconds"</span><span class="w">   </span><span class="p">}</span><span class="w"> 
-    </span><span class="p">],</span><span class="w">
-   </span><span class="nt">"doc:"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"A basic schema for storing Twitter messages"</span><span class="w"> 
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{
+   "type" : "record",
+   "name" : "twitter_schema",
+   "namespace" : "com.miguno.avro",
+   "fields" : [
+        {     "name" : "username",
+               "type" : "string",
+              "doc"  : "Name of the user account on Twitter.com"   },
+         {
+             "name" : "tweet",
+             "type" : "string",
+             "doc"  : "The content of the user's Twitter message"   },
+         {
+             "name" : "timestamp",
+             "type" : "long",
+             "doc"  : "Unix epoch time in seconds"   } 
+    ],
+   "doc:" : "A basic schema for storing Twitter messages" 
+}
+</code></pre>
 
 <p>twitter.json 中有一些数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="nt">"username"</span><span class="p">:</span><span class="s2">"miguno"</span><span class="p">,</span><span class="nt">"tweet"</span><span class="p">:</span><span class="s2">"Rock: Nerf paper, scissors is fine."</span><span class="p">,</span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1366150681</span><span class="w"> </span><span class="p">}</span><span class="w"> 
-</span><span class="p">{</span><span class="nt">"username"</span><span class="p">:</span><span class="s2">"BlizzardCS"</span><span class="p">,</span><span class="nt">"tweet"</span><span class="p">:</span><span class="s2">"Works as intended.  Terran is IMBA."</span><span class="p">,</span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1366154481</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{"username":"miguno","tweet":"Rock: Nerf paper, scissors is fine.","timestamp": 1366150681 } 
+{"username":"BlizzardCS","tweet":"Works as intended.  Terran is IMBA.","timestamp": 1366154481 }
+</code></pre>
 
 <p>我们将这些数据转换成二进制的 Avro 格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar ~/avro-tools-1.7.7.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
+<pre><code class="language-bash">$ java -jar ~/avro-tools-1.7.7.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
 </code></pre>
-</div>
 
 <p>然后，我们将 Avro 数据转换为 Java：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /app/avro/avro-tools-1.7.7.jar compile schema /app/avro/data/twitter.avsc /app/avro/data/
+<pre><code class="language-bash">$ java -jar /app/avro/avro-tools-1.7.7.jar compile schema /app/avro/data/twitter.avsc /app/avro/data/
 </code></pre>
-</div>
 
 <p>现在，我们编译这些类并将其打包：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nv">CLASSPATH</span><span class="o">=</span>/app/avro/avro-1.7.7-javadoc.jar:/app/avro/avro-mapred-1.7.7-hadoop1.jar:/app/avro/avro-tools-1.7.7.jar
-<span class="gp">$ </span>javac -classpath <span class="nv">$CLASSPATH</span> /app/avro/data/com/miguno/avro/twitter_schema.java
-<span class="gp">$ </span>jar cvf Twitter.jar com/miguno/avro/<span class="k">*</span>.class
+<pre><code class="language-bash">$ CLASSPATH=/app/avro/avro-1.7.7-javadoc.jar:/app/avro/avro-mapred-1.7.7-hadoop1.jar:/app/avro/avro-tools-1.7.7.jar
+$ javac -classpath $CLASSPATH /app/avro/data/com/miguno/avro/twitter_schema.java
+$ jar cvf Twitter.jar com/miguno/avro/*.class
 </code></pre>
-</div>
 
 <p>我们启动 Spark，并将上面创建的 Jar 和一些需要的库（Hadoop 和 Avro）传递给 Spark 程序：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./bin/spark-shell --jars /app/avro/avro-mapred-1.7.7-hadoop1.jar,/avro/avro-1.7.7.jar,/app/avro/data/Twitter.jar
+<pre><code class="language-bash">$ ./bin/spark-shell --jars /app/avro/avro-mapred-1.7.7-hadoop1.jar,/avro/avro-1.7.7.jar,/app/avro/data/Twitter.jar
 </code></pre>
-</div>
 
 <p>在 REPL 中，我们获取数据并创建一个 RDD：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>scala&gt;
+<pre><code>scala&gt;
 import com.miguno.avro.twitter_schema
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileWriter;
@@ -201,13 +195,11 @@ val path = "/app/avro/data/twitter.avro"
 val avroRDD = sc.hadoopFile[AvroWrapper[GenericRecord], NullWritable, AvroInputFormat[GenericRecord]](path)
 avroRDD.map(l =&gt; new String(l._1.datum.get("username").toString() ) ).first
 </code></pre>
-</div>
 
 <p>返回结果：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>res2: String = miguno
+<pre><code>res2: String = miguno
 </code></pre>
-</div>
 
 <p>一些注意事项：</p>
 
@@ -231,29 +223,26 @@ avroRDD.map(l =&gt; new String(l._1.datum.get("username").toString() ) ).first
 
 <p>然后，使用 avro-tools 将这些数据转换成二进制的 Avro 格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
+<pre><code>$ java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
 </code></pre>
-</div>
 
 <p>这时候会生成 avro 文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ll
+<pre><code class="language-bash">$ ll
 总用量 12
 -rw-r--r-- 1 root root 543  3月 25 15:13 twitter.avro
 -rw-r--r-- 1 root root 590  3月 25 15:12 twitter.avsc
 -rw-r--r-- 1 root root 191  3月 25 15:12 twitter.json
 </code></pre>
-</div>
 
 <p>将 Avro 数据转换为 Java：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar /usr/lib/avro/avro-tools.jar compile schema twitter.avsc .
+<pre><code>$ java -jar /usr/lib/avro/avro-tools.jar compile schema twitter.avsc .
 </code></pre>
-</div>
 
 <p>这时候会生成 twitter_schema.java 文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tree
+<pre><code class="language-bash">$ tree
 .
 ├── com
 │   └── miguno
@@ -263,33 +252,29 @@ avroRDD.map(l =&gt; new String(l._1.datum.get("username").toString() ) ).first
 ├── twitter.avsc
 └── twitter.json
 </code></pre>
-</div>
 
 <p>这时候会生成一个 Twitter.jar 的 jar 包。</p>
 
 <p>编译这些类并将其打包：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nv">CLASSPATH</span><span class="o">=</span>/usr/lib/avro/avro-mapred-hadoop2.jar:/usr/lib/avro/avro-tools.jar
-<span class="gp">$ </span>javac -classpath <span class="nv">$CLASSPATH</span> com/miguno/avro/twitter_schema.java
-<span class="gp">$ </span>jar cvf Twitter.jar com/miguno/avro/<span class="k">*</span>.class
+<pre><code class="language-bash">$ CLASSPATH=/usr/lib/avro/avro-mapred-hadoop2.jar:/usr/lib/avro/avro-tools.jar
+$ javac -classpath $CLASSPATH com/miguno/avro/twitter_schema.java
+$ jar cvf Twitter.jar com/miguno/avro/*.class
 </code></pre>
-</div>
 
 <p>在当前目录，运行 spark-shell:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>spark-shell --jars /usr/lib/avro/avro-mapred-hadoop2.jar,/usr/lib/avro/avro.jar,Twitter.jar
+<pre><code class="language-bash">spark-shell --jars /usr/lib/avro/avro-mapred-hadoop2.jar,/usr/lib/avro/avro.jar,Twitter.jar
 </code></pre>
-</div>
 
 <p>将 twitter.avro 上传到 hdfs:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -put twitter.avro
+<pre><code class="language-bash">hadoop fs -put twitter.avro
 </code></pre>
-</div>
 
 <p>在 REPL 中，我们创建一个 RDD 并查看结果是否和上面一致：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>scala&gt;
+<pre><code>scala&gt;
 import com.miguno.avro.twitter_schema;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileWriter;
@@ -310,7 +295,6 @@ val path = "twitter.avro"
 val avroRDD = sc.hadoopFile[AvroWrapper[GenericRecord], NullWritable, AvroInputFormat[GenericRecord]](path)
 avroRDD.map(l =&gt; new String(l._1.datum.get("username").toString() ) ).first
 </code></pre>
-</div>
 
 <p>更多的 Avro Tools 用法，可以参考 <a href="/2015/03/20/about-avro.html">Avro 介绍</a>。</p>
 
@@ -366,7 +350,7 @@ avroRDD.map(l =&gt; new String(l._1.datum.get("username").toString() ) ).first
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

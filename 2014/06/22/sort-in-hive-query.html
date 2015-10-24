@@ -109,17 +109,16 @@
 
 <p>hive中的ORDER BY语句和关系数据库中的sql语法相似。他会对查询结果做全局排序，这意味着所有的数据会传送到一个Reduce任务上，这样会导致在大数量的情况下，花费大量时间。</p>
 
-<p>与数据库中 ORDER BY 的区别在于在<code class="highlighter-rouge">hive.mapred.mode = strict</code>模式下，必须指定 limit 否则执行会报错。</p>
+<p>与数据库中 ORDER BY 的区别在于在<code>hive.mapred.mode = strict</code>模式下，必须指定 limit 否则执行会报错。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">hive</span><span class="p">.</span><span class="n">mapred</span><span class="p">.</span><span class="k">mode</span><span class="o">=</span><span class="k">strict</span><span class="p">;</span>
-<span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span><span class="p">;</span>
-<span class="n">FAILED</span><span class="p">:</span> <span class="n">SemanticException</span> <span class="mi">1</span><span class="p">:</span><span class="mi">28</span> <span class="k">In</span> <span class="k">strict</span> <span class="k">mode</span><span class="p">,</span> <span class="n">if</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="k">is</span> <span class="n">specified</span><span class="p">,</span> <span class="k">LIMIT</span> <span class="n">must</span> <span class="n">also</span> <span class="n">be</span> <span class="n">specified</span><span class="p">.</span> <span class="n">Error</span> <span class="n">encountered</span> <span class="n">near</span> <span class="n">token</span> <span class="s1">'id'</span>
+<pre><code class="language-sql">hive&gt; set hive.mapred.mode=strict;
+hive&gt; select * from test order by id;
+FAILED: SemanticException 1:28 In strict mode, if ORDER BY is specified, LIMIT must also be specified. Error encountered near token 'id'
 </code></pre>
-</div>
 
 <p>例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hive&gt; set hive.mapred.mode=unstrict;
+<pre><code>hive&gt; set hive.mapred.mode=unstrict;
 hive&gt; select * from test order BY id ;
 MapReduce Jobs Launched: 
 Job 0: Map: 1  Reduce: 1   Cumulative CPU: 1.88 sec   HDFS Read: 305 HDFS Write: 32 SUCCESS
@@ -135,7 +134,6 @@ OK
 4	d
 Time taken: 24.609 seconds, Fetched: 8 row(s)
 </code></pre>
-</div>
 
 <p>从上面的日志可以看到：启动了一个reduce进行全局排序。</p>
 
@@ -144,30 +142,29 @@ Time taken: 24.609 seconds, Fetched: 8 row(s)
 <p>SORT BY不是全局排序，其在数据进入reducer前完成排序，因此在有多个reduce任务情况下，SORT BY只能保证每个reduce的输出有序，而不能保证全局有序。</p>
 
 <blockquote>
-  <p>注意：SORT BY 不受 <code class="highlighter-rouge">hive.mapred.mode</code> 参数的影响</p>
+  <p>注意：SORT BY 不受 <code>hive.mapred.mode</code> 参数的影响</p>
 </blockquote>
 
-<p>你可以通过设置<code class="highlighter-rouge">mapred.reduce.tasks</code>的值来控制reduce的数，然后对reduce输出的结果做二次排序。</p>
+<p>你可以通过设置<code>mapred.reduce.tasks</code>的值来控制reduce的数，然后对reduce输出的结果做二次排序。</p>
 
 <p>例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">mapred</span><span class="p">.</span><span class="n">reduce</span><span class="p">.</span><span class="n">tasks</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span>
-<span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span> <span class="n">sort</span> <span class="k">BY</span> <span class="n">id</span> <span class="p">;</span> 
-<span class="n">MapReduce</span> <span class="n">Jobs</span> <span class="n">Launched</span><span class="p">:</span> 
-<span class="n">Job</span> <span class="mi">0</span><span class="p">:</span> <span class="k">Map</span><span class="p">:</span> <span class="mi">1</span>  <span class="n">Reduce</span><span class="p">:</span> <span class="mi">3</span>   <span class="n">Cumulative</span> <span class="n">CPU</span><span class="p">:</span> <span class="mi">4</span><span class="p">.</span><span class="mi">48</span> <span class="n">sec</span>   <span class="n">HDFS</span> <span class="k">Read</span><span class="p">:</span> <span class="mi">305</span> <span class="n">HDFS</span> <span class="k">Write</span><span class="p">:</span> <span class="mi">32</span> <span class="n">SUCCESS</span>
-<span class="n">Total</span> <span class="n">MapReduce</span> <span class="n">CPU</span> <span class="n">Time</span> <span class="n">Spent</span><span class="p">:</span> <span class="mi">4</span> <span class="n">seconds</span> <span class="mi">480</span> <span class="n">msec</span>
-<span class="n">OK</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">29</span><span class="p">.</span><span class="mi">574</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">8</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<pre><code class="language-sql">hive&gt; set mapred.reduce.tasks=3;
+hive&gt; select * from test sort BY id ; 
+MapReduce Jobs Launched: 
+Job 0: Map: 1  Reduce: 3   Cumulative CPU: 4.48 sec   HDFS Read: 305 HDFS Write: 32 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 480 msec
+OK
+1	a
+2	b
+3	c
+4	d
+2	b
+3	c
+4	d
+1	a
+Time taken: 29.574 seconds, Fetched: 8 row(s)
 </code></pre>
-</div>
 
 <p>从上面的日志可以看到：启动了三个reduce分别排序，最后的结果不是有序的。</p>
 
@@ -183,21 +180,20 @@ Time taken: 24.609 seconds, Fetched: 8 row(s)
 
 <p>例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span> <span class="n">distribute</span> <span class="k">BY</span> <span class="n">id</span> <span class="n">sort</span> <span class="k">by</span> <span class="n">id</span> <span class="k">asc</span><span class="p">;</span>  
-<span class="n">Job</span> <span class="mi">0</span><span class="p">:</span> <span class="k">Map</span><span class="p">:</span> <span class="mi">1</span>  <span class="n">Reduce</span><span class="p">:</span> <span class="mi">3</span>   <span class="n">Cumulative</span> <span class="n">CPU</span><span class="p">:</span> <span class="mi">4</span><span class="p">.</span><span class="mi">24</span> <span class="n">sec</span>   <span class="n">HDFS</span> <span class="k">Read</span><span class="p">:</span> <span class="mi">305</span> <span class="n">HDFS</span> <span class="k">Write</span><span class="p">:</span> <span class="mi">32</span> <span class="n">SUCCESS</span>
-<span class="n">Total</span> <span class="n">MapReduce</span> <span class="n">CPU</span> <span class="n">Time</span> <span class="n">Spent</span><span class="p">:</span> <span class="mi">4</span> <span class="n">seconds</span> <span class="mi">240</span> <span class="n">msec</span>
-<span class="n">OK</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">29</span><span class="p">.</span><span class="mi">89</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">8</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<pre><code class="language-sql">hive&gt; select * from test distribute BY id sort by id asc;  
+Job 0: Map: 1  Reduce: 3   Cumulative CPU: 4.24 sec   HDFS Read: 305 HDFS Write: 32 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 240 msec
+OK
+3	c
+3	c
+1	a
+1	a
+4	d
+4	d
+2	b
+2	b
+Time taken: 29.89 seconds, Fetched: 8 row(s)
 </code></pre>
-</div>
 
 <p>从上面的日志可以看到：启动了三个reduce分别排序，最后的结果不是有序的。</p>
 
@@ -211,27 +207,25 @@ Time taken: 24.609 seconds, Fetched: 8 row(s)
 
 <p>例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span> <span class="k">cluster</span> <span class="k">by</span> <span class="n">id</span> <span class="k">asc</span><span class="p">;</span>              
-<span class="n">FAILED</span><span class="p">:</span> <span class="n">ParseException</span> <span class="n">line</span> <span class="mi">1</span><span class="p">:</span><span class="mi">33</span> <span class="n">extraneous</span> <span class="k">input</span> <span class="s1">'asc'</span> <span class="n">expecting</span> <span class="n">EOF</span> <span class="n">near</span> <span class="s1">'&lt;EOF&gt;'</span>
+<pre><code class="language-sql">hive&gt; select * from test cluster by id asc;              
+FAILED: ParseException line 1:33 extraneous input 'asc' expecting EOF near '&lt;EOF&gt;'
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span> <span class="k">cluster</span> <span class="k">by</span> <span class="n">id</span> <span class="p">;</span>
-<span class="n">MapReduce</span> <span class="n">Jobs</span> <span class="n">Launched</span><span class="p">:</span> 
-<span class="n">Job</span> <span class="mi">0</span><span class="p">:</span> <span class="k">Map</span><span class="p">:</span> <span class="mi">1</span>  <span class="n">Reduce</span><span class="p">:</span> <span class="mi">3</span>   <span class="n">Cumulative</span> <span class="n">CPU</span><span class="p">:</span> <span class="mi">4</span><span class="p">.</span><span class="mi">58</span> <span class="n">sec</span>   <span class="n">HDFS</span> <span class="k">Read</span><span class="p">:</span> <span class="mi">305</span> <span class="n">HDFS</span> <span class="k">Write</span><span class="p">:</span> <span class="mi">32</span> <span class="n">SUCCESS</span>
-<span class="n">Total</span> <span class="n">MapReduce</span> <span class="n">CPU</span> <span class="n">Time</span> <span class="n">Spent</span><span class="p">:</span> <span class="mi">4</span> <span class="n">seconds</span> <span class="mi">580</span> <span class="n">msec</span>
-<span class="n">OK</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">30</span><span class="p">.</span><span class="mi">646</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">8</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<pre><code class="language-sql">hive&gt; select * from test cluster by id ;
+MapReduce Jobs Launched: 
+Job 0: Map: 1  Reduce: 3   Cumulative CPU: 4.58 sec   HDFS Read: 305 HDFS Write: 32 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 580 msec
+OK
+3	c
+3	c
+1	a
+1	a
+4	d
+4	d
+2	b
+2	b
+Time taken: 30.646 seconds, Fetched: 8 row(s)
 </code></pre>
-</div>
 
 <p>从上面的日志可以看到：启动了三个reduce分别排序，最后的结果不是有序的。</p>
 
@@ -239,23 +233,22 @@ Time taken: 24.609 seconds, Fetched: 8 row(s)
 
 <p>可以这样做：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span> <span class="k">cluster</span> <span class="k">by</span> <span class="n">id</span> <span class="p">)</span> <span class="n">a</span> <span class="k">order</span> <span class="k">by</span> <span class="n">a</span><span class="p">.</span><span class="n">id</span> <span class="p">;</span>
-<span class="n">MapReduce</span> <span class="n">Jobs</span> <span class="n">Launched</span><span class="p">:</span> 
-<span class="n">Job</span> <span class="mi">0</span><span class="p">:</span> <span class="k">Map</span><span class="p">:</span> <span class="mi">1</span>  <span class="n">Reduce</span><span class="p">:</span> <span class="mi">3</span>   <span class="n">Cumulative</span> <span class="n">CPU</span><span class="p">:</span> <span class="mi">4</span><span class="p">.</span><span class="mi">5</span> <span class="n">sec</span>   <span class="n">HDFS</span> <span class="k">Read</span><span class="p">:</span> <span class="mi">305</span> <span class="n">HDFS</span> <span class="k">Write</span><span class="p">:</span> <span class="mi">448</span> <span class="n">SUCCESS</span>
-<span class="n">Job</span> <span class="mi">1</span><span class="p">:</span> <span class="k">Map</span><span class="p">:</span> <span class="mi">1</span>  <span class="n">Reduce</span><span class="p">:</span> <span class="mi">1</span>   <span class="n">Cumulative</span> <span class="n">CPU</span><span class="p">:</span> <span class="mi">1</span><span class="p">.</span><span class="mi">96</span> <span class="n">sec</span>   <span class="n">HDFS</span> <span class="k">Read</span><span class="p">:</span> <span class="mi">1232</span> <span class="n">HDFS</span> <span class="k">Write</span><span class="p">:</span> <span class="mi">32</span> <span class="n">SUCCESS</span>
-<span class="n">Total</span> <span class="n">MapReduce</span> <span class="n">CPU</span> <span class="n">Time</span> <span class="n">Spent</span><span class="p">:</span> <span class="mi">6</span> <span class="n">seconds</span> <span class="mi">460</span> <span class="n">msec</span>
-<span class="n">OK</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">1</span>	<span class="n">a</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="mi">2</span>	<span class="n">b</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">3</span>	<span class="k">c</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="mi">4</span>	<span class="n">d</span>
-<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">118</span><span class="p">.</span><span class="mi">261</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">8</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<pre><code class="language-sql">hive&gt; select a.* from (select * from test cluster by id ) a order by a.id ;
+MapReduce Jobs Launched: 
+Job 0: Map: 1  Reduce: 3   Cumulative CPU: 4.5 sec   HDFS Read: 305 HDFS Write: 448 SUCCESS
+Job 1: Map: 1  Reduce: 1   Cumulative CPU: 1.96 sec   HDFS Read: 1232 HDFS Write: 32 SUCCESS
+Total MapReduce CPU Time Spent: 6 seconds 460 msec
+OK
+1	a
+1	a
+2	b
+2	b
+3	c
+3	c
+4	d
+4	d
+Time taken: 118.261 seconds, Fetched: 8 row(s)
 </code></pre>
-</div>
 
 <h1 id="section">总结</h1>
 
@@ -315,7 +308,7 @@ Time taken: 24.609 seconds, Fetched: 8 row(s)
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

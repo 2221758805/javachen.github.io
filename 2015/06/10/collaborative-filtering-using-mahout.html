@@ -123,12 +123,12 @@
 <p>基于用户或物品的推荐器主要包括以下几个接口：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">DataModel</code> 是用户喜好信息的抽象接口，它的具体实现支持从任意类型的数据源抽取用户喜好信息。Taste 默认提供 JDBCDataModel 和 FileDataModel，分别支持从数据库和文件中读取用户的喜好信息。</li>
-  <li><code class="highlighter-rouge">UserSimilarity</code> 和 <code class="highlighter-rouge">ItemSimilarity</code>。UserSimilarity 用于定义两个用户间的相似度，它是基于协同过滤的推荐引擎的核心部分，可以用来计算用户的“邻居”，这里我们将与当前用户口味相似的用户称为他的邻居。ItemSimilarity 类似的，计算内容之间的相似度。</li>
-  <li><code class="highlighter-rouge">UserNeighborhood</code> 用于基于用户相似度的推荐方法中，推荐的内容是基于找到与当前用户喜好相似的邻居用户的方式产生的。UserNeighborhood 定义了确定邻居用户的方法，具体实现一般是基于 UserSimilarity 计算得到的。</li>
-  <li><code class="highlighter-rouge">Recommender</code> 是推荐引擎的抽象接口，Taste 中的核心组件。程序中，为它提供一个 DataModel，它可以计算出对不同用户的推荐内容。实际应用中，主要使用它的实现类 GenericUserBasedRecommender 或者 GenericItemBasedRecommender，分别实现基于用户相似度的推荐引擎或者基于内容的推荐引擎。</li>
-  <li><code class="highlighter-rouge">RecommenderEvaluator</code>：评分器。</li>
-  <li><code class="highlighter-rouge">RecommenderIRStatsEvaluator</code>：搜集推荐性能相关的指标，包括准确率、召回率等等。</li>
+  <li><code>DataModel</code> 是用户喜好信息的抽象接口，它的具体实现支持从任意类型的数据源抽取用户喜好信息。Taste 默认提供 JDBCDataModel 和 FileDataModel，分别支持从数据库和文件中读取用户的喜好信息。</li>
+  <li><code>UserSimilarity</code> 和 <code>ItemSimilarity</code>。UserSimilarity 用于定义两个用户间的相似度，它是基于协同过滤的推荐引擎的核心部分，可以用来计算用户的“邻居”，这里我们将与当前用户口味相似的用户称为他的邻居。ItemSimilarity 类似的，计算内容之间的相似度。</li>
+  <li><code>UserNeighborhood</code> 用于基于用户相似度的推荐方法中，推荐的内容是基于找到与当前用户喜好相似的邻居用户的方式产生的。UserNeighborhood 定义了确定邻居用户的方法，具体实现一般是基于 UserSimilarity 计算得到的。</li>
+  <li><code>Recommender</code> 是推荐引擎的抽象接口，Taste 中的核心组件。程序中，为它提供一个 DataModel，它可以计算出对不同用户的推荐内容。实际应用中，主要使用它的实现类 GenericUserBasedRecommender 或者 GenericItemBasedRecommender，分别实现基于用户相似度的推荐引擎或者基于内容的推荐引擎。</li>
+  <li><code>RecommenderEvaluator</code>：评分器。</li>
+  <li><code>RecommenderIRStatsEvaluator</code>：搜集推荐性能相关的指标，包括准确率、召回率等等。</li>
 </ul>
 
 <p>目前，Mahout为DataModel提供了以下几种实现：</p>
@@ -153,16 +153,16 @@
 
 <p>从类名上就可以大概猜出来每个DataModel的用途，奇怪的是竟然没有HDFS的DataModel，有人实现了一个，请参考<a href="https://issues.apache.org/jira/browse/MAHOUT-1579">MAHOUT-1579</a>。</p>
 
-<p><code class="highlighter-rouge">UserSimilarity</code> 和 <code class="highlighter-rouge">ItemSimilarity</code> 相似度实现有以下几种：</p>
+<p><code>UserSimilarity</code> 和 <code>ItemSimilarity</code> 相似度实现有以下几种：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">CityBlockSimilarity</code>：基于Manhattan距离相似度</li>
-  <li><code class="highlighter-rouge">EuclideanDistanceSimilarity</code>：基于欧几里德距离计算相似度</li>
-  <li><code class="highlighter-rouge">LogLikelihoodSimilarity</code>：基于对数似然比的相似度</li>
-  <li><code class="highlighter-rouge">PearsonCorrelationSimilarity</code>：基于皮尔逊相关系数计算相似度</li>
-  <li><code class="highlighter-rouge">SpearmanCorrelationSimilarity</code>：基于皮尔斯曼相关系数相似度</li>
-  <li><code class="highlighter-rouge">TanimotoCoefficientSimilarity</code>：基于谷本系数计算相似度</li>
-  <li><code class="highlighter-rouge">UncenteredCosineSimilarity</code>：计算 Cosine 相似度</li>
+  <li><code>CityBlockSimilarity</code>：基于Manhattan距离相似度</li>
+  <li><code>EuclideanDistanceSimilarity</code>：基于欧几里德距离计算相似度</li>
+  <li><code>LogLikelihoodSimilarity</code>：基于对数似然比的相似度</li>
+  <li><code>PearsonCorrelationSimilarity</code>：基于皮尔逊相关系数计算相似度</li>
+  <li><code>SpearmanCorrelationSimilarity</code>：基于皮尔斯曼相关系数相似度</li>
+  <li><code>TanimotoCoefficientSimilarity</code>：基于谷本系数计算相似度</li>
+  <li><code>UncenteredCosineSimilarity</code>：计算 Cosine 相似度</li>
 </ul>
 
 <p>以上相似度的说明，请参考<a href="/2014/09/22/mahout-recommend-engine.html">Mahout推荐引擎介绍</a>。</p>
@@ -186,8 +186,8 @@
 <p>RecommenderEvaluator有以下几种实现：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">AverageAbsoluteDifferenceRecommenderEvaluator</code>：计算平均差值</li>
-  <li><code class="highlighter-rouge">RMSRecommenderEvaluator</code>：计算均方根差</li>
+  <li><code>AverageAbsoluteDifferenceRecommenderEvaluator</code>：计算平均差值</li>
+  <li><code>RMSRecommenderEvaluator</code>：计算均方根差</li>
 </ul>
 
 <p>RecommenderIRStatsEvaluator的实现类是GenericRecommenderIRStatsEvaluator。</p>
@@ -196,58 +196,56 @@
 
 <p>首先，需要在maven中加入对mahout的依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.apache.mahout<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>mahout-core<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.mahout&lt;/groupId&gt;
+    &lt;artifactId&gt;mahout-core&lt;/artifactId&gt;
+    &lt;version&gt;0.9&lt;/version&gt;
+&lt;/dependency&gt;
 
-<span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.apache.mahout<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>mahout-integration<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.mahout&lt;/groupId&gt;
+    &lt;artifactId&gt;mahout-integration&lt;/artifactId&gt;
+    &lt;version&gt;0.9&lt;/version&gt;
+&lt;/dependency&gt;
 
-<span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.apache.mahout<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>mahout-math<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.mahout&lt;/groupId&gt;
+    &lt;artifactId&gt;mahout-math&lt;/artifactId&gt;
+    &lt;version&gt;0.9&lt;/version&gt;
+&lt;/dependency&gt;
 
-<span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.apache.mahout<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>mahout-examples<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.mahout&lt;/groupId&gt;
+    &lt;artifactId&gt;mahout-examples&lt;/artifactId&gt;
+    &lt;version&gt;0.9&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
-</div>
 
 <p>基于用户的推荐，以FileDataModel为例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">File</span> <span class="n">modelFile</span> <span class="n">modelFile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"intro.csv"</span><span class="o">);</span>
+<pre><code class="language-java">File modelFile modelFile = new File("intro.csv");
 
-<span class="n">DataModel</span> <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileDataModel</span><span class="o">(</span><span class="n">modelFile</span><span class="o">);</span>
+DataModel model = new FileDataModel(modelFile);
 
-<span class="c1">//用户相似度，使用基于皮尔逊相关系数计算相似度</span>
-<span class="n">UserSimilarity</span> <span class="n">similarity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PearsonCorrelationSimilarity</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
+//用户相似度，使用基于皮尔逊相关系数计算相似度
+UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 
-<span class="c1">//选择邻居用户，使用NearestNUserNeighborhood实现UserNeighborhood接口，选择邻近的4个用户</span>
-<span class="n">UserNeighborhood</span> <span class="n">neighborhood</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NearestNUserNeighborhood</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">similarity</span><span class="o">,</span> <span class="n">model</span><span class="o">);</span>
+//选择邻居用户，使用NearestNUserNeighborhood实现UserNeighborhood接口，选择邻近的4个用户
+UserNeighborhood neighborhood = new NearestNUserNeighborhood(4, similarity, model);
 
-<span class="n">Recommender</span> <span class="n">recommender</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericUserBasedRecommender</span><span class="o">(</span><span class="n">model</span><span class="o">,</span> <span class="n">neighborhood</span><span class="o">,</span> <span class="n">similarity</span><span class="o">);</span>
+Recommender recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
 
-<span class="c1">//给用户1推荐4个物品</span>
-<span class="n">List</span><span class="o">&lt;</span><span class="n">RecommendedItem</span><span class="o">&gt;</span> <span class="n">recommendations</span> <span class="o">=</span> <span class="n">recommender</span><span class="o">.</span><span class="na">recommend</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span>
+//给用户1推荐4个物品
+List&lt;RecommendedItem&gt; recommendations = recommender.recommend(1, 4);
 
-<span class="k">for</span> <span class="o">(</span><span class="n">RecommendedItem</span> <span class="n">recommendation</span> <span class="o">:</span> <span class="n">recommendations</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">recommendation</span><span class="o">);</span>
-<span class="o">}</span>
+for (RecommendedItem recommendation : recommendations) {
+    System.out.println(recommendation);
+}
 </code></pre>
-</div>
 
 <blockquote>
   <p>注意：<br />
-FileDataModel要求输入文件中的字段分隔符为逗号或者制表符，如果你想使用其他分隔符，你可以扩展一个FileDataModel的实现，例如，mahout中已经提供了一个解析MoiveLens的数据集（分隔符为<code class="highlighter-rouge">::</code>）的实现GroupLensDataModel。</p>
+FileDataModel要求输入文件中的字段分隔符为逗号或者制表符，如果你想使用其他分隔符，你可以扩展一个FileDataModel的实现，例如，mahout中已经提供了一个解析MoiveLens的数据集（分隔符为<code>::</code>）的实现GroupLensDataModel。</p>
 </blockquote>
 
 <p>GenericUserBasedRecommender是基于用户的简单推荐器实现类，推荐主要参照传入的DataModel和UserNeighborhood，总体是三个步骤：</p>
@@ -260,152 +258,146 @@ FileDataModel要求输入文件中的字段分隔符为逗号或者制表符，�
 
 <p>对相同用户重复获得推荐结果，我们可以改用CachingRecommender来包装GenericUserBasedRecommender对象，将推荐结果缓存起来：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Recommender</span> <span class="n">cachingRecommender</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CachingRecommender</span><span class="o">(</span><span class="n">recommender</span><span class="o">);</span>
+<pre><code class="language-java">Recommender cachingRecommender = new CachingRecommender(recommender);
 </code></pre>
-</div>
 
 <p>上面代码可以在main方法中直接运行，然后，我们可以获取推荐模型的评分：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//使用平均绝对差值获得评分</span>
-<span class="n">RecommenderEvaluator</span> <span class="n">evaluator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AverageAbsoluteDifferenceRecommenderEvaluator</span><span class="o">();</span>
-<span class="c1">// 用RecommenderBuilder构建推荐引擎</span>
-<span class="n">RecommenderBuilder</span> <span class="n">recommenderBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RecommenderBuilder</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Recommender</span> <span class="n">buildRecommender</span><span class="o">(</span><span class="n">DataModel</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">TasteException</span> <span class="o">{</span>
-        <span class="n">UserSimilarity</span> <span class="n">similarity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PearsonCorrelationSimilarity</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
-        <span class="n">UserNeighborhood</span> <span class="n">neighborhood</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NearestNUserNeighborhood</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">similarity</span><span class="o">,</span> <span class="n">model</span><span class="o">);</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">GenericUserBasedRecommender</span><span class="o">(</span><span class="n">model</span><span class="o">,</span> <span class="n">neighborhood</span><span class="o">,</span> <span class="n">similarity</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-<span class="c1">// Use 70% of the data to train; test using the other 30%.</span>
-<span class="kt">double</span> <span class="n">score</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">recommenderBuilder</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="mf">0.7</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">);</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">score</span><span class="o">);</span>
+<pre><code class="language-java">//使用平均绝对差值获得评分
+RecommenderEvaluator evaluator = new AverageAbsoluteDifferenceRecommenderEvaluator();
+// 用RecommenderBuilder构建推荐引擎
+RecommenderBuilder recommenderBuilder = new RecommenderBuilder() {
+    @Override
+    public Recommender buildRecommender(DataModel model) throws TasteException {
+        UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+        UserNeighborhood neighborhood = new NearestNUserNeighborhood(4, similarity, model);
+        return new GenericUserBasedRecommender(model, neighborhood, similarity);
+    }
+};
+// Use 70% of the data to train; test using the other 30%.
+double score = evaluator.evaluate(recommenderBuilder, null, model, 0.7, 1.0);
+System.out.println(score);
 </code></pre>
-</div>
 
 <p>接下来，可以获取推荐结果的查准率和召回率：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">RecommenderIRStatsEvaluator</span> <span class="n">statsEvaluator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericRecommenderIRStatsEvaluator</span><span class="o">();</span>
-<span class="c1">// Build the same recommender for testing that we did last time:</span>
-<span class="n">RecommenderBuilder</span> <span class="n">recommenderBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RecommenderBuilder</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Recommender</span> <span class="n">buildRecommender</span><span class="o">(</span><span class="n">DataModel</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">TasteException</span> <span class="o">{</span>
-        <span class="n">UserSimilarity</span> <span class="n">similarity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PearsonCorrelationSimilarity</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
-        <span class="n">UserNeighborhood</span> <span class="n">neighborhood</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NearestNUserNeighborhood</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">similarity</span><span class="o">,</span> <span class="n">model</span><span class="o">);</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">GenericUserBasedRecommender</span><span class="o">(</span><span class="n">model</span><span class="o">,</span> <span class="n">neighborhood</span><span class="o">,</span> <span class="n">similarity</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-<span class="c1">// 计算推荐4个结果时的查准率和召回率</span>
-<span class="n">IRStatistics</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">statsEvaluator</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">recommenderBuilder</span><span class="o">,</span><span class="kc">null</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span>
-        <span class="n">GenericRecommenderIRStatsEvaluator</span><span class="o">.</span><span class="na">CHOOSE_THRESHOLD</span><span class="o">,</span><span class="mf">1.0</span><span class="o">);</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">stats</span><span class="o">.</span><span class="na">getPrecision</span><span class="o">());</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">stats</span><span class="o">.</span><span class="na">getRecall</span><span class="o">());</span>
+<pre><code class="language-java">RecommenderIRStatsEvaluator statsEvaluator = new GenericRecommenderIRStatsEvaluator();
+// Build the same recommender for testing that we did last time:
+RecommenderBuilder recommenderBuilder = new RecommenderBuilder() {
+    @Override
+    public Recommender buildRecommender(DataModel model) throws TasteException {
+        UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+        UserNeighborhood neighborhood = new NearestNUserNeighborhood(4, similarity, model);
+        return new GenericUserBasedRecommender(model, neighborhood, similarity);
+    }
+};
+// 计算推荐4个结果时的查准率和召回率
+IRStatistics stats = statsEvaluator.evaluate(recommenderBuilder,null, model, null, 4,
+        GenericRecommenderIRStatsEvaluator.CHOOSE_THRESHOLD,1.0);
+System.out.println(stats.getPrecision());
+System.out.println(stats.getRecall());
 </code></pre>
-</div>
 
 <p>如果是基于物品的推荐，代码大体相似，只是没有了UserNeighborhood，然后将上面代码中的User换成Item即可，完整代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">File</span> <span class="n">modelFile</span> <span class="n">modelFile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"intro.csv"</span><span class="o">);</span>
+<pre><code class="language-java">File modelFile modelFile = new File("intro.csv");
 
-<span class="n">DataModel</span> <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileDataModel</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">file</span><span class="o">));</span>
+DataModel model = new FileDataModel(new File(file));
 
-<span class="c1">// Build the same recommender for testing that we did last time:</span>
-<span class="n">RecommenderBuilder</span> <span class="n">recommenderBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RecommenderBuilder</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Recommender</span> <span class="n">buildRecommender</span><span class="o">(</span><span class="n">DataModel</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">TasteException</span> <span class="o">{</span>
-        <span class="n">ItemSimilarity</span> <span class="n">similarity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PearsonCorrelationSimilarity</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">GenericItemBasedRecommender</span><span class="o">(</span><span class="n">model</span><span class="o">,</span> <span class="n">similarity</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">};</span>
+// Build the same recommender for testing that we did last time:
+RecommenderBuilder recommenderBuilder = new RecommenderBuilder() {
+    @Override
+    public Recommender buildRecommender(DataModel model) throws TasteException {
+        ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
+        return new GenericItemBasedRecommender(model, similarity);
+    }
+};
 
-<span class="c1">//获取推荐结果</span>
-<span class="n">List</span><span class="o">&lt;</span><span class="n">RecommendedItem</span><span class="o">&gt;</span> <span class="n">recommendations</span> <span class="o">=</span> <span class="n">recommenderBuilder</span><span class="o">.</span><span class="na">buildRecommender</span><span class="o">(</span><span class="n">model</span><span class="o">).</span><span class="na">recommend</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span>
+//获取推荐结果
+List&lt;RecommendedItem&gt; recommendations = recommenderBuilder.buildRecommender(model).recommend(1, 4);
 
-<span class="k">for</span> <span class="o">(</span><span class="n">RecommendedItem</span> <span class="n">recommendation</span> <span class="o">:</span> <span class="n">recommendations</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">recommendation</span><span class="o">);</span>
-<span class="o">}</span>
+for (RecommendedItem recommendation : recommendations) {
+    System.out.println(recommendation);
+}
 
-<span class="c1">//计算评分</span>
-<span class="n">RecommenderEvaluator</span> <span class="n">evaluator</span> <span class="o">=</span>
-        <span class="k">new</span> <span class="n">AverageAbsoluteDifferenceRecommenderEvaluator</span><span class="o">();</span>
-<span class="c1">// Use 70% of the data to train; test using the other 30%.</span>
-<span class="kt">double</span> <span class="n">score</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">recommenderBuilder</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="mf">0.7</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">);</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">score</span><span class="o">);</span>
+//计算评分
+RecommenderEvaluator evaluator =
+        new AverageAbsoluteDifferenceRecommenderEvaluator();
+// Use 70% of the data to train; test using the other 30%.
+double score = evaluator.evaluate(recommenderBuilder, null, model, 0.7, 1.0);
+System.out.println(score);
 
-<span class="c1">//计算查全率和查准率</span>
-<span class="n">RecommenderIRStatsEvaluator</span> <span class="n">statsEvaluator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericRecommenderIRStatsEvaluator</span><span class="o">();</span>
+//计算查全率和查准率
+RecommenderIRStatsEvaluator statsEvaluator = new GenericRecommenderIRStatsEvaluator();
 
-<span class="c1">// Evaluate precision and recall "at 2":</span>
-<span class="n">IRStatistics</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">statsEvaluator</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">recommenderBuilder</span><span class="o">,</span>
-        <span class="kc">null</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span>
-        <span class="n">GenericRecommenderIRStatsEvaluator</span><span class="o">.</span><span class="na">CHOOSE_THRESHOLD</span><span class="o">,</span>
-        <span class="mf">1.0</span><span class="o">);</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">stats</span><span class="o">.</span><span class="na">getPrecision</span><span class="o">());</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">stats</span><span class="o">.</span><span class="na">getRecall</span><span class="o">());</span>
+// Evaluate precision and recall "at 2":
+IRStatistics stats = statsEvaluator.evaluate(recommenderBuilder,
+        null, model, null, 4,
+        GenericRecommenderIRStatsEvaluator.CHOOSE_THRESHOLD,
+        1.0);
+System.out.println(stats.getPrecision());
+System.out.println(stats.getRecall());
 </code></pre>
-</div>
 
 <h1 id="spark">在Spark中运行</h1>
 
 <p>在Spark中运行，需要将Mahout相关的jar添加到Spark的classpath中，修改/etc/spark/conf/spark-env.sh，添加下面两行代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">SPARK_DIST_CLASSPATH</span><span class="p">=</span><span class="s">"$SPARK_DIST_CLASSPATH:/usr/lib/mahout/lib/*"</span>
-<span class="py">SPARK_DIST_CLASSPATH</span><span class="p">=</span><span class="s">"$SPARK_DIST_CLASSPATH:/usr/lib/mahout/*"</span>
+<pre><code class="language-properties">SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:/usr/lib/mahout/lib/*"
+SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:/usr/lib/mahout/*"
 </code></pre>
-</div>
 
 <p>然后，以本地模式在spark-shell中运行下面代码交互测试：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//注意：这里是本地目录
-</span><span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FileDataModel</span><span class="o">(</span><span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"intro.csv"</span><span class="o">))</span>
+<pre><code class="language-scala">//注意：这里是本地目录
+val model = new FileDataModel(new File("intro.csv"))
 
-<span class="k">val</span> <span class="n">evaluator</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RMSRecommenderEvaluator</span><span class="o">()</span>
-<span class="k">val</span> <span class="n">recommenderBuilder</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RecommenderBuilder</span> <span class="o">{</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">buildRecommender</span><span class="o">(</span><span class="n">dataModel</span><span class="k">:</span> <span class="kt">DataModel</span><span class="o">)</span><span class="k">:</span> <span class="kt">Recommender</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="k">val</span> <span class="n">similarity</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">LogLikelihoodSimilarity</span><span class="o">(</span><span class="n">dataModel</span><span class="o">)</span>
-    <span class="k">new</span> <span class="nc">GenericItemBasedRecommender</span><span class="o">(</span><span class="n">dataModel</span><span class="o">,</span> <span class="n">similarity</span><span class="o">)</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+val evaluator = new RMSRecommenderEvaluator()
+val recommenderBuilder = new RecommenderBuilder {
+  override def buildRecommender(dataModel: DataModel): Recommender = {
+    val similarity = new LogLikelihoodSimilarity(dataModel)
+    new GenericItemBasedRecommender(dataModel, similarity)
+  }
+}
 
-<span class="k">val</span> <span class="n">score</span> <span class="k">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="o">(</span><span class="n">recommenderBuilder</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="mf">0.95</span><span class="o">,</span> <span class="mf">0.05</span><span class="o">)</span>
-<span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Score=$score"</span><span class="o">)</span>
+val score = evaluator.evaluate(recommenderBuilder, null, model, 0.95, 0.05)
+println(s"Score=$score")
 
-<span class="k">val</span> <span class="n">recommender</span><span class="k">=</span><span class="n">recommenderBuilder</span><span class="o">.</span><span class="n">buildRecommender</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">users</span><span class="k">=</span><span class="n">trainingRatings</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">user</span><span class="o">).</span><span class="n">distinct</span><span class="o">().</span><span class="n">take</span><span class="o">(</span><span class="mi">20</span><span class="o">)</span>
+val recommender=recommenderBuilder.buildRecommender(model)
+val users=trainingRatings.map(_.user).distinct().take(20)
 
-<span class="k">import</span> <span class="nn">scala.collection.JavaConversions._</span>
+import scala.collection.JavaConversions._
 
-<span class="k">val</span> <span class="n">result</span><span class="k">=</span><span class="n">users</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">map</span><span class="o">{</span><span class="n">user</span><span class="k">=&gt;</span>
-  <span class="n">user</span><span class="o">+</span><span class="s">","</span><span class="o">+</span><span class="n">recommender</span><span class="o">.</span><span class="n">recommend</span><span class="o">(</span><span class="n">user</span><span class="o">,</span><span class="mi">40</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">getItemID</span><span class="o">).</span><span class="n">mkString</span><span class="o">(</span><span class="s">","</span><span class="o">)</span>
-<span class="o">}</span>
+val result=users.par.map{user=&gt;
+  user+","+recommender.recommend(user,40).map(_.getItemID).mkString(",")
+}
 </code></pre>
-</div>
 
 <p><a href="https://github.com/sujitpal/mia-scala-examples">https://github.com/sujitpal/mia-scala-examples</a>上面有一个评估基于物品或是用户的各种相似度下的评分的类，叫做 RecommenderEvaluator，供大家学习参考。</p>
 
 <h1 id="section-2">分布式运行</h1>
 
-<p>Mahout提供了<code class="highlighter-rouge">org.apache.mahout.cf.taste.hadoop.item.RecommenderJob</code>类以MapReduce的方式来实现基于物品的协同过滤，查看该类的使用说明：</p>
+<p>Mahout提供了<code>org.apache.mahout.cf.taste.hadoop.item.RecommenderJob</code>类以MapReduce的方式来实现基于物品的协同过滤，查看该类的使用说明：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop jar /usr/lib/mahout/mahout-examples-0.9-cdh5.4.0-job.jar org.apache.mahout.cf.taste.hadoop.item.RecommenderJob
+<pre><code class="language-bash">$ hadoop jar /usr/lib/mahout/mahout-examples-0.9-cdh5.4.0-job.jar org.apache.mahout.cf.taste.hadoop.item.RecommenderJob
 15/06/10 16:19:34 ERROR common.AbstractJob: Missing required option --similarityClassname
 Missing required option --similarityClassname
 Usage:
- <span class="o">[</span>--input &lt;input&gt; --output &lt;output&gt; --numRecommendations &lt;numRecommendations&gt;
+ [--input &lt;input&gt; --output &lt;output&gt; --numRecommendations &lt;numRecommendations&gt;
 --usersFile &lt;usersFile&gt; --itemsFile &lt;itemsFile&gt; --filterFile &lt;filterFile&gt;
 --booleanData &lt;booleanData&gt; --maxPrefsPerUser &lt;maxPrefsPerUser&gt;
 --minPrefsPerUser &lt;minPrefsPerUser&gt; --maxSimilaritiesPerItem
-<span class="gp">&lt;maxSimilaritiesPerItem&gt; </span>--maxPrefsInItemSimilarity &lt;maxPrefsInItemSimilarity&gt;
+&lt;maxSimilaritiesPerItem&gt; --maxPrefsInItemSimilarity &lt;maxPrefsInItemSimilarity&gt;
 --similarityClassname &lt;similarityClassname&gt; --threshold &lt;threshold&gt;
 --outputPathForSimilarityMatrix &lt;outputPathForSimilarityMatrix&gt; --randomSeed
-<span class="gp">&lt;randomSeed&gt; </span>--sequencefileOutput --help --tempDir &lt;tempDir&gt; --startPhase
-<span class="gp">&lt;startPhase&gt; </span>--endPhase &lt;endPhase&gt;]
---similarityClassname <span class="o">(</span>-s<span class="o">)</span> similarityClassname    Name of distributed
+&lt;randomSeed&gt; --sequencefileOutput --help --tempDir &lt;tempDir&gt; --startPhase
+&lt;startPhase&gt; --endPhase &lt;endPhase&gt;]
+--similarityClassname (-s) similarityClassname    Name of distributed
                                                   similarity measures class to
                                                   instantiate, alternatively
                                                   use one of the predefined
                                                   similarities
-                                                  <span class="o">([</span>SIMILARITY_COOCCURRENCE,
+                                                  ([SIMILARITY_COOCCURRENCE,
                                                   SIMILARITY_LOGLIKELIHOOD,
                                                   SIMILARITY_TANIMOTO_COEFFICIEN
                                                   T, SIMILARITY_CITY_BLOCK,
@@ -413,45 +405,43 @@ Usage:
                                                   SIMILARITY_PEARSON_CORRELATION
                                                   ,
                                                   SIMILARITY_EUCLIDEAN_DISTANCE]
-                                                  <span class="o">)</span>
+                                                  )
 </code></pre>
-</div>
 
 <p>可见，该类可以接收的命令行参数如下：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">--input(path)</code>: 存储用户偏好数据的目录，该目录下可以包含一个或多个存储用户偏好数据的文本文件；</li>
-  <li><code class="highlighter-rouge">--output(path)</code>: 结算结果的输出目录</li>
-  <li><code class="highlighter-rouge">--numRecommendations (integer)</code>: 为每个用户推荐的item数量，默认为10</li>
-  <li><code class="highlighter-rouge">--usersFile (path)</code>: 指定一个包含了一个或多个存储userID的文件路径，仅为该路径下所有文件包含的userID做推荐计算 (该选项可选)</li>
-  <li><code class="highlighter-rouge">--itemsFile (path)</code>: 指定一个包含了一个或多个存储itemID的文件路径，仅为该路径下所有文件包含的itemID做推荐计算 (该选项可选)</li>
-  <li><code class="highlighter-rouge">--filterFile (path)</code>: 指定一个路径，该路径下的文件包含了<code class="highlighter-rouge">[userID,itemID]</code>值对，userID和itemID用逗号分隔。计算结果将不会为user推荐<code class="highlighter-rouge">[userID,itemID]</code>值对中包含的item (该选项可选)</li>
-  <li><code class="highlighter-rouge">--booleanData (boolean)</code>: 如果输入数据不包含偏好数值，则将该参数设置为true，默认为false</li>
-  <li><code class="highlighter-rouge">--maxPrefsPerUser (integer)</code>: 在最后计算推荐结果的阶段，针对每一个user使用的偏好数据的最大数量，默认为10</li>
-  <li><code class="highlighter-rouge">--minPrefsPerUser (integer)</code>: 在相似度计算中，忽略所有偏好数据量少于该值的用户，默认为1</li>
-  <li><code class="highlighter-rouge">--maxSimilaritiesPerItem (integer)</code>: 针对每个item的相似度最大值，默认为100</li>
-  <li><code class="highlighter-rouge">--maxPrefsPerUserInItemSimilarity (integer)</code>: 在item相似度计算阶段，针对每个用户考虑的偏好数据最大数量，默认为1000</li>
-  <li><code class="highlighter-rouge">--similarityClassname (classname)</code>: 向量相似度计算类</li>
-  <li><code class="highlighter-rouge">outputPathForSimilarityMatrix</code>：SimilarityMatrix输出目录</li>
-  <li><code class="highlighter-rouge">--randomSeed</code>：随机种子<br />
-–<code class="highlighter-rouge">sequencefileOutput</code>：序列文件输出路径</li>
-  <li><code class="highlighter-rouge">--tempDir (path)</code>: 存储临时文件的目录，默认为当前用户的home目录下的temp目录</li>
-  <li><code class="highlighter-rouge">--startPhase</code></li>
-  <li><code class="highlighter-rouge">--endPhase</code></li>
-  <li><code class="highlighter-rouge">--threshold (double)</code>: 忽略相似度低于该阀值的item对</li>
+  <li><code>--input(path)</code>: 存储用户偏好数据的目录，该目录下可以包含一个或多个存储用户偏好数据的文本文件；</li>
+  <li><code>--output(path)</code>: 结算结果的输出目录</li>
+  <li><code>--numRecommendations (integer)</code>: 为每个用户推荐的item数量，默认为10</li>
+  <li><code>--usersFile (path)</code>: 指定一个包含了一个或多个存储userID的文件路径，仅为该路径下所有文件包含的userID做推荐计算 (该选项可选)</li>
+  <li><code>--itemsFile (path)</code>: 指定一个包含了一个或多个存储itemID的文件路径，仅为该路径下所有文件包含的itemID做推荐计算 (该选项可选)</li>
+  <li><code>--filterFile (path)</code>: 指定一个路径，该路径下的文件包含了<code>[userID,itemID]</code>值对，userID和itemID用逗号分隔。计算结果将不会为user推荐<code>[userID,itemID]</code>值对中包含的item (该选项可选)</li>
+  <li><code>--booleanData (boolean)</code>: 如果输入数据不包含偏好数值，则将该参数设置为true，默认为false</li>
+  <li><code>--maxPrefsPerUser (integer)</code>: 在最后计算推荐结果的阶段，针对每一个user使用的偏好数据的最大数量，默认为10</li>
+  <li><code>--minPrefsPerUser (integer)</code>: 在相似度计算中，忽略所有偏好数据量少于该值的用户，默认为1</li>
+  <li><code>--maxSimilaritiesPerItem (integer)</code>: 针对每个item的相似度最大值，默认为100</li>
+  <li><code>--maxPrefsPerUserInItemSimilarity (integer)</code>: 在item相似度计算阶段，针对每个用户考虑的偏好数据最大数量，默认为1000</li>
+  <li><code>--similarityClassname (classname)</code>: 向量相似度计算类</li>
+  <li><code>outputPathForSimilarityMatrix</code>：SimilarityMatrix输出目录</li>
+  <li><code>--randomSeed</code>：随机种子<br />
+–<code>sequencefileOutput</code>：序列文件输出路径</li>
+  <li><code>--tempDir (path)</code>: 存储临时文件的目录，默认为当前用户的home目录下的temp目录</li>
+  <li><code>--startPhase</code></li>
+  <li><code>--endPhase</code></li>
+  <li><code>--threshold (double)</code>: 忽略相似度低于该阀值的item对</li>
 </ul>
 
 <p>一个例子如下，使用SIMILARITY_LOGLIKELIHOOD相似度推荐物品：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop jar /usr/lib/mahout/mahout-examples-0.9-cdh5.4.0-job.jar org.apache.mahout.cf.taste.hadoop.item.RecommenderJob --input /tmp/mahout/part-00000 --output /tmp/mahout-out  -s SIMILARITY_LOGLIKELIHOOD
+<pre><code class="language-bash">$ hadoop jar /usr/lib/mahout/mahout-examples-0.9-cdh5.4.0-job.jar org.apache.mahout.cf.taste.hadoop.item.RecommenderJob --input /tmp/mahout/part-00000 --output /tmp/mahout-out  -s SIMILARITY_LOGLIKELIHOOD
 </code></pre>
-</div>
 
-<p>默认情况下，mahout使用的reduce数目为1，这样造成大数据处理时效率较低，可以通过参数mahout执行脚本中的<code class="highlighter-rouge">MAHOUT_OPTS</code>中的<code class="highlighter-rouge">-Dmapred.reduce.tasks</code>参数指定reduce数目。</p>
+<p>默认情况下，mahout使用的reduce数目为1，这样造成大数据处理时效率较低，可以通过参数mahout执行脚本中的<code>MAHOUT_OPTS</code>中的<code>-Dmapred.reduce.tasks</code>参数指定reduce数目。</p>
 
-<p>上面命令运行完成之后，会在当前用户的hdfs主目录生成temp目录，该目录可由<code class="highlighter-rouge">--tempDir (path)</code>参数设置：</p>
+<p>上面命令运行完成之后，会在当前用户的hdfs主目录生成temp目录，该目录可由<code>--tempDir (path)</code>参数设置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -ls temp
+<pre><code class="language-bash">$ hadoop fs -ls temp
 Found 10 items
 -rw-r--r--   3 root hadoop          7 2015-06-10 14:42 temp/maxValues.bin
 -rw-r--r--   3 root hadoop    5522717 2015-06-10 14:42 temp/norms.bin
@@ -464,7 +454,6 @@ drwxr-xr-x   - root hadoop          0 2015-06-10 14:39 temp/preparePreferenceMat
 drwxr-xr-x   - root hadoop          0 2015-06-10 14:50 temp/similarityMatrix
 drwxr-xr-x   - root hadoop          0 2015-06-10 14:42 temp/weights
 </code></pre>
-</div>
 
 <p>观察yarn的管理界面，该命令会生成9个任务，任务名称依次是：</p>
 
@@ -482,12 +471,11 @@ drwxr-xr-x   - root hadoop          0 2015-06-10 14:42 temp/weights
 
 <p>从任务名称，大概可以知道每个任务在做什么，如果你的输入参数不一样，生成的任务数可能不一样，这个需要测试一下才能确认。</p>
 
-<p>在hdfs上查看输出的结果，用户和推荐结果用<code class="highlighter-rouge">\t</code>分隔，推荐结果中物品之间用逗号分隔，物品后面通过冒号连接评分：</p>
+<p>在hdfs上查看输出的结果，用户和推荐结果用<code>\t</code>分隔，推荐结果中物品之间用逗号分隔，物品后面通过冒号连接评分：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>843 [10709679:4.8334665,8389878:4.833426,9133835:4.7503786,10366169:4.7503185,9007487:4.750272,8149253:4.7501993,10366165:4.750115,9780049:4.750108,8581254:4.750071,10456307:4.7500467]
+<pre><code>843 [10709679:4.8334665,8389878:4.833426,9133835:4.7503786,10366169:4.7503185,9007487:4.750272,8149253:4.7501993,10366165:4.750115,9780049:4.750108,8581254:4.750071,10456307:4.7500467]
 6253    [10117445:3.0375953,10340299:3.0340924,8321090:3.0340924,10086615:3.032164,10436801:3.0187714,9668385:3.0141575,8502110:3.013954,10476325:3.0074399,10318667:3.0004222,8320987:3.0003839]
 </code></pre>
-</div>
 
 <p>使用Java API方式执行，请参考<a href="http://blog.fens.me/hadoop-mahout-mapreduce-itemcf/">Mahout分步式程序开发 基于物品的协同过滤ItemCF</a>。</p>
 
@@ -550,7 +538,7 @@ drwxr-xr-x   - root hadoop          0 2015-06-10 14:42 temp/weights
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

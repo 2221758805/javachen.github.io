@@ -110,7 +110,7 @@
 <p>简单的概念：</p>
 
 <ul>
-  <li>Django 中每一个 Model 都继承自 <code class="highlighter-rouge">django.db.models.Model</code>。</li>
+  <li>Django 中每一个 Model 都继承自 <code>django.db.models.Model</code>。</li>
   <li>在 Model 当中每一个属性 attribute 都代表一个数据库字段。</li>
   <li>通过 Django Model API 可以执行数据库的增删改查, 而不需要写一些数据库的查询语句。</li>
 </ul>
@@ -121,85 +121,81 @@
 
 <p>下面在 myapp 应用种定义了一个 Person 模型，包括两个字段：first_name 和 last_name。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+class Person(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
 </code></pre>
-</div>
 
 <p>first_name 和 last_name 是模型的字段，每一个字段对应着一个类的属性，并且每一个属性对应数据库表中的一个列。</p>
 
 <p>上面的 Person 模型对应数据库中的表如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">myapp_person</span> <span class="p">(</span>
-    <span class="nv">"id"</span> <span class="n">serial</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="nv">"first_name"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="nv">"last_name"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-<span class="p">);</span>
+<pre><code class="language-sql">CREATE TABLE myapp_person (
+    "id" serial NOT NULL PRIMARY KEY,
+    "first_name" varchar(30) NOT NULL,
+    "last_name" varchar(30) NOT NULL
+);
 </code></pre>
-</div>
 
 <p>说明：</p>
 
 <ul>
-  <li>表名 <code class="highlighter-rouge">myapp_person</code> 是由模型的元数据自动生成的，格式为 <code class="highlighter-rouge">应用_模型</code>，你可以设置元数据覆盖该值。</li>
+  <li>表名 <code>myapp_person</code> 是由模型的元数据自动生成的，格式为 <code>应用_模型</code>，你可以设置元数据覆盖该值。</li>
   <li>id 字段在模型中是自动添加的，同样该字段名称也可以通过元数据覆盖。</li>
   <li>上面的 sql 语法是 PostgreSQL 中的语法，你可以通过设置数据库类型，生成不同数据库对应的 sql。</li>
 </ul>
 
 <h2 id="section-2">1.2 使用模型</h2>
 
-<p>使用模型之前，你需要先创建应用，然后将其加入 <code class="highlighter-rouge">INSTALLED_APPS</code>，然后编写该应用中的 models.py 文件，最后运行 <code class="highlighter-rouge">manage.py makemigrations</code> 和 <code class="highlighter-rouge">manage.py migrate</code> 在数据库中创建该实体对应的表。</p>
+<p>使用模型之前，你需要先创建应用，然后将其加入 <code>INSTALLED_APPS</code>，然后编写该应用中的 models.py 文件，最后运行 <code>manage.py makemigrations</code> 和 <code>manage.py migrate</code> 在数据库中创建该实体对应的表。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="c">#...</span>
-    <span class="s">'myapp'</span><span class="p">,</span>
-    <span class="c">#...</span>
-<span class="p">)</span>
+<pre><code class="language-python">INSTALLED_APPS = (
+    #...
+    'myapp',
+    #...
+)
 </code></pre>
-</div>
 
 <p>manage.py 参数列表</p>
 
 <ul>
-  <li><code class="highlighter-rouge">syncdb</code>：创建所有应用所需的数据表</li>
-  <li><code class="highlighter-rouge">sql </code>：显示CREATETABLE调用</li>
-  <li><code class="highlighter-rouge">sqlall</code> 如同上面的sql一样，从sql文件中初始化数据载入语句</li>
-  <li><code class="highlighter-rouge">sqlindexs</code>：显示对主键创建索引的调用</li>
-  <li><code class="highlighter-rouge">sqlclear</code>：显示DROP TABLE的调用</li>
-  <li><code class="highlighter-rouge">sqlcustom</code>：显示指定.sql文件里的自定义SQL语句</li>
-  <li><code class="highlighter-rouge">loaddata</code>：载入初始数据</li>
-  <li><code class="highlighter-rouge">dumpdata</code>：把原有的数据库里的数据输出伟JSON，XML等格式</li>
+  <li><code>syncdb</code>：创建所有应用所需的数据表</li>
+  <li><code>sql </code>：显示CREATETABLE调用</li>
+  <li><code>sqlall</code> 如同上面的sql一样，从sql文件中初始化数据载入语句</li>
+  <li><code>sqlindexs</code>：显示对主键创建索引的调用</li>
+  <li><code>sqlclear</code>：显示DROP TABLE的调用</li>
+  <li><code>sqlcustom</code>：显示指定.sql文件里的自定义SQL语句</li>
+  <li><code>loaddata</code>：载入初始数据</li>
+  <li><code>dumpdata</code>：把原有的数据库里的数据输出伟JSON，XML等格式</li>
 </ul>
 
 <p>sql、sqlall、sql、sqlindexs、sqlclear、sqlcustom 不更新数据库，只打印SQL语句以作检验之用。</p>
 
 <h2 id="section-3">1.3 模型属性</h2>
 
-<p>每个模型有一个默认的属性  <code class="highlighter-rouge">Manager</code>，他是模型访问数据库的接口。如果没有自定义的 Manager，则其默认名称为 <code class="highlighter-rouge">objects</code>。</p>
+<p>每个模型有一个默认的属性  <code>Manager</code>，他是模型访问数据库的接口。如果没有自定义的 Manager，则其默认名称为 <code>objects</code>。</p>
 
 <h2 id="section-4">1.4 模型字段</h2>
 
 <p>字段名称不能和 clean、save 或者 delete 冲突。一个示例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Musician</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">instrument</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+class Musician(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    instrument = models.CharField(max_length=100)
 
-<span class="k">class</span> <span class="nc">Album</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">artist</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Musician</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">release_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
-    <span class="n">num_stars</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+class Album(models.Model):
+    artist = models.ForeignKey(Musician)
+    name = models.CharField(max_length=100)
+    release_date = models.DateField()
+    num_stars = models.IntegerField()
 </code></pre>
-</div>
 
-<p>模型中的每一个字段都必须为  <code class="highlighter-rouge">Field</code> 类的一个实例，Django 使用该类型来决定数据库中对应的列的类型，并且每一个字段都有一些可选的参数。</p>
+<p>模型中的每一个字段都必须为  <code>Field</code> 类的一个实例，Django 使用该类型来决定数据库中对应的列的类型，并且每一个字段都有一些可选的参数。</p>
 
 <p>模型的字段可能的类型及参数如下：</p>
 
@@ -435,48 +431,44 @@
 
 <p>举例1，一个 choices 类型的例子如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">SHIRT_SIZES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">(</span><span class="s">'S'</span><span class="p">,</span> <span class="s">'Small'</span><span class="p">),</span>
-        <span class="p">(</span><span class="s">'M'</span><span class="p">,</span> <span class="s">'Medium'</span><span class="p">),</span>
-        <span class="p">(</span><span class="s">'L'</span><span class="p">,</span> <span class="s">'Large'</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
-    <span class="n">shirt_size</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">SHIRT_SIZES</span><span class="p">)</span>
+class Person(models.Model):
+    SHIRT_SIZES = (
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+    )
+    name = models.CharField(max_length=60)
+    shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
 </code></pre>
-</div>
 
-<p>你可以通过 <code class="highlighter-rouge">get_FOO_display</code> 来访问 choices 字段显示的名称：</p>
+<p>你可以通过 <code>get_FOO_display</code> 来访问 choices 字段显示的名称：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Fred Flintstone"</span><span class="p">,</span> <span class="n">shirt_size</span><span class="o">=</span><span class="s">"L"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">shirt_size</span>
-<span class="s">u'L'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">get_shirt_size_display</span><span class="p">()</span>
-<span class="s">u'Large'</span>
+<pre><code class="language-python">&gt;&gt;&gt; p = Person(name="Fred Flintstone", shirt_size="L")
+&gt;&gt;&gt; p.save()
+&gt;&gt;&gt; p.shirt_size
+u'L'
+&gt;&gt;&gt; p.get_shirt_size_display()
+u'Large'
 </code></pre>
-</div>
 
 <p>举例2，自定义主键：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Fruit</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+class Fruit(models.Model):
+    name = models.CharField(max_length=100, primary_key=True)
 </code></pre>
-</div>
 
 <p>使用 primary_key 可以指定某一个字段为主键。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">fruit</span> <span class="o">=</span> <span class="n">Fruit</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Apple'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">fruit</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">'Pear'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">fruit</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Fruit</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s">'name'</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="p">[</span><span class="s">'Apple'</span><span class="p">,</span> <span class="s">'Pear'</span><span class="p">]</span>
+<pre><code class="language-python">&gt;&gt;&gt; fruit = Fruit.objects.create(name='Apple')
+&gt;&gt;&gt; fruit.name = 'Pear'
+&gt;&gt;&gt; fruit.save()
+&gt;&gt;&gt; Fruit.objects.values_list('name', flat=True)
+['Apple', 'Pear']
 </code></pre>
-</div>
 
 <blockquote>
   <p>说明：<br />
@@ -499,73 +491,71 @@ values_list 函数</p>
 <p>Meta类有以下属性：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">abstract</code>：定义当前的模型类是不是一个抽象类。</li>
-  <li><code class="highlighter-rouge">app_label</code>：这个选项只在一种情况下使用，就是你的模型类不在默认的应用程序包下的 models.py 文件中，这时候你需要指定你这个模型类是那个应用程序的</li>
-  <li><code class="highlighter-rouge">db_table</code>：指定自定义数据库表名</li>
-  <li><code class="highlighter-rouge">db_tablespace</code>：指定这个模型对应的数据库表放在哪个数据库表空间</li>
-  <li><code class="highlighter-rouge">get_latest_by</code>：由于 Django 的管理方法中有个 <code class="highlighter-rouge">lastest()</code>方法，就是得到最近一行记录。如果你的数据模型中有 DateField 或 DateTimeField 类型的字段，你可以通过这个选项来指定 <code class="highlighter-rouge">lastest()</code> 是按照哪个字段进行选取的。</li>
-  <li><code class="highlighter-rouge">managed</code>：由于 Django 会自动根据模型类生成映射的数据库表，如果你不希望 Django 这么做，可以把 managed 的值设置为 False。</li>
-  <li><code class="highlighter-rouge">order_with_respect_to</code>：这个选项一般用于多对多的关系中，它指向一个关联对象。就是说关联对象找到这个对象后它是经过排序的。指定这个属性后你会得到一个 <code class="highlighter-rouge">get_XXX_order()</code> 和 <code class="highlighter-rouge">set_XXX_order()</code> 的方法,通过它们你可以设置或者返回排序的对象。</li>
-  <li><code class="highlighter-rouge">ordering</code>：定义排序字段</li>
-  <li><code class="highlighter-rouge">permissions</code>：为了在 Django Admin 管理模块下使用的，如果你设置了这个属性可以让指定的方法权限描述更清晰可读</li>
-  <li><code class="highlighter-rouge">proxy</code>：为了实现代理模型使用的</li>
-  <li><code class="highlighter-rouge">unique_together</code>：定义多个字段保证数据的唯一性</li>
-  <li><code class="highlighter-rouge">verbose_name</code>：给你的模型类起一个更可读的名字</li>
-  <li><code class="highlighter-rouge">verbose_name_plural</code>：这个选项是指定模型的复数形式是什么</li>
+  <li><code>abstract</code>：定义当前的模型类是不是一个抽象类。</li>
+  <li><code>app_label</code>：这个选项只在一种情况下使用，就是你的模型类不在默认的应用程序包下的 models.py 文件中，这时候你需要指定你这个模型类是那个应用程序的</li>
+  <li><code>db_table</code>：指定自定义数据库表名</li>
+  <li><code>db_tablespace</code>：指定这个模型对应的数据库表放在哪个数据库表空间</li>
+  <li><code>get_latest_by</code>：由于 Django 的管理方法中有个 <code>lastest()</code>方法，就是得到最近一行记录。如果你的数据模型中有 DateField 或 DateTimeField 类型的字段，你可以通过这个选项来指定 <code>lastest()</code> 是按照哪个字段进行选取的。</li>
+  <li><code>managed</code>：由于 Django 会自动根据模型类生成映射的数据库表，如果你不希望 Django 这么做，可以把 managed 的值设置为 False。</li>
+  <li><code>order_with_respect_to</code>：这个选项一般用于多对多的关系中，它指向一个关联对象。就是说关联对象找到这个对象后它是经过排序的。指定这个属性后你会得到一个 <code>get_XXX_order()</code> 和 <code>set_XXX_order()</code> 的方法,通过它们你可以设置或者返回排序的对象。</li>
+  <li><code>ordering</code>：定义排序字段</li>
+  <li><code>permissions</code>：为了在 Django Admin 管理模块下使用的，如果你设置了这个属性可以让指定的方法权限描述更清晰可读</li>
+  <li><code>proxy</code>：为了实现代理模型使用的</li>
+  <li><code>unique_together</code>：定义多个字段保证数据的唯一性</li>
+  <li><code>verbose_name</code>：给你的模型类起一个更可读的名字</li>
+  <li><code>verbose_name_plural</code>：这个选项是指定模型的复数形式是什么</li>
 </ul>
 
 <h2 id="section-5">1.6 模型方法</h2>
 
 <p>Manager 提供的是表级别的方法，模型中还可以定义字段级别的方法。例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+class Person(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    birth_date = models.DateField()
 
-    <span class="k">def</span> <span class="nf">baby_boomer_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">"Returns the person's baby-boomer status."</span>
-        <span class="kn">import</span> <span class="nn">datetime</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">birth_date</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">1945</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s">"Pre-boomer"</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">birth_date</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">1965</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s">"Baby boomer"</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">"Post-boomer"</span>
+    def baby_boomer_status(self):
+        "Returns the person's baby-boomer status."
+        import datetime
+        if self.birth_date &lt; datetime.date(1945, 8, 1):
+            return "Pre-boomer"
+        elif self.birth_date &lt; datetime.date(1965, 1, 1):
+            return "Baby boomer"
+        else:
+            return "Post-boomer"
 
-    <span class="k">def</span> <span class="nf">_get_full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">"Returns the person's full name."</span>
-        <span class="k">return</span> <span class="s">'</span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
-    <span class="n">full_name</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_full_name</span><span class="p">)</span>
+    def _get_full_name(self):
+        "Returns the person's full name."
+        return '%s %s' % (self.first_name, self.last_name)
+    full_name = property(_get_full_name)
 </code></pre>
-</div>
 
-<p>最后一个方法是 <code class="highlighter-rouge">property</code> 的一个示例。</p>
+<p>最后一个方法是 <code>property</code> 的一个示例。</p>
 
 <p>每一个模型有一些 Django 自动添加的方法，你也可以在模型的定义中覆盖这些方法：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">__str__()</code> (Python 3)</li>
-  <li><code class="highlighter-rouge">__unicode__()</code> (Python 2)</li>
-  <li><code class="highlighter-rouge">get_absolute_url()</code></li>
+  <li><code>__str__()</code> (Python 3)</li>
+  <li><code>__unicode__()</code> (Python 2)</li>
+  <li><code>get_absolute_url()</code></li>
 </ul>
 
-<p>你也可以覆盖模型中和数据库相关的方法，通常是  <code class="highlighter-rouge">save()</code> 和 <code class="highlighter-rouge">delete()</code> 两个方法。例如：</p>
+<p>你也可以覆盖模型中和数据库相关的方法，通常是  <code>save()</code> 和 <code>delete()</code> 两个方法。例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">tagline</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+class Blog(models.Model):
+    name = models.CharField(max_length=100)
+    tagline = models.TextField()
 
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">do_something</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Blog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="c"># Call the "real" save() method.</span>
-        <span class="n">do_something_else</span><span class="p">()</span>
+    def save(self, *args, **kwargs):
+        do_something()
+        super(Blog, self).save(*args, **kwargs) # Call the "real" save() method.
+        do_something_else()
 </code></pre>
-</div>
 
 <h2 id="sql">1.7 执行自定义的 sql</h2>
 
@@ -573,147 +563,139 @@ values_list 函数</p>
 
 <h1 id="section-6">2. 模型之间的关系</h1>
 
-<p>Django 提供了三种模型之间的关联关系： <code class="highlighter-rouge">many-to-one</code>、<code class="highlighter-rouge">many-to-many</code> 和 <code class="highlighter-rouge">one-to-one</code>。</p>
+<p>Django 提供了三种模型之间的关联关系： <code>many-to-one</code>、<code>many-to-many</code> 和 <code>one-to-one</code>。</p>
 
 <h2 id="section-7">2.1 多对一</h2>
 
-<p>定义多对一的关系，需要使用 <code class="highlighter-rouge">django.db.models.ForeignKey</code> 来引用被关联的模型。</p>
+<p>定义多对一的关系，需要使用 <code>django.db.models.ForeignKey</code> 来引用被关联的模型。</p>
 
 <p>例如，一本书有多个作者：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<pre><code class="language-python">class Author(models.Model):
+    name = models.CharField(max_length=100)
 
-<span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.ForeignKey(Author)
 </code></pre>
-</div>
 
 <p>Django 的外键表现很直观，其主要参数就是它要引用的模型类；但是注意要把被引用的模型放在前面。不过，如果不想留意顺序，也可以用字符串代替。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-  <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">"Author"</span><span class="p">)</span>
-  <span class="c">#if Author class is defined in another file myapp/models.py</span>
-  <span class="c">#author = models.ForeignKey("myapp.Author")</span>
+<pre><code class="language-python">class Book(models.Model):
+  title = models.CharField(max_length=100)
+  author = models.ForeignKey("Author")
+  #if Author class is defined in another file myapp/models.py
+  #author = models.ForeignKey("myapp.Author")
 
-<span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-   <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+class Author(models.Model):
+   name = models.CharField(max_length=100)
 </code></pre>
-</div>
 
-<p>如果要引用自己为外键，可以设置 <code class="highlighter-rouge">models.ForeignKey("self")</code> ，这在定义层次结构等类似场景很常用，比如 Employee 类可以具有类似 supervisor 或是 hired_by 这样的属性。</p>
+<p>如果要引用自己为外键，可以设置 <code>models.ForeignKey("self")</code> ，这在定义层次结构等类似场景很常用，比如 Employee 类可以具有类似 supervisor 或是 hired_by 这样的属性。</p>
 
 <p>外键 ForeignKey 只定义了关系的一端，但是另一端可以根据关系追溯回来，因为这是一种多对一的关系，多个子对象可以引用同一个父对象，而父对象可以访问到一组子对象。看下面的例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#取一本书“Moby Dick”</span>
-<span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">"Moby Dick"</span><span class="p">)</span>
+<pre><code class="language-python">#取一本书“Moby Dick”
+book = Book.objects.get(title="Moby Dick")
 
-<span class="c">#取作者名字</span>
-<span class="n">author</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">author</span>
+#取作者名字
+author = Book.author
 
-<span class="c">#获取这个作者所有的书</span>
-<span class="n">books</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">book_set</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+#获取这个作者所有的书
+books = author.book_set.all()
 </code></pre>
-</div>
 
-<p>这里从 Author 到 Book 的反向关系式通过 <code class="highlighter-rouge">Author.book_set</code> 属性来表示的（这是一个manager对象），是由 ORM 自动添加的，可以通过在 ForeignKey 里指定 <code class="highlighter-rouge">related_name</code> 参数来改变它的名字。比如：</p>
+<p>这里从 Author 到 Book 的反向关系式通过 <code>Author.book_set</code> 属性来表示的（这是一个manager对象），是由 ORM 自动添加的，可以通过在 ForeignKey 里指定 <code>related_name</code> 参数来改变它的名字。比如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">"Author"</span><span class="p">,</span> <span class="n">related_name</span> <span class="o">=</span> <span class="s">"books"</span><span class="p">)</span>
+<pre><code class="language-python">class Book(models.Model):
+  author = models.ForeignKey("Author", related_name = "books")
 
-<span class="c">#获取这个作者所有的书</span>
-<span class="n">books</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">books</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+#获取这个作者所有的书
+books = author.books.all()
 </code></pre>
-</div>
 
-<p>对简单的对象层次来说， <code class="highlighter-rouge">related_name</code> 不是必需的，但是更复杂的关系里，比如当有多个 ForeignKey 的时候就一定要指定了。</p>
+<p>对简单的对象层次来说， <code>related_name</code> 不是必需的，但是更复杂的关系里，比如当有多个 ForeignKey 的时候就一定要指定了。</p>
 
 <h2 id="section-8">2.2 多对多</h2>
 
 <p>上面的例子假设的是一本书只有一个作者，一个作者有多本书，所以是多对一的关系；但是如果一本书也有多个作者呢？这就是多对多的关系；由于SQL没有定义这种关系，必须通过外键用它能理解的方式实现多对多</p>
 
-<p>这里 Django 提供了第二种关系对象映射变量 <code class="highlighter-rouge">ManyToManyField</code>，语法上来讲， 这和 ForeignKey 是一模一样的，你在关系的一端定义，把要关联的类传递进来，ORM 会自动为另一端生成使用这个关系必要的方法和属性。</p>
+<p>这里 Django 提供了第二种关系对象映射变量 <code>ManyToManyField</code>，语法上来讲， 这和 ForeignKey 是一模一样的，你在关系的一端定义，把要关联的类传递进来，ORM 会自动为另一端生成使用这个关系必要的方法和属性。</p>
 
 <p>不过由于 ManyToManyField 的特性，在哪一端定义它通常都没有关系，因为这个关系是对称的。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<pre><code class="language-python">class Author(models.Model):
+  name = models.CharField(max_length=100)
 
-<span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-  <span class="n">authors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+class Book(models.Model):
+  title = models.CharField(max_length=100)
+  authors = models.ManyToManyField(Author)
 
-<span class="c">#获取一本书</span>
-<span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">"Python Web Dev Django"</span><span class="p">)</span>
+#获取一本书
+book = Book.objects.get(title="Python Web Dev Django")
 
-<span class="c">#获取该书所有的作者</span>
-<span class="n">authors</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">author_set</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+#获取该书所有的作者
+authors = Book.author_set.all()
 
-<span class="c">#获取第三个作者出版过的所有的书</span>
-<span class="n">books</span> <span class="o">=</span> <span class="n">authors</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">book_set</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+#获取第三个作者出版过的所有的书
+books = authors[2].book_set.all()
 </code></pre>
-</div>
 
 <p>ManyToManyField 的秘密在于它在背后创建了一张新的表来满足这类关系的查询的需要，而这张表用的则是 SQL 外键，其中每一行都代表了两个对象的一个关系，同时包含了两端的外键</p>
 
 <p>这张查询表在 Django ORM 中一般是隐藏的，不可以单独查询，只能通过关系的某一端查询；不过可以在 ManyToManyField 上指定一个特殊的选项 through 来指向一个显式的中间模型类，更方便你的手动管理关系的两端</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<pre><code class="language-python">class Author(models.Model):
+  name = models.CharField(max_length=100)
 
-<span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-  <span class="n">authors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Author</span><span class="p">,</span> <span class="n">through</span> <span class="o">=</span> <span class="s">"Authoring"</span><span class="p">)</span>
+class Book(models.Model):
+  title = models.CharField(max_length=100)
+  authors = models.ManyToManyField(Author, through = "Authoring")
 
-<span class="k">class</span> <span class="nc">Authoring</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">collaboration_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-  <span class="n">book</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Book</span><span class="p">)</span>
-  <span class="n">author</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+class Authoring(models.Model):
+  collaboration_type = models.CharField(max_length=100)
+  book = model.ForeignKey(Book)
+  author = model.ForeignKey(Author)
 </code></pre>
-</div>
 
 <p>查询 Author 和 Book 的方法和之前完全一样，另外还能构造对 authoring 的查询：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">chan_essay_compilations</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span>
-    <span class="n">author__name__endswith</span> <span class="o">=</span> <span class="s">'Chun'</span>
-    <span class="n">authoring__collaboration_type</span> <span class="o">=</span> <span class="s">'essays'</span>
-<span class="p">)</span>
+<pre><code class="language-python">chan_essay_compilations = Book.objects.filter(
+    author__name__endswith = 'Chun'
+    authoring__collaboration_type = 'essays'
+)
 </code></pre>
-</div>
 
 <h2 id="section-9">2.3 一对一</h2>
 
-<p>定义一个一对一的关系，需要使用 <code class="highlighter-rouge">OneToOneField</code> 类。</p>
+<p>定义一个一对一的关系，需要使用 <code>OneToOneField</code> 类。</p>
 
 <p>例如，Restaurant 和 Place 为一对一：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Place</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">address</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+class Place(models.Model):
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=80)
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>              <span class="c"># __unicode__ on Python 2</span>
-        <span class="k">return</span> <span class="s">"</span><span class="si">%</span><span class="s">s the place"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    def __str__(self):              # __unicode__ on Python 2
+        return "%s the place" % self.name
 
-<span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">place</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">serves_hot_dogs</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">serves_pizza</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+class Restaurant(models.Model):
+    place = models.OneToOneField(Place, primary_key=True)
+    serves_hot_dogs = models.BooleanField(default=False)
+    serves_pizza = models.BooleanField(default=False)
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>              <span class="c"># __unicode__ on Python 2</span>
-        <span class="k">return</span> <span class="s">"</span><span class="si">%</span><span class="s">s the restaurant"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">place</span><span class="o">.</span><span class="n">name</span>
+    def __str__(self):              # __unicode__ on Python 2
+        return "%s the restaurant" % self.place.name
 
-<span class="k">class</span> <span class="nc">Waiter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">restaurant</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Restaurant</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+class Waiter(models.Model):
+    restaurant = models.ForeignKey(Restaurant)
+    name = models.CharField(max_length=50)
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>              <span class="c"># __unicode__ on Python 2</span>
-        <span class="k">return</span> <span class="s">"</span><span class="si">%</span><span class="s">s the waiter at </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">restaurant</span><span class="p">)</span>
+    def __str__(self):              # __unicode__ on Python 2
+        return "%s the waiter at %s" % (self.name, self.restaurant)
 </code></pre>
-</div>
 
 <p>一个 Restaurant 都会有一个 Place，实际上你也可以使用继承的方式来定义。</p>
 
@@ -721,118 +703,106 @@ values_list 函数</p>
 
 <p>创建 Place：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">Place</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Demon Dogs'</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s">'944 W. Fullerton'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">Place</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Ace Hardware'</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s">'1013 N. Ashland'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p2</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; p1 = Place(name='Demon Dogs', address='944 W. Fullerton')
+&gt;&gt;&gt; p1.save()
+&gt;&gt;&gt; p2 = Place(name='Ace Hardware', address='1013 N. Ashland')
+&gt;&gt;&gt; p2.save()
 </code></pre>
-</div>
 
 <p>创建 Restaurant 并关联到 Place：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">Restaurant</span><span class="p">(</span><span class="n">place</span><span class="o">=</span><span class="n">p1</span><span class="p">,</span> <span class="n">serves_hot_dogs</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">serves_pizza</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; r = Restaurant(place=p1, serves_hot_dogs=True, serves_pizza=False)
+&gt;&gt;&gt; r.save()
 </code></pre>
-</div>
 
 <p>然后，可以这样访问：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">place</span>
-<span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p1</span><span class="o">.</span><span class="n">restaurant</span>
-<span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span>
+<pre><code class="language-python">&gt;&gt;&gt; r.place
+&lt;Place: Demon Dogs the place&gt;
+&gt;&gt;&gt; p1.restaurant
+&lt;Restaurant: Demon Dogs the restaurant&gt;
 </code></pre>
-</div>
 
 <p>这时候，p2 没有与之关联的 Restaurant，如果通过 p2 访问 Restaurant 就会提示异常：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ObjectDoesNotExist</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">try</span><span class="p">:</span>
-<span class="o">&gt;&gt;&gt;</span>     <span class="n">p2</span><span class="o">.</span><span class="n">restaurant</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
-<span class="o">&gt;&gt;&gt;</span>     <span class="k">print</span><span class="p">(</span><span class="s">"There is no restaurant here."</span><span class="p">)</span>
-<span class="n">There</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">restaurant</span> <span class="n">here</span><span class="o">.</span>
+<pre><code class="language-python">&gt;&gt;&gt; from django.core.exceptions import ObjectDoesNotExist
+&gt;&gt;&gt; try:
+&gt;&gt;&gt;     p2.restaurant
+&gt;&gt;&gt; except ObjectDoesNotExist:
+&gt;&gt;&gt;     print("There is no restaurant here.")
+There is no restaurant here.
 </code></pre>
-</div>
 
 <p>你可以通过下面的方式来避免出现异常：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="s">'restaurant'</span><span class="p">)</span>
-<span class="bp">False</span>
+<pre><code class="language-python">&gt;&gt;&gt; hasattr(p2, 'restaurant')
+False
 </code></pre>
-</div>
 
 <p>下面可以做一些赋值操作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">place</span> <span class="o">=</span> <span class="n">p2</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p2</span><span class="o">.</span><span class="n">restaurant</span>
-<span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Ace</span> <span class="n">Hardware</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">place</span>
-<span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Ace</span> <span class="n">Hardware</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span>
+<pre><code class="language-python">&gt;&gt;&gt; r.place = p2
+&gt;&gt;&gt; r.save()
+&gt;&gt;&gt; p2.restaurant
+&lt;Restaurant: Ace Hardware the restaurant&gt;
+&gt;&gt;&gt; r.place
+&lt;Place: Ace Hardware the place&gt;
 </code></pre>
-</div>
 
 <p>也可以反向赋值：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">p1</span><span class="o">.</span><span class="n">restaurant</span> <span class="o">=</span> <span class="n">r</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">p1</span><span class="o">.</span><span class="n">restaurant</span>
-<span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span>
+<pre><code class="language-python">&gt;&gt;&gt; p1.restaurant = r
+&gt;&gt;&gt; p1.restaurant
+&lt;Restaurant: Demon Dogs the restaurant&gt;
 </code></pre>
-</div>
 
 <p>查询所有的 Restaurant 和 Place：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Restaurant</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Ace</span> <span class="n">Hardware</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'name'</span><span class="p">)</span>
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Ace</span> <span class="n">Hardware</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span><span class="p">]</span>
+<pre><code class="language-python">&gt;&gt;&gt; Restaurant.objects.all()
+[&lt;Restaurant: Demon Dogs the restaurant&gt;, &lt;Restaurant: Ace Hardware the restaurant&gt;]
+&gt;&gt;&gt; Place.objects.order_by('name')
+[&lt;Place: Ace Hardware the place&gt;, &lt;Place: Demon Dogs the place&gt;]
 </code></pre>
-</div>
 
 <p>当然，也可以使用跨关系查找：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Restaurant</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">place</span><span class="o">=</span><span class="n">p1</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Restaurant</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">place__pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Restaurant</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">place__name__startswith</span><span class="o">=</span><span class="s">"Demon"</span><span class="p">)</span>
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Restaurant</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">place__address__contains</span><span class="o">=</span><span class="s">"Ashland"</span><span class="p">)</span>
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Restaurant</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span><span class="p">]</span>
+<pre><code class="language-python">&gt;&gt;&gt; Restaurant.objects.get(place=p1)
+&lt;Restaurant: Demon Dogs the restaurant&gt;
+&gt;&gt;&gt; Restaurant.objects.get(place__pk=1)
+&lt;Restaurant: Demon Dogs the restaurant&gt;
+&gt;&gt;&gt; Restaurant.objects.filter(place__name__startswith="Demon")
+[&lt;Restaurant: Demon Dogs the restaurant&gt;]
+&gt;&gt;&gt; Restaurant.objects.exclude(place__address__contains="Ashland")
+[&lt;Restaurant: Demon Dogs the restaurant&gt;]
 </code></pre>
-</div>
 
 <p>反向查找：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">restaurant__place</span><span class="o">=</span><span class="n">p1</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">restaurant</span><span class="o">=</span><span class="n">r</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">restaurant__place__name__startswith</span><span class="o">=</span><span class="s">"Demon"</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">Place</span><span class="p">:</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">place</span><span class="o">&gt;</span>
+<pre><code class="language-python">&gt;&gt;&gt; Place.objects.get(pk=1)
+&lt;Place: Demon Dogs the place&gt;
+&gt;&gt;&gt; Place.objects.get(restaurant__place=p1)
+&lt;Place: Demon Dogs the place&gt;
+&gt;&gt;&gt; Place.objects.get(restaurant=r)
+&lt;Place: Demon Dogs the place&gt;
+&gt;&gt;&gt; Place.objects.get(restaurant__place__name__startswith="Demon")
+&lt;Place: Demon Dogs the place&gt;
 </code></pre>
-</div>
 
 <p>创建一个 Waiter：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">w</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">waiter_set</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Joe'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">w</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">w</span>
-<span class="o">&lt;</span><span class="n">Waiter</span><span class="p">:</span> <span class="n">Joe</span> <span class="n">the</span> <span class="n">waiter</span> <span class="n">at</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span>
+<pre><code class="language-python">&gt;&gt;&gt; w = r.waiter_set.create(name='Joe')
+&gt;&gt;&gt; w.save()
+&gt;&gt;&gt; w
+&lt;Waiter: Joe the waiter at Demon Dogs the restaurant&gt;
 </code></pre>
-</div>
 
 <p>然后，查询：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Waiter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">restaurant__place</span><span class="o">=</span><span class="n">p1</span><span class="p">)</span>
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Waiter</span><span class="p">:</span> <span class="n">Joe</span> <span class="n">the</span> <span class="n">waiter</span> <span class="n">at</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Waiter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">restaurant__place__name__startswith</span><span class="o">=</span><span class="s">"Demon"</span><span class="p">)</span>
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Waiter</span><span class="p">:</span> <span class="n">Joe</span> <span class="n">the</span> <span class="n">waiter</span> <span class="n">at</span> <span class="n">Demon</span> <span class="n">Dogs</span> <span class="n">the</span> <span class="n">restaurant</span><span class="o">&gt;</span><span class="p">]</span>
+<pre><code class="language-python">&gt;&gt;&gt; Waiter.objects.filter(restaurant__place=p1)
+[&lt;Waiter: Joe the waiter at Demon Dogs the restaurant&gt;]
+&gt;&gt;&gt; Waiter.objects.filter(restaurant__place__name__startswith="Demon")
+[&lt;Waiter: Joe the waiter at Demon Dogs the restaurant&gt;]
 </code></pre>
-</div>
 
 <h1 id="section-10">3. 模型继承</h1>
 
@@ -846,122 +816,117 @@ values_list 函数</p>
 
 <p>方式一：每个类一张表</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
  
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-  <span class="n">sex</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+class Person(models.Model):
+  name = models.CharField(max_length=20)
+  sex = models.BooleanField(default=True)
  
-<span class="k">class</span> <span class="nc">teacher</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-  <span class="n">subject</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+class teacher(Person):
+  subject = models.CharField(max_length=20)
  
-<span class="k">class</span> <span class="nc">student</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-  <span class="n">course</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+class student(Person):
+  course = models.CharField(max_length=20)
 </code></pre>
-</div>
 
-<p>执行 <code class="highlighter-rouge">python manage.py sqlall</code>：</p>
+<p>执行 <code>python manage.py sqlall</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">"blog_person"</span> <span class="p">(</span>
-    <span class="nv">"id"</span> <span class="n">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="nv">"name"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="nv">"sex"</span> <span class="n">bool</span> <span class="k">NOT</span> <span class="k">NULL</span>
-<span class="p">)</span>
-<span class="p">;</span>
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">"blog_teacher"</span> <span class="p">(</span>
-    <span class="nv">"person_ptr_id"</span> <span class="n">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="k">REFERENCES</span> <span class="nv">"blog_person"</span> <span class="p">(</span><span class="nv">"id"</span><span class="p">),</span>
-    <span class="nv">"subject"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-<span class="p">)</span>
-<span class="p">;</span>
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">"blog_student"</span> <span class="p">(</span>
-    <span class="nv">"person_ptr_id"</span> <span class="n">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="k">REFERENCES</span> <span class="nv">"blog_person"</span> <span class="p">(</span><span class="nv">"id"</span><span class="p">),</span>
-    <span class="nv">"course"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-<span class="p">)</span>
-<span class="p">;</span>
+<pre><code class="language-sql">BEGIN;
+CREATE TABLE "blog_person" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(20) NOT NULL,
+    "sex" bool NOT NULL
+)
+;
+CREATE TABLE "blog_teacher" (
+    "person_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "blog_person" ("id"),
+    "subject" varchar(20) NOT NULL
+)
+;
+CREATE TABLE "blog_student" (
+    "person_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "blog_person" ("id"),
+    "course" varchar(20) NOT NULL
+)
+;
  
-<span class="k">COMMIT</span><span class="p">;</span>
+COMMIT;
 </code></pre>
-</div>
 
 <p>方式二：每个具体类一张表，父类不需要创建表</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
  
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-  <span class="n">sex</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+class Person(models.Model):
+  name = models.CharField(max_length=20)
+  sex = models.BooleanField(default=True)
  
-  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-    <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+  class Meta:
+    abstract = True
  
-<span class="k">class</span> <span class="nc">teacher</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-  <span class="n">subject</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+class teacher(Person):
+  subject = models.CharField(max_length=20)
  
-<span class="k">class</span> <span class="nc">student</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-  <span class="n">course</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+class student(Person):
+  course = models.CharField(max_length=20)
 </code></pre>
-</div>
 
-<p>执行 <code class="highlighter-rouge">python manage.py sqlall</code>：</p>
+<p>执行 <code>python manage.py sqlall</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">"blog_teacher"</span> <span class="p">(</span>
-    <span class="nv">"id"</span> <span class="n">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="nv">"name"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="nv">"sex"</span> <span class="n">bool</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="nv">"subject"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-<span class="p">)</span>
-<span class="p">;</span>
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">"blog_student"</span> <span class="p">(</span>
-    <span class="nv">"id"</span> <span class="n">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="nv">"name"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="nv">"sex"</span> <span class="n">bool</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="nv">"course"</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-<span class="p">)</span>
-<span class="p">;</span>
+<pre><code class="language-sql">BEGIN;
+CREATE TABLE "blog_teacher" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(20) NOT NULL,
+    "sex" bool NOT NULL,
+    "subject" varchar(20) NOT NULL
+)
+;
+CREATE TABLE "blog_student" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(20) NOT NULL,
+    "sex" bool NOT NULL,
+    "course" varchar(20) NOT NULL
+)
+;
  
-<span class="k">COMMIT</span><span class="p">;</span>
+COMMIT;
 </code></pre>
-</div>
 
 <p>可以通过 Meta 嵌套类自定义每个子类的表名：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
  
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-  <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-  <span class="n">sex</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+class Person(models.Model):
+  name = models.CharField(max_length=20)
+  sex = models.BooleanField(default=True)
  
-  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-    <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+  class Meta:
+    abstract = True
  
-<span class="k">class</span> <span class="nc">teacher</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-  <span class="n">subject</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+class teacher(Person):
+  subject = models.CharField(max_length=20)
  
-  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-    <span class="n">db_table</span> <span class="o">=</span> <span class="s">"Teacher"</span>
+  class Meta:
+    db_table = "Teacher"
  
-<span class="k">class</span> <span class="nc">student</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-  <span class="n">course</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+class student(Person):
+  course = models.CharField(max_length=20)
  
-  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-    <span class="n">db_table</span> <span class="o">=</span> <span class="s">"Student"</span>
- <span class="sb">``</span><span class="err">`</span>   
+  class Meta:
+    db_table = "Student"
+ ```   
 
-<span class="err">方式三：代理模型，为子类增加方法，但不能增加属性</span>
+方式三：代理模型，为子类增加方法，但不能增加属性
 
- <span class="sb">``</span><span class="err">`</span> <span class="n">python</span>  
-<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+ ``` python  
+from django.db import models
  
-<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">User</span><span class="p">):</span>
-  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-    <span class="n">proxy</span> <span class="o">=</span> <span class="bp">True</span>
+class Person(User):
+  class Meta:
+    proxy = True
  
-  <span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">pass</span>
+  def some_function(self):
+    pass
 </code></pre>
-</div>
 
 <p>这样的方式不会改变数据存储结构，但可以纵向的扩展子类Person的方法，并且基础User父类的所有属性和方法。</p>
 
@@ -1025,7 +990,7 @@ values_list 函数</p>
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

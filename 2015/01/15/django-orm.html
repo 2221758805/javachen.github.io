@@ -109,78 +109,73 @@
 
 <p>一个 blog 的应用中 mysite/blog/models.py 有以下实体：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<pre><code class="language-python">from django.db import models
 
-<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">tagline</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+class Blog(models.Model):
+    name = models.CharField(max_length=100)
+    tagline = models.TextField()
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>              <span class="c"># __unicode__ on Python 2</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
 
-<span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">()</span>
+class Author(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>              <span class="c"># __unicode__ on Python 2</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
 
-<span class="k">class</span> <span class="nc">Entry</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">blog</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Blog</span><span class="p">)</span>
-    <span class="n">headline</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
-    <span class="n">body_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-    <span class="n">pub_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
-    <span class="n">mod_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
-    <span class="n">authors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
-    <span class="n">n_comments</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
-    <span class="n">n_pingbacks</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
-    <span class="n">rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+class Entry(models.Model):
+    blog = models.ForeignKey(Blog)
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    pub_date = models.DateField()
+    mod_date = models.DateField()
+    authors = models.ManyToManyField(Author)
+    n_comments = models.IntegerField()
+    n_pingbacks = models.IntegerField()
+    rating = models.IntegerField()
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>              <span class="c"># __unicode__ on Python 2</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">headline</span>
+    def __str__(self):              # __unicode__ on Python 2
+        return self.headline
 </code></pre>
-</div>
 
 <h2 id="section">创建对象</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Blog</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Blog</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Beatles Blog'</span><span class="p">,</span> <span class="n">tagline</span><span class="o">=</span><span class="s">'All the latest Beatles news.'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; from blog.models import Blog
+&gt;&gt;&gt; b = Blog(name='Beatles Blog', tagline='All the latest Beatles news.')
+&gt;&gt;&gt; b.save()
 </code></pre>
-</div>
 
 <p>你也可以修改实体，然后保存：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">b5</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">'New name'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b5</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>    
+<pre><code class="language-python">&gt;&gt;&gt; b5.name = 'New name'
+&gt;&gt;&gt; b5.save()    
 </code></pre>
-</div>
 
 <h2 id="section-1">保存外键信息</h2>
 
 <p>下面例子更新 entry 实例的 blog 属性：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Entry</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cheese_blog</span> <span class="o">=</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Cheddar Talk"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">entry</span><span class="o">.</span><span class="n">blog</span> <span class="o">=</span> <span class="n">cheese_blog</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">entry</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; from blog.models import Entry
+&gt;&gt;&gt; entry = Entry.objects.get(pk=1)
+&gt;&gt;&gt; cheese_blog = Blog.objects.get(name="Cheddar Talk")
+&gt;&gt;&gt; entry.blog = cheese_blog
+&gt;&gt;&gt; entry.save()
 </code></pre>
-</div>
 
 <p>下面是更新一个 ManyToManyField 字段：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Author</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">joe</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Joe"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">entry</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">joe</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">john</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"John"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">paul</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Paul"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">george</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"George"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ringo</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Ringo"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">entry</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">john</span><span class="p">,</span> <span class="n">paul</span><span class="p">,</span> <span class="n">george</span><span class="p">,</span> <span class="n">ringo</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; from blog.models import Author
+&gt;&gt;&gt; joe = Author.objects.create(name="Joe")
+&gt;&gt;&gt; entry.authors.add(joe)
+&gt;&gt;&gt; 
+&gt;&gt;&gt; john = Author.objects.create(name="John")
+&gt;&gt;&gt; paul = Author.objects.create(name="Paul")
+&gt;&gt;&gt; george = Author.objects.create(name="George")
+&gt;&gt;&gt; ringo = Author.objects.create(name="Ringo")
+&gt;&gt;&gt; entry.authors.add(john, paul, george, ringo)
 </code></pre>
-</div>
 
 <h2 id="section-2">查询对象</h2>
 
@@ -193,44 +188,41 @@
 <p>Manager 的几个常用方法：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">all</code>：返回一个包含模式里所有数据库记录的 QuerySet</li>
-  <li><code class="highlighter-rouge">filter</code>：返回一个包含符合指定条件的模型记录的 QuerySet</li>
-  <li><code class="highlighter-rouge">exclude</code>：和 filter 相反，查找不符合条件的那些记录</li>
-  <li><code class="highlighter-rouge">get</code>：获取单个符合条件的记录（没有找到或者又超过一个结果都会抛出异常）</li>
-  <li><code class="highlighter-rouge">order_by</code>：改变 QuerySet 默认的排序</li>
+  <li><code>all</code>：返回一个包含模式里所有数据库记录的 QuerySet</li>
+  <li><code>filter</code>：返回一个包含符合指定条件的模型记录的 QuerySet</li>
+  <li><code>exclude</code>：和 filter 相反，查找不符合条件的那些记录</li>
+  <li><code>get</code>：获取单个符合条件的记录（没有找到或者又超过一个结果都会抛出异常）</li>
+  <li><code>order_by</code>：改变 QuerySet 默认的排序</li>
 </ul>
 
 <p>你可以通过模型的 Manager 对象获取 QuerySet 对象：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span>
-<span class="o">&lt;</span><span class="n">django</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Manager</span> <span class="nb">object</span> <span class="n">at</span> <span class="o">...&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Blog</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Foo'</span><span class="p">,</span> <span class="n">tagline</span><span class="o">=</span><span class="s">'Bar'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">objects</span>
-<span class="n">Traceback</span><span class="p">:</span>
-    <span class="o">...</span>
-<span class="nb">AttributeError</span><span class="p">:</span> <span class="s">"Manager isn't accessible via Blog instances."</span>
+<pre><code class="language-python">&gt;&gt;&gt; Blog.objects
+&lt;django.db.models.manager.Manager object at ...&gt;
+&gt;&gt;&gt; b = Blog(name='Foo', tagline='Bar')
+&gt;&gt;&gt; b.objects
+Traceback:
+    ...
+AttributeError: "Manager isn't accessible via Blog instances."
 </code></pre>
-</div>
 
 <p>获取所有的 blog 内容:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">all_entries</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; all_entries = Entry.objects.all()
 
-<span class="c">#正向排序</span>
-<span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">"headline"</span><span class="p">)</span>
-<span class="c">#反向排序</span>
-<span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">"-headline"</span><span class="p">)</span>
+#正向排序
+Entry.objects.all().order_by("headline")
+#反向排序
+Entry.objects.all().order_by("-headline")
 </code></pre>
-</div>
 
 <p>获取 headline 为 Python 开头的 blog :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__startswith</span><span class="o">=</span><span class="s">"Python"</span><span class="p">)</span>
+<pre><code class="language-python">Entry.objects.filter(headline__startswith="Python")
 
-<span class="c">#支持链式操作</span>
-<span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__startswith</span><span class="o">=</span><span class="s">"Python"</span><span class="p">)</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">pub_date__gte</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pub_date__gte</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+#支持链式操作
+Entry.objects.filter(headline__startswith="Python").exclude(pub_date__gte=datetime.now()).filter(pub_date__gte=datetime(2014, 1, 1))
 </code></pre>
-</div>
 
 <h3 id="queryset-">QuerySet 类</h3>
 
@@ -239,157 +231,141 @@
 <p>QuerySet 的几个常用方法：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">distinct</code></li>
-  <li><code class="highlighter-rouge">values</code></li>
-  <li><code class="highlighter-rouge">values_list</code></li>
-  <li><code class="highlighter-rouge">select_related</code></li>
-  <li><code class="highlighter-rouge">filter</code>：返回一个包含符合指定条件的模型记录的 QuerySet</li>
-  <li><code class="highlighter-rouge">extra</code>：增加结果集以外的字段</li>
+  <li><code>distinct</code></li>
+  <li><code>values</code></li>
+  <li><code>values_list</code></li>
+  <li><code>select_related</code></li>
+  <li><code>filter</code>：返回一个包含符合指定条件的模型记录的 QuerySet</li>
+  <li><code>extra</code>：增加结果集以外的字段</li>
 </ul>
 
 <h4 id="section-3">延时查询</h4>
 
 <p>每次你完成一个 QuerySet，你获得一个全新的结果集，不包括前面的。每次完成的结果集是可以贮存，使用或复用：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">q1</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__startswith</span><span class="o">=</span><span class="s">"What"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">q2</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">pub_date__gte</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">q3</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pub_date__gte</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+<pre><code class="language-python">&gt;&gt;&gt; q1 = Entry.objects.filter(headline__startswith="What")
+&gt;&gt;&gt; q2 = q1.exclude(pub_date__gte=datetime.date.today())
+&gt;&gt;&gt; q3 = q1.filter(pub_date__gte=datetime.date.today())
 </code></pre>
-</div>
 
 <p>三个 QuerySets 是分开的，第一个是 headline 以 “What” 单词开头的结果集，第二个是第一个的子集，即 pub_date 不大于现在的，第三个是第一个的子集 ，pub_date 大于现在的。</p>
 
 <p>QuerySets 是延迟的，创建 QuerySets 不会触及到数据库操作，你可以多个过滤合并到一起，直到求值的时候 django才会开始查询。如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__startswith</span><span class="o">=</span><span class="s">"What"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pub_date__lte</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">body_text__icontains</span><span class="o">=</span><span class="s">"food"</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; q = Entry.objects.filter(headline__startswith="What")
+&gt;&gt;&gt; q = q.filter(pub_date__lte=datetime.date.today())
+&gt;&gt;&gt; q = q.exclude(body_text__icontains="food")
+&gt;&gt;&gt; print(q)
 </code></pre>
-</div>
 
-<p>虽然看起来执行了三个过滤条件，实际上最后执行 <code class="highlighter-rouge">print q</code> 的时候，django 才开始查询执行 SQL 到数据库。</p>
+<p>虽然看起来执行了三个过滤条件，实际上最后执行 <code>print q</code> 的时候，django 才开始查询执行 SQL 到数据库。</p>
 
 <p>可以使用 python 的数组限制语法限定 QuerySet，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.all()[:5]
+&gt;&gt;&gt; Entry.objects.all()[5:10]
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">"headline"</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">"headline"</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
+&gt;&gt;&gt; Entry.objects.all().order_by("headline")[:4]
+&gt;&gt;&gt; Entry.objects.all().order_by("headline")[4:8]
 </code></pre>
-</div>
 
 <p>一般的，限制 QuerySet 返回新的 QuerySet，不会立即求值查询，除非你使用了 “step” 参数</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()[:</span><span class="mi">10</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'headline'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'headline'</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.all()[:10:2]
+&gt;&gt;&gt; Entry.objects.order_by('headline')[0]
+&gt;&gt;&gt; Entry.objects.order_by('headline')[0:1].get()
 </code></pre>
-</div>
 
 <h4 id="section-4">字段过滤</h4>
 
-<p>字段查找是指定 SQL 语句的 WHERE 条件从句，通过 QuerySet 的方法 <code class="highlighter-rouge">filter()</code>, <code class="highlighter-rouge">exclude()</code> 和 <code class="highlighter-rouge">get()</code> 指定查询关键字。</p>
+<p>字段查找是指定 SQL 语句的 WHERE 条件从句，通过 QuerySet 的方法 <code>filter()</code>, <code>exclude()</code> 和 <code>get()</code> 指定查询关键字。</p>
 
-<p>格式为：<code class="highlighter-rouge">field__lookuptype=value</code>。</p>
+<p>格式为：<code>field__lookuptype=value</code>。</p>
 
 <p>lookuptype 有以下几种：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">gt</code> ： 大于</li>
-  <li><code class="highlighter-rouge">gte</code> : 大于等于</li>
-  <li><code class="highlighter-rouge">in</code> : 包含</li>
-  <li><code class="highlighter-rouge">lt</code> : 小于</li>
-  <li><code class="highlighter-rouge">lte</code> : 小于等于</li>
-  <li><code class="highlighter-rouge">exact</code>：</li>
-  <li><code class="highlighter-rouge">iexact</code>：</li>
-  <li><code class="highlighter-rouge">contains</code>：包含查询，区分大小写</li>
-  <li><code class="highlighter-rouge">icontains</code>：不区分大小写</li>
-  <li><code class="highlighter-rouge">startswith</code>：匹配开头</li>
-  <li><code class="highlighter-rouge">endswith</code>：匹配结尾</li>
-  <li><code class="highlighter-rouge">istartswith</code>：匹配开头，不区分大小写</li>
-  <li><code class="highlighter-rouge">iendswith</code>：匹配结尾，不区分大小写</li>
+  <li><code>gt</code> ： 大于</li>
+  <li><code>gte</code> : 大于等于</li>
+  <li><code>in</code> : 包含</li>
+  <li><code>lt</code> : 小于</li>
+  <li><code>lte</code> : 小于等于</li>
+  <li><code>exact</code>：</li>
+  <li><code>iexact</code>：</li>
+  <li><code>contains</code>：包含查询，区分大小写</li>
+  <li><code>icontains</code>：不区分大小写</li>
+  <li><code>startswith</code>：匹配开头</li>
+  <li><code>endswith</code>：匹配结尾</li>
+  <li><code>istartswith</code>：匹配开头，不区分大小写</li>
+  <li><code>iendswith</code>：匹配结尾，不区分大小写</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pub_date__lte</span><span class="o">=</span><span class="s">'2006-01-01'</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.filter(pub_date__lte='2006-01-01')
 </code></pre>
-</div>
 
 <p>等价于:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">blog_entry</span> <span class="k">WHERE</span> <span class="n">pub_date</span> <span class="o">&lt;=</span> <span class="s1">'2006-01-01'</span><span class="p">;</span>
+<pre><code class="language-sql">SELECT * FROM blog_entry WHERE pub_date &lt;= '2006-01-01';
 </code></pre>
-</div>
 
 <p>当实体中存在  ForeignKey 时，其外键字段名称为模型名称加上 ‘_id’：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">blog_id</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.filter(blog_id=4)
 </code></pre>
-</div>
 
 <p>下面是一些举例：</p>
 
 <p>a、exact</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">headline__exact</span><span class="o">=</span><span class="s">"Man bites dog"</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.get(headline__exact="Man bites dog")
 </code></pre>
-</div>
 
 <p>相当于：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="p">...</span> <span class="k">WHERE</span> <span class="n">headline</span> <span class="o">=</span> <span class="s1">'Man bites dog'</span><span class="p">;</span>
+<pre><code class="language-sql">SELECT ... WHERE headline = 'Man bites dog';
 </code></pre>
-</div>
 
-<p>如果查询没有提供双下划线，那么会默认 <code class="highlighter-rouge">__exact</code>:</p>
+<p>如果查询没有提供双下划线，那么会默认 <code>__exact</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id__exact</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c"># Explicit form</span>
-<span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c"># __exact is implied</span>
+<pre><code class="language-python">Entry.objects.get(id__exact=14) # Explicit form
+Entry.objects.get(id=14) # __exact is implied
 
-<span class="c">#主键查询</span>
-<span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c"># pk implies id__exact</span>
+#主键查询
+Entry.objects.get(pk=14) # pk implies id__exact
 </code></pre>
-</div>
 
 <p>b、iexact——忽略大小写</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name__iexact</span><span class="o">=</span><span class="s">"beatles blog"</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; Blog.objects.get(name__iexact="beatles blog")
 </code></pre>
-</div>
 
 <p>将要匹配 blog 名称为 “Beatles Blog”, “beatles blog”, 甚至是 “BeAtlES blOG”。</p>
 
 <p>c、contains——包含查询，区分大小写</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">headline__contains</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">)</span>
+<pre><code class="language-python">Entry.objects.get(headline__contains='Lennon')
 </code></pre>
-</div>
 
 <p>转化为 SQL:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="p">...</span> <span class="k">WHERE</span> <span class="n">headline</span> <span class="k">LIKE</span> <span class="s1">'%Lennon%'</span><span class="p">;</span>
+<pre><code class="language-sql">SELECT ... WHERE headline LIKE '%Lennon%';
 </code></pre>
-</div>
 
 <p>如果有百分号，则会进行转义：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__contains</span><span class="o">=</span><span class="s">'</span><span class="si">%</span><span class="s">'</span><span class="p">)</span>
+<pre><code class="language-python">Entry.objects.filter(headline__contains='%')
 </code></pre>
-</div>
 
 <p>转义为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="p">...</span> <span class="k">WHERE</span> <span class="n">headline</span> <span class="k">LIKE</span> <span class="s1">'%</span><span class="se">\%</span><span class="s1">%'</span><span class="p">;</span>
+<pre><code class="language-sql">SELECT ... WHERE headline LIKE '%\%%';
 </code></pre>
-</div>
 
 <p>d、in 查询</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get blogs  with id 1, 4 and 7</span>
-<span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+<pre><code class="language-python"># Get blogs  with id 1, 4 and 7
+Entry.objects.filter(pk__in=[1,4,7])
 </code></pre>
-</div>
 
 <h4 id="section-5">跨关系查询</h4>
 
@@ -397,129 +373,114 @@
 
 <p>获取所有 blog 名称为 Beatles Blog 的 Entry 列表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">blog__name</span><span class="o">=</span><span class="s">'Beatles Blog'</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.filter(blog__name='Beatles Blog')
 </code></pre>
-</div>
 
 <p>也可以反向查询：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">entry__headline__contains</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; Blog.objects.filter(entry__headline__contains='Lennon')
 </code></pre>
-</div>
 
 <p>如果跨越多层关系查询，中间模型没有值，django会作为空对待不会发生异常。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">entry__authors__name</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">)</span>
-<span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">entry__authors__name__isnull</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">entry__authors__isnull</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">entry__authors__name__isnull</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<pre><code class="language-python">Blog.objects.filter(entry__authors__name='Lennon')
+Blog.objects.filter(entry__authors__name__isnull=True)
+Blog.objects.filter(entry__authors__isnull=False,
+        entry__authors__name__isnull=True)
 </code></pre>
-</div>
 
 <p>也支持多条件跨关系查询：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">entry__headline__contains</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">,</span>
-        <span class="n">entry__pub_date__year</span><span class="o">=</span><span class="mi">2008</span><span class="p">)</span>
+<pre><code class="language-python">Blog.objects.filter(entry__headline__contains='Lennon',
+        entry__pub_date__year=2008)
 </code></pre>
-</div>
 
 <p>或者：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">entry__headline__contains</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">)</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span>
-        <span class="n">entry__pub_date__year</span><span class="o">=</span><span class="mi">2008</span><span class="p">)</span>        
+<pre><code class="language-python">Blog.objects.filter(entry__headline__contains='Lennon').filter(
+        entry__pub_date__year=2008)        
 </code></pre>
-</div>
 
 <h4 id="extra--sql">使用 Extra 调整 SQL</h4>
 
 <p>用extra可以修复QuerySet生成的原始SQL的各个部分，它接受四个关键字参数。如下：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">select</code>：修改select语句</li>
-  <li><code class="highlighter-rouge">where</code>：提供额外的where子句</li>
-  <li><code class="highlighter-rouge">tables</code>：提供额外的表</li>
-  <li><code class="highlighter-rouge">params</code>：安全的替换动态参数</li>
+  <li><code>select</code>：修改select语句</li>
+  <li><code>where</code>：提供额外的where子句</li>
+  <li><code>tables</code>：提供额外的表</li>
+  <li><code>params</code>：安全的替换动态参数</li>
 </ul>
 
 <p>增加结果集以外的字段：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">queryset</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">{</span><span class="s">'成年'</span><span class="p">:</span><span class="s">'age&gt;18'</span><span class="p">})</span> 
+<pre><code class="language-python">queryset.extra(select={'成年':'age&gt;18'}) 
 </code></pre>
-</div>
 
 <p>提供额外的 where 条件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">queryset</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s">"first like '</span><span class="si">%</span><span class="s">小明</span><span class="si">%</span><span class="s">' "</span><span class="p">])</span>
+<pre><code class="language-python">queryset.extra(where=["first like '%小明%' "])
 </code></pre>
-</div>
 
 <p>提供额外的表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">queryset</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">tables</span><span class="o">=</span><span class="p">[</span><span class="s">'myapp_person'</span><span class="p">])</span>
+<pre><code class="language-python">queryset.extra(tables=['myapp_person'])
 </code></pre>
-</div>
 
 <p>安全的替换动态参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">##'%s' is not replaced with normal string </span>
-<span class="n">matches</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s">"first = '</span><span class="si">%</span><span class="s">s' "</span><span class="p">],</span> <span class="n">params</span><span class="o">=</span> <span class="p">[</span><span class="n">unknown</span><span class="o">-</span><span class="nb">input</span> <span class="p">(</span> <span class="p">)</span> <span class="p">])</span>
+<pre><code class="language-python">##'%s' is not replaced with normal string 
+matches = Author.objects.all().extra(where=["first = '%s' "], params= [unknown-input ( ) ])
 </code></pre>
-</div>
 
 <h4 id="f-">F 关键字参数</h4>
 
-<p>前面给的例子里，我们建立了过滤，比照模型字段值和一个固定的值，但是如果我们想比较同一个模型里的一个字段和另一个字段的值，django 提供 <code class="highlighter-rouge">F()</code>——专门取对象中某列值的操作。</p>
+<p>前面给的例子里，我们建立了过滤，比照模型字段值和一个固定的值，但是如果我们想比较同一个模型里的一个字段和另一个字段的值，django 提供 <code>F()</code>——专门取对象中某列值的操作。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">F</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">n_comments__gt</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s">'n_pingbacks'</span><span class="p">))</span>
+<pre><code class="language-python">&gt;&gt;&gt; from django.db.models import F
+&gt;&gt;&gt; Entry.objects.filter(n_comments__gt=F('n_pingbacks'))
 </code></pre>
-</div>
 
 <p>当然，还支持加减乘除和模计算：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">n_comments__gt</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s">'n_pingbacks'</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">rating__lt</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s">'n_comments'</span><span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="p">(</span><span class="s">'n_pingbacks'</span><span class="p">))</span>
-<span class="o">&gt;&gt;&gt;</span> 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">authors__name</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s">'blog__name'</span><span class="p">))</span>
+<pre><code class="language-python">&gt;&gt;&gt; Entry.objects.filter(n_comments__gt=F('n_pingbacks') * 2)
+&gt;&gt;&gt; Entry.objects.filter(rating__lt=F('n_comments') + F('n_pingbacks'))
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Entry.objects.filter(authors__name=F('blog__name'))
 </code></pre>
-</div>
 
 <p>对于日期类型字段，可以使用 timedelta 方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">mod_date__gt</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s">'pub_date'</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<pre><code class="language-python">&gt;&gt;&gt; from datetime import timedelta
+&gt;&gt;&gt; Entry.objects.filter(mod_date__gt=F('pub_date') + timedelta(days=3))
 </code></pre>
-</div>
 
-<p>还支持位操作 <code class="highlighter-rouge">.bitand()</code> 和 <code class="highlighter-rouge">.bitor()</code>：</p>
+<p>还支持位操作 <code>.bitand()</code> 和 <code>.bitor()</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">F</span><span class="p">(</span><span class="s">'somefield'</span><span class="p">)</span><span class="o">.</span><span class="n">bitand</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+<pre><code class="language-python">&gt;&gt;&gt; F('somefield').bitand(16)
 </code></pre>
-</div>
 
 <h4 id="section-6">主键查找</h4>
 
 <p>Django 支持使用 pk 代替主键：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id__exact</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c"># Explicit form</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c"># __exact is implied</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c"># pk implies id__exact</span>
+<pre><code class="language-python">&gt;&gt;&gt; Blog.objects.get(id__exact=14) # Explicit form
+&gt;&gt;&gt; Blog.objects.get(id=14) # __exact is implied
+&gt;&gt;&gt; Blog.objects.get(pk=14) # pk implies id__exact
 </code></pre>
-</div>
 
 <p>pk 还可以用于其他的查找类型：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get blogs entries with id 1, 4 and 7</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+<pre><code class="language-python"># Get blogs entries with id 1, 4 and 7
+&gt;&gt;&gt; Blog.objects.filter(pk__in=[1,4,7])
 
-<span class="c"># Get all blog entries with id &gt; 14</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pk__gt</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+# Get all blog entries with id &gt; 14
+&gt;&gt;&gt; Blog.objects.filter(pk__gt=14)
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">blog__id__exact</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c"># Explicit form</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">blog__id</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>        <span class="c"># __exact is implied</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">blog__pk</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>        <span class="c"># __pk implies __id__exact</span>
+&gt;&gt;&gt; Entry.objects.filter(blog__id__exact=3) # Explicit form
+&gt;&gt;&gt; Entry.objects.filter(blog__id=3)        # __exact is implied
+&gt;&gt;&gt; Entry.objects.filter(blog__pk=3)        # __pk implies __id__exact
 </code></pre>
-</div>
 
 <h4 id="q-">Q 关键字参数</h4>
 
@@ -527,10 +488,9 @@
 
 <p>例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="n">Q</span><span class="p">(</span><span class="n">question__startswith</span><span class="o">=</span><span class="s">'What'</span><span class="p">)</span>
+<pre><code class="language-python">from django.db.models import Q
+Q(question__startswith='What')
 </code></pre>
-</div>
 
 <table>
   <tbody>
@@ -541,47 +501,41 @@
   </tbody>
 </table>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Q</span><span class="p">(</span><span class="n">question__startswith</span><span class="o">=</span><span class="s">'Who'</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">question__startswith</span><span class="o">=</span><span class="s">'What'</span><span class="p">)</span>
+<pre><code class="language-python">Q(question__startswith='Who') | Q(question__startswith='What')
 </code></pre>
-</div>
 
 <p>上面的查询翻译成 sql 语句：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">WHERE</span> <span class="n">question</span> <span class="k">LIKE</span> <span class="s1">'Who%'</span> <span class="k">OR</span> <span class="n">question</span> <span class="k">LIKE</span> <span class="s1">'What%'</span>
+<pre><code class="language-sql">WHERE question LIKE 'Who%' OR question LIKE 'What%'
 </code></pre>
-</div>
 
 <p>取反操作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Q</span><span class="p">(</span><span class="n">question__startswith</span><span class="o">=</span><span class="s">'Who'</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">Q</span><span class="p">(</span><span class="n">pub_date__year</span><span class="o">=</span><span class="mi">2005</span><span class="p">)</span>
+<pre><code class="language-python">Q(question__startswith='Who') | ~Q(pub_date__year=2005)
 </code></pre>
-</div>
 
-<p>也可以用在 <code class="highlighter-rouge">filter()</code>、<code class="highlighter-rouge">exclude()</code>、<code class="highlighter-rouge">get()</code> 中：</p>
+<p>也可以用在 <code>filter()</code>、<code>exclude()</code>、<code>get()</code> 中：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Poll</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-    <span class="n">Q</span><span class="p">(</span><span class="n">question__startswith</span><span class="o">=</span><span class="s">'Who'</span><span class="p">),</span>
-    <span class="n">Q</span><span class="p">(</span><span class="n">pub_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">pub_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="p">)</span>
+<pre><code class="language-python">Poll.objects.get(
+    Q(question__startswith='Who'),
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6))
+)
 </code></pre>
-</div>
 
 <p>翻译成 sql 语句为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="n">polls</span> <span class="k">WHERE</span> <span class="n">question</span> <span class="k">LIKE</span> <span class="s1">'Who%'</span>
-    <span class="k">AND</span> <span class="p">(</span><span class="n">pub_date</span> <span class="o">=</span> <span class="s1">'2005-05-02'</span> <span class="k">OR</span> <span class="n">pub_date</span> <span class="o">=</span> <span class="s1">'2005-05-06'</span><span class="p">)</span>
+<pre><code class="language-sql">SELECT * from polls WHERE question LIKE 'Who%'
+    AND (pub_date = '2005-05-02' OR pub_date = '2005-05-06')
 </code></pre>
-</div>
 
 <h2 id="section-7">删除对象</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span><span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span><span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt;entry = Entry.objects.get(pk=1)
+&gt;&gt;&gt;entry.delete()
+&gt;&gt;&gt;Blog.objects.all().delete()
 
-<span class="o">&gt;&gt;&gt;</span><span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pub_date__year</span><span class="o">=</span><span class="mi">2005</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+&gt;&gt;&gt;Entry.objects.filter(pub_date__year=2005).delete()
 </code></pre>
-</div>
 
 <h2 id="section-8">关系对象</h2>
 
@@ -593,108 +547,96 @@
 
 <p>如果一个对象有ForeignKey，这个模型实例访问关系对象通过简单的属性:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">blog</span> <span class="c"># Returns the related Blog object.</span>
+<pre><code class="language-python">&gt;&gt;&gt; e = Entry.objects.get(id=2)
+&gt;&gt;&gt; e.blog # Returns the related Blog object.
 </code></pre>
-</div>
 
-<p>你可以凭借外键属性获取和赋值，修改外键值知道执行 <code class="highlighter-rouge">save()</code> 方法才会保存到数据库:</p>
+<p>你可以凭借外键属性获取和赋值，修改外键值知道执行 <code>save()</code> 方法才会保存到数据库:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">blog</span> <span class="o">=</span> <span class="n">some_blog</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<pre><code class="language-python">&gt;&gt;&gt; e = Entry.objects.get(id=2)
+&gt;&gt;&gt; e.blog = some_blog
+&gt;&gt;&gt; e.save()
 </code></pre>
-</div>
 
 <p>如果关联的对象可以为空，则可以将关联对象职位 None，删除关联：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">blog</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">save</span><span class="p">()</span> <span class="c"># "UPDATE blog_entry SET blog_id = NULL ...;"</span>
+<pre><code class="language-python">&gt;&gt;&gt; e = Entry.objects.get(id=2)
+&gt;&gt;&gt; e.blog = None
+&gt;&gt;&gt; e.save() # "UPDATE blog_entry SET blog_id = NULL ...;"
 </code></pre>
-</div>
 
 <p>子查询：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">blog</span><span class="p">)</span>  <span class="c"># Hits the database to retrieve the associated Blog.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">blog</span><span class="p">)</span>  <span class="c"># Doesn't hit the database; uses cached version.</span>
+<pre><code class="language-python">&gt;&gt;&gt; e = Entry.objects.get(id=2)
+&gt;&gt;&gt; print(e.blog)  # Hits the database to retrieve the associated Blog.
+&gt;&gt;&gt; print(e.blog)  # Doesn't hit the database; uses cached version.
 </code></pre>
-</div>
 
 <p>也可以使用 select_related() 方法，该方法会提前将关联对象查询出来：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_related</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">blog</span><span class="p">)</span>  <span class="c"># Doesn't hit the database; uses cached version.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">blog</span><span class="p">)</span>  <span class="c"># Doesn't hit the database; uses cached version.</span>
+<pre><code class="language-python">&gt;&gt;&gt; e = Entry.objects.select_related().get(id=2)
+&gt;&gt;&gt; print(e.blog)  # Doesn't hit the database; uses cached version.
+&gt;&gt;&gt; print(e.blog)  # Doesn't hit the database; uses cached version.
 </code></pre>
-</div>
 
-<p>你也可以通过 <code class="highlighter-rouge">模型_set</code> 来访问关系对象的另一边，在 Blog 对象并没有维护 Entry 列表，但是你可以通过下面方式从 Blog 对象访问 Entry 列表：</p>
+<p>你也可以通过 <code>模型_set</code> 来访问关系对象的另一边，在 Blog 对象并没有维护 Entry 列表，但是你可以通过下面方式从 Blog 对象访问 Entry 列表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">entry_set</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span> <span class="c"># Returns all Entry objects related to Blog.</span>
+<pre><code class="language-python">&gt;&gt;&gt; b = Blog.objects.get(id=1)
+&gt;&gt;&gt; b.entry_set.all() # Returns all Entry objects related to Blog.
 
-<span class="c"># b.entry_set is a Manager that returns QuerySets.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">entry_set</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__contains</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">entry_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+# b.entry_set is a Manager that returns QuerySets.
+&gt;&gt;&gt; b.entry_set.filter(headline__contains='Lennon')
+&gt;&gt;&gt; b.entry_set.count()
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">模型_set</code> 可以通过 <code class="highlighter-rouge">related_name</code> 属性来修改，例如将 Entry 模型中的定义修改为：</p>
+<p><code>模型_set</code> 可以通过 <code>related_name</code> 属性来修改，例如将 Entry 模型中的定义修改为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="n">blog</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Blog</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">'entries'</span><span class="p">)</span>
+<pre><code class="language-python"> blog = ForeignKey(Blog, related_name='entries')
 </code></pre>
-</div>
 
 <p>上面的查询就会变成：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Blog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span> <span class="c"># Returns all Entry objects related to Blog.</span>
+<pre><code class="language-python">&gt;&gt;&gt; b = Blog.objects.get(id=1)
+&gt;&gt;&gt; b.entries.all() # Returns all Entry objects related to Blog.
 
-<span class="c"># b.entries is a Manager that returns QuerySets.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">headline__contains</span><span class="o">=</span><span class="s">'Lennon'</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+# b.entries is a Manager that returns QuerySets.
+&gt;&gt;&gt; b.entries.filter(headline__contains='Lennon')
+&gt;&gt;&gt; b.entries.count()
 </code></pre>
-</div>
 
 <h3 id="many-to-many">Many-to-many关系</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">e</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span> <span class="c"># Returns all Author objects for this Entry.</span>
-<span class="n">e</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="n">e</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">name__contains</span><span class="o">=</span><span class="s">'John'</span><span class="p">)</span>
+<pre><code class="language-python">e = Entry.objects.get(id=3)
+e.authors.all() # Returns all Author objects for this Entry.
+e.authors.count()
+e.authors.filter(name__contains='John')
 
-<span class="n">a</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">a</span><span class="o">.</span><span class="n">entry_set</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span> <span class="c"># Returns all Entry objects for this Author.</span>
+a = Author.objects.get(id=5)
+a.entry_set.all() # Returns all Entry objects for this Author.
 </code></pre>
-</div>
 
 <h3 id="one-to-one">One-to-one关系</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EntryDetail</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">entry</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Entry</span><span class="p">)</span>
-    <span class="n">details</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+<pre><code class="language-python">class EntryDetail(models.Model):
+    entry = models.OneToOneField(Entry)
+    details = models.TextField()
 
-<span class="n">ed</span> <span class="o">=</span> <span class="n">EntryDetail</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ed</span><span class="o">.</span><span class="n">entry</span> <span class="c"># Returns the related Entry object.</span>
+ed = EntryDetail.objects.get(id=2)
+ed.entry # Returns the related Entry object.
 </code></pre>
-</div>
 
 <p>当反向查询时：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">e</span><span class="o">.</span><span class="n">entrydetail</span> <span class="c"># returns the related EntryDetail object</span>
+<pre><code class="language-python">e = Entry.objects.get(id=2)
+e.entrydetail # returns the related EntryDetail object
 </code></pre>
-</div>
 
-<p>这时候如果没有关联对象，则会抛出 <code class="highlighter-rouge">DoesNotExist</code> 异常。</p>
+<p>这时候如果没有关联对象，则会抛出 <code>DoesNotExist</code> 异常。</p>
 
 <p>并且还可以修改：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">e</span><span class="o">.</span><span class="n">entrydetail</span> <span class="o">=</span> <span class="n">ed</span>
+<pre><code class="language-python">e.entrydetail = ed
 </code></pre>
-</div>
 
 <h2 id="section-9">参考资料</h2>
 
@@ -756,7 +698,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

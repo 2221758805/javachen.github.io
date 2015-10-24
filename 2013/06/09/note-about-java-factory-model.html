@@ -147,34 +147,33 @@
 
 <p>举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">//抽象产品角色</span>
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Car</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">drive</span><span class="o">();</span>
-<span class="o">}</span>
-<span class="c1">//具体产品角色</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Benz</span> <span class="kd">implements</span> <span class="n">Car</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">drive</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Driving Benz "</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bmw</span> <span class="kd">implements</span> <span class="n">Car</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">drive</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Driving Bmw "</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="c1">//工厂类角色</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CarFactory</span><span class="o">{</span>
-    <span class="c1">//工厂方法.注意 返回类型为抽象产品角色</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Car</span> <span class="n">create</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span><span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"Benz"</span><span class="o">))</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">Benz</span><span class="o">();</span>
-        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"Bmw"</span><span class="o">))</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">Bmw</span><span class="o">();</span>
-        <span class="k">else</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<pre><code class="language-java"> //抽象产品角色
+public interface Car{
+    public void drive();
+}
+//具体产品角色
+public class Benz implements Car{
+    public void drive() {
+        System.out.println("Driving Benz ");
+    }
+}
+public class Bmw implements Car{
+    public void drive() {
+        System.out.println("Driving Bmw ");
+    }
+}
+//工厂类角色
+public class CarFactory{
+    //工厂方法.注意 返回类型为抽象产品角色
+    public static Car create(String s)throws Exception{
+        if(s.equalsIgnoreCase("Benz"))
+            return new Benz();
+        else if(s.equalsIgnoreCase("Bmw"))
+            return new Bmw();
+        else throw new Exception();
+    }
+}
 </code></pre>
-</div>
 
 <h1 id="section-1">工厂方法模式</h1>
 
@@ -191,48 +190,47 @@
 
 <p>举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">//抽象产品角色</span>
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Car</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">drive</span><span class="o">();</span>
-<span class="o">}</span>
-<span class="c1">//具体产品角色</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Benz</span> <span class="kd">implements</span> <span class="n">Car</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">drive</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Driving Benz "</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bmw</span> <span class="kd">implements</span> <span class="n">Car</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">drive</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Driving Bmw "</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="c1">//抽象工厂类角色</span>
-<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">CarFactory</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Car</span> <span class="n">create</span><span class="o">();</span>
-<span class="o">}</span>
+<pre><code class="language-java"> //抽象产品角色
+public interface Car{
+    public void drive();
+}
+//具体产品角色
+public class Benz implements Car{
+    public void drive() {
+        System.out.println("Driving Benz ");
+    }
+}
+public class Bmw implements Car{
+    public void drive() {
+        System.out.println("Driving Bmw ");
+    }
+}
+//抽象工厂类角色
+public abstract class CarFactory{
+    public abstract Car create();
+}
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BenzCarFactory</span> <span class="kd">extends</span> <span class="n">CarFactory</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="n">Car</span> <span class="n">create</span><span class="o">(){</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Benz</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+public class BenzCarFactory extends CarFactory{
+    public Car create(){
+        return new Benz();
+    }
+}
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BmwCarFactory</span> <span class="kd">extends</span> <span class="n">CarFactory</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="n">Car</span> <span class="n">create</span><span class="o">(){</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Bmw</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+public class BmwCarFactory extends CarFactory{
+    public Car create(){
+        return new Bmw();
+    }
+}
 
-<span class="c1">//测试类</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">CarFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BenzCarFactory</span><span class="o">();</span>
-        <span class="n">Car</span> <span class="n">m</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
-        <span class="n">m</span><span class="o">.</span><span class="na">drive</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+//测试类
+public class Test {
+    public static void main(String[] args) {
+        CarFactory factory = new BenzCarFactory();
+        Car m = factory.create();
+        m.drive();
+    }
+}
 </code></pre>
-</div>
 
 <h1 id="section-2">抽象工厂模式</h1>
 
@@ -240,38 +238,37 @@
 
 <p>举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//抽象工厂类</span>
-<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractFactory</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Vehicle</span> <span class="n">createVehicle</span><span class="o">();</span>
-    <span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Weapon</span> <span class="n">createWeapon</span><span class="o">();</span>
-    <span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Food</span> <span class="n">createFood</span><span class="o">();</span>
-<span class="o">}</span>
-<span class="c1">//具体工厂类，其中Food,Vehicle，Weapon是抽象类</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultFactory</span> <span class="kd">extends</span> <span class="n">AbstractFactory</span><span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Food</span> <span class="n">createFood</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Apple</span><span class="o">();</span>
-    <span class="o">}</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Vehicle</span> <span class="n">createVehicle</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Car</span><span class="o">();</span>
-    <span class="o">}</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Weapon</span> <span class="n">createWeapon</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">AK47</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="c1">//测试类</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">AbstractFactory</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultFactory</span><span class="o">();</span>
-        <span class="n">Vehicle</span> <span class="n">v</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">createVehicle</span><span class="o">();</span>
-        <span class="n">Weapon</span> <span class="n">w</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">createWeapon</span><span class="o">();</span>
-        <span class="n">Food</span> <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">createFood</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<pre><code class="language-java">//抽象工厂类
+public abstract class AbstractFactory {
+    public abstract Vehicle createVehicle();
+    public abstract Weapon createWeapon();
+    public abstract Food createFood();
+}
+//具体工厂类，其中Food,Vehicle，Weapon是抽象类
+public class DefaultFactory extends AbstractFactory{
+    @Override
+    public Food createFood() {
+        return new Apple();
+    }
+    @Override
+    public Vehicle createVehicle() {
+        return new Car();
+    }
+    @Override
+    public Weapon createWeapon() {
+        return new AK47();
+    }
+}
+//测试类
+public class Test {
+    public static void main(String[] args) {
+        AbstractFactory f = new DefaultFactory();
+        Vehicle v = f.createVehicle();
+        Weapon w = f.createWeapon();
+        Food a = f.createFood();
+    }
+}
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -322,7 +319,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

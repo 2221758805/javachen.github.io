@@ -109,118 +109,102 @@
 
 <h1 id="section">安装常用工具</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
+<pre><code>sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
 </code></pre>
-</div>
 
 <h1 id="exfat">挂载exfat格式磁盘</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install exfat-fuse exfat-utils
+<pre><code>sudo apt-get install exfat-fuse exfat-utils
 </code></pre>
-</div>
 
 <h1 id="ibus">安装ibus</h1>
 
 <p>在终端输入命令:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo add-apt-repository ppa:shawn-p-huang/ppa
+<pre><code>sudo add-apt-repository ppa:shawn-p-huang/ppa
 sudo apt-get update
 sudo apt-get install ibus-gtk ibus-pinyin
 </code></pre>
-</div>
 
 <p>启用IBus框架:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>im-switch -s ibus
+<pre><code>im-switch -s ibus
 </code></pre>
-</div>
 
 <p>启动ibus：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ibus-daemon
+<pre><code>ibus-daemon
 </code></pre>
-</div>
 
 <h1 id="gedit-markdown">安装gedit-markdown</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget https://gitorious.org/projets-divers/gedit-markdown/archive/master.zip
+<pre><code>wget https://gitorious.org/projets-divers/gedit-markdown/archive/master.zip
 unzip master.zip
 cd projets-divers-gedit-markdown
 ./gedit-markdown.sh install
 </code></pre>
-</div>
 
 <h1 id="wiz">安装wiz</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo add-apt-repository ppa:wiznote-team
+<pre><code>sudo add-apt-repository ppa:wiznote-team
 sudo apt-get update
 sudo apt-get install wiznote
 </code></pre>
-</div>
 
 <h1 id="oh-my-zsh">安装 oh-my-zsh</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install zsh
+<pre><code>sudo apt-get install zsh
 </code></pre>
-</div>
 
 <p>把默认 Shell 换为 zsh。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>chsh -s /bin/zsh
+<pre><code>chsh -s /bin/zsh
 </code></pre>
-</div>
 
 <p>然后用下面的两句（任选其一）可以自动安装 oh-my-zsh：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+<pre><code>curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+<pre><code>wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
 </code></pre>
-</div>
 
-<p>编辑<code class="highlighter-rouge">~/.zshrc</code>：</p>
+<p>编辑<code>~/.zshrc</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>echo 'source ~/.bashrc' &gt;&gt;~/.zshrc
+<pre><code>echo 'source ~/.bashrc' &gt;&gt;~/.zshrc
 echo 'source ~/.bash_profile' &gt;&gt;~/.zshrc
 </code></pre>
-</div>
 
 <h1 id="section-1">博客相关</h1>
 <p>## 安装Ruby</p>
 
 <p>通过rvm安装ruby：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>curl -L get.rvm.io | bash -s stable
+<pre><code>curl -L get.rvm.io | bash -s stable
 source ~/.bash_profile
 sed -i -e 's/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g' ~/.rvm/config/db
 </code></pre>
-</div>
 
 <p>安装rvm:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install clang -y
+<pre><code>sudo apt-get install clang -y
 rvm install 1.9.3 --with-gcc=clang
 rvm --default 1.9.3
 </code></pre>
-</div>
 
 <h2 id="jekyll">安装jekyll</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>gem update --system
+<pre><code>gem update --system
 gem install rdoc jekyll redcarpet
 </code></pre>
-</div>
 
 <h2 id="section-2">安装七牛同步脚本</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget http://devtools.qiniudn.com/linux_amd64/qiniu-devtools.zip
+<pre><code>wget http://devtools.qiniudn.com/linux_amd64/qiniu-devtools.zip
 unzip qiniu-devtools.zip
 mv _package_linux_amd64/* /usr/bin/
 source ~/.bashrc
 </code></pre>
-</div>
 
 <h2 id="ssh-key">更新ssh-key</h2>
 
@@ -228,64 +212,57 @@ source ~/.bashrc
 
 <h1 id="virtualbox">安装 virtualbox</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+<pre><code>wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install virtualbox-4.3
 </code></pre>
-</div>
 
 <h1 id="fortune-zh">安装fortune-zh</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install fortune-zh
+<pre><code>sudo apt-get install fortune-zh
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">/usr/bin/mint-fortune</code> 中调用语句改为:</p>
+<p><code>/usr/bin/mint-fortune</code> 中调用语句改为:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/usr/games/fortune 70% tang300 30% song100 | <span class="nv">$command</span> -f <span class="nv">$cow</span> -n
+<pre><code class="language-bash">/usr/games/fortune 70% tang300 30% song100 | $command -f $cow -n
 </code></pre>
-</div>
 
 <p>这里的70%与30%是显示唐诗与宋词的概率。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>gsettings set com.linuxmint.terminal show-fortunes true
+<pre><code>gsettings set com.linuxmint.terminal show-fortunes true
 </code></pre>
-</div>
 
 <h1 id="section-3">修改分区权限</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo chown -R june:june /chan
+<pre><code>sudo chown -R june:june /chan
 </code></pre>
-</div>
 
 <h1 id="home">重命名home下目录</h1>
 
 <p>先手动重命名:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>文档   ---&gt;  projects
+<pre><code>文档   ---&gt;  projects
 音乐   ---&gt;  app
 图片   ---&gt;  codes
 视频   ---&gt;  workspace
 下载   ---&gt;  downloads
 </code></pre>
-</div>
 
 <p>然后,删除这些目录,建立软连接:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>rm -rf projects app codes workspace downloads
+<pre><code>rm -rf projects app codes workspace downloads
 ln -s /chan/app  ~/app
 ln -s /chan/codes   ~/codes
 ln -s /chan/projects  ~/projects
 ln -s /chan/workspace  ~/workspace
 ln -s /chan/downloads    ~/downloads
 </code></pre>
-</div>
 
 <h1 id="section-4">安装开发环境</h1>
 
 <p>配置ant、maven和ivy仓库</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>chmod +x /chan/app/apache/apache-maven-3.0.5/bin/mvn
+<pre><code>chmod +x /chan/app/apache/apache-maven-3.0.5/bin/mvn
 chmod +x /chan/app/apache/apache-ant-1.9.4/bin/ant
 
 rm -rf /home/june/.ivy2/cache /home/june/.m2/repository
@@ -293,18 +270,16 @@ mkdir -p /home/june/.ivy2 /home/june/.m2
 ln -s /chan/app/repository/cache/  /home/june/.ivy2/cache
 ln -s /chan/app/repository/m2/  /home/june/.m2/repository
 </code></pre>
-</div>
 
 <p>安装jdk1.6</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/pool/contrib/o/oracle-j2sdk1.6/oracle-j2sdk1.6_1.6.0+update31_amd64.deb
+<pre><code>wget http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/pool/contrib/o/oracle-j2sdk1.6/oracle-j2sdk1.6_1.6.0+update31_amd64.deb
 dpkg -i oracle-j2sdk1.6_1.6.0+update31_amd64.deb
 </code></pre>
-</div>
 
 <p>配置环境变量：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo mkdir -p /usr/java/
+<pre><code>sudo mkdir -p /usr/java/
 sudo ln -s /usr/lib/jvm/j2sdk1.6-oracle /usr/java/latest
 sudo update-alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5
 sudo update-alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 5
@@ -324,7 +299,6 @@ echo "export ANT_HOME=/chan/app/apache/apache-ant-1.9.4" &gt;&gt; ~/.bashrc
 echo "export PATH=\$JAVA_HOME/bin:\$MVN_HOME/bin:\$ANT_HOME/bin:\$PATH" &gt;&gt; ~/.bashrc
 source ~/.bashrc
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -375,7 +349,7 @@ source ~/.bashrc
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

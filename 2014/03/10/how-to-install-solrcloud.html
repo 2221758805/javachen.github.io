@@ -120,9 +120,9 @@
 <p>各个目录说明：</p>
 
 <ul>
-  <li>所有的程序安装在 <code class="highlighter-rouge">/opt</code> 目录下，你可以依照你的实际情况下修改安装目录。</li>
-  <li>ZooKeeper的数据目录在： <code class="highlighter-rouge">/data/zookeeper/data</code></li>
-  <li>solrhome设置在： <code class="highlighter-rouge">/usr/local/solrhome</code></li>
+  <li>所有的程序安装在 <code>/opt</code> 目录下，你可以依照你的实际情况下修改安装目录。</li>
+  <li>ZooKeeper的数据目录在： <code>/data/zookeeper/data</code></li>
+  <li>solrhome设置在： <code>/usr/local/solrhome</code></li>
 </ul>
 
 <h1 id="solrcloud">2. 规划SolrCloud</h1>
@@ -149,56 +149,50 @@
 
 <p>由于需要用到 ZooKeeper，故我们先安装好 ZooKeeper 集群。</p>
 
-<p>安装 ZooKeeper 集群之前，请确保每台机器上配置 <code class="highlighter-rouge">/etc/hosts</code>文件，使每个节点都能通过机器名访问。</p>
+<p>安装 ZooKeeper 集群之前，请确保每台机器上配置 <code>/etc/hosts</code>文件，使每个节点都能通过机器名访问。</p>
 
-<p>首先，在第一个节点上将 zookeeper-3.4.5.tar.gz 解压到 <code class="highlighter-rouge">/opt</code> 目录：</p>
+<p>首先，在第一个节点上将 zookeeper-3.4.5.tar.gz 解压到 <code>/opt</code> 目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ tar zxvf zookeeper-3.4.5.tar.gz -C /opt/
+<pre><code>$ tar zxvf zookeeper-3.4.5.tar.gz -C /opt/
 </code></pre>
-</div>
 
 <p>创建 ZooKeeper 配置文件 zookeeper-3.4.5/conf/zoo.cfg，内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">tickTime</span><span class="p">=</span><span class="s">2000</span>
-<span class="py">initLimit</span><span class="p">=</span><span class="s">10</span>
-<span class="py">syncLimit</span><span class="p">=</span><span class="s">5</span>
-<span class="py">dataDir</span><span class="p">=</span><span class="s">/data/zookeeper/data</span>
-<span class="py">clientPort</span><span class="p">=</span><span class="s">2181</span>
-<span class="py">server.1</span><span class="p">=</span><span class="s">192.168.56.121:2888:3888</span>
-<span class="py">server.2</span><span class="p">=</span><span class="s">192.168.56.122:2888:3888</span>
-<span class="py">server.3</span><span class="p">=</span><span class="s">192.168.56.123:2888:3888</span>
+<pre><code class="language-properties">tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/data/zookeeper/data
+clientPort=2181
+server.1=192.168.56.121:2888:3888
+server.2=192.168.56.122:2888:3888
+server.3=192.168.56.123:2888:3888
 </code></pre>
-</div>
 
-<p>ZooKeeper 的数据目录指定在 <code class="highlighter-rouge">/data/zookeeper/data</code> ，你也可以使用其他目录，通过下面命令进行创建该目录：</p>
+<p>ZooKeeper 的数据目录指定在 <code>/data/zookeeper/data</code> ，你也可以使用其他目录，通过下面命令进行创建该目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir /data/zookeeper/data -p
+<pre><code class="language-bash">$ mkdir /data/zookeeper/data -p
 </code></pre>
-</div>
 
-<p>然后，初始化 myid ，三个节点编号依次为 <code class="highlighter-rouge">1，2，3</code> ，在其余节点上分别执行命令（注意修改编号）。</p>
+<p>然后，初始化 myid ，三个节点编号依次为 <code>1，2，3</code> ，在其余节点上分别执行命令（注意修改编号）。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s2">"1"</span> &gt;/data/zookeeper/data/myid
+<pre><code class="language-bash">$ echo "1" &gt;/data/zookeeper/data/myid
 </code></pre>
-</div>
 
 <p>然后，在第二个和第三个节点上依次重复上面的操作。这样第一个节点中 myid 内容为1，第二个节点为2，第三个节点为3。</p>
 
 <p>最后，启动 ZooKeeper 集群，在每个节点上分别启动 ZooKeeper 服务：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /opt
-<span class="gp">$ </span>sh zookeeper-3.4.5/bin/zkServer.sh start
+<pre><code class="language-bash">$ cd /opt
+$ sh zookeeper-3.4.5/bin/zkServer.sh start
 </code></pre>
-</div>
 
 <p>可以查看 ZooKeeper 集群的状态，保证集群启动没有问题：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>root@192.168.56.121 opt]# sh zookeeper-3.4.5/bin/zkServer.sh status
+<pre><code class="language-bash">[root@192.168.56.121 opt]# sh zookeeper-3.4.5/bin/zkServer.sh status
 JMX enabled by default
 Using config: /opt/zookeeper-3.4.5/bin/../conf/zoo.cfg
 Mode: follower
 </code></pre>
-</div>
 
 <h1 id="solr">4. 安装Solr</h1>
 
@@ -206,17 +200,16 @@ Mode: follower
 
 <p>简单来说，执行以下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>unzip apache-tomcat-6.0.36.zip  -d /opt
-<span class="gp">$ </span>unzip solr-4.4.0.zip  -d /opt
+<pre><code class="language-bash">$ unzip apache-tomcat-6.0.36.zip  -d /opt
+$ unzip solr-4.4.0.zip  -d /opt
 
-<span class="gp">$ </span><span class="nb">cd</span> /opt
-<span class="gp">$ </span>chmod +x apache-tomcat-6.0.36/bin/<span class="k">*</span>.sh
+$ cd /opt
+$ chmod +x apache-tomcat-6.0.36/bin/*.sh
 
-<span class="gp">$ </span>cp solr-4.4.0/example/webapps/solr.war apache-tomcat-6.0.36/webapps/
-<span class="gp">$ </span>cp solr-4.4.0/example/lib/ext/<span class="k">*</span> apache-tomcat-6.0.36/webapps/solr/WEB-INF/lib/
-<span class="gp">$ </span>cp solr-4.4.0/example/resources/log4j.properties apache-tomcat-6.0.36/lib/
+$ cp solr-4.4.0/example/webapps/solr.war apache-tomcat-6.0.36/webapps/
+$ cp solr-4.4.0/example/lib/ext/* apache-tomcat-6.0.36/webapps/solr/WEB-INF/lib/
+$ cp solr-4.4.0/example/resources/log4j.properties apache-tomcat-6.0.36/lib/
 </code></pre>
-</div>
 
 <p>在其他节点上重复以上操作完成所有节点的 solr 的安装。</p>
 
@@ -224,44 +217,40 @@ Mode: follower
 
 <p>1、 创建一个 SolrCloud 目录，并将 solr 的 lib 文件拷贝到这个目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir -p /usr/local/solrcloud/solr-lib/
-<span class="gp">$ </span>cp apache-tomcat-6.0.36/webapps/solr/WEB-INF/lib/<span class="k">*</span> /usr/local/solrcloud/solr-lib/
+<pre><code class="language-bash">$ mkdir -p /usr/local/solrcloud/solr-lib/
+$ cp apache-tomcat-6.0.36/webapps/solr/WEB-INF/lib/* /usr/local/solrcloud/solr-lib/
 </code></pre>
-</div>
 
 <p>2、 通过 bootstrap 设置 solrhome ：</p>
 
 <p>这里设置 solrhome 为 /usr/local/solrhome，创建该目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mkdir -p /usr/local/solrhome 
+<pre><code class="language-bash">mkdir -p /usr/local/solrhome 
 </code></pre>
-</div>
 
 <p>然后，运行下面命令将 solrhome 下面的配置上传到 zookeeper：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -classpath .:/usr/local/solrcloud/solr-lib/<span class="k">*</span> org.apache.solr.cloud.ZkCLI -zkhost 192.168.56.121:2181,192.168.56.122:2181,192.168.56.123:2181 -cmd bootstrap -solrhome 
+<pre><code class="language-bash">$ java -classpath .:/usr/local/solrcloud/solr-lib/* org.apache.solr.cloud.ZkCLI -zkhost 192.168.56.121:2181,192.168.56.122:2181,192.168.56.123:2181 -cmd bootstrap -solrhome 
 </code></pre>
-</div>
 
-<p>SolrCloud 集群的所有的配置存储在 ZooKeeper。 一旦 SolrCloud 节点启动时配置了 <code class="highlighter-rouge">-Dbootstrap_confdir</code> 参数， 该节点的配置信息将发送到 ZooKeeper 上存储。基它节点启动时会应用 ZooKeeper 上的配置信息，这样当我们改动配置时就不用一个个机子去更改了。</p>
+<p>SolrCloud 集群的所有的配置存储在 ZooKeeper。 一旦 SolrCloud 节点启动时配置了 <code>-Dbootstrap_confdir</code> 参数， 该节点的配置信息将发送到 ZooKeeper 上存储。基它节点启动时会应用 ZooKeeper 上的配置信息，这样当我们改动配置时就不用一个个机子去更改了。</p>
 
 <p>3、SolrCloud 是通过 ZooKeeper 集群来保证配置文件的变更及时同步到各个节点上，所以，需要将我们自己的配置文件（在 /usr/local/solrcloud/conf/primary/conf 目录下）上传到 ZooKeeper 集群中，配置名称设为 primaryconf：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -classpath .:/usr/local/solrcloud/solr-lib/<span class="k">*</span> org.apache.solr.cloud.ZkCLI -zkhost 192.168.56.121:2181,192.168.56.122:2181,192.168.56.123:2181 -cmd upconfig -confdir /usr/local/solrcloud/conf/primary/conf -confname primaryconf
+<pre><code class="language-bash">$ java -classpath .:/usr/local/solrcloud/solr-lib/* org.apache.solr.cloud.ZkCLI -zkhost 192.168.56.121:2181,192.168.56.122:2181,192.168.56.123:2181 -cmd upconfig -confdir /usr/local/solrcloud/conf/primary/conf -confname primaryconf
 </code></pre>
-</div>
 
 <p>说明：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">zkhost</code> 指定 ZooKeeper 地址，逗号分割</li>
-  <li><code class="highlighter-rouge">/usr/local/solrcloud/conf/</code> 目录下存在名称为 primary 的目录，该目录下的配置是后面需要用到的。</li>
-  <li><code class="highlighter-rouge">primaryconf</code> 为在 ZooKeeper 上的配置文件名称。</li>
+  <li><code>zkhost</code> 指定 ZooKeeper 地址，逗号分割</li>
+  <li><code>/usr/local/solrcloud/conf/</code> 目录下存在名称为 primary 的目录，该目录下的配置是后面需要用到的。</li>
+  <li><code>primaryconf</code> 为在 ZooKeeper 上的配置文件名称。</li>
 </ul>
 
 <p>/usr/local/solrcloud/conf 结构如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tree /usr/local/solrcloud/conf
+<pre><code class="language-bash">$ tree /usr/local/solrcloud/conf
 /usr/local/solrcloud/conf
 ├── primary
 │   └── conf
@@ -271,149 +260,145 @@ Mode: follower
 
 2 directories, 3 files
 </code></pre>
-</div>
 
 <p>schema.xml 内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
-<span class="nt">&lt;schema</span> <span class="na">name=</span><span class="s">"example"</span> <span class="na">version=</span><span class="s">"1.5"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;fields&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"productId"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"category"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"explicitCategory"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"searchable"</span> <span class="na">type=</span><span class="s">"text_general"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"false"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"_version_"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_searchable"</span> <span class="na">type=</span><span class="s">"text_general"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;schema name="example" version="1.5"&gt;
+    &lt;fields&gt;
+        &lt;field name="namespace" type="string" indexed="true" stored="true" /&gt;
+        &lt;field name="id" type="string" indexed="true" stored="true" /&gt;
+        &lt;field name="productId" type="long" indexed="true" stored="true" /&gt;
+        &lt;field name="category" type="long" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;field name="explicitCategory" type="long" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;field name="searchable" type="text_general" indexed="true" stored="false" /&gt;
+        &lt;field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/&gt;
+        &lt;dynamicField name="*_searchable" type="text_general" indexed="true" stored="true" /&gt;
 
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_i"</span> <span class="na">type=</span><span class="s">"int"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_is"</span> <span class="na">type=</span><span class="s">"int"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_s"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_ss"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_l"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_ls"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_t"</span> <span class="na">type=</span><span class="s">"text_general"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_txt"</span> <span class="na">type=</span><span class="s">"text_general"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_b"</span> <span class="na">type=</span><span class="s">"boolean"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_bs"</span> <span class="na">type=</span><span class="s">"boolean"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_d"</span> <span class="na">type=</span><span class="s">"double"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_ds"</span> <span class="na">type=</span><span class="s">"double"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_p"</span> <span class="na">type=</span><span class="s">"double"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+        &lt;dynamicField name="*_i" type="int" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_is" type="int" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;dynamicField name="*_s" type="string" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_ss" type="string" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;dynamicField name="*_l" type="long" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_ls" type="long" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;dynamicField name="*_t" type="text_general" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_txt" type="text_general" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;dynamicField name="*_b" type="boolean" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_bs" type="boolean" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;dynamicField name="*_d" type="double" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_ds" type="double" indexed="true" stored="true" multiValued="true" /&gt;
+        &lt;dynamicField name="*_p" type="double" indexed="true" stored="true" /&gt;
 
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_dt"</span> <span class="na">type=</span><span class="s">"date"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_dts"</span> <span class="na">type=</span><span class="s">"date"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+        &lt;dynamicField name="*_dt" type="date" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_dts" type="date" indexed="true" stored="true" multiValued="true" /&gt;
 
-        <span class="c">&lt;!-- some trie-coded dynamic fields for faster range queries --&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_ti"</span> <span class="na">type=</span><span class="s">"tint"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_tl"</span> <span class="na">type=</span><span class="s">"tlong"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_td"</span> <span class="na">type=</span><span class="s">"tdouble"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_tdt"</span> <span class="na">type=</span><span class="s">"tdate"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/fields&gt;</span>
+        &lt;!-- some trie-coded dynamic fields for faster range queries --&gt;
+        &lt;dynamicField name="*_ti" type="tint" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_tl" type="tlong" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_td" type="tdouble" indexed="true" stored="true" /&gt;
+        &lt;dynamicField name="*_tdt" type="tdate" indexed="true" stored="true" /&gt;
+    &lt;/fields&gt;
 
-    <span class="nt">&lt;uniqueKey&gt;</span>id<span class="nt">&lt;/uniqueKey&gt;</span>
+    &lt;uniqueKey&gt;id&lt;/uniqueKey&gt;
 
-    <span class="nt">&lt;types&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"string"</span> <span class="na">class=</span><span class="s">"solr.StrField"</span> <span class="na">sortMissingLast=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"boolean"</span> <span class="na">class=</span><span class="s">"solr.BoolField"</span> <span class="na">sortMissingLast=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+    &lt;types&gt;
+        &lt;fieldType name="string" class="solr.StrField" sortMissingLast="true" /&gt;
+        &lt;fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" /&gt;
 
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"int"</span> <span class="na">class=</span><span class="s">"solr.TrieIntField"</span> <span class="na">precisionStep=</span><span class="s">"0"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"long"</span> <span class="na">class=</span><span class="s">"solr.TrieLongField"</span> <span class="na">precisionStep=</span><span class="s">"0"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"double"</span> <span class="na">class=</span><span class="s">"solr.TrieDoubleField"</span> <span class="na">precisionStep=</span><span class="s">"0"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"tint"</span> <span class="na">class=</span><span class="s">"solr.TrieIntField"</span> <span class="na">precisionStep=</span><span class="s">"8"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"tlong"</span> <span class="na">class=</span><span class="s">"solr.TrieLongField"</span> <span class="na">precisionStep=</span><span class="s">"8"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"tdouble"</span> <span class="na">class=</span><span class="s">"solr.TrieDoubleField"</span> <span class="na">precisionStep=</span><span class="s">"8"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
+        &lt;fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" /&gt;
+        &lt;fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" /&gt;
+        &lt;fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0" /&gt;
+        &lt;fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0" /&gt;
+        &lt;fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0" /&gt;
+        &lt;fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0" /&gt;
 
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"date"</span> <span class="na">class=</span><span class="s">"solr.TrieDateField"</span> <span class="na">precisionStep=</span><span class="s">"0"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-        <span class="c">&lt;!-- A Trie based date field for faster date range queries and date faceting. --&gt;</span>
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"tdate"</span> <span class="na">class=</span><span class="s">"solr.TrieDateField"</span> <span class="na">precisionStep=</span><span class="s">"6"</span> <span class="na">positionIncrementGap=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
+        &lt;fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" /&gt;
+        &lt;!-- A Trie based date field for faster date range queries and date faceting. --&gt;
+        &lt;fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0" /&gt;
 
-        <span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"text_general"</span> <span class="na">class=</span><span class="s">"solr.TextField"</span> <span class="na">positionIncrementGap=</span><span class="s">"100"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;analyzer</span> <span class="na">type=</span><span class="s">"index"</span><span class="nt">&gt;</span>
-                <span class="nt">&lt;tokenizer</span> <span class="na">class=</span><span class="s">"solr.StandardTokenizerFactory"</span> <span class="nt">/&gt;</span>
-                <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"solr.LowerCaseFilterFactory"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;/analyzer&gt;</span>
-            <span class="nt">&lt;analyzer</span> <span class="na">type=</span><span class="s">"query"</span><span class="nt">&gt;</span>
-                <span class="nt">&lt;tokenizer</span> <span class="na">class=</span><span class="s">"solr.StandardTokenizerFactory"</span> <span class="nt">/&gt;</span>
-                <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"solr.LowerCaseFilterFactory"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;/analyzer&gt;</span>
-        <span class="nt">&lt;/fieldType&gt;</span>
+        &lt;fieldType name="text_general" class="solr.TextField" positionIncrementGap="100"&gt;
+            &lt;analyzer type="index"&gt;
+                &lt;tokenizer class="solr.StandardTokenizerFactory" /&gt;
+                &lt;filter class="solr.LowerCaseFilterFactory" /&gt;
+            &lt;/analyzer&gt;
+            &lt;analyzer type="query"&gt;
+                &lt;tokenizer class="solr.StandardTokenizerFactory" /&gt;
+                &lt;filter class="solr.LowerCaseFilterFactory" /&gt;
+            &lt;/analyzer&gt;
+        &lt;/fieldType&gt;
 
-    <span class="nt">&lt;/types&gt;</span>
-<span class="nt">&lt;/schema&gt;</span>
+    &lt;/types&gt;
+&lt;/schema&gt;
 </code></pre>
-</div>
 
 <p>solrconfig.xml 内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
-<span class="nt">&lt;config&gt;</span>
-  <span class="nt">&lt;luceneMatchVersion&gt;</span>4.4<span class="nt">&lt;/luceneMatchVersion&gt;</span>
-  <span class="nt">&lt;directoryFactory</span> <span class="na">name=</span><span class="s">"DirectoryFactory"</span> <span class="na">class=</span><span class="s">"${solr.directoryFactory:solr.StandardDirectoryFactory}"</span><span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;config&gt;
+  &lt;luceneMatchVersion&gt;4.4&lt;/luceneMatchVersion&gt;
+  &lt;directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}"/&gt;
 
-  <span class="nt">&lt;schemaFactory</span> <span class="na">class=</span><span class="s">"ClassicIndexSchemaFactory"</span><span class="nt">/&gt;</span>
+  &lt;schemaFactory class="ClassicIndexSchemaFactory"/&gt;
 
-  <span class="nt">&lt;updateHandler</span> <span class="na">class=</span><span class="s">"solr.DirectUpdateHandler2"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;updateLog&gt;</span>
-            <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"dir"</span><span class="nt">&gt;</span>${solr.data.dir:}<span class="nt">&lt;/str&gt;</span>
-        <span class="nt">&lt;/updateLog&gt;</span>
-  <span class="nt">&lt;/updateHandler&gt;</span>
+  &lt;updateHandler class="solr.DirectUpdateHandler2"&gt;
+    &lt;updateLog&gt;
+            &lt;str name="dir"&gt;${solr.data.dir:}&lt;/str&gt;
+        &lt;/updateLog&gt;
+  &lt;/updateHandler&gt;
 
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/get"</span> <span class="na">class=</span><span class="s">"solr.RealTimeGetHandler"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"defaults"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"omitHeader"</span><span class="nt">&gt;</span>true<span class="nt">&lt;/str&gt;</span>
-    <span class="nt">&lt;/lst&gt;</span>
-  <span class="nt">&lt;/requestHandler&gt;</span>
+  &lt;requestHandler name="/get" class="solr.RealTimeGetHandler"&gt;
+    &lt;lst name="defaults"&gt;
+      &lt;str name="omitHeader"&gt;true&lt;/str&gt;
+    &lt;/lst&gt;
+  &lt;/requestHandler&gt;
 
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/replication"</span> <span class="na">class=</span><span class="s">"solr.ReplicationHandler"</span> <span class="na">startup=</span><span class="s">"lazy"</span> <span class="nt">/&gt;</span>
+  &lt;requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" /&gt;
 
-  <span class="nt">&lt;requestDispatcher</span> <span class="na">handleSelect=</span><span class="s">"true"</span> <span class="nt">&gt;</span>
-    <span class="nt">&lt;requestParsers</span> <span class="na">enableRemoteStreaming=</span><span class="s">"false"</span> <span class="na">multipartUploadLimitInKB=</span><span class="s">"2048"</span> <span class="na">formdataUploadLimitInKB=</span><span class="s">"2048"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;httpCaching</span> <span class="na">never304=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;/requestDispatcher&gt;</span>
+  &lt;requestDispatcher handleSelect="true" &gt;
+    &lt;requestParsers enableRemoteStreaming="false" multipartUploadLimitInKB="2048" formdataUploadLimitInKB="2048" /&gt;
+    &lt;httpCaching never304="true" /&gt;
+  &lt;/requestDispatcher&gt;
 
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"standard"</span> <span class="na">class=</span><span class="s">"solr.StandardRequestHandler"</span> <span class="na">default=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/analysis/field"</span> <span class="na">startup=</span><span class="s">"lazy"</span> <span class="na">class=</span><span class="s">"solr.FieldAnalysisRequestHandler"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/update"</span> <span class="na">class=</span><span class="s">"solr.UpdateRequestHandler"</span>  <span class="nt">/&gt;</span>
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/update/json"</span> <span class="na">class=</span><span class="s">"solr.JsonUpdateRequestHandler"</span> <span class="na">startup=</span><span class="s">"lazy"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/admin/"</span> <span class="na">class=</span><span class="s">"org.apache.solr.handler.admin.AdminHandlers"</span> <span class="nt">/&gt;</span>
+  &lt;requestHandler name="standard" class="solr.StandardRequestHandler" default="true" /&gt;
+  &lt;requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" /&gt;
+  &lt;requestHandler name="/update" class="solr.UpdateRequestHandler"  /&gt;
+  &lt;requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler" startup="lazy" /&gt;
+  &lt;requestHandler name="/admin/" class="org.apache.solr.handler.admin.AdminHandlers" /&gt;
 
-  <span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/admin/ping"</span> <span class="na">class=</span><span class="s">"solr.PingRequestHandler"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"invariants"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"q"</span><span class="nt">&gt;</span>solrpingquery<span class="nt">&lt;/str&gt;</span>
-    <span class="nt">&lt;/lst&gt;</span>
-    <span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"defaults"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"echoParams"</span><span class="nt">&gt;</span>all<span class="nt">&lt;/str&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"df"</span><span class="nt">&gt;</span>id<span class="nt">&lt;/str&gt;</span>
-    <span class="nt">&lt;/lst&gt;</span>
-  <span class="nt">&lt;/requestHandler&gt;</span>
+  &lt;requestHandler name="/admin/ping" class="solr.PingRequestHandler"&gt;
+    &lt;lst name="invariants"&gt;
+      &lt;str name="q"&gt;solrpingquery&lt;/str&gt;
+    &lt;/lst&gt;
+    &lt;lst name="defaults"&gt;
+      &lt;str name="echoParams"&gt;all&lt;/str&gt;
+      &lt;str name="df"&gt;id&lt;/str&gt;
+    &lt;/lst&gt;
+  &lt;/requestHandler&gt;
 
-  <span class="nt">&lt;queryResponseWriter</span> <span class="na">name=</span><span class="s">"json"</span> <span class="na">class=</span><span class="s">"solr.JSONResponseWriter"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"content-type"</span><span class="nt">&gt;</span>text/plain; charset=UTF-8<span class="nt">&lt;/str&gt;</span>
-  <span class="nt">&lt;/queryResponseWriter&gt;</span>
+  &lt;queryResponseWriter name="json" class="solr.JSONResponseWriter"&gt;
+        &lt;str name="content-type"&gt;text/plain; charset=UTF-8&lt;/str&gt;
+  &lt;/queryResponseWriter&gt;
 
-  <span class="nt">&lt;updateRequestProcessorChain</span> <span class="na">name=</span><span class="s">"sample"</span><span class="nt">&gt;</span>
-     <span class="nt">&lt;processor</span> <span class="na">class=</span><span class="s">"solr.LogUpdateProcessorFactory"</span> <span class="nt">/&gt;</span>
-     <span class="nt">&lt;processor</span> <span class="na">class=</span><span class="s">"solr.DistributedUpdateProcessorFactory"</span><span class="nt">/&gt;</span>
-     <span class="nt">&lt;processor</span> <span class="na">class=</span><span class="s">"solr.RunUpdateProcessorFactory"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;/updateRequestProcessorChain&gt;</span>
+  &lt;updateRequestProcessorChain name="sample"&gt;
+     &lt;processor class="solr.LogUpdateProcessorFactory" /&gt;
+     &lt;processor class="solr.DistributedUpdateProcessorFactory"/&gt;
+     &lt;processor class="solr.RunUpdateProcessorFactory" /&gt;
+  &lt;/updateRequestProcessorChain&gt;
 
-  <span class="c">&lt;!-- config for the admin interface --&gt;</span>
-  <span class="nt">&lt;admin&gt;</span>
-    <span class="nt">&lt;defaultQuery&gt;</span>solr<span class="nt">&lt;/defaultQuery&gt;</span>
-    <span class="nt">&lt;pingQuery&gt;</span>q=solr<span class="ni">&amp;amp;</span>version=2.0<span class="ni">&amp;amp;</span>start=0<span class="ni">&amp;amp;</span>rows=0<span class="nt">&lt;/pingQuery&gt;</span>
-    <span class="nt">&lt;healthcheck</span> <span class="na">type=</span><span class="s">"file"</span><span class="nt">&gt;</span>server-enabled<span class="nt">&lt;/healthcheck&gt;</span>
-  <span class="nt">&lt;/admin&gt;</span>
+  &lt;!-- config for the admin interface --&gt;
+  &lt;admin&gt;
+    &lt;defaultQuery&gt;solr&lt;/defaultQuery&gt;
+    &lt;pingQuery&gt;q=solr&amp;amp;version=2.0&amp;amp;start=0&amp;amp;rows=0&lt;/pingQuery&gt;
+    &lt;healthcheck type="file"&gt;server-enabled&lt;/healthcheck&gt;
+  &lt;/admin&gt;
 
-<span class="nt">&lt;/config&gt;</span>
+&lt;/config&gt;
 </code></pre>
-</div>
 
 <p>4、创建 collection 并和配置文件关联：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -classpath .:/usr/local/solrcloud/solr-lib/<span class="k">*</span> org.apache.solr.cloud.ZkCLI -zkhost 192.168.56.121:2181,192.168.56.122:2181,192.168.56.123:2181 -cmd linkconfig -collection primary -confname primaryconf
+<pre><code class="language-bash">$ java -classpath .:/usr/local/solrcloud/solr-lib/* org.apache.solr.cloud.ZkCLI -zkhost 192.168.56.121:2181,192.168.56.122:2181,192.168.56.123:2181 -cmd linkconfig -collection primary -confname primaryconf
 </code></pre>
-</div>
 
 <p>说明：</p>
 
@@ -425,58 +410,54 @@ Mode: follower
 
 <p>在任意一个节点的 /opt 目录下执行如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$  </span>zookeeper-3.4.5/bin/zkCli.sh 
+<pre><code class="language-bash">$  zookeeper-3.4.5/bin/zkCli.sh 
 
-<span class="o">[</span>zk: localhost:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 0] ls /
-<span class="o">[</span>configs,zookeeper,clusterstate.json,aliases.json,live_nodes,overseer,collections,overseer_elect]
+[zk: localhost:2181(CONNECTED) 0] ls /
+[configs,zookeeper,clusterstate.json,aliases.json,live_nodes,overseer,collections,overseer_elect]
 
-<span class="o">[</span>zk: localhost:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 1] ls /configs
-<span class="o">[</span>primaryconf,]
+[zk: localhost:2181(CONNECTED) 1] ls /configs
+[primaryconf,]
 
-<span class="o">[</span>zk: localhost:2181<span class="o">(</span>CONNECTED<span class="o">)</span> 1] ls /collections
-<span class="o">[</span>primary]
+[zk: localhost:2181(CONNECTED) 1] ls /collections
+[primary]
 
 </code></pre>
-</div>
 
-<p>查看 <code class="highlighter-rouge">/configs</code> 和 <code class="highlighter-rouge">/collections</code> 目录均有值，说明配置文件已经上传到 ZooKeeper 上了，接下来启动 solr。</p>
+<p>查看 <code>/configs</code> 和 <code>/collections</code> 目录均有值，说明配置文件已经上传到 ZooKeeper 上了，接下来启动 solr。</p>
 
 <h1 id="tomcat-">6. Tomcat 配置与启动</h1>
 
-<p>1、修改每个节点上的 tomcat 配置文件，在环境变量中添加 <code class="highlighter-rouge">zkHost</code> 变量</p>
+<p>1、修改每个节点上的 tomcat 配置文件，在环境变量中添加 <code>zkHost</code> 变量</p>
 
-<p>编辑 <code class="highlighter-rouge">apache-tomcat-6.0.36/bin/catalina.sh</code> ，添加如下代码：</p>
+<p>编辑 <code>apache-tomcat-6.0.36/bin/catalina.sh</code> ，添加如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s1">'-Djetty.port=8080 -Dsolr.solr.home=/usr/local/solrhome -DzkHost=192.168.56.122:2181,192.168.56.122:2181,192.168.56.123:2181'</span>
+<pre><code class="language-bash">JAVA_OPTS='-Djetty.port=8080 -Dsolr.solr.home=/usr/local/solrhome -DzkHost=192.168.56.122:2181,192.168.56.122:2181,192.168.56.123:2181'
 </code></pre>
-</div>
 
-<p>在 <code class="highlighter-rouge">/usr/local/solrhome/</code> 目录创建 solr.xml ：</p>
+<p>在 <code>/usr/local/solrhome/</code> 目录创建 solr.xml ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
-<span class="nt">&lt;solr</span> <span class="na">persistent=</span><span class="s">"true"</span> <span class="na">sharedLib=</span><span class="s">"lib"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;cores</span> <span class="na">adminPath=</span><span class="s">"/admin/cores"</span> <span class="na">zkClientTimeout=</span><span class="s">"${zkClientTimeout:15000}"</span> <span class="na">hostPort=</span><span class="s">"${jetty.port:8080}"</span> <span class="na">hostContext=</span><span class="s">"${hostContext:solr}"</span><span class="nt">&gt;&lt;/cores&gt;</span>
-<span class="nt">&lt;/solr&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;solr persistent="true" sharedLib="lib"&gt;
+    &lt;cores adminPath="/admin/cores" zkClientTimeout="${zkClientTimeout:15000}" hostPort="${jetty.port:8080}" hostContext="${hostContext:solr}"&gt;&lt;/cores&gt;
+&lt;/solr&gt;
 </code></pre>
-</div>
 
 <p>说明：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">-Djetty.port</code>：配置 solr 使用的端口，默认为 8983，这里我们使用的是 tomcat，端口为 8080</li>
-  <li><code class="highlighter-rouge">-Dsolr.solr.home</code>：配置 solr/home</li>
-  <li><code class="highlighter-rouge">-zkHost</code>: 配置 zookeeper 集群地址，多个地址逗号分隔</li>
+  <li><code>-Djetty.port</code>：配置 solr 使用的端口，默认为 8983，这里我们使用的是 tomcat，端口为 8080</li>
+  <li><code>-Dsolr.solr.home</code>：配置 solr/home</li>
+  <li><code>-zkHost</code>: 配置 zookeeper 集群地址，多个地址逗号分隔</li>
 </ul>
 
 <p>最后，在 /opt 目录下启动 tomcat：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sh apache-tomcat-6.0.36/bin/startup.sh
+<pre><code class="language-bash">$ sh apache-tomcat-6.0.36/bin/startup.sh
 </code></pre>
-</div>
 
-<p>通过 <a href="http://192.168.56.121:8080/solr/">http://192.168.56.121:8080/solr/</a> 进行访问，界面如图提示 <code class="highlighter-rouge">There are no SolrCores running. </code>，这是因为配置文件尚未配置 solrcore。</p>
+<p>通过 <a href="http://192.168.56.121:8080/solr/">http://192.168.56.121:8080/solr/</a> 进行访问，界面如图提示 <code>There are no SolrCores running. </code>，这是因为配置文件尚未配置 solrcore。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/solr-no-solrcores.png" alt="There are no SolrCores running" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/solr-no-solrcores.png" alt="There are no SolrCores running" /></p>
 
 <h1 id="collectionshard--replication">7. 创建 Collection、Shard 和 Replication</h1>
 
@@ -484,69 +465,66 @@ Mode: follower
 
 <p>直接通过 REST 接口来创建 Collection，你也可以通过浏览器访问下面地址，如下所示：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl <span class="s1">'http://192.168.56.121:8080/solr/admin/collections?action=CREATE&amp;name=primary&amp;numShards=3&amp;replicationFactor=1'</span>
+<pre><code class="language-bash">$ curl 'http://192.168.56.121:8080/solr/admin/collections?action=CREATE&amp;name=primary&amp;numShards=3&amp;replicationFactor=1'
 </code></pre>
-</div>
 
 <p>如果成功，会输出如下响应内容：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;response&gt;</span>
-<span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"responseHeader"</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"status"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/int&gt;</span>
-	<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"QTime"</span><span class="nt">&gt;</span>2649<span class="nt">&lt;/int&gt;</span>
-<span class="nt">&lt;/lst&gt;</span>
-<span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"success"</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;lst&gt;</span>
-		<span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"responseHeader"</span><span class="nt">&gt;</span>
-			<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"status"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/int&gt;</span>
-			<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"QTime"</span><span class="nt">&gt;</span>2521<span class="nt">&lt;/int&gt;</span>
-		<span class="nt">&lt;/lst&gt;</span>
-		<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"core"</span><span class="nt">&gt;</span>primary_shard2_replica1<span class="nt">&lt;/str&gt;</span>
-		<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"saved"</span><span class="nt">&gt;</span>/usr/local/solrhome/solr.xml<span class="nt">&lt;/str&gt;</span>
-	<span class="nt">&lt;/lst&gt;</span>
-	<span class="nt">&lt;lst&gt;</span>
-		<span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"responseHeader"</span><span class="nt">&gt;</span>
-			<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"status"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/int&gt;</span>
-			<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"QTime"</span><span class="nt">&gt;</span>2561<span class="nt">&lt;/int&gt;</span>
-		<span class="nt">&lt;/lst&gt;</span>
-		<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"core"</span><span class="nt">&gt;</span>primary_shard3_replica1<span class="nt">&lt;/str&gt;</span>
-		<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"saved"</span><span class="nt">&gt;</span>/usr/local/solrhome/solr.xml<span class="nt">&lt;/str&gt;</span>
-	<span class="nt">&lt;/lst&gt;</span>
-	<span class="nt">&lt;lst&gt;</span>
-		<span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"responseHeader"</span><span class="nt">&gt;</span>
-		<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"status"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/int&gt;</span>
-		<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">"QTime"</span><span class="nt">&gt;</span>2607<span class="nt">&lt;/int&gt;</span>
-		<span class="nt">&lt;/lst&gt;</span>
-		<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"core"</span><span class="nt">&gt;</span>primary_shard1_replica1<span class="nt">&lt;/str&gt;</span>
-		<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"saved"</span><span class="nt">&gt;</span>/usr/local/solrhome/solr.xml<span class="nt">&lt;/str&gt;</span>
-	<span class="nt">&lt;/lst&gt;</span>
-<span class="nt">&lt;/lst&gt;</span>
-<span class="nt">&lt;/response&gt;</span>
+<pre><code class="language-xml">&lt;response&gt;
+&lt;lst name="responseHeader"&gt;
+	&lt;int name="status"&gt;0&lt;/int&gt;
+	&lt;int name="QTime"&gt;2649&lt;/int&gt;
+&lt;/lst&gt;
+&lt;lst name="success"&gt;
+	&lt;lst&gt;
+		&lt;lst name="responseHeader"&gt;
+			&lt;int name="status"&gt;0&lt;/int&gt;
+			&lt;int name="QTime"&gt;2521&lt;/int&gt;
+		&lt;/lst&gt;
+		&lt;str name="core"&gt;primary_shard2_replica1&lt;/str&gt;
+		&lt;str name="saved"&gt;/usr/local/solrhome/solr.xml&lt;/str&gt;
+	&lt;/lst&gt;
+	&lt;lst&gt;
+		&lt;lst name="responseHeader"&gt;
+			&lt;int name="status"&gt;0&lt;/int&gt;
+			&lt;int name="QTime"&gt;2561&lt;/int&gt;
+		&lt;/lst&gt;
+		&lt;str name="core"&gt;primary_shard3_replica1&lt;/str&gt;
+		&lt;str name="saved"&gt;/usr/local/solrhome/solr.xml&lt;/str&gt;
+	&lt;/lst&gt;
+	&lt;lst&gt;
+		&lt;lst name="responseHeader"&gt;
+		&lt;int name="status"&gt;0&lt;/int&gt;
+		&lt;int name="QTime"&gt;2607&lt;/int&gt;
+		&lt;/lst&gt;
+		&lt;str name="core"&gt;primary_shard1_replica1&lt;/str&gt;
+		&lt;str name="saved"&gt;/usr/local/solrhome/solr.xml&lt;/str&gt;
+	&lt;/lst&gt;
+&lt;/lst&gt;
+&lt;/response&gt;
 </code></pre>
-</div>
 
 <p>上面链接中的几个参数的含义，说明如下：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">name</code>：               待创建Collection的名称</li>
-  <li><code class="highlighter-rouge">numShards</code>：          分片的数量</li>
-  <li><code class="highlighter-rouge">replicationFactor</code>：   复制副本的数量</li>
+  <li><code>name</code>：               待创建Collection的名称</li>
+  <li><code>numShards</code>：          分片的数量</li>
+  <li><code>replicationFactor</code>：   复制副本的数量</li>
 </ul>
 
-<p>可以通过 Web 管理页面，访问 <code class="highlighter-rouge">http://192.168.56.121:8080/solr/#/~cloud</code>，查看 SolrCloud 集群的分片信息，如图所示:</p>
+<p>可以通过 Web 管理页面，访问 <code>http://192.168.56.121:8080/solr/#/~cloud</code>，查看 SolrCloud 集群的分片信息，如图所示:</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/solrcloud-collection-shard.png" alt="SolrCloud-collection-shard" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/solrcloud-collection-shard.png" alt="SolrCloud-collection-shard" /></p>
 
 <p>实际上，我们从192.168.56.121节点可以看到，SOLR 的配置文件内容，已经发生了变化，如下所示：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
-<span class="nt">&lt;solr</span> <span class="na">persistent=</span><span class="s">"true"</span> <span class="na">sharedLib=</span><span class="s">"lib"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;cores</span> <span class="na">adminPath=</span><span class="s">"/admin/cores"</span> <span class="na">zkClientTimeout=</span><span class="s">"20000"</span> <span class="na">hostPort=</span><span class="s">"${jetty.port:8080}"</span> <span class="na">hostContext=</span><span class="s">"${hostContext:solr}"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;core</span> <span class="na">shard=</span><span class="s">"shard2"</span> <span class="na">instanceDir=</span><span class="s">"primary_shard2_replica1/"</span> <span class="na">name=</span><span class="s">"primary_shard2_replica1"</span> <span class="na">collection=</span><span class="s">"primary"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/cores&gt;</span>
-<span class="nt">&lt;/solr&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;solr persistent="true" sharedLib="lib"&gt;
+  &lt;cores adminPath="/admin/cores" zkClientTimeout="20000" hostPort="${jetty.port:8080}" hostContext="${hostContext:solr}"&gt;
+    &lt;core shard="shard2" instanceDir="primary_shard2_replica1/" name="primary_shard2_replica1" collection="primary"/&gt;
+  &lt;/cores&gt;
+&lt;/solr&gt;
 </code></pre>
-</div>
 
 <p>同时，你还可以看另外两个节点上的 solr.xml 文件的变化。</p>
 
@@ -554,52 +532,47 @@ Mode: follower
 
 <p>下面对已经创建的初始分片进行复制。 shard1 已经在 192.168.56.123 上，我们复制分片到 192.168.56.121 和 192.168.56.122 上，执行如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl <span class="s1">'http://192.168.56.121:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard1_replica_2&amp;shard=shard1'</span>
+<pre><code class="language-bash">$ curl 'http://192.168.56.121:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard1_replica_2&amp;shard=shard1'
 
-<span class="gp">$ </span>curl <span class="s1">'http://192.168.56.122:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard1_replica_3&amp;shard=shard1'</span>
+$ curl 'http://192.168.56.122:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard1_replica_3&amp;shard=shard1'
 </code></pre>
-</div>
 
-<p>最后的结果是，192.168.56.123 上的 shard1，在 192.168.56.121 节点上有1个副本，名称为 <code class="highlighter-rouge">primary_shard1_replica_2</code> ，在 192.168.56.122 节点上有一个副本，名称为 <code class="highlighter-rouge">primary_shard1_replica_3</code> 。也可以通过查看 192.168.56.121 和 192.168.56.122 上的目录变化，如下所示：</p>
+<p>最后的结果是，192.168.56.123 上的 shard1，在 192.168.56.121 节点上有1个副本，名称为 <code>primary_shard1_replica_2</code> ，在 192.168.56.122 节点上有一个副本，名称为 <code>primary_shard1_replica_3</code> 。也可以通过查看 192.168.56.121 和 192.168.56.122 上的目录变化，如下所示：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$  </span>ll /usr/local/solrhome/
+<pre><code class="language-bash">$  ll /usr/local/solrhome/
 total 16
 drwxr-xr-x 3 root root 4096 Mar 10 17:11 primary_shard1_replica2
 drwxr-xr-x 3 root root 4096 Mar 10 17:02 primary_shard2_replica1
 -rw-r--r-- 1 root root  444 Mar 10 17:16 solr.xml
 </code></pre>
-</div>
 
 <p>你还可以对 shard2 和 shard3 添加副本。shard2 已经在 192.168.56.121 上，我们复制分片到 192.168.56.122 和 192.168.56.123 上，执行如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl <span class="s1">'http://192.168.56.122:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard2_replica_2&amp;shard=shard2'</span>
-<span class="gp">$ </span>curl <span class="s1">'http://192.168.56.123:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard2_replica_3&amp;shard=shard2'</span>
+<pre><code class="language-bash">$ curl 'http://192.168.56.122:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard2_replica_2&amp;shard=shard2'
+$ curl 'http://192.168.56.123:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard2_replica_3&amp;shard=shard2'
 </code></pre>
-</div>
 
 <p>shard3 已经在 192.168.56.122 上，我们复制分片到 192.168.56.121 和 192.168.56.123 上，执行如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl <span class="s1">'http://192.168.56.121:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard3_replica_2&amp;shard=shard3'</span>
-<span class="gp">$ </span>curl <span class="s1">'http://192.168.56.123:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard3_replica_3&amp;shard=shard3'</span>
+<pre><code class="language-bash">$ curl 'http://192.168.56.121:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard3_replica_2&amp;shard=shard3'
+$ curl 'http://192.168.56.123:8080/solr/admin/cores?action=CREATE&amp;collection=primary&amp;name=primary_shard3_replica_3&amp;shard=shard3'
 </code></pre>
-</div>
 
 <p>我们再次从 192.168.56.121 节点可以看到，SOLR 的配置文件内容，又发生了变化，如下所示：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
-<span class="nt">&lt;solr</span> <span class="na">persistent=</span><span class="s">"true"</span> <span class="na">sharedLib=</span><span class="s">"lib"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;cores</span> <span class="na">adminPath=</span><span class="s">"/admin/cores"</span> <span class="na">zkClientTimeout=</span><span class="s">"20000"</span> <span class="na">hostPort=</span><span class="s">"${jetty.port:8080}"</span> <span class="na">hostContext=</span><span class="s">"${hostContext:solr}"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;core</span> <span class="na">shard=</span><span class="s">"shard1"</span> <span class="na">instanceDir=</span><span class="s">"primary_shard1_replica2/"</span> <span class="na">name=</span><span class="s">"primary_shard1_replica_2"</span> <span class="na">collection=</span><span class="s">"primary"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;core</span> <span class="na">shard=</span><span class="s">"shard2"</span> <span class="na">instanceDir=</span><span class="s">"primary_shard2_replica1/"</span> <span class="na">name=</span><span class="s">"primary_shard2_replica_1"</span> <span class="na">collection=</span><span class="s">"primary"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;core</span> <span class="na">shard=</span><span class="s">"shard3"</span> <span class="na">instanceDir=</span><span class="s">"primary_shard2_replica2/"</span> <span class="na">name=</span><span class="s">"primary_shard2_replica_2"</span> <span class="na">collection=</span><span class="s">"primary"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/cores&gt;</span>
-<span class="nt">&lt;/solr&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;solr persistent="true" sharedLib="lib"&gt;
+  &lt;cores adminPath="/admin/cores" zkClientTimeout="20000" hostPort="${jetty.port:8080}" hostContext="${hostContext:solr}"&gt;
+    &lt;core shard="shard1" instanceDir="primary_shard1_replica2/" name="primary_shard1_replica_2" collection="primary"/&gt;
+    &lt;core shard="shard2" instanceDir="primary_shard2_replica1/" name="primary_shard2_replica_1" collection="primary"/&gt;
+    &lt;core shard="shard3" instanceDir="primary_shard2_replica2/" name="primary_shard2_replica_2" collection="primary"/&gt;
+  &lt;/cores&gt;
+&lt;/solr&gt;
 </code></pre>
-</div>
 
 <p>到此为止，我们已经基于3个节点，配置完成了 SolrCloud 集群。最后效果如下：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/solrcloud-collection-shard-replica.png" alt="solrcloud-collection-shard-replica" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/solrcloud-collection-shard-replica.png" alt="solrcloud-collection-shard-replica" /></p>
 
 <h1 id="section-1">8. 其他说明</h1>
 
@@ -607,91 +580,81 @@ drwxr-xr-x 3 root root 4096 Mar 10 17:02 primary_shard2_replica1
 
 <h3 id="schemaxml">schema.xml</h3>
 
-<p>必须定义 <code class="highlighter-rouge">_version_</code> 字段：</p>
+<p>必须定义 <code>_version_</code> 字段：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"_version_"</span> <span class="na">type=</span><span class="s">"long"</span> <span class="na">indexed=</span><span class="s">"true"</span> <span class="na">stored=</span><span class="s">"true"</span> <span class="na">multiValued=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/&gt;
 </code></pre>
-</div>
 
 <h3 id="solrconfigxml">solrconfig.xml</h3>
 
 <p>updateHandler 节点下需要定义 updateLog：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c">&lt;!-- Enables a transaction log， currently used for real-time get.
+<pre><code class="language-xml">    &lt;!-- Enables a transaction log， currently used for real-time get.
          "dir" - the target directory for transaction logs， defaults to the
-         solr data directory.  --&gt;</span>
-    <span class="nt">&lt;updateLog&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"dir"</span><span class="nt">&gt;</span>${solr.data.dir:}<span class="nt">&lt;/str&gt;</span>
-      <span class="c">&lt;!-- if you want to take control of the synchronization you may specify the syncLevel as one of the
+         solr data directory.  --&gt;
+    &lt;updateLog&gt;
+      &lt;str name="dir"&gt;${solr.data.dir:}&lt;/str&gt;
+      &lt;!-- if you want to take control of the synchronization you may specify the syncLevel as one of the
            following where ''flush'' is the default. fsync will reduce throughput.
       &lt;str name="syncLevel"&gt;flush|fsync|none&lt;/str&gt;
-      --&gt;</span>
-    <span class="nt">&lt;/updateLog&gt;</span>
+      --&gt;
+    &lt;/updateLog&gt;
 </code></pre>
-</div>
 
-<p>需要定义一个 <code class="highlighter-rouge">replication handler</code>，名称为 <code class="highlighter-rouge">/replication</code> ：</p>
+<p>需要定义一个 <code>replication handler</code>，名称为 <code>/replication</code> ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/replication"</span> <span class="na">class=</span><span class="s">"solr.ReplicationHandler"</span> <span class="na">startup=</span><span class="s">"lazy"</span> <span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" /&gt;
 </code></pre>
-</div>
 
-<p>需要定义一个 <code class="highlighter-rouge">realtime get handler</code>，名称为<code class="highlighter-rouge">/get</code>:</p>
+<p>需要定义一个 <code>realtime get handler</code>，名称为<code>/get</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	<span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">"/get"</span> <span class="na">class=</span><span class="s">"solr.RealTimeGetHandler"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">"defaults"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"omitHeader"</span><span class="nt">&gt;</span>true<span class="nt">&lt;/str&gt;</span>
-     <span class="nt">&lt;/lst&gt;</span>
-    <span class="nt">&lt;/requestHandler&gt;</span>
+<pre><code class="language-xml">	&lt;requestHandler name="/get" class="solr.RealTimeGetHandler"&gt;
+      &lt;lst name="defaults"&gt;
+        &lt;str name="omitHeader"&gt;true&lt;/str&gt;
+     &lt;/lst&gt;
+    &lt;/requestHandler&gt;
 </code></pre>
-</div>
 
-<p>需要定义 <code class="highlighter-rouge">admin handlers</code>：</p>
+<p>需要定义 <code>admin handlers</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;requestHandler name="/admin/" class="solr.admin.AdminHandlers" /&gt;
+<pre><code>&lt;requestHandler name="/admin/" class="solr.admin.AdminHandlers" /&gt;
 </code></pre>
-</div>
 
-<p>需要定义 <code class="highlighter-rouge">updateRequestProcessorChain</code>：</p>
+<p>需要定义 <code>updateRequestProcessorChain</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="nt">&lt;updateRequestProcessorChain</span> <span class="na">name=</span><span class="s">"sample"</span><span class="nt">&gt;</span>
-     <span class="nt">&lt;processor</span> <span class="na">class=</span><span class="s">"solr.LogUpdateProcessorFactory"</span> <span class="nt">/&gt;</span>
-     <span class="nt">&lt;processor</span> <span class="na">class=</span><span class="s">"solr.DistributedUpdateProcessorFactory"</span><span class="nt">/&gt;</span>
-     <span class="nt">&lt;processor</span> <span class="na">class=</span><span class="s">"solr.RunUpdateProcessorFactory"</span> <span class="nt">/&gt;</span>
-   <span class="nt">&lt;/updateRequestProcessorChain&gt;</span>
+<pre><code class="language-xml"> &lt;updateRequestProcessorChain name="sample"&gt;
+     &lt;processor class="solr.LogUpdateProcessorFactory" /&gt;
+     &lt;processor class="solr.DistributedUpdateProcessorFactory"/&gt;
+     &lt;processor class="solr.RunUpdateProcessorFactory" /&gt;
+   &lt;/updateRequestProcessorChain&gt;
 </code></pre>
-</div>
 
 <h3 id="solrxml">solr.xml</h3>
 
-<p>cores 节点需要定义 <code class="highlighter-rouge">adminPath</code> 属性：</p>
+<p>cores 节点需要定义 <code>adminPath</code> 属性：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;cores</span> <span class="na">adminPath=</span><span class="s">"/admin/cores"</span> <span class="nt">&gt;</span>
+<pre><code class="language-xml">&lt;cores adminPath="/admin/cores" &gt;
 </code></pre>
-</div>
 
 <h2 id="solrcloud--shard">8.2 SolrCloud 分布式检索时忽略宕机的 Shard</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">”error”</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">”msg”</span><span class="nt">&gt;</span>no servers hosting shard:<span class="nt">&lt;/str&gt;</span>
-	<span class="nt">&lt;int</span> <span class="na">name=</span><span class="s">”code”</span><span class="nt">&gt;</span>503<span class="nt">&lt;/int&gt;</span>
-<span class="nt">&lt;/lst&gt;</span>
+<pre><code class="language-xml">&lt;lst name=”error”&gt;
+	&lt;str name=”msg”&gt;no servers hosting shard:&lt;/str&gt;
+	&lt;int name=”code”&gt;503&lt;/int&gt;
+&lt;/lst&gt;
 </code></pre>
-</div>
 
 <p>加入下面参数，只从存活的 shards 获取数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">shards.tolerant</span><span class="p">=</span><span class="s">true </span>
+<pre><code class="language-properties">shards.tolerant=true 
 </code></pre>
-</div>
 
-<p>如：<code class="highlighter-rouge">http://192.168.56.121:8080/solr/primary_shard2_replica1/select?q=*%3A*&amp;wt=xml&amp;indent=true&amp;shards.tolerant=true</code></p>
+<p>如：<code>http://192.168.56.121:8080/solr/primary_shard2_replica1/select?q=*%3A*&amp;wt=xml&amp;indent=true&amp;shards.tolerant=true</code></p>
 
 <p>没有打此参数，如果集群内有挂掉的 shard，将显示：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>no servers hosting shard
+<pre><code>no servers hosting shard
 </code></pre>
-</div>
 
 <h2 id="collection--shard-1">8.3 自动创建 Collection 及初始 Shard</h2>
 
@@ -699,17 +662,15 @@ drwxr-xr-x 3 root root 4096 Mar 10 17:02 primary_shard2_replica1
 
 <p>1、在第一个节点修改 tomcat 启动参数</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>JAVA_OPTS='-Djetty.port=8080 -Dsolr.solr.home=/usr/local/solrhome -DzkHost=192.168.56.122:2181,192.168.56.122:2181,192.168.56.123:2181 -DnumShards=3 -Dbootstrap_confdir=/usr/local/solrhome/primary/conf -Dcollection.configName=primaryconf '
+<pre><code>JAVA_OPTS='-Djetty.port=8080 -Dsolr.solr.home=/usr/local/solrhome -DzkHost=192.168.56.122:2181,192.168.56.122:2181,192.168.56.123:2181 -DnumShards=3 -Dbootstrap_confdir=/usr/local/solrhome/primary/conf -Dcollection.configName=primaryconf '
 </code></pre>
-</div>
 
-<p>然后启动 tomcat。这个步骤上传了集群的相关配置信息(<code class="highlighter-rouge">/usr/local/solrhome/primary/conf</code>)到 ZooKeeper 中去，所以启动下一个节点时不用再指定配置文件了。</p>
+<p>然后启动 tomcat。这个步骤上传了集群的相关配置信息(<code>/usr/local/solrhome/primary/conf</code>)到 ZooKeeper 中去，所以启动下一个节点时不用再指定配置文件了。</p>
 
 <p>2、在第二个和第三个节点修改 tomcat 启动参数</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>JAVA_OPTS='-Djetty.port=8080 -Dsolr.solr.home=/usr/local/solrhome -DzkHost=192.168.56.122:2181,192.168.56.122:2181,192.168.56.123:2181 -DnumShards=3'
+<pre><code>JAVA_OPTS='-Djetty.port=8080 -Dsolr.solr.home=/usr/local/solrhome -DzkHost=192.168.56.122:2181,192.168.56.122:2181,192.168.56.123:2181 -DnumShards=3'
 </code></pre>
-</div>
 
 <p>然后启动 tomcat。</p>
 
@@ -779,7 +740,7 @@ drwxr-xr-x 3 root root 4096 Mar 10 17:02 primary_shard2_replica1
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

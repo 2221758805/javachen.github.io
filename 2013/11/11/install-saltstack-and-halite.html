@@ -113,98 +113,86 @@
 
 <p>在每个节点上配置yum源：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ rpm -ivh http://mirrors.sohu.com/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
+<pre><code>$ rpm -ivh http://mirrors.sohu.com/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
 </code></pre>
-</div>
 
 <p>然后通过下面命令查看epel参考是否安装成功：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
+<pre><code>$ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
 </code></pre>
-</div>
 
-<p>如果没有安装成功，则可以手动下载<code class="highlighter-rouge">epel-release-6-8.noarch.rpm</code>，然后打开该rpm找到<code class="highlighter-rouge">./etc/yum.repos.d/epel.repo</code>，将其拷贝到<code class="highlighter-rouge">/etc/yum.repos.d</code>目录</p>
+<p>如果没有安装成功，则可以手动下载<code>epel-release-6-8.noarch.rpm</code>，然后打开该rpm找到<code>./etc/yum.repos.d/epel.repo</code>，将其拷贝到<code>/etc/yum.repos.d</code>目录</p>
 
 <h1 id="section">安装依赖</h1>
 
-<p>因为我用jinja2作为SaltStack的渲染引擎，故需要在每个节点上安装<code class="highlighter-rouge">python-jinja2</code>：</p>
+<p>因为我用jinja2作为SaltStack的渲染引擎，故需要在每个节点上安装<code>python-jinja2</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ yum install python-jinja2 -y
+<pre><code>$ yum install python-jinja2 -y
 </code></pre>
-</div>
 
 <h1 id="saltstack">安装saltstack</h1>
 
 <p>在sk1上安装master：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ yum install salt-master
+<pre><code>$ yum install salt-master
 </code></pre>
-</div>
 
 <p>在sk1上安装minion：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ yum install salt-minion
+<pre><code>$ yum install salt-minion
 </code></pre>
-</div>
 
 <h1 id="section-1">关闭防火墙</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ iptables -F
+<pre><code>$ iptables -F
 $ setenforce 0
 </code></pre>
-</div>
 
 <h1 id="section-2">修改配置文件</h1>
 
-<p>修改master配置文件，使其监听<code class="highlighter-rouge">0.0.0.0</code>地址，并设置自动接受minion的请求。</p>
+<p>修改master配置文件，使其监听<code>0.0.0.0</code>地址，并设置自动接受minion的请求。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ vim /etc/salt/master
+<pre><code>$ vim /etc/salt/master
  interface: 0.0.0.0 #去掉对该行的注释
  auto_accept: True #去掉对该行的注释,并修改False为True
 </code></pre>
-</div>
 
 <p>在所有的minion节点配置master的id和自己的id：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ vim /etc/salt/minion
+<pre><code>$ vim /etc/salt/minion
  master: sk1
  id: sk2
 </code></pre>
-</div>
 
 <h1 id="section-3">启动</h1>
 
 <p>分别在sk1和sk2上配置开机启动：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ chkconfig salt-master on
+<pre><code>$ chkconfig salt-master on
 $ chkconfig salt-minion on
 </code></pre>
-</div>
 
 <p>分别在sk1和sk2上以service方式启动：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ /etc/init.d/salt-master start
+<pre><code>$ /etc/init.d/salt-master start
 $ /etc/init.d/salt-minion start
 </code></pre>
-</div>
 
 <p>你可以在sk2上以后台运行salt-minion</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ salt-minion -d
+<pre><code>$ salt-minion -d
 </code></pre>
-</div>
 
 <p>或者在sk2上debug方式运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ salt-minion -l debug
+<pre><code>$ salt-minion -l debug
 </code></pre>
-</div>
 
 <h1 id="section-4">排错</h1>
 
 <p>如果启动提示如下错误：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$  /etc/init.d/salt-master start
+<pre><code>$  /etc/init.d/salt-master start
 Starting salt-master daemon: Traceback (most recent call last):
  File "/usr/bin/salt-master", line 10, in &lt;module&gt;
    salt_master()
@@ -216,33 +204,30 @@ Starting salt-master daemon: Traceback (most recent call last):
    if user in e.gr_mem] + [pwuser.gid])
 AttributeError: 'pwd.struct_passwd' object has no attribute 'gid'
 </code></pre>
-</div>
 
 <p>请下载saltstack源码重新编译：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ wget https://github.com/saltstack/salt/archive/develop.zip
+<pre><code>$ wget https://github.com/saltstack/salt/archive/develop.zip
 $ unzip develop
 $ cd salt-develop/
 $ python2.6 setup.py install
 </code></pre>
-</div>
 
 <p>如果你通过’cmd.run’命令去运行java命令，你会得到这样的结果：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@sk1 salt]# salt '*' cmd.run 'java' 
+<pre><code>[root@sk1 salt]# salt '*' cmd.run 'java' 
 sk2:
     /bin/bash: java: command not found
 </code></pre>
-</div>
 
 <p>这是因为minion在启动过程中并没有加载系统的环境变量，解决这个问题有两种方式：</p>
 
 <ul>
-  <li>运行java命令前先<code class="highlighter-rouge">source</code>环境变量</li>
+  <li>运行java命令前先<code>source</code>环境变量</li>
   <li>修改minion启动脚本，添加source命令：</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># Source function library.
+<pre><code># Source function library.
 if [ -f $DEBIAN_VERSION ]; then
    break
 elif [ -f $SUSE_RELEASE -a -r /etc/rc.status ]; then
@@ -253,7 +238,6 @@ else
     . /etc/profile
 fi
 </code></pre>
-</div>
 
 <h1 id="salt-minionmaster">salt minion和master的认证过程</h1>
 
@@ -264,40 +248,36 @@ fi
 
 <p>master上执行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@sk1 pillar]# salt-key -L
+<pre><code>[root@sk1 pillar]# salt-key -L
 Accepted Keys:
 Unaccepted Keys:
 Rejected Keys:
 </code></pre>
-</div>
 
 <p>接受所有的认证请求：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@sk1 pillar]# salt-key -A
+<pre><code>[root@sk1 pillar]# salt-key -A
 </code></pre>
-</div>
 
 <p>再次查看：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@sk1 pillar]# salt-key -L
+<pre><code>[root@sk1 pillar]# salt-key -L
 Accepted Keys:
 sk2
 Unaccepted Keys:
 Rejected Keys:
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">salt-key</code>更多说明：<a href="http://docs.saltstack.com/ref/cli/salt-key.html">http://docs.saltstack.com/ref/cli/salt-key.html</a></p>
+<p><code>salt-key</code>更多说明：<a href="http://docs.saltstack.com/ref/cli/salt-key.html">http://docs.saltstack.com/ref/cli/salt-key.html</a></p>
 
 <h1 id="section-5">测试运行</h1>
 
 <p>在master上运行ping：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@sk1 pillar]# salt '*' test.ping
+<pre><code>[root@sk1 pillar]# salt '*' test.ping
 sk2:salt '*' test.ping
     True
 </code></pre>
-</div>
 
 <p>True表明测试成功。</p>
 
@@ -305,63 +285,56 @@ sk2:salt '*' test.ping
 
 <h2 id="section-6">下载代码</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ git clone https://github.com/saltstack/halite
+<pre><code>$ git clone https://github.com/saltstack/halite
 </code></pre>
-</div>
 
 <h2 id="indexhtml">生成index.html</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ cd halite/halite
+<pre><code>$ cd halite/halite
 $ ./genindex.py -C
 </code></pre>
-</div>
 
 <h2 id="salt-api">安装salt-api</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ yum install salt-api
+<pre><code>$ yum install salt-api
 </code></pre>
-</div>
 
 <h2 id="salt-master">配置salt master文件</h2>
 
 <p>配置salt的master文件，添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">rest_cherrypy</span><span class="p">:</span>
- <span class="n">host</span><span class="p">:</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span>
- <span class="n">port</span><span class="p">:</span> <span class="mi">8080</span>
- <span class="n">debug</span><span class="p">:</span> <span class="n">true</span>
- <span class="n">static</span><span class="p">:</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">halite</span><span class="o">/</span><span class="n">halite</span>
- <span class="n">app</span><span class="p">:</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">halite</span><span class="o">/</span><span class="n">halite</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
-<span class="n">external_auth</span><span class="p">:</span>
-   <span class="n">pam</span><span class="p">:</span>
-     <span class="n">admin</span><span class="p">:</span>
-	 <span class="o">-</span> <span class="o">.*</span>
-	 <span class="o">-</span> <span class="s">'@runner'</span>
-	 <span class="o">-</span> <span class="s">'@wheel'</span>
+<pre><code class="language-python">rest_cherrypy:
+ host: 0.0.0.0
+ port: 8080
+ debug: true
+ static: /root/halite/halite
+ app: /root/halite/halite/index.html
+external_auth:
+   pam:
+     admin:
+	 - .*
+	 - '@runner'
+	 - '@wheel'
 </code></pre>
-</div>
 
 <p>重启master;</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ /etc/init.d/salt-master restart
+<pre><code>$ /etc/init.d/salt-master restart
 </code></pre>
-</div>
 
 <h2 id="section-7">添加登陆用户</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ useradd admin
+<pre><code>$ useradd admin
 $ echo admin|passwd –stdin admin
 </code></pre>
-</div>
 
 <h2 id="salt-api-1">启动 salt-api</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ cd halite/halite
+<pre><code>$ cd halite/halite
 $ python2.6 server_bottle.py -d -C -l debug -s cherrypy
 </code></pre>
-</div>
 
-<p>然后打开<code class="highlighter-rouge">http://ip:8080/app</code>，通过admin/admin登陆即可。</p>
+<p>然后打开<code>http://ip:8080/app</code>，通过admin/admin登陆即可。</p>
 
 
                     <br/>
@@ -415,7 +388,7 @@ $ python2.6 server_bottle.py -d -C -l debug -s cherrypy
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

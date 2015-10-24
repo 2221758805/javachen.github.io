@@ -113,7 +113,7 @@
 
 <p>Yeoman 的目的不仅是要为新项目建立工作流，同时还是为了解决前端开发所面临的诸多严重问题，例如零散的依赖关系。</p>
 
-<p>Yeoman 主要有三部分组成：<code class="highlighter-rouge">yo</code>（脚手架工具）、<code class="highlighter-rouge">grunt</code>（构建工具）、<code class="highlighter-rouge">bower</code>（包管理器）。这三个工具是分别独立开发的，但是需要配合使用，来实现我们高效的工作流模式。</p>
+<p>Yeoman 主要有三部分组成：<code>yo</code>（脚手架工具）、<code>grunt</code>（构建工具）、<code>bower</code>（包管理器）。这三个工具是分别独立开发的，但是需要配合使用，来实现我们高效的工作流模式。</p>
 
 <ul>
   <li><a href="https://github.com/yeoman/yo">Yo</a> 搭建新应用的脚手架，编写你的 Grunt 配置并且安装你有可能在构建中需要的相关的 Grunt 任务。</li>
@@ -128,16 +128,16 @@
 <p>Yeoman 特性：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">快速创建骨架应用程序</code>。使用可自定义的模板（例如：HTML5、Boilerplate、Twitter Bootstrap 等）、AMD（通过 RequireJS）以及其他工具轻松地创建新项目的骨架。</li>
-  <li><code class="highlighter-rouge">自动编译 CoffeeScrip 和 Compass</code>。在做出变更的时候，Yeoman 的 LiveReload 监视进程会自动编译源文件，并刷新浏览器，而不需要你手动执行。</li>
-  <li><code class="highlighter-rouge">自动完善你的脚本</code>。所有脚本都会自动针对 JSHint 运行，从而确保它们遵循语言的最佳实践。</li>
-  <li><code class="highlighter-rouge">内建的预览服务器</code>。你不需要启动自己的 HTTP 服务器。内建的服务器用一条命令就可以启动。</li>
-  <li><code class="highlighter-rouge">非常棒的图像优化</code>。使用 OptPNG 和 JPEGTran 对所有图像做了优化。</li>
-  <li><code class="highlighter-rouge">生成 AppCache 清单</code>。Yeoman 会为你生成应用程序缓存的清单，你只需要构建项目就好。</li>
-  <li><code class="highlighter-rouge">“杀手级”的构建过程</code>。你所做的工作不仅被精简到最少，让你更加专注，为你节省大量工作。</li>
-  <li><code class="highlighter-rouge">集成的包管理</code>。Yeoman 让你可以通过命令行轻松地查找新的包，安装并保持更新，而不需要你打开浏览器。</li>
-  <li><code class="highlighter-rouge">对 ES6 模块语法的支持</code>。你可以使用最新的 ECMAScript 6 模块语法来编写模块。这还是一种实验性的特性，它会被转换成 ES5，从而你可以在所有流行的浏览器中使用编写的代码。</li>
-  <li><code class="highlighter-rouge">PhantomJS 单元测试</code>。你可以通过 PhantomJS 轻松地运行单元测试。当你创建新的应用程序的时候，它还会为你自动创建测试内容的骨架。</li>
+  <li><code>快速创建骨架应用程序</code>。使用可自定义的模板（例如：HTML5、Boilerplate、Twitter Bootstrap 等）、AMD（通过 RequireJS）以及其他工具轻松地创建新项目的骨架。</li>
+  <li><code>自动编译 CoffeeScrip 和 Compass</code>。在做出变更的时候，Yeoman 的 LiveReload 监视进程会自动编译源文件，并刷新浏览器，而不需要你手动执行。</li>
+  <li><code>自动完善你的脚本</code>。所有脚本都会自动针对 JSHint 运行，从而确保它们遵循语言的最佳实践。</li>
+  <li><code>内建的预览服务器</code>。你不需要启动自己的 HTTP 服务器。内建的服务器用一条命令就可以启动。</li>
+  <li><code>非常棒的图像优化</code>。使用 OptPNG 和 JPEGTran 对所有图像做了优化。</li>
+  <li><code>生成 AppCache 清单</code>。Yeoman 会为你生成应用程序缓存的清单，你只需要构建项目就好。</li>
+  <li><code>“杀手级”的构建过程</code>。你所做的工作不仅被精简到最少，让你更加专注，为你节省大量工作。</li>
+  <li><code>集成的包管理</code>。Yeoman 让你可以通过命令行轻松地查找新的包，安装并保持更新，而不需要你打开浏览器。</li>
+  <li><code>对 ES6 模块语法的支持</code>。你可以使用最新的 ECMAScript 6 模块语法来编写模块。这还是一种实验性的特性，它会被转换成 ES5，从而你可以在所有流行的浏览器中使用编写的代码。</li>
+  <li><code>PhantomJS 单元测试</code>。你可以通过 PhantomJS 轻松地运行单元测试。当你创建新的应用程序的时候，它还会为你自动创建测试内容的骨架。</li>
 </ul>
 
 <h1 id="section">安装</h1>
@@ -148,33 +148,29 @@
 
 <p>Node.js 版本要求为 v0.10.x+，npm 版本要求为 v2.1.0+，运行下面命令 检查版本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>node --version <span class="o">&amp;&amp;</span> npm --version
+<pre><code class="language-bash">$ node --version &amp;&amp; npm --version
 </code></pre>
-</div>
 
 <p>也可以检查 Git 版本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git --version
+<pre><code class="language-bash">$ git --version
 </code></pre>
-</div>
 
 <h2 id="yeoman--1">安装 Yeoman 工具集</h2>
 
 <p>确保 Node 安装之后，安装 Yeoman 工具集：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm install --global yo bower grunt-cli
+<pre><code class="language-bash">$ npm install --global yo bower grunt-cli
 </code></pre>
-</div>
 
 <p>运行下面命令检查是否安装成功：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yo --version <span class="o">&amp;&amp;</span> bower --version <span class="o">&amp;&amp;</span> grunt --version
+<pre><code class="language-bash">$ yo --version &amp;&amp; bower --version &amp;&amp; grunt --version
 
 1.4.5
 1.3.12
 grunt-cli v0.1.13
 </code></pre>
-</div>
 
 <h2 id="angularjs-">安装 AngularJS 的生成器</h2>
 
@@ -182,28 +178,25 @@ grunt-cli v0.1.13
 
 <p>你可以安装 web 应用的生成器</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm install -g generator-webapp
+<pre><code class="language-bash">$ npm install -g generator-webapp
 </code></pre>
-</div>
 
 <p>也可以安装 <a href="https://www.npmjs.org/package/generator-angular">generator-angular</a> 生成器：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm install --global generator-angular
+<pre><code class="language-bash">$ npm install --global generator-angular
 </code></pre>
-</div>
 
 <h1 id="section-2">创建项目</h1>
 
 <p>创建一个目录用于作为工程目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir mytodo <span class="o">&amp;&amp;</span> <span class="nb">cd </span>mytodo
+<pre><code class="language-bash">$ mkdir mytodo &amp;&amp; cd mytodo
 </code></pre>
-</div>
 
 <p>你可以查看所有的生成器：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yo
-? <span class="s1">'Allo june! What would you like to do?
+<pre><code class="language-bash">$ yo
+? 'Allo june! What would you like to do?
   Run a generator
   Angular
   Karma
@@ -212,35 +205,33 @@ grunt-cli v0.1.13
   ──────────────
   Update your generators
 (Move up and down to reveal more choices)
-</span></code></pre>
-</div>
+</code></pre>
 
 <p>运行 Angular 生成器，会提示你是否使用 Sass 和引入 Bootstrap，以及加载哪些 Angular 模块：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yo angular
+<pre><code class="language-bash">$ yo angular
 
      _-----_
     |       |    .--------------------------.
-    |--<span class="o">(</span>o<span class="o">)</span>--|    |    Welcome to Yeoman,    |
-   <span class="sb">`</span>---------´   |   ladies and gentlemen!  |
-    <span class="o">(</span> _´U<span class="sb">`</span>_ <span class="o">)</span>    <span class="s1">'--------------------------'</span>
-    /___A___<span class="se">\</span>
+    |--(o)--|    |    Welcome to Yeoman,    |
+   `---------´   |   ladies and gentlemen!  |
+    ( _´U`_ )    '--------------------------'
+    /___A___\
      |  ~  |
-   __<span class="s1">'.___.'</span>__
- ´   <span class="sb">`</span>  |° ´ Y <span class="sb">`</span>
+   __'.___.'__
+ ´   `  |° ´ Y `
 
 Out of the box I include Bootstrap and some AngularJS recommended modules.
 
-? Would you like to use Sass <span class="o">(</span>with Compass<span class="o">)</span>? No
+? Would you like to use Sass (with Compass)? No
 ? Would you like to include Bootstrap? Yes
 ? Which modules would you like to include? angular-animate.js, angular-cookies.js, angular-resource.js, angular-route.js, angular-sanitize.js, angular-touch.js
 
 </code></pre>
-</div>
 
 <p>选择需要下载的模块，然后回车。过一段时间之后，生成的目录结构如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mytodo
+<pre><code>mytodo
 ├── Gruntfile.js
 ├── app
 │   ├── 404.html
@@ -265,15 +256,13 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
     └── spec
         └── controllers
 </code></pre>
-</div>
 
 <p>示例中的所有 js 代码都使用了严格模式，有关严格模式的内容可以参考 <a href="http://www.waylau.com/javascript-use-strict-mode/">http://www.waylau.com/javascript-use-strict-mode/</a></p>
 
 <p>运行下面命令启动服务：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>grunt serve
+<pre><code class="language-bash">$ grunt serve
 </code></pre>
-</div>
 
 <p>浏览器访问 <localhost:9000>，你会看到：</localhost:9000></p>
 
@@ -285,24 +274,22 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>打开 scripts/controllers/main.js ，代码修改为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+<pre><code class="language-javascript">'use strict';
 
-<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'MainCtrl'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Item 1'</span><span class="p">,</span> <span class="s1">'Item 2'</span><span class="p">,</span> <span class="s1">'Item 3'</span><span class="p">];</span>
-  <span class="p">});</span>
+angular.module('webApp').controller('MainCtrl', function ($scope) {
+    $scope.todos = ['Item 1', 'Item 2', 'Item 3'];
+  });
 </code></pre>
-</div>
 
 <p>修改 views/main.html，将 todos 中的项目以 input 标签形式输出：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;h2&gt;</span>My todos<span class="nt">&lt;/h2&gt;</span>
-  <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"form-group"</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"todo"</span> <span class="na">class=</span><span class="s">"form-control"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;/p&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
+<pre><code class="language-html">&lt;div class="container"&gt;
+  &lt;h2&gt;My todos&lt;/h2&gt;
+  &lt;p class="form-group" ng-repeat="todo in todos"&gt;
+    &lt;input type="text" ng-model="todo" class="form-control"&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
 </code></pre>
-</div>
 
 <p>页面会显示如下：</p>
 
@@ -312,29 +299,28 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>首先，添加一个输入框和添加按钮，将 views/main.html 修改为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;h2&gt;</span>My todos<span class="nt">&lt;/h2&gt;</span>
+<pre><code class="language-html">&lt;div class="container"&gt;
+  &lt;h2&gt;My todos&lt;/h2&gt;
 
-  <span class="c">&lt;!-- Todos input --&gt;</span>
-  <span class="nt">&lt;form</span> <span class="na">role=</span><span class="s">"form"</span> <span class="na">ng-submit=</span><span class="s">"addTodo()"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"todo"</span> <span class="na">placeholder=</span><span class="s">"What needs to be done?"</span> <span class="na">class=</span><span class="s">"form-control"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"input-group-btn"</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span> <span class="na">value=</span><span class="s">"Add"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;/span&gt;</span>
-      <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-  <span class="nt">&lt;/form&gt;</span>
-  <span class="nt">&lt;p&gt;&lt;/p&gt;</span>
+  &lt;!-- Todos input --&gt;
+  &lt;form role="form" ng-submit="addTodo()"&gt;
+    &lt;div class="row"&gt;
+      &lt;div class="input-group"&gt;
+        &lt;input type="text" ng-model="todo" placeholder="What needs to be done?" class="form-control"&gt;
+        &lt;span class="input-group-btn"&gt;
+          &lt;input type="submit" class="btn btn-primary" value="Add"&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+  &lt;p&gt;&lt;/p&gt;
 
-  <span class="c">&lt;!-- Todos list --&gt;</span>
-  <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"form-group"</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"todo"</span> <span class="na">class=</span><span class="s">"form-control"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;/p&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
+  &lt;!-- Todos list --&gt;
+  &lt;p class="form-group" ng-repeat="todo in todos"&gt;
+    &lt;input type="text" ng-model="todo" class="form-control"&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
 </code></pre>
-</div>
 
 <p>这时候，页面内容如下：</p>
 
@@ -342,53 +328,50 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>修改 main.js 添加 addTodo() 事件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+<pre><code class="language-javascript">'use strict';
 
-<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'MainCtrl'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Item 1'</span><span class="p">,</span> <span class="s1">'Item 2'</span><span class="p">,</span> <span class="s1">'Item 3'</span><span class="p">];</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">addTodo</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span><span class="p">);</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-    <span class="p">};</span>
-  <span class="p">});</span>
+angular.module('webApp')
+  .controller('MainCtrl', function ($scope) {
+    $scope.todos = ['Item 1', 'Item 2', 'Item 3'];
+    $scope.addTodo = function () {
+      $scope.todos.push($scope.todo);
+      $scope.todo = '';
+    };
+  });
 </code></pre>
-</div>
 
 <p>这样，就完成了添加 todo 项的功能。</p>
 
 <h2 id="todo--2">移除一个 todo 项目</h2>
 
-<p>先在列表中每一个 todo 项目的边上加上一个移除按钮，修改 views/main.html 中 <code class="highlighter-rouge">Todos list</code> 注释部分的代码为：</p>
+<p>先在列表中每一个 todo 项目的边上加上一个移除按钮，修改 views/main.html 中 <code>Todos list</code> 注释部分的代码为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Todos list --&gt;</span>
-<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"input-group"</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"todo"</span> <span class="na">class=</span><span class="s">"form-control"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"input-group-btn"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span> <span class="na">ng-click=</span><span class="s">"removeTodo($index)"</span> <span class="na">aria-label=</span><span class="s">"Remove"</span><span class="nt">&gt;</span>X<span class="nt">&lt;/button&gt;</span>
-  <span class="nt">&lt;/span&gt;</span>
-<span class="nt">&lt;/p&gt;</span>
+<pre><code class="language-html">&lt;!-- Todos list --&gt;
+&lt;p class="input-group" ng-repeat="todo in todos"&gt;
+  &lt;input type="text" ng-model="todo" class="form-control"&gt;
+  &lt;span class="input-group-btn"&gt;
+    &lt;button class="btn btn-danger" ng-click="removeTodo($index)" aria-label="Remove"&gt;X&lt;/button&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
 </code></pre>
-</div>
 
-<p>修改 main.js 添加 <code class="highlighter-rouge">removeTodo($index)</code> 事件：</p>
+<p>修改 main.js 添加 <code>removeTodo($index)</code> 事件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+<pre><code class="language-javascript">'use strict';
 
-<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'MainCtrl'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Item 1'</span><span class="p">,</span> <span class="s1">'Item 2'</span><span class="p">,</span> <span class="s1">'Item 3'</span><span class="p">];</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">addTodo</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span><span class="p">);</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-    <span class="p">};</span>
+angular.module('webApp')
+  .controller('MainCtrl', function ($scope) {
+    $scope.todos = ['Item 1', 'Item 2', 'Item 3'];
+    $scope.addTodo = function () {
+      $scope.todos.push($scope.todo);
+      $scope.todo = '';
+    };
 
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeTodo</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="p">};</span>
-  <span class="p">});</span>
+    $scope.removeTodo = function (index) {
+      $scope.todos.splice(index, 1);
+    };
+  });
 </code></pre>
-</div>
 
 <p>现在，删除按钮能够响应删除事件了。虽然我们可以添加和移除 Todo 事项，但是这些记录都不能永久地保存。一旦页面被刷新了，更改的记录都会不见了，又恢复到 main.js 中设置的todo 数组的值。</p>
 
@@ -398,59 +381,53 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>接下来，我们安装并引入 <a href="https://github.com/angular-ui/ui-sortable">AngularUI Sortable</a> 模块，使得 Todo 事项可以排序。这里，我们需要使用 bower 安装 angular-ui-sortable 和 jquery-ui：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bower install --save angular-ui-sortable jquery-ui
+<pre><code class="language-bash">$ bower install --save angular-ui-sortable jquery-ui
 </code></pre>
-</div>
 
-<p>添加参数 <code class="highlighter-rouge">--save</code> 可以更新 bower.json 文件中关于 angular-ui-sortable 和 jquery-ui 的依赖，这样你就不用手动去 bower.json 中更新依赖了。</p>
+<p>添加参数 <code>--save</code> 可以更新 bower.json 文件中关于 angular-ui-sortable 和 jquery-ui 的依赖，这样你就不用手动去 bower.json 中更新依赖了。</p>
 
 <p>再次启动 grunt server：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>grunt serve
+<pre><code class="language-bash">$ grunt serve
 </code></pre>
-</div>
 
 <p>为了使用Sortable模块，我们需要在 scripts/app.js 中更新Angular 模块，将 Sortable 可以加载到我们的应用中，更改前代码， 将 ui.sortable 添加进数组中,如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">,</span> <span class="p">[</span>
-    <span class="s1">'ngAnimate'</span><span class="p">,</span>
-    <span class="s1">'ngCookies'</span><span class="p">,</span>
-    <span class="s1">'ngResource'</span><span class="p">,</span>
-    <span class="s1">'ngRoute'</span><span class="p">,</span>
-    <span class="s1">'ngSanitize'</span><span class="p">,</span>
-    <span class="s1">'ngTouch'</span><span class="p">,</span>
-    <span class="s1">'ui.sortable'</span>
-  <span class="p">])</span>
+<pre><code class="language-javascript">angular.module('webApp', [
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    'ui.sortable'
+  ])
 </code></pre>
-</div>
 
-<p>最后，在 views/main.html 中，我们需要将 <code class="highlighter-rouge">ui-sortable</code> 指令作为一个 div 将 <code class="highlighter-rouge">ng-repeat</code> 层包起来。</p>
+<p>最后，在 views/main.html 中，我们需要将 <code>ui-sortable</code> 指令作为一个 div 将 <code>ng-repeat</code> 层包起来。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Todos list --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">ui-sortable</span> <span class="na">ng-model=</span><span class="s">"todos"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"input-group"</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span><span class="nt">&gt;</span>
+<pre><code class="language-html">&lt;!-- Todos list --&gt;
+&lt;div ui-sortable ng-model="todos"&gt;
+  &lt;p class="input-group" ng-repeat="todo in todos"&gt;
 </code></pre>
-</div>
 
 <p>添加一些内联的 CSS，将鼠标显示为 “可移动” 样式来告诉用户这些 todo 项是可以移动的：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"input-group"</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span> <span class="na">style=</span><span class="s">"padding:5px 10px; cursor: move;"</span><span class="nt">&gt;</span>
+<pre><code class="language-html">&lt;p class="input-group" ng-repeat="todo in todos" style="padding:5px 10px; cursor: move;"&gt;
 </code></pre>
-</div>
 
 <p>完整代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Todos list --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">ui-sortable</span> <span class="na">ng-model=</span><span class="s">"todos"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"input-group"</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span> <span class="na">style=</span><span class="s">"padding:5px 10px; cursor: move;"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"todo"</span> <span class="na">class=</span><span class="s">"form-control"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"input-group-btn"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span> <span class="na">ng-click=</span><span class="s">"removeTodo($index)"</span> <span class="na">aria-label=</span><span class="s">"Remove"</span><span class="nt">&gt;</span>X<span class="nt">&lt;/button&gt;</span>
-    <span class="nt">&lt;/span&gt;</span>
-  <span class="nt">&lt;/p&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
+<pre><code class="language-html">&lt;!-- Todos list --&gt;
+&lt;div ui-sortable ng-model="todos"&gt;
+  &lt;p class="input-group" ng-repeat="todo in todos" style="padding:5px 10px; cursor: move;"&gt;
+    &lt;input type="text" ng-model="todo" class="form-control"&gt;
+    &lt;span class="input-group-btn"&gt;
+      &lt;button class="btn btn-danger" ng-click="removeTodo($index)" aria-label="Remove"&gt;X&lt;/button&gt;
+    &lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
 </code></pre>
-</div>
 
 <p>服务浏览器，我们就可以对 Todo 事项进行拖拽排序了。</p>
 
@@ -460,95 +437,90 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>下载依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bower install --save angular-local-storage
+<pre><code class="language-bash">$ bower install --save angular-local-storage
 </code></pre>
-</div>
 
 <p>编辑 scripts/app.js 添加 LocalStorageModule的 适配器:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span>
-  <span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">,</span> <span class="p">[</span>
-    <span class="s1">'ngAnimate'</span><span class="p">,</span>
-    <span class="s1">'ngCookies'</span><span class="p">,</span>
-    <span class="s1">'ngResource'</span><span class="p">,</span>
-    <span class="s1">'ngRoute'</span><span class="p">,</span>
-    <span class="s1">'ngSanitize'</span><span class="p">,</span>
-    <span class="s1">'ngTouch'</span><span class="p">,</span>
-    <span class="s1">'ui.sortable'</span><span class="p">,</span>
-    <span class="s1">'LocalStorageModule'</span>
-<span class="p">])</span>
+<pre><code class="language-javascript">angular
+  .module('webApp', [
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    'ui.sortable',
+    'LocalStorageModule'
+])
 </code></pre>
-</div>
 
 <p>同时也要配置 localStorageServiceProvider，用 ls 作为 localStorage名称前缀：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">'localStorageServiceProvider'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">localStorageServiceProvider</span><span class="p">){</span>
-  <span class="nx">localStorageServiceProvider</span><span class="p">.</span><span class="nx">setPrefix</span><span class="p">(</span><span class="s1">'ls'</span><span class="p">);</span>
-<span class="p">}])</span>
+<pre><code class="language-javascript">.config(['localStorageServiceProvider', function(localStorageServiceProvider){
+  localStorageServiceProvider.setPrefix('ls');
+}])
 </code></pre>
-</div>
 
 <p>完整的 scripts/app.js 文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+<pre><code class="language-javascript">'use strict';
 
-<span class="nx">angular</span>
-  <span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">,</span> <span class="p">[</span>
-    <span class="s1">'ngAnimate'</span><span class="p">,</span>
-    <span class="s1">'ngCookies'</span><span class="p">,</span>
-    <span class="s1">'ngResource'</span><span class="p">,</span>
-    <span class="s1">'ngRoute'</span><span class="p">,</span>
-    <span class="s1">'ngSanitize'</span><span class="p">,</span>
-    <span class="s1">'ngTouch'</span><span class="p">,</span>
-    <span class="s1">'ui.sortable'</span><span class="p">,</span>
-    <span class="s1">'LocalStorageModule'</span>
-  <span class="p">]).</span><span class="nx">config</span><span class="p">([</span><span class="s1">'localStorageServiceProvider'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">localStorageServiceProvider</span><span class="p">){</span>
-    <span class="nx">localStorageServiceProvider</span><span class="p">.</span><span class="nx">setPrefix</span><span class="p">(</span><span class="s1">'ls'</span><span class="p">);</span>
-  <span class="p">}]).</span><span class="nx">config</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">$routeProvider</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">$routeProvider</span>
-      <span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="p">{</span>
-        <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'views/main.html'</span><span class="p">,</span>
-        <span class="na">controller</span><span class="p">:</span> <span class="s1">'MainCtrl'</span>
-      <span class="p">})</span>
-      <span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">'/about'</span><span class="p">,</span> <span class="p">{</span>
-        <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'views/about.html'</span><span class="p">,</span>
-        <span class="na">controller</span><span class="p">:</span> <span class="s1">'AboutCtrl'</span>
-      <span class="p">})</span>
-      <span class="p">.</span><span class="nx">otherwise</span><span class="p">({</span>
-        <span class="na">redirectTo</span><span class="p">:</span> <span class="s1">'/'</span>
-      <span class="p">});</span>
-  <span class="p">});</span>
+angular
+  .module('webApp', [
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    'ui.sortable',
+    'LocalStorageModule'
+  ]).config(['localStorageServiceProvider', function(localStorageServiceProvider){
+    localStorageServiceProvider.setPrefix('ls');
+  }]).config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
+      })
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+  });
 </code></pre>
-</div>
 
 <p>然后，需要修改 scripts/controllers/main.js ，改为从本地存储访问数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+<pre><code class="language-javascript">'use strict';
 
-<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'MainCtrl'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">localStorageService</span><span class="p">)</span> <span class="p">{</span>
+angular.module('webApp').controller('MainCtrl', function ($scope, localStorageService) {
 
-    <span class="c1">// 初始化时为空</span>
-    <span class="kd">var</span> <span class="nx">todosInStore</span> <span class="o">=</span> <span class="nx">localStorageService</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'todos'</span><span class="p">);</span>
+    // 初始化时为空
+    var todosInStore = localStorageService.get('todos');
 
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span> <span class="o">=</span> <span class="nx">todosInStore</span> <span class="o">&amp;&amp;</span> <span class="nx">todosInStore</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'\n'</span><span class="p">)</span> <span class="o">||</span> <span class="p">[];</span>
+    $scope.todos = todosInStore &amp;&amp; todosInStore.split('\n') || [];
 
-    <span class="c1">// 监听变化</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">'todos'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">localStorageService</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'todos'</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">'\n'</span><span class="p">));</span>
-    <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+    // 监听变化
+    $scope.$watch('todos', function () {
+      localStorageService.add('todos', $scope.todos.join('\n'));
+    }, true);
 
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">addTodo</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span><span class="p">);</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-    <span class="p">};</span>
+    $scope.addTodo = function () {
+      $scope.todos.push($scope.todo);
+      $scope.todo = '';
+    };
 
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeTodo</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="p">};</span>
+    $scope.removeTodo = function (index) {
+      $scope.todos.splice(index, 1);
+    };
 
-  <span class="p">});</span>
+  });
 </code></pre>
-</div>
 
 <p>在浏览器中查看应用，你会发现 todo 列表中没有任何东西。因为这个应用从本地存储中读取了 todo 数组，而本地存储中还没有任何 todo 项。</p>
 
@@ -558,95 +530,90 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <h1 id="section-4">测试</h1>
 
-<p><a href="http://karma-runner.github.io/">Karma</a> 是一个 JS 测试框架。Angular 生成器本身已经包括了两个测试框架：<a href="https://code.angularjs.org/1.2.16/docs/guide/e2e-testing">ngScenario</a> 和 <a href="http://jasmine.github.io/">Jasmine</a>。当之前我们运行 <code class="highlighter-rouge">yo angular</code> 的时候，在 mytodo 文件夹下会生成了一个 test 目录，还有一个 karma.conf.js 文件，它会被放入在 Node 模块中以使用 Karma。我们将会编辑一个 Jasmine 脚本来完成我们的测试。现在先来看看要怎么进行测试。</p>
+<p><a href="http://karma-runner.github.io/">Karma</a> 是一个 JS 测试框架。Angular 生成器本身已经包括了两个测试框架：<a href="https://code.angularjs.org/1.2.16/docs/guide/e2e-testing">ngScenario</a> 和 <a href="http://jasmine.github.io/">Jasmine</a>。当之前我们运行 <code>yo angular</code> 的时候，在 mytodo 文件夹下会生成了一个 test 目录，还有一个 karma.conf.js 文件，它会被放入在 Node 模块中以使用 Karma。我们将会编辑一个 Jasmine 脚本来完成我们的测试。现在先来看看要怎么进行测试。</p>
 
 <p>先安装依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>npm install -g phantomjs
-<span class="gp">$ </span>npm install grunt-karma --save-dev
+<pre><code class="language-bash">$ npm install -g phantomjs
+$ npm install grunt-karma --save-dev
 </code></pre>
-</div>
 
 <h2 id="karma-">更新 Karma 配置</h2>
 
 <p>首先，修改 karma.conf.js，添加</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="s1">'bower_components/jquery/dist/jquery.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/jquery-ui/ui/jquery-ui.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-ui-sortable/sortable.js'</span><span class="p">,</span>
+<pre><code class="language-javascript">  'bower_components/jquery/dist/jquery.js',
+  'bower_components/jquery-ui/ui/jquery-ui.js',
+  'bower_components/angular-ui-sortable/sortable.js',
 </code></pre>
-</div>
 
 <p>最终的样子是：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">files</span><span class="err">:</span> <span class="p">[</span>
-  <span class="s1">'bower_components/angular/angular.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-mocks/angular-mocks.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-animate/angular-animate.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-cookies/angular-cookies.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-resource/angular-resource.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-route/angular-route.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-sanitize/angular-sanitize.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-touch/angular-touch.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/jquery/dist/jquery.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/jquery-ui/ui/jquery-ui.js'</span><span class="p">,</span>
-  <span class="s1">'bower_components/angular-ui-sortable/sortable.js'</span><span class="p">,</span>
-  <span class="s1">'app/scripts/**/*.js'</span><span class="p">,</span>
-  <span class="s1">'test/mock/**/*.js'</span><span class="p">,</span>
-  <span class="s1">'test/spec/**/*.js'</span>
-<span class="p">],</span>
+<pre><code class="language-javascript">files: [
+  'bower_components/angular/angular.js',
+  'bower_components/angular-mocks/angular-mocks.js',
+  'bower_components/angular-animate/angular-animate.js',
+  'bower_components/angular-cookies/angular-cookies.js',
+  'bower_components/angular-resource/angular-resource.js',
+  'bower_components/angular-route/angular-route.js',
+  'bower_components/angular-sanitize/angular-sanitize.js',
+  'bower_components/angular-touch/angular-touch.js',
+  'bower_components/jquery/dist/jquery.js',
+  'bower_components/jquery-ui/ui/jquery-ui.js',
+  'bower_components/angular-ui-sortable/sortable.js',
+  'app/scripts/**/*.js',
+  'test/mock/**/*.js',
+  'test/spec/**/*.js'
+],
 </code></pre>
-</div>
 
 <h2 id="section-5">运行测试</h2>
 
-<p>现在回到命令行结束 grunt server 的进程（使用 <code class="highlighter-rouge">Ctrl+c</code>）。在 Gruntfile.js 中已经有了用于运行测试的 grunt 任务，可以直接像下面这样运行：</p>
+<p>现在回到命令行结束 grunt server 的进程（使用 <code>Ctrl+c</code>）。在 Gruntfile.js 中已经有了用于运行测试的 grunt 任务，可以直接像下面这样运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>grunt <span class="nb">test</span>
+<pre><code class="language-bash">$ grunt test
 </code></pre>
-</div>
 
 <h2 id="section-6">添加更多测试</h2>
 
 <p>修改 test/spec/controllers/main.js 如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+<pre><code class="language-javascript">'use strict';
 
-<span class="nx">describe</span><span class="p">(</span><span class="s1">'Controller: MainCtrl'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+describe('Controller: MainCtrl', function () {
 
-  <span class="c1">// load the controller's module</span>
-  <span class="nx">beforeEach</span><span class="p">(</span><span class="nx">module</span><span class="p">(</span><span class="s1">'webApp'</span><span class="p">));</span>
+  // load the controller's module
+  beforeEach(module('webApp'));
 
-  <span class="kd">var</span> <span class="nx">MainCtrl</span><span class="p">,</span>
-    <span class="nx">scope</span><span class="p">;</span>
+  var MainCtrl,
+    scope;
 
-  <span class="c1">// Initialize the controller and a mock scope</span>
-  <span class="nx">beforeEach</span><span class="p">(</span><span class="nx">inject</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">$controller</span><span class="p">,</span> <span class="nx">$rootScope</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">scope</span> <span class="o">=</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$new</span><span class="p">();</span>
-    <span class="nx">MainCtrl</span> <span class="o">=</span> <span class="nx">$controller</span><span class="p">(</span><span class="s1">'MainCtrl'</span><span class="p">,</span> <span class="p">{</span>
-      <span class="na">$scope</span><span class="p">:</span> <span class="nx">scope</span>
-    <span class="p">});</span>
-  <span class="p">}));</span>
+  // Initialize the controller and a mock scope
+  beforeEach(inject(function ($controller, $rootScope) {
+    scope = $rootScope.$new();
+    MainCtrl = $controller('MainCtrl', {
+      $scope: scope
+    });
+  }));
 
-  <span class="nx">it</span><span class="p">(</span><span class="s1">'should attach a list of awesomeThings to the scope'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">awesomeThings</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-  <span class="p">});</span>
+  it('should attach a list of awesomeThings to the scope', function () {
+    expect(scope.awesomeThings.length).toBe(3);
+  });
 
-  <span class="nx">it</span><span class="p">(</span><span class="s1">'should add items to the list'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="s1">'Test 1'</span><span class="p">;</span>
-    <span class="nx">scope</span><span class="p">.</span><span class="nx">addTodo</span><span class="p">();</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-  <span class="p">});</span>
+  it('should add items to the list', function () {
+    scope.todo = 'Test 1';
+    scope.addTodo();
+    expect(scope.todos.length).toBe(4);
+  });
 
-  <span class="nx">it</span><span class="p">(</span><span class="s1">'should add then remove an item from the list'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="s1">'Test 1'</span><span class="p">;</span>
-    <span class="nx">scope</span><span class="p">.</span><span class="nx">addTodo</span><span class="p">();</span>
-    <span class="nx">scope</span><span class="p">.</span><span class="nx">removeTodo</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">todos</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="p">});</span>
-<span class="p">});</span>
+  it('should add then remove an item from the list', function () {
+    scope.todo = 'Test 1';
+    scope.addTodo();
+    scope.removeTodo(0);
+    expect(scope.todos.length).toBe(2);
+  });
+});
 </code></pre>
-</div>
 
 <p>更多有关单元测试的内容，请参考 <a href="http://andyshora.com/unit-testing-best-practices-angularjs.html">Unit Testing Best Practices in AngularJS</a>。</p>
 
@@ -664,9 +631,8 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>实现上述目标只需一句：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>grunt
+<pre><code class="language-bash">$ grunt
 </code></pre>
-</div>
 
 <p>这个命令将会完成 Grunt 的任务以及根据 Gruntfile.js 文件进行配置，创建一个可以运行的应用版本。只需等上一分钟，你就能得到一个完整的编译版本，和一份编译过程耗时的报告。</p>
 
@@ -674,13 +640,12 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
 
 <p>你也可以运行下面命令自动编译项目，并且启动 web 服务器</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>grunt serve:dist
+<pre><code class="language-bash">$ grunt serve:dist
 </code></pre>
-</div>
 
 <h1 id="section-8">总结</h1>
 
-<p>Anugular 生成器也支持创建新的视图、指令和控制器。例如：可以通过运行 <code class="highlighter-rouge">yo angular:route routeName</code> 搭建一个新的控制器，同时在 app.js 中的路由也会被更新。</p>
+<p>Anugular 生成器也支持创建新的视图、指令和控制器。例如：可以通过运行 <code>yo angular:route routeName</code> 搭建一个新的控制器，同时在 app.js 中的路由也会被更新。</p>
 
 <p>了解更多有关于 Angular 生成器的 Yeoman 命令，请查看 <a href="https://github.com/yeoman/generator-angular#readme">generator readme</a>。</p>
 
@@ -746,7 +711,7 @@ Out of the box I include Bootstrap and some AngularJS recommended modules.
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

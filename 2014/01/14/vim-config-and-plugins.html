@@ -119,16 +119,14 @@
 
 <p>安装方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir -p ~/.vim/autoload ~/.vim/bundle <span class="o">&amp;&amp;</span> <span class="se">\</span>
-<span class="gp">$ </span>curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+<pre><code class="language-bash">$ mkdir -p ~/.vim/autoload ~/.vim/bundle &amp;&amp; \
+$ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 </code></pre>
-</div>
 
 <p>要记得把以下内容加入到vimrc文件中:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>execute pathogen#infect()
+<pre><code>execute pathogen#infect()
 </code></pre>
-</div>
 
 <h1 id="section-1">3. 安装插件</h1>
 
@@ -140,10 +138,9 @@
 
 <p>安装方法很简单，只要把项目clone一份到bundle目录就可以了。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cd ~/.vim/bundle
+<pre><code>cd ~/.vim/bundle
 git clone https://github.com/scrooloose/nerdtree.git
 </code></pre>
-</div>
 
 <p>之后的插件也都是这么安装。</p>
 
@@ -151,26 +148,26 @@ git clone https://github.com/scrooloose/nerdtree.git
 
 <ol>
   <li>在linux命令行界面，输入vim</li>
-  <li>输入<code class="highlighter-rouge">:NERDTree</code> ，回车，默认打开当前目录，当然可以打开指定目录，如 <code class="highlighter-rouge">:NERDTree /home/</code> 打开</li>
+  <li>输入<code>:NERDTree</code> ，回车，默认打开当前目录，当然可以打开指定目录，如 <code>:NERDTree /home/</code> 打开</li>
   <li>入当前目录的树形界面，通过小键盘上下键，能移动选中的目录或文件</li>
-  <li>目录前面有<code class="highlighter-rouge">+</code>号，摁 <code class="highlighter-rouge">Enter</code> 会展开目录，文件前面是<code class="highlighter-rouge">-</code>号，摁 <code class="highlighter-rouge">Enter</code> 会在右侧窗口展现该文件的内容，并光标的焦点focus右侧。</li>
-  <li><code class="highlighter-rouge">ctr+w+h</code> 光标 focus 左侧树形目录，<code class="highlighter-rouge">ctrl+w+l</code> 光标 focus 右侧文件显示窗口。多次摁 <code class="highlighter-rouge">ctrl+w</code>，光标自动在左右侧窗口切换</li>
-  <li>光标focus左侧树形窗口，按 <code class="highlighter-rouge">?</code> 弹出NERDTree的帮助，再次按 <code class="highlighter-rouge">？</code>关闭帮助显示</li>
-  <li>输入 <code class="highlighter-rouge">:q</code> 回车，关闭光标所在窗口</li>
+  <li>目录前面有<code>+</code>号，摁 <code>Enter</code> 会展开目录，文件前面是<code>-</code>号，摁 <code>Enter</code> 会在右侧窗口展现该文件的内容，并光标的焦点focus右侧。</li>
+  <li><code>ctr+w+h</code> 光标 focus 左侧树形目录，<code>ctrl+w+l</code> 光标 focus 右侧文件显示窗口。多次摁 <code>ctrl+w</code>，光标自动在左右侧窗口切换</li>
+  <li>光标focus左侧树形窗口，按 <code>?</code> 弹出NERDTree的帮助，再次按 <code>？</code>关闭帮助显示</li>
+  <li>输入 <code>:q</code> 回车，关闭光标所在窗口</li>
 </ol>
 
 <p>除了使用鼠标可以基本操作以外，还可以使用键盘。下下面列出常用的快捷键：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">j</code>、<code class="highlighter-rouge">k</code> 分别下、上移动光标</li>
-  <li><code class="highlighter-rouge">o</code> 或者回车打开文件或是文件夹，如果是文件的话，光标直接定位到文件中，想回到目录结构中，按住 <code class="highlighter-rouge">Ctrl</code>，然后点两下 <code class="highlighter-rouge">w</code> 就回来了</li>
-  <li><code class="highlighter-rouge">go</code> 打开文件，但是光标不动，仍然在目录结构中</li>
-  <li><code class="highlighter-rouge">i</code>、<code class="highlighter-rouge">s</code> 分别是水平、垂直打开文件，就像vim命令的 <code class="highlighter-rouge">:vs</code>、<code class="highlighter-rouge">:sp</code>一样</li>
-  <li><code class="highlighter-rouge">gi</code>、<code class="highlighter-rouge">gs</code> 水平、垂直打开文件，光标不动</li>
-  <li><code class="highlighter-rouge">p</code> 快速定位到上层目录</li>
-  <li><code class="highlighter-rouge">P</code> 快速定位到根目录</li>
-  <li><code class="highlighter-rouge">K</code>、<code class="highlighter-rouge">J</code> 快速定位到同层目录第一个、最后一个节点</li>
-  <li><code class="highlighter-rouge">q</code> 关闭</li>
+  <li><code>j</code>、<code>k</code> 分别下、上移动光标</li>
+  <li><code>o</code> 或者回车打开文件或是文件夹，如果是文件的话，光标直接定位到文件中，想回到目录结构中，按住 <code>Ctrl</code>，然后点两下 <code>w</code> 就回来了</li>
+  <li><code>go</code> 打开文件，但是光标不动，仍然在目录结构中</li>
+  <li><code>i</code>、<code>s</code> 分别是水平、垂直打开文件，就像vim命令的 <code>:vs</code>、<code>:sp</code>一样</li>
+  <li><code>gi</code>、<code>gs</code> 水平、垂直打开文件，光标不动</li>
+  <li><code>p</code> 快速定位到上层目录</li>
+  <li><code>P</code> 快速定位到根目录</li>
+  <li><code>K</code>、<code>J</code> 快速定位到同层目录第一个、最后一个节点</li>
+  <li><code>q</code> 关闭</li>
 </ul>
 
 <h2 id="nerdtree-tabs">3.2 NERDTree-Tabs</h2>
@@ -181,17 +178,15 @@ git clone https://github.com/scrooloose/nerdtree.git
 
 <p>安装方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> ~/.vim/bundle
-<span class="gp">$ </span>git clone https://github.com/jistr/vim-nerdtree-tabs.git
+<pre><code class="language-bash">$ cd ~/.vim/bundle
+$ git clone https://github.com/jistr/vim-nerdtree-tabs.git
 </code></pre>
-</div>
 
 <p>可以把一下内容添加到 vimrc 文件中</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>let g:nerdtree_tabs_open_on_console_startup=1       "设置打开vim的时候默认打开目录树
+<pre><code>let g:nerdtree_tabs_open_on_console_startup=1       "设置打开vim的时候默认打开目录树
 map &lt;leader&gt;n &lt;plug&gt;NERDTreeTabsToggle &lt;CR&gt;         "设置打开目录树的快捷键
 </code></pre>
-</div>
 
 <h2 id="supertab">3.3 supertab</h2>
 
@@ -203,16 +198,14 @@ map &lt;leader&gt;n &lt;plug&gt;NERDTreeTabsToggle &lt;CR&gt;         "设置打
 
 <p>安装方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> ~/.vim/bundle
-<span class="gp">$ </span>git clone git@github.com:ervandew/supertab.git
+<pre><code class="language-bash">$ cd ~/.vim/bundle
+$ git clone git@github.com:ervandew/supertab.git
 </code></pre>
-</div>
 
-<p>打开vim配置文件，<code class="highlighter-rouge">vim ~/.vimrc</code>，在最后加上一行内容</p>
+<p>打开vim配置文件，<code>vim ~/.vimrc</code>，在最后加上一行内容</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>let g:SuperTabDefaultCompletionType="context"
+<pre><code>let g:SuperTabDefaultCompletionType="context"
 </code></pre>
-</div>
 
 <h2 id="ctrlp">3.4 ctrlp</h2>
 
@@ -220,12 +213,11 @@ map &lt;leader&gt;n &lt;plug&gt;NERDTreeTabsToggle &lt;CR&gt;         "设置打
 
 <p>安装方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> ~/.vim/bundle
-<span class="gp">$ </span>git clone git@github.com:kien/ctrlp.vim.git
+<pre><code class="language-bash">$ cd ~/.vim/bundle
+$ git clone git@github.com:kien/ctrlp.vim.git
 </code></pre>
-</div>
 
-<p>快捷键：<code class="highlighter-rouge">ctrl+p</code></p>
+<p>快捷键：<code>ctrl+p</code></p>
 
 <h1 id="section-2">4. 参考</h1>
 
@@ -284,7 +276,7 @@ map &lt;leader&gt;n &lt;plug&gt;NERDTreeTabsToggle &lt;CR&gt;         "设置打
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

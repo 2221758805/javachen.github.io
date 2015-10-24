@@ -7,9 +7,10 @@ msg="update:$*"
 
 qrsync qiniu-images.conf
 
+
 cd _posts
 
-sed -i "" 's/\/static\/images/http:\/\/javachen\-rs\.qiniudn\.com/g' */*
+sed -i "" 's/javachen\-rs\.qiniudn\.com/7xnrdo\.com1\.z0\.glb.clouddn\.com/g' */*
 
 cd ..
 

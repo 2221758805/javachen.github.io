@@ -112,9 +112,9 @@
 
 <h1 id="section-1">修改配置文件</h1>
 
-<p>修改 <code class="highlighter-rouge">conf/hbase-site.xml</code>文件：</p>
+<p>修改 <code>conf/hbase-site.xml</code>文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
+<pre><code>&lt;property&gt;
 &lt;name&gt;hbase.defaults.for.version&lt;/name&gt;
 &lt;value&gt;0.94.6-cdh4.4.0&lt;/value&gt;
 &lt;/property&gt;
@@ -124,19 +124,18 @@
 &lt;value&gt;file:///home/june/tmp/data&lt;/value&gt;
 &lt;/property&gt;
 </code></pre>
-</div>
 
 <p>把conf文件夹加到Classpath中</p>
 
 <h1 id="hmaster">运行HMaster</h1>
 
-<p>新建一个<code class="highlighter-rouge">Debug Configuration</code>,  main class 是<code class="highlighter-rouge">org.apache.hadoop.hbase.master.HMaster</code>,  参数填start</p>
+<p>新建一个<code>Debug Configuration</code>,  main class 是<code>org.apache.hadoop.hbase.master.HMaster</code>,  参数填start</p>
 
 <!-- more -->
 
 <p>调试运行该类，运行成功之后日志如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>13/10/29 14:38:29 WARN zookeeper.RecoverableZooKeeper: Node /hbase/table/.META. already deleted, and this is not a retry
+<pre><code>13/10/29 14:38:29 WARN zookeeper.RecoverableZooKeeper: Node /hbase/table/.META. already deleted, and this is not a retry
 13/10/29 14:38:29 INFO regionserver.HRegionServer: Received request to open region: .META.,,1.1028785192
 13/10/29 14:38:29 INFO regionserver.HRegion: Setting up tabledescriptor config now ...
 13/10/29 14:38:29 INFO regionserver.Store: time to purge deletes set to 0ms in store info
@@ -153,33 +152,30 @@
 13/10/29 14:38:29 INFO master.HMaster: Registered HMaster MXBean
 13/10/29 14:38:29 INFO master.HMaster: Master has completed initialization
 </code></pre>
-</div>
 
-<p>如果想修改日志级别，请修改<code class="highlighter-rouge">conf/log4j.properties</code>中级别为INFO:</p>
+<p>如果想修改日志级别，请修改<code>conf/log4j.properties</code>中级别为INFO:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#Logging Threshold
+<pre><code>#Logging Threshold
 log4j.threshold=INFO
 </code></pre>
-</div>
 
 <h1 id="hregionserver">运行HRegionServer</h1>
 
 <p>参考上面的方法，运行HRegionServer，这时候会出现如下日志：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>13/11/04 11:50:47 INFO util.VersionInfo: HBase 0.94.6-cdh4.4.0
+<pre><code>13/11/04 11:50:47 INFO util.VersionInfo: HBase 0.94.6-cdh4.4.0
 13/11/04 11:50:47 INFO util.VersionInfo: Subversion git://june-mint/chan/workspace/hadoop/hbase -r 979969e1d0d95ce3b8c1d14593f55148da8bc98f
 13/11/04 11:50:47 INFO util.VersionInfo: Compiled by june on Tue Oct 29 15:11:51 CST 2013
 13/11/04 11:50:47 WARN regionserver.HRegionServerCommandLine: Not starting a distinct region server because hbase.cluster.distributed is false
 </code></pre>
-</div>
 
-<p>这是因为当<code class="highlighter-rouge">hbase.cluster.distributed=false</code>时，hbase为本地模式，master和regionserver在同一个jvm启动，并且会启动一个最小化的zookeeper集群。请参看：<code class="highlighter-rouge">HMasterCommandLine.java</code>的startMaster()方法。</p>
+<p>这是因为当<code>hbase.cluster.distributed=false</code>时，hbase为本地模式，master和regionserver在同一个jvm启动，并且会启动一个最小化的zookeeper集群。请参看：<code>HMasterCommandLine.java</code>的startMaster()方法。</p>
 
-<p>如果你把该值设为true，则hbase集群为分布式模式，这时候默认会连接<code class="highlighter-rouge">127.0.0.1：2181</code>对应的zookeeper集群（该集群需要在master启动之前启动）。当然，你可以修改参数让hbase自己维护一个zookeeper集群。</p>
+<p>如果你把该值设为true，则hbase集群为分布式模式，这时候默认会连接<code>127.0.0.1：2181</code>对应的zookeeper集群（该集群需要在master启动之前启动）。当然，你可以修改参数让hbase自己维护一个zookeeper集群。</p>
 
 <h1 id="hbase-shell">调试hbase shell</h1>
 
-<p>新建一个<code class="highlighter-rouge">Debug Configuration</code>,  main class 是<code class="highlighter-rouge">org.jruby.Main</code>，在程序参数中添加<code class="highlighter-rouge">bin/hirb.rb</code>,然后运行即可。</p>
+<p>新建一个<code>Debug Configuration</code>,  main class 是<code>org.jruby.Main</code>，在程序参数中添加<code>bin/hirb.rb</code>,然后运行即可。</p>
 
 <h1 id="section-2">一些技巧</h1>
 
@@ -187,9 +183,8 @@ log4j.threshold=INFO
   <li>调试java代码的时候, byte[]的变量总是显示成数字,如果要显示对应的字符</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Window-&gt;Preference-&gt;Java-&gt;Debug-&gt;Primitive Display Options-&gt;Check some of them
+<pre><code>Window-&gt;Preference-&gt;Java-&gt;Debug-&gt;Primitive Display Options-&gt;Check some of them
 </code></pre>
-</div>
 
 <ul>
   <li>hbase源码中默认依赖的是hadoop 1.0.x版本，所以mavne依赖中会引入hadoop-core-1.0.4.jar，你可以修改pom.xml文件，将默认的profile修改为你需要的hadoop版本，如2.0版本的hadoop。这样做之后，当你看HMaster的源代码时，你会很方便的关联并浏览ToolRunner类中的源代码。</li>
@@ -197,7 +192,7 @@ log4j.threshold=INFO
 
 <p>默认的profile是hadoop-1.0，配置文件如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  &lt;!-- profile for building against Hadoop 1.0.x: This is the default. --&gt;
+<pre><code>  &lt;!-- profile for building against Hadoop 1.0.x: This is the default. --&gt;
     &lt;profile&gt;
       &lt;id&gt;hadoop-1.0&lt;/id&gt;
       &lt;activation&gt;
@@ -213,11 +208,10 @@ log4j.threshold=INFO
           &lt;value&gt;2.0&lt;/value&gt;
         &lt;/property&gt;
 </code></pre>
-</div>
 
 <p>你可以将默认的profile改为hadoop-2.0,修改之后的配置文件如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    &lt;profile&gt;
+<pre><code>    &lt;profile&gt;
       &lt;id&gt;hadoop-1.0&lt;/id&gt;
       &lt;activation&gt;
         &lt;property&gt;
@@ -232,7 +226,6 @@ log4j.threshold=INFO
           &lt;name&gt;!hadoop.profile&lt;/name&gt;
         &lt;/property&gt;
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -283,7 +276,7 @@ log4j.threshold=INFO
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

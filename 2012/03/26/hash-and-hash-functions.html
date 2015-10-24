@@ -109,7 +109,7 @@
 
 <p>一般的线性表、树，数据在结构中的相对位置是随机的，即和记录的关键字之间不存在确定的关系，因此，在结构中查找记录时需进行一系列和关键字的比较。这一类查找方法建立在“比较“的基础上，查找的效率依赖于查找过程中所进行的比较次数。 若想能直接找到需要的记录，必须在记录的存储位置和它的关键字之间建立一个确定的对应关系f，使每个关键字和结构中一个唯一的存储位置相对应，这就是哈希表。</p>
 
-<p><code class="highlighter-rouge">哈希表</code>又称散列表。<em>哈希表存储的基本思想是</em>：以数据表中的每个记录的关键字 k为自变量，通过一种函数H(k)计算出函数值。把这个值解释为一块连续存储空间（即<code class="highlighter-rouge">数组空间</code>）的单元地址（即<code class="highlighter-rouge">下标</code>），将该记录存储到这个单元中。在此称该函数H为哈希函数或散列函数。按这种方法建立的表称为<code class="highlighter-rouge">哈希表</code>或<code class="highlighter-rouge">散列表</code>。</p>
+<p><code>哈希表</code>又称散列表。<em>哈希表存储的基本思想是</em>：以数据表中的每个记录的关键字 k为自变量，通过一种函数H(k)计算出函数值。把这个值解释为一块连续存储空间（即<code>数组空间</code>）的单元地址（即<code>下标</code>），将该记录存储到这个单元中。在此称该函数H为哈希函数或散列函数。按这种方法建立的表称为<code>哈希表</code>或<code>散列表</code>。</p>
 
 <p>哈希表是一种数据结构，它可以提供快速的插入操作和查找操作。</p>
 
@@ -118,7 +118,7 @@
 <h1 id="section-1">冲突</h1>
 
 <p>理想情况下，哈希函数在关键字和地址之间建立了一个一一对应关系，从而使得查找只需一次计算即可完成。由于关键字值的某种随机性，使得这种一一对应关系难以发现或构造。因而可能会出现不同的关键字对应一个存储地址。即k1≠k2，但H(k1)=H(k2)，这种现象称为冲突。<br />
-把这种具有不同关键字值而具有相同哈希地址的对象称<code class="highlighter-rouge">同义词</code>。</p>
+把这种具有不同关键字值而具有相同哈希地址的对象称<code>同义词</code>。</p>
 
 <p>在大多数情况下，冲突是不能完全避免的。这是因为所有可能的关键字的集合可能比较大，而对应的地址数则可能比较少。</p>
 
@@ -139,9 +139,8 @@
 
 <p>该哈希函数H(k)为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>H(k)=k+c (c≥0)
+<pre><code>H(k)=k+c (c≥0)
 </code></pre>
-</div>
 
 <p>这种哈希函数计算简单，并且不可能有冲突发生。当关键字的分布基本连续时，可使用直接定址法的哈希函数。否则，若关键字分布不连续将造成内存单元的大量浪费</p>
 
@@ -149,9 +148,8 @@
 
 <p>取关键字k除以哈希表长度m所得余数作为哈希函数地址的方法。即：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>H(k)=k％m
+<pre><code>H(k)=k％m
 </code></pre>
-</div>
 
 <p>这是一种较简单、也是较常见的构造方法。</p>
 
@@ -182,7 +180,7 @@
 
 <h2 id="section-8">6）. 随机数法</h2>
 
-<p>选择一个随机函数，取关键字的随机函数值为它的哈希地址，即<code class="highlighter-rouge">H(key)＝random(key)</code>，其中random为随机函数。</p>
+<p>选择一个随机函数，取关键字的随机函数值为它的哈希地址，即<code>H(key)＝random(key)</code>，其中random为随机函数。</p>
 
 <h2 id="fibonacci">7）. 斐波那契（Fibonacci）散列法</h2>
 
@@ -198,14 +196,13 @@
 
 <p>对我们常见的32位整数而言，公式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>index = (value * 2654435769) &gt;&gt; 28
+<pre><code>index = (value * 2654435769) &gt;&gt; 28
 </code></pre>
-</div>
 <p>如果用这种斐波那契散列法的话，那我上面的图就变成这样了：</p>
 
 <h1 id="section-9">冲突的解决方法</h1>
 
-<p>假设哈希表的地址范围为<code class="highlighter-rouge">0～m-l</code>，当对给定的关键字k，由哈希函数<code class="highlighter-rouge">H(k)</code>算出的哈希地址为<code class="highlighter-rouge">i（0≤i≤m-1）</code>的位置上已存有记录，这种情况就是冲突现象。 处理冲突就是为该关键字的记录找到另一个“空”的哈希地址。即通过一个新的哈希函数得到一个新的哈希地址。如果仍然发生冲突，则再求下一个，依次类推。直至新的哈希地址不再发生冲突为止。</p>
+<p>假设哈希表的地址范围为<code>0～m-l</code>，当对给定的关键字k，由哈希函数<code>H(k)</code>算出的哈希地址为<code>i（0≤i≤m-1）</code>的位置上已存有记录，这种情况就是冲突现象。 处理冲突就是为该关键字的记录找到另一个“空”的哈希地址。即通过一个新的哈希函数得到一个新的哈希地址。如果仍然发生冲突，则再求下一个，依次类推。直至新的哈希地址不再发生冲突为止。</p>
 
 <p>常用的处理冲突的方法有开放地址法、链地址法两大类</p>
 
@@ -224,16 +221,15 @@
 
 <p>线性探查法的数学递推描述公式为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>d0=H(k)
+<pre><code>d0=H(k)
 di=(di-1+1)% m (1≤i≤m-1)
 </code></pre>
-</div>
 
 <p>【例】已知哈希表地址区间为0～10，给定关键字序列（20，30，70，15，8，12，18，63，19）。哈希函数为H(k)=k％ll，采用线性探测法处理冲突，则将以上关键字依次存储到哈希表中。试构造出该哈希表，并求出等概率情况下的平均查找长度。</p>
 
 <p>假设数组为A, 本题中各元素的存放过程如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>H(20)=9，可直接存放到A[9]中去。
+<pre><code>H(20)=9，可直接存放到A[9]中去。
 H(30)=8，可直接存放到A[8]中去。
 H(70)=4，可直接存放到A[4]中去。
 H(15)=4，冲突；
@@ -244,13 +240,11 @@ d0=8
 d1=(8+1)%11=9，仍冲突；
 d2=(8+2)%11=10，将8放入到A[10]中。
 </code></pre>
-</div>
 
 <p>在等概率情况下成功的平均查找长度为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>（1*5+2+3+4+6）/9 =20/9
+<pre><code>（1*5+2+3+4+6）/9 =20/9
 </code></pre>
-</div>
 
 <p>利用线性探查法处理冲突容易造成关键字的堆积问题。这是因为当连续n个单元被占用后，再散列到这些单元上的关键字和直接散列到后面一个空闲单元上的关键字都要占用这个空闲单元，致使该空闲单元很容易被占用，从而发生非同义冲突。造成平均查找长度的增加。<br />
 为了克服堆积现象的发生，可以用下面的方法替代线性探查法。</p>
@@ -261,16 +255,14 @@ d2=(8+2)%11=10，将8放入到A[10]中。
 
 <p>平方探查法的数学描述公式为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>d0=H(k)
+<pre><code>d0=H(k)
 di=(d0+i2) % m (1≤i≤m-1)
 </code></pre>
-</div>
 
 <p>在等概率情况下成功的平均查找长度为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>（1*4+2*2+3+4+6）/9 =21/9
+<pre><code>（1*4+2*2+3+4+6）/9 =21/9
 </code></pre>
-</div>
 
 <p>平方探查法是一种较好的处理冲突的方法，可以避免出现堆积问题。它的缺点是不能探查到哈希表上的所有单元，但至少能探查到一半单元。</p>
 
@@ -285,15 +277,14 @@ di=(d0+i2) % m (1≤i≤m-1)
 
 <p>由于在各链表中的第一个元素的查找长度为l，第二个元素的查找长度为2，依此类推。因此，在等概率情况下成功的平均查找长度为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(1*5+2*2+3*l+4*1)／9=16／9
+<pre><code>(1*5+2*2+3*l+4*1)／9=16／9
 </code></pre>
-</div>
 
 <p>虽然链地址法要多费一些存储空间，但是彻底解决了“堆积”问题，大大提高了查找效率。</p>
 
 <h2 id="section-12">3）. 再哈希法：</h2>
 
-<p><code class="highlighter-rouge">Hi=R Hi(key)</code>，R和Hi均是不同的哈希函数，即在同义词产生地址冲突时计算另一个哈希函数地址，直到冲突不再发生。这种方法不易产生聚集，但增加了计算的时间。</p>
+<p><code>Hi=R Hi(key)</code>，R和Hi均是不同的哈希函数，即在同义词产生地址冲突时计算另一个哈希函数地址，直到冲突不再发生。这种方法不易产生聚集，但增加了计算的时间。</p>
 
 <h2 id="section-13">4）.建立一个公共溢出区</h2>
 
@@ -401,7 +392,7 @@ MiltigetHashMap，MapMaker google collection，和CurrentHashMap性能相当，�
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

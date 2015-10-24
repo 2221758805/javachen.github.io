@@ -107,18 +107,17 @@
               <div id="post-text">
                     <p>本文主要记录手动安装Cloudera Hive集群过程，环境设置及Hadoop安装过程见<a href="/2013/03/24/manual-install-Cloudera-Hadoop-CDH.html">手动安装Cloudera Hadoop CDH</a>,参考这篇文章，hadoop各个组件和jdk版本如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	hadoop-2.0.0-cdh4.6.0
+<pre><code>	hadoop-2.0.0-cdh4.6.0
 	hbase-0.94.15-cdh4.6.0
 	hive-0.10.0-cdh4.6.0
 	jdk1.6.0_38
 </code></pre>
-</div>
 
 <p>hadoop各组件可以在<a href="http://archive.cloudera.com/cdh4/cdh/4/">这里</a>下载。</p>
 
 <p>集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、impala
+<pre><code>	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、impala
 	192.168.0.2        desktop2     SSNameNode
 	192.168.0.3        desktop3     DataNode、HBase、NodeManager、impala
 	192.168.0.4        desktop4     DataNode、HBase、NodeManager、impala
@@ -126,13 +125,12 @@
 	192.168.0.6        desktop6     DataNode、HBase、NodeManager、impala
 	192.168.0.7        desktop7     DataNode、HBase、NodeManager、impala
 </code></pre>
-</div>
 
 <h1 id="hive">安装hive</h1>
 
 <p>hive安装在desktop1上，<strong>注意</strong>：hive默认是使用derby数据库保存元数据，这里替换为postgresql，下面会提到postgresql的安装说明，并且需要拷贝postgres的jdbc jar文件导hive的lib目录下。</p>
 
-<p>上传<code class="highlighter-rouge">hive-0.10.0-cdh4.6.0.tar</code>到desktop1的<code class="highlighter-rouge">/opt</code>，并解压缩。</p>
+<p>上传<code>hive-0.10.0-cdh4.6.0.tar</code>到desktop1的<code>/opt</code>，并解压缩。</p>
 
 <h1 id="postgres">安装postgres</h1>
 
@@ -140,117 +138,111 @@
 
 <p>这里创建数据库metastore并创建hiveuser用户，其密码为redhat。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	bash# sudo -u postgres psql
+<pre><code>	bash# sudo -u postgres psql
 	bash$ psql
 	postgres=# CREATE USER hiveuser WITH PASSWORD 'redhat';
 	postgres=# CREATE DATABASE metastore owner=hiveuser;
 	postgres=# GRANT ALL privileges ON DATABASE metastore TO hiveuser;
 	postgres=# \q;
 </code></pre>
-</div>
 
 <h2 id="section-1">初始化数据库</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>psql  -U hiveuser -d metastore
+<pre><code>psql  -U hiveuser -d metastore
  \i /opt/hive-0.10.0-cdh4.6.0/scripts/metastore/upgrade/postgres/hive-schema-0.10.0.postgres.sql 
 </code></pre>
-</div>
 
-<p>编辑postgresql配置文件(<code class="highlighter-rouge">/opt/PostgreSQL/9.1/data/pg_hba.conf</code>)，修改访问权限</p>
+<p>编辑postgresql配置文件(<code>/opt/PostgreSQL/9.1/data/pg_hba.conf</code>)，修改访问权限</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>host    all             all             0.0.0.0/0            md5
+<pre><code>host    all             all             0.0.0.0/0            md5
 </code></pre>
-</div>
 
 <p>修改postgresql.conf</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	standard_conforming_strings = of
+<pre><code>	standard_conforming_strings = of
 </code></pre>
-</div>
 
 <h2 id="postgres-1">重起postgres</h2>
 
-<p>拷贝postgres的jdbc驱动到<code class="highlighter-rouge">/opt/hive-0.10.0-cdh4.6.0/lib</code>目录。</p>
+<p>拷贝postgres的jdbc驱动到<code>/opt/hive-0.10.0-cdh4.6.0/lib</code>目录。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>su -c '/opt/PostgreSQL/9.1/bin/pg_ctl -D /opt/PostgreSQL/9.1/data restart' postgres
+<pre><code>su -c '/opt/PostgreSQL/9.1/bin/pg_ctl -D /opt/PostgreSQL/9.1/data restart' postgres
 </code></pre>
-</div>
 
 <h1 id="section-2">修改配置文件</h1>
 
 <h2 id="hive-sitexml">hive-site.xml</h2>
 
-<p>注意修改下面配置文件中postgres数据库的密码，注意配置<code class="highlighter-rouge">hive.aux.jars.path</code>，在hive集成hbase时候需要从该路径家在hbase的一些jar文件。</p>
+<p>注意修改下面配置文件中postgres数据库的密码，注意配置<code>hive.aux.jars.path</code>，在hive集成hbase时候需要从该路径家在hbase的一些jar文件。</p>
 
 <p>hive-site.xml文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;configuration&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionURL<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>jdbc:postgresql://127.0.0.1/metastore<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionDriverName<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>org.postgresql.Driver<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionUserName<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>hiveuser<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionPassword<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>redhat<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
- <span class="nt">&lt;name&gt;</span>mapred.job.tracker<span class="nt">&lt;/name&gt;</span>
- <span class="nt">&lt;value&gt;</span>desktop1:8031<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
- <span class="nt">&lt;name&gt;</span>mapreduce.framework.name<span class="nt">&lt;/name&gt;</span>
- <span class="nt">&lt;value&gt;</span>yarn<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.aux.jars.path<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>file:///opt/hive-0.10.0-cdh4.6.0/lib/zookeeper-3.4.5-cdh4.6.0.jar,
+<pre><code class="language-xml">&lt;configuration&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;
+  &lt;value&gt;jdbc:postgresql://127.0.0.1/metastore&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;
+  &lt;value&gt;org.postgresql.Driver&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;
+  &lt;value&gt;hiveuser&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;
+  &lt;value&gt;redhat&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+ &lt;name&gt;mapred.job.tracker&lt;/name&gt;
+ &lt;value&gt;desktop1:8031&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+ &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+ &lt;value&gt;yarn&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.aux.jars.path&lt;/name&gt;
+  &lt;value&gt;file:///opt/hive-0.10.0-cdh4.6.0/lib/zookeeper-3.4.5-cdh4.6.0.jar,
 	file:///opt/hive-0.10.0-cdh4.6.0/lib/hive-hbase-handler-0.10.0-cdh4.6.0.jar,
 	file:///opt/hive-0.10.0-cdh4.6.0/lib/hbase-0.94.15-cdh4.6.0.jar,
-	file:///opt/hive-0.10.0-cdh4.6.0/lib/guava-11.0.2.jar<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.metastore.warehouse.dir<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>/opt/data/warehouse-${user.name}<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.exec.scratchdir<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>/opt/data/hive-${user.name}<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.querylog.location<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>/opt/data/querylog-${user.name}<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.support.concurrency<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.zookeeper.quorum<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>desktop3,desktop4,desktop5,desktop6,desktop7<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.hwi.listen.host<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>desktop1<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.hwi.listen.port<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>9999<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hive.hwi.war.file<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>lib/hive-hwi-0.10.0-cdh4.6.0.war<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
+	file:///opt/hive-0.10.0-cdh4.6.0/lib/guava-11.0.2.jar&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;
+  &lt;value&gt;/opt/data/warehouse-${user.name}&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.exec.scratchdir&lt;/name&gt;
+  &lt;value&gt;/opt/data/hive-${user.name}&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.querylog.location&lt;/name&gt;
+  &lt;value&gt;/opt/data/querylog-${user.name}&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.support.concurrency&lt;/name&gt;
+  &lt;value&gt;true&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.zookeeper.quorum&lt;/name&gt;
+  &lt;value&gt;desktop3,desktop4,desktop5,desktop6,desktop7&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.hwi.listen.host&lt;/name&gt;
+  &lt;value&gt;desktop1&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.hwi.listen.port&lt;/name&gt;
+  &lt;value&gt;9999&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hive.hwi.war.file&lt;/name&gt;
+  &lt;value&gt;lib/hive-hwi-0.10.0-cdh4.6.0.war&lt;/value&gt;
+&lt;/property&gt;
+&lt;/configuration&gt;
 </code></pre>
-</div>
 
 <h2 id="section-3">环境变量</h2>
 
@@ -262,52 +254,46 @@
 
 <h2 id="hivehbase">hive与hbase集成</h2>
 
-<p>在<code class="highlighter-rouge">hive-site.xml</code>中配置<code class="highlighter-rouge">hive.aux.jars.path</code>,在环境变量中配置hadoop、mapreduce的环境变量</p>
+<p>在<code>hive-site.xml</code>中配置<code>hive.aux.jars.path</code>,在环境变量中配置hadoop、mapreduce的环境变量</p>
 
 <h1 id="section-4">异常说明</h1>
 
 <h2 id="section-5">异常1：</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>FAILED: Error in metadata: MetaException(message:org.apache.hadoop.hbase.ZooKeeperConnectionException: An error is preventing HBase from connecting to ZooKeeper
+<pre><code>FAILED: Error in metadata: MetaException(message:org.apache.hadoop.hbase.ZooKeeperConnectionException: An error is preventing HBase from connecting to ZooKeeper
 </code></pre>
-</div>
 
 <p>原因：hadoop配置文件没有zk</p>
 
 <h2 id="section-6">异常2</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>FAILED: Error in metadata: MetaException(message:Got exception: org.apache.hadoop.hive.metastore.api.MetaException javax.jdo.JDODataStoreException: Error executing JDOQL query "SELECT "THIS"."TBL_NAME" AS NUCORDER0 FROM "TBLS" "THIS" LEFT OUTER JOIN "DBS" "THIS_DATABASE_NAME" ON "THIS"."DB_ID" = "THIS_DATABASE_NAME"."DB_ID" WHERE "THIS_DATABASE_NAME"."NAME" = ? AND (LOWER("THIS"."TBL_NAME") LIKE ? ESCAPE '\\' ) ORDER BY NUCORDER0 " : ERROR: invalid escape string 建议：Escape string must be empty or one character..
+<pre><code>FAILED: Error in metadata: MetaException(message:Got exception: org.apache.hadoop.hive.metastore.api.MetaException javax.jdo.JDODataStoreException: Error executing JDOQL query "SELECT "THIS"."TBL_NAME" AS NUCORDER0 FROM "TBLS" "THIS" LEFT OUTER JOIN "DBS" "THIS_DATABASE_NAME" ON "THIS"."DB_ID" = "THIS_DATABASE_NAME"."DB_ID" WHERE "THIS_DATABASE_NAME"."NAME" = ? AND (LOWER("THIS"."TBL_NAME") LIKE ? ESCAPE '\\' ) ORDER BY NUCORDER0 " : ERROR: invalid escape string 建议：Escape string must be empty or one character..
 </code></pre>
-</div>
 
 <p>参考：https://issues.apache.org/jira/browse/HIVE-3994</p>
 
 <h2 id="section-7">异常3，以下语句没反应</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>select count(*) from hive_userinfo
+<pre><code>select count(*) from hive_userinfo
 </code></pre>
-</div>
 <p>## 异常4</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>zookeeper.ClientCnxn (ClientCnxn.java:logStartConnect(966)) - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (无法定位登录配置)
+<pre><code>zookeeper.ClientCnxn (ClientCnxn.java:logStartConnect(966)) - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (无法定位登录配置)
 </code></pre>
-</div>
 
 <p>原因：hive中没有设置zk</p>
 
 <h2 id="section-8">异常5</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hbase 中提示：WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+<pre><code>hbase 中提示：WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 </code></pre>
-</div>
 
 <p>原因：cloudera hadoop lib中没有hadoop的native jar</p>
 
 <h2 id="section-9">异常6</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Exception in thread "main" java.lang.NoClassDefFoundError: org/apache/hadoop/mapreduce/v2/app/MRAppMaster
+<pre><code>Exception in thread "main" java.lang.NoClassDefFoundError: org/apache/hadoop/mapreduce/v2/app/MRAppMaster
 </code></pre>
-</div>
 
 <p>原因：classpath没有配置正确，检查环境变量以及yarn的classpath</p>
 
@@ -369,7 +355,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -115,13 +115,12 @@
 
 <p>Mac 上安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ brew install gradle
+<pre><code>$ brew install gradle
 </code></pre>
-</div>
 
 <p>测试是否安装成功：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ gradle -v
+<pre><code>$ gradle -v
 ------------------------------------------------------------
 Gradle 2.0
 ------------------------------------------------------------
@@ -135,7 +134,6 @@ Ant:          Apache Ant(TM) version 1.9.3 compiled on December 23 2013
 JVM:          1.7.0_60 (Oracle Corporation 24.60-b09)
 OS:           Mac OS X 10.9.4 x86_64
 </code></pre>
-</div>
 
 <h1 id="section-1">简单使用</h1>
 
@@ -153,26 +151,24 @@ OS:           Mac OS X 10.9.4 x86_64
 
 <p>作为测试，创建一个 test 目录，然后通过下面命令来初始化一个项目：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir <span class="nb">test</span>
-<span class="gp">$ </span><span class="nb">cd test</span>
-<span class="gp">$ </span>gradle init
+<pre><code class="language-bash">$ mkdir test
+$ cd test
+$ gradle init
 :wrapper
 :init
 
 BUILD SUCCESSFUL
 
-Total <span class="nb">time</span>: 3.058 secs
+Total time: 3.058 secs
 
-<span class="gp">$ </span>ls
+$ ls
 build.gradle    gradle          gradlew         gradlew.bat     settings.gradle
 </code></pre>
-</div>
 
 <p>可以看到生成了 gradle 的一些配置文件。接下来在 build.gradle 文件中添加下面代码，可以支持生成 jar 包：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
+<pre><code class="language-groovy">apply plugin: 'java'
 </code></pre>
-</div>
 
 <p>这就是你定义一个Java项目所需要做的一切。这就会在你项目里使用Java插件，该插件会给你的项目增加很多任务。</p>
 
@@ -180,58 +176,52 @@ build.gradle    gradle          gradlew         gradlew.bat     settings.gradle
 
 <p>运行下面命令即可生成 jar 包：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ gradle jar
+<pre><code>$ gradle jar
 </code></pre>
-</div>
 
 <p>如果 jar 包中有一个包含 main 方法的主类，想让其打包之后能够运行其 main 方法，则需要添加下面代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
+<pre><code class="language-groovy">apply plugin: 'java'
 
-<span class="n">jar</span> <span class="o">{</span>
-    <span class="n">manifest</span> <span class="o">{</span>
-        <span class="n">attributes</span> <span class="s1">'Main-Class'</span><span class="o">:</span> <span class="s1">'com.javachen.gradle.HelloWorld'</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.javachen.gradle.HelloWorld'
+    }
+}
 </code></pre>
-</div>
 
 <p>通常，JAR 包需要被发布到某个地方。为了完成这个功能，你需要告诉 Gradle 把 JAR 包发布到哪里。在 Gradle 中，如 JAR 之类的压缩包都被发布到库中。在我们的样例中，我们将会发布到本地仓库。你也可以发布到一个或多个远端地址。</p>
 
 <p>发布 jar 包添加如下配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">uploadArchives</span> <span class="o">{</span>
-    <span class="n">repositories</span> <span class="o">{</span>
-       <span class="n">flatDir</span> <span class="o">{</span>
-           <span class="n">dirs</span> <span class="s1">'repos'</span>
-    <span class="o">}</span> <span class="o">}</span>
-<span class="o">}</span>
+<pre><code class="language-groovy">uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+    } }
+}
 </code></pre>
-</div>
 
 <p>此外，你还可以添加下面代码，引入 Eclipse 插件以支持生成 Eclipse 工程：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'eclipse'</span>
+<pre><code class="language-groovy">apply plugin: 'eclipse'
 </code></pre>
-</div>
 
 <p>添加Maven库：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">repositories</span> <span class="o">{</span>
-    <span class="n">mavenCentral</span><span class="o">()</span>
-<span class="o">}</span>
+<pre><code class="language-groovy">repositories {
+    mavenCentral()
+}
 </code></pre>
-</div>
 
 <p>如果想添加依赖，也是非常简单，例如添加 spring 依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
-<span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">compile</span> <span class="s1">'org.springframework:spring-context:3.2.6.RELEASE'</span>
-    <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">'junit'</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">'junit'</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">'4.+'</span>
-<span class="o">}</span>
+<pre><code class="language-groovy">apply plugin: 'java'
+dependencies {
+    compile 'org.springframework:spring-context:3.2.6.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
 </code></pre>
-</div>
 
 <p>gradle 便会自动地到 maven 服务器下载 spring-context-3.2.6.RELEASE.jar，以及它所依赖的 jar 包。</p>
 
@@ -246,69 +236,66 @@ build.gradle    gradle          gradlew         gradlew.bat     settings.gradle
 
 <p>当然，也可以直接依赖本地的 jar 包，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
-<span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">compile</span> <span class="nf">fileTree</span><span class="o">(</span><span class="nl">dir:</span> <span class="s1">'libs'</span><span class="o">,</span> <span class="nl">include:</span> <span class="s1">'*.jar'</span><span class="o">)</span>
-<span class="o">}</span>
+<pre><code class="language-groovy">apply plugin: 'java'
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
 </code></pre>
-</div>
 
-<p>也可以通过 <code class="highlighter-rouge">buildscript{}</code> 中添加依赖的方式，将相关 jar 包加入到 classpath 中，如：</p>
+<p>也可以通过 <code>buildscript{}</code> 中添加依赖的方式，将相关 jar 包加入到 classpath 中，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>  
-    <span class="n">repositories</span> <span class="o">{</span>  
-        <span class="n">mavenCentral</span><span class="o">()</span>  
-    <span class="o">}</span>  
-    <span class="n">dependencies</span> <span class="o">{</span>  
-        <span class="n">classpath</span> <span class="nl">group:</span> <span class="s1">'commons-codec'</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">'commons-codec'</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">'1.2'</span>  
-    <span class="o">}</span>  
-<span class="o">}</span>  
+<pre><code class="language-groovy">buildscript {  
+    repositories {  
+        mavenCentral()  
+    }  
+    dependencies {  
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'  
+    }  
+}  
 </code></pre>
-</div>
 
 <p>综上，完成的配置如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'eclipse'</span>
+<pre><code class="language-groovy">apply plugin: 'java'
+apply plugin: 'eclipse'
 
-<span class="n">jar</span> <span class="o">{</span>
-    <span class="n">manifest</span> <span class="o">{</span>
-        <span class="n">attributes</span> <span class="s1">'Main-Class'</span><span class="o">:</span> <span class="s1">'com.javachen.gradle.HelloWorld'</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.javachen.gradle.HelloWorld'
+    }
+}
 
-<span class="n">repositories</span> <span class="o">{</span>
-    <span class="n">mavenLocal</span><span class="o">()</span>
-    <span class="n">mavenCentral</span><span class="o">()</span>
-    <span class="n">mavenRepo</span> <span class="nl">urls:</span> <span class="s2">"http://repository.sonatype.org/content/groups/forge/"</span>
-<span class="o">}</span>
+repositories {
+    mavenLocal()
+    mavenCentral()
+    mavenRepo urls: "http://repository.sonatype.org/content/groups/forge/"
+}
 
-<span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">compile</span> <span class="s1">'org.springframework:spring-context:3.2.6.RELEASE'</span>
-    <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">'junit'</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">'junit'</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">'4.+'</span>
-    <span class="n">compile</span> <span class="nf">fileTree</span><span class="o">(</span><span class="nl">dir:</span> <span class="s1">'libs'</span><span class="o">,</span> <span class="nl">include:</span> <span class="s1">'*.jar'</span><span class="o">)</span>
-<span class="o">}</span>
+dependencies {
+    compile 'org.springframework:spring-context:3.2.6.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
 
-<span class="n">buildscript</span> <span class="o">{</span>  
-    <span class="n">repositories</span> <span class="o">{</span>  
-        <span class="n">mavenLocal</span><span class="o">()</span>
-        <span class="n">mavenCentral</span><span class="o">()</span>
-        <span class="n">mavenRepo</span> <span class="nl">urls:</span> <span class="s2">"http://repository.sonatype.org/content/groups/forge/"</span>
-    <span class="o">}</span>  
-    <span class="n">dependencies</span> <span class="o">{</span>  
-        <span class="n">classpath</span> <span class="nl">group:</span> <span class="s1">'commons-codec'</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">'commons-codec'</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">'1.2'</span>  
-    <span class="o">}</span>  
-<span class="o">}</span>  
+buildscript {  
+    repositories {  
+        mavenLocal()
+        mavenCentral()
+        mavenRepo urls: "http://repository.sonatype.org/content/groups/forge/"
+    }  
+    dependencies {  
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'  
+    }  
+}  
 
-<span class="n">uploadArchives</span> <span class="o">{</span>
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">flatDir</span> <span class="o">{</span>
-            <span class="n">dirs</span> <span class="s1">'repos'</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
+}
 </code></pre>
-</div>
 
 <h1 id="section-3">其他使用</h1>
 
@@ -316,39 +303,36 @@ build.gradle    gradle          gradlew         gradlew.bat     settings.gradle
 
 <p>gradle 不像 maven 那样有固定的项目结构，gradle 原声 API 是不支持的，要想做到这一点，我们可以自定义一个 task。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'idea'</span>
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'war'</span>
+<pre><code class="language-groovy">apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'war'
 
-<span class="n">task</span> <span class="n">createJavaProject</span> <span class="o">&lt;&lt;</span> <span class="o">{</span>
-  <span class="n">sourceSets</span><span class="o">*.</span><span class="na">java</span><span class="o">.</span><span class="na">srcDirs</span><span class="o">*.</span><span class="na">each</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()</span> <span class="o">}</span>
-  <span class="n">sourceSets</span><span class="o">*.</span><span class="na">resources</span><span class="o">.</span><span class="na">srcDirs</span><span class="o">*.</span><span class="na">each</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()}</span>
-<span class="o">}</span>
+task createJavaProject &lt;&lt; {
+  sourceSets*.java.srcDirs*.each { it.mkdirs() }
+  sourceSets*.resources.srcDirs*.each { it.mkdirs()}
+}
 
-<span class="n">task</span> <span class="nf">createWebProject</span><span class="o">(</span><span class="nl">dependsOn:</span> <span class="s1">'createJavaProject'</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="o">{</span>
-  <span class="kt">def</span> <span class="n">webAppDir</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"$webAppDirName"</span><span class="o">)</span>
-  <span class="n">webAppDir</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()</span>
-<span class="o">}</span>
+task createWebProject(dependsOn: 'createJavaProject') &lt;&lt; {
+  def webAppDir = file("$webAppDirName")
+  webAppDir.mkdirs()
+}
 </code></pre>
-</div>
 
 <p>然后运行下面命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gradle createJavaProject
+<pre><code class="language-bash">$ gradle createJavaProject
 </code></pre>
-</div>
 
 <p>另外，还可以使用 <a href="http://tellurianring.com/wiki/gradle/templates">gradle templates</a> 创建项目目录结构，这里不做研究。</p>
 
 <p>更加标准的方法是使用 gradle 自带的插件创建项目目录结构，例如创建 java 项目结构：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gradle init --type java-library
+<pre><code class="language-bash">$ gradle init --type java-library
 </code></pre>
-</div>
 
 <p>这时候的目录结果如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tree -L 4
+<pre><code class="language-bash">$ tree -L 4
 .
 ├── build.gradle
 ├── gradle
@@ -362,47 +346,43 @@ build.gradle    gradle          gradlew         gradlew.bat     settings.gradle
     ├── main
     │   └── java
     │       └── Library.java
-    └── <span class="nb">test</span>
+    └── test
         └── java
             └── LibraryTest.java
 
 7 directories, 8 files
 </code></pre>
-</div>
 
 <p>如果想要导入到 idea 中，先执行下面命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gradle idea
+<pre><code class="language-bash">$ gradle idea
 </code></pre>
-</div>
 
 <p>这时候的 build.gradle 如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'idea'</span>
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'war'</span>
+<pre><code class="language-groovy">apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'war'
 
-<span class="n">task</span> <span class="n">createJavaProject</span> <span class="o">&lt;&lt;</span> <span class="o">{</span>
-      <span class="n">sourceSets</span><span class="o">*.</span><span class="na">java</span><span class="o">.</span><span class="na">srcDirs</span><span class="o">*.</span><span class="na">each</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()</span> <span class="o">}</span>
-        <span class="n">sourceSets</span><span class="o">*.</span><span class="na">resources</span><span class="o">.</span><span class="na">srcDirs</span><span class="o">*.</span><span class="na">each</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()}</span>
-<span class="o">}</span>
+task createJavaProject &lt;&lt; {
+      sourceSets*.java.srcDirs*.each { it.mkdirs() }
+        sourceSets*.resources.srcDirs*.each { it.mkdirs()}
+}
 
-<span class="n">task</span> <span class="nf">createWebProject</span><span class="o">(</span><span class="nl">dependsOn:</span> <span class="s1">'createJavaProject'</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="o">{</span>
-      <span class="kt">def</span> <span class="n">webAppDir</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"$webAppDirName"</span><span class="o">)</span>
-        <span class="n">webAppDir</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()</span>
-<span class="o">}</span>
+task createWebProject(dependsOn: 'createJavaProject') &lt;&lt; {
+      def webAppDir = file("$webAppDirName")
+        webAppDir.mkdirs()
+}
 </code></pre>
-</div>
 
 <h2 id="javamavengradle">将Java项目从maven迁移到gradle</h2>
 
-<p>如何将一个 java 项目从maven迁移到 gradle 呢？gradle 集成了一个很方便的插件：<code class="highlighter-rouge">Build Init Plugin</code>，使用这个插件可以很方便地创建一个新的 gradle 项目，或者将其它类型的项目转换为 gradle 项目。</p>
+<p>如何将一个 java 项目从maven迁移到 gradle 呢？gradle 集成了一个很方便的插件：<code>Build Init Plugin</code>，使用这个插件可以很方便地创建一个新的 gradle 项目，或者将其它类型的项目转换为 gradle 项目。</p>
 
 <p>要将 maven 项目转换为 gradle 项目，只需要在项目的 pom 文件所在的目录下执行以下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gradle init --type pom
+<pre><code class="language-bash">$ gradle init --type pom
 </code></pre>
-</div>
 
 <p>上面的命令会根据 pom 文件自动生成 gradle 项目所需的文件和配置，然后以 gradle 项目重新导入即可。</p>
 
@@ -464,7 +444,7 @@ build.gradle    gradle          gradlew         gradlew.bat     settings.gradle
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

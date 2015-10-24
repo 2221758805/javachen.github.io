@@ -111,18 +111,16 @@
 
 <p>设置主机名：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo scutil --set HostName june－mac
+<pre><code class="language-bash">$ sudo scutil --set HostName june－mac
 </code></pre>
-</div>
 
 <p>设置鼠标滚轮滑动的方向：系统偏好设置－－&gt;鼠标－－&gt;”滚动方向：自然”前面的勾去掉</p>
 
 <p>显示/隐藏Mac隐藏文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>defaults write com.apple.finder AppleShowAllFiles -bool <span class="nb">true</span>  <span class="c">#显示Mac隐藏文件的命令</span>
-defaults write com.apple.finder AppleShowAllFiles -bool <span class="nb">false</span> <span class="c">#隐藏Mac隐藏文件的命令</span>
+<pre><code class="language-bash">defaults write com.apple.finder AppleShowAllFiles -bool true  #显示Mac隐藏文件的命令
+defaults write com.apple.finder AppleShowAllFiles -bool false #隐藏Mac隐藏文件的命令
 </code></pre>
-</div>
 
 <ul>
   <li>触控板</li>
@@ -144,82 +142,73 @@ defaults write com.apple.finder AppleShowAllFiles -bool <span class="nb">false</
 <h1 id="apps">Apps</h1>
 
 <ul>
-  <li>VirtualBox：<a href="http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/VirtualBox-4.3.10-93012-OSX.dmg">http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/VirtualBox-4.3.10-93012-OSX.dmg</a></li>
-  <li>Vagrant：<a href="https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.4.dmg">https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.4.dmg</a></li>
+  <li>VirtualBox</li>
+  <li>Vagrant</li>
   <li>Unarchiver: 支持多种格式（包括 windows下的格式）的压缩/解压缩工具</li>
   <li>OminiFocus ：时间管理工具</li>
   <li>Mou：Markdown 编辑器，国人出品</li>
   <li>Dash</li>
   <li>Xmind</li>
   <li>Shadowsocks</li>
-  <li>WizNote</li>
-  <li>StarUML</li>
+  <li>WizNote：为知笔记</li>
+  <li>yEd：画时序图</li>
   <li>Iterm2</li>
+  <li><a href="https://github.com/dreamhead/moco">Moco</a>，一个用来模拟服务器的工具。在服务器端没有开发完成时，可以通过配置来搭建一个模拟服务， 这样可以方便客户端的开发。</li>
 </ul>
 
 <h1 id="homebrew">Homebrew</h1>
 
 <p><a href="http://brew.sh/">Brew</a> 是 Mac 下面的包管理工具，通过 Github 托管适合 Mac 的编译配置以及 Patch，可以方便的安装开发工具。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install<span class="k">)</span><span class="s2">"</span>
+<pre><code class="language-bash">$ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 </code></pre>
-</div>
 
 <p>通过brew安装软件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install git git-flow  curl  wget  putty  tmux ack <span class="nb">source</span>-highlight aria2 dos2unix nmap iotop htop  ctags tree openvpn
+<pre><code class="language-bash">$ brew install git git-flow  curl  wget  putty  tmux ack source-highlight aria2 dos2unix nmap iotop htop  ctags tree openvpn
 </code></pre>
-</div>
 
 <p>紧接着，我们需要做一件事让通过 Homebrew 安装的程序的启动链接 (在 /usr/local/bin中）可以直接运行，无需将完整路径写出。通过以下命令将 /usr/local/bin 添加至 $PATH 环境变量中:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s1">'export PATH="/usr/local/bin:$PATH"'</span> &gt;&gt; ~/.bash_profile
+<pre><code class="language-bash">$ echo 'export PATH="/usr/local/bin:$PATH"' &gt;&gt; ~/.bash_profile
 </code></pre>
-</div>
 
 <p>Cmd+T 打开一个新的 terminal 标签页，运行以下命令，确保 brew 运行正常。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew doctor
+<pre><code class="language-bash">$ brew doctor
 </code></pre>
-</div>
 
 <h2 id="section-1">使用</h2>
 
 <p>安装一个包，可以简单的运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install &lt;package_name&gt;
+<pre><code class="language-bash">$ brew install &lt;package_name&gt;
 </code></pre>
-</div>
 
 <p>更新 Homebrew 在服务器端上的包目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew update
+<pre><code class="language-bash">$ brew update
 </code></pre>
-</div>
 
 <p>查看你的包是否需要更新：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew outdated
+<pre><code class="language-bash">$ brew outdated
 </code></pre>
-</div>
 
 <p>更新包：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew upgrade &lt;package_name&gt;
+<pre><code class="language-bash">$ brew upgrade &lt;package_name&gt;
 </code></pre>
-</div>
 
 <p>Homebrew 将会把老版本的包缓存下来，以便当你想回滚至旧版本时使用。但这是比较少使用的情况，当你想清理旧版本的包缓存时，可以运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew cleanup
+<pre><code class="language-bash">$ brew cleanup
 </code></pre>
-</div>
 
 <p>查看你安装过的包列表（包括版本号）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew list --versions
+<pre><code class="language-bash">$ brew list --versions
 </code></pre>
-</div>
 
 <h2 id="cask">Cask</h2>
 
@@ -227,18 +216,16 @@ defaults write com.apple.finder AppleShowAllFiles -bool <span class="nb">false</
 
 <p>Brew cask 安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew tap phinze/homebrew-cask
-<span class="gp">$ </span>brew install brew-cask
+<pre><code class="language-bash">$ brew tap phinze/homebrew-cask
+$ brew install brew-cask
 </code></pre>
-</div>
 
 <p>我通过 Brew cask 安装的软件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew cask install google-chrome omnigraffle xtrafinder
+<pre><code class="language-bash">$ brew cask install google-chrome omnigraffle xtrafinder
 
-<span class="gp">$ </span>brew update <span class="o">&amp;&amp;</span> brew upgrade brew-cask <span class="o">&amp;&amp;</span> brew cleanup <span class="c"># 更新</span>
+$ brew update &amp;&amp; brew upgrade brew-cask &amp;&amp; brew cleanup # 更新
 </code></pre>
-</div>
 
 <blockquote>
   <p>相对于 brew cask 的安装方式，本人更倾向于到 App Store 或官方下载 OS X 图形界面程序。主要因为名字不好记忆、偶尔需要手动更新，另外当你使用 Alfred 或 Spotlight ，你将发现将程序安装在 ~/Application 会很方便。</p>
@@ -248,56 +235,49 @@ defaults write com.apple.finder AppleShowAllFiles -bool <span class="nb">false</
 
 <p>使用 Homebrew 完成 zsh 和 zsh completions 的安装</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>brew install zsh zsh-completions
+<pre><code class="language-bash">brew install zsh zsh-completions
 </code></pre>
-</div>
 
 <p>把默认 Shell 换为 zsh。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>chsh -s /bin/zsh
+<pre><code class="language-bash">$ chsh -s /bin/zsh
 </code></pre>
-</div>
 
 <p>然后用下面的两句（任选其一）可以自动安装 oh-my-zsh：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+<pre><code class="language-bash">$ curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+<pre><code class="language-bash">$ wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
 </code></pre>
-</div>
 
 <p>编辑 ~/.zshrc：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>echo 'source ~/.bashrc' &gt;&gt;~/.zshrc
+<pre><code>echo 'source ~/.bashrc' &gt;&gt;~/.zshrc
 echo 'source ~/.bash_profile' &gt;&gt;~/.zshrc
 </code></pre>
-</div>
 
 <p>用文本编辑器或 vi 打开 .zshrc 进行以下编辑:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">ZSH_THEME</span><span class="o">=</span>pygmalion
-<span class="nv">plugins</span><span class="o">=(</span>git colored-man colorize github jira vagrant virtualenv pip python brew osx zsh-syntax-highlighting<span class="o">)</span>
+<pre><code class="language-bash">ZSH_THEME=pygmalion
+plugins=(git colored-man colorize github jira vagrant virtualenv pip python brew osx zsh-syntax-highlighting)
 </code></pre>
-</div>
 
-<p>使用 <code class="highlighter-rouge">ctrl+r</code> 查找历史命令，在 <code class="highlighter-rouge">~/.zshrc</code> 中添加：</p>
+<p>使用 <code>ctrl+r</code> 查找历史命令，在 <code>~/.zshrc</code> 中添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bindkey "^R" history-incremental-search-backward
+<pre><code>bindkey "^R" history-incremental-search-backward
 </code></pre>
-</div>
 
 <h2 id="section-2">使用</h2>
 
 <p>使用上默认加了很多快捷映射，如：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">~</code>: 进入用户根目录，可以少打cd三个字符了</li>
-  <li><code class="highlighter-rouge">l</code>: 相当于ls -lah</li>
-  <li><code class="highlighter-rouge">..</code>: 返回上层目录</li>
-  <li><code class="highlighter-rouge">...</code>: 返回上上层目录</li>
-  <li><code class="highlighter-rouge">-</code>: 打开上次所在目录</li>
+  <li><code>~</code>: 进入用户根目录，可以少打cd三个字符了</li>
+  <li><code>l</code>: 相当于ls -lah</li>
+  <li><code>..</code>: 返回上层目录</li>
+  <li><code>...</code>: 返回上上层目录</li>
+  <li><code>-</code>: 打开上次所在目录</li>
 </ul>
 
 <p>具体的可以查看其<a href="https://github.com/robbyrussell/oh-my-zsh/blob/master/lib/aliases.zsh">配置文件</a>。</p>
@@ -306,32 +286,28 @@ echo 'source ~/.bash_profile' &gt;&gt;~/.zshrc
 
 <p>安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install git
+<pre><code class="language-bash">$ brew install git
 </code></pre>
-</div>
 
 <p>好的，现在我们来测试一下 gti 是否安装完好：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git --version
+<pre><code class="language-bash">$ git --version
 </code></pre>
-</div>
 
-<p>运行 <code class="highlighter-rouge">$ which git</code> 将会输出 /usr/local/bin/git.</p>
+<p>运行 <code>$ which git</code> 将会输出 /usr/local/bin/git.</p>
 
 <p>接着，我们将定义你的 Git 帐号（与你在 GitHub 使用的用户名和邮箱一致）</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git config --global user.name <span class="s2">"Your Name Here"</span>
-<span class="gp">$ </span>git config --global user.email <span class="s2">"your_email@youremail.com"</span>
+<pre><code class="language-bash">$ git config --global user.name "Your Name Here"
+$ git config --global user.email "your_email@youremail.com"
 </code></pre>
-</div>
 
 <p>这些配置信息将会添加进 ~/.gitconfig 文件中.</p>
 
 <p>我们将推荐使用 HTTPS 方法（另一个是 SSH），将你的代码推送到 Github 上的仓库。如果你不想每次都输入用户名和密码的话，可以按照此 <a href="https://help.github.com/articles/set-up-git">描述</a> 说的那样，运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git config --global credential.helper osxkeychain
+<pre><code class="language-bash">$ git config --global credential.helper osxkeychain
 </code></pre>
-</div>
 
 <p>此外，如果你打算使用 SSH方式，可以参考此 <a href="https://help.github.com/articles/generating-ssh-keys">链接</a>。</p>
 
@@ -339,7 +315,7 @@ echo 'source ~/.bash_profile' &gt;&gt;~/.zshrc
 
 <p>创建一个新文件 ~/.gitignore ，并将以下内容添加进去，这样全部 git 仓库将会忽略以下内容所提及的文件。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># Folder view configuration files
+<pre><code># Folder view configuration files
 .DS_Store
 Desktop.ini
 
@@ -375,24 +351,21 @@ venv
 node_modules
 .sass-cache
 </code></pre>
-</div>
 
 <h1 id="vim">安装Vim插件</h1>
 
 <p>安装 pathogen：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir -p ~/.vim/autoload ~/.vim/bundle; <span class="se">\</span>
-<span class="gp">$ </span>curl -Sso ~/.vim/autoload/pathogen.vim <span class="se">\</span>
+<pre><code class="language-bash">$ mkdir -p ~/.vim/autoload ~/.vim/bundle; \
+$ curl -Sso ~/.vim/autoload/pathogen.vim \
     https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
 </code></pre>
-</div>
 
 <p>安装NERDTree：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> ~/.vim/bundle
-<span class="gp">$ </span>git clone https://github.com/scrooloose/nerdtree.git
+<pre><code class="language-bash">$ cd ~/.vim/bundle
+$ git clone https://github.com/scrooloose/nerdtree.git
 </code></pre>
-</div>
 
 <p>更多请参考：<a href="/2014/01/14/vim-config-and-plugins.html">vim配置和插件管理</a></p>
 
@@ -400,32 +373,28 @@ node_modules
 
 <p>先安装依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install libksba autoconf automake libtool gcc46 libyaml readline
+<pre><code class="language-bash">$ brew install libksba autoconf automake libtool gcc46 libyaml readline
 </code></pre>
-</div>
 
 <p>通过rvm安装ruby：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -L get.rvm.io | bash -s stable <span class="nv">$ </span><span class="nb">source</span> ~/.bash_profile
-<span class="gp">$ </span>sed -i -e <span class="s1">'s/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g'</span> ~/.rvm/config/db
-<span class="gp">$ </span>sudo rvm install 1.9.3 --with-gcc<span class="o">=</span>clang
-<span class="gp">$ </span>rvm --default 1.9.3
+<pre><code class="language-bash">$ curl -L get.rvm.io | bash -s stable $ source ~/.bash_profile
+$ sed -i -e 's/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g' ~/.rvm/config/db
+$ sudo rvm install 1.9.3 --with-gcc=clang
+$ rvm --default 1.9.3
 </code></pre>
-</div>
 
 <h1 id="jekyll">安装Jekyll</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo gem install rdoc
-<span class="gp">$ </span>sudo gem install jekyll redcarpet
+<pre><code class="language-bash">$ sudo gem install rdoc
+$ sudo gem install jekyll redcarpet
 </code></pre>
-</div>
 
 <p>设置环境变量：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s1">'export PATH=$PATH:$HOME/.rvm/bin'</span> &gt;&gt; ~/.bash_profile
-<span class="gp">$ </span><span class="nb">echo</span> <span class="s1">'[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; . "$HOME/.rvm/scripts/rvm"'</span> &gt;&gt; ~/.bash_profile
+<pre><code class="language-bash">$ echo 'export PATH=$PATH:$HOME/.rvm/bin' &gt;&gt; ~/.bash_profile
+$ echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; . "$HOME/.rvm/scripts/rvm"' &gt;&gt; ~/.bash_profile
 </code></pre>
-</div>
 
 <h1 id="java">Java开发环境</h1>
 
@@ -438,26 +407,23 @@ node_modules
 
 <p>设置 java_home 为 1.7:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span><span class="k">$(</span>/usr/libexec/java_home -v 1.7<span class="k">)</span>
+<pre><code class="language-bash">export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
 </code></pre>
-</div>
 
 <p>使用 brew 来安装 ant、maven、ivy、forrest、springboot 等：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install https://raw.github.com/Homebrew/homebrew-versions/master/maven30.rb ant ivy apache-forrest  springboot
+<pre><code class="language-bash">$ brew install https://raw.github.com/Homebrew/homebrew-versions/master/maven30.rb ant ivy apache-forrest  springboot
 </code></pre>
-</div>
 
 <p>配置 ant、maven 和 ivy 仓库：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>rm -rf ~/.ivy2/cache ~/.m2/repository
-<span class="gp">$ </span>mkdir -p ~/.ivy2 ~/.m2
-<span class="gp">$ </span>ln -s ~/app/repository/cache/  ~/.ivy2/cache
-<span class="gp">$ </span>ln -s ~/app/repository/m2/  ~/.m2/repository
+<pre><code class="language-bash">$ rm -rf ~/.ivy2/cache ~/.m2/repository
+$ mkdir -p ~/.ivy2 ~/.m2
+$ ln -s ~/app/repository/cache/  ~/.ivy2/cache
+$ ln -s ~/app/repository/m2/  ~/.m2/repository
 </code></pre>
-</div>
 
-<p>注意，这里我在 <code class="highlighter-rouge">~/app/repository</code> 有两个目录，cache 用于存放 ivy 下载的文件，m2 用于存放 maven 的仓库。</p>
+<p>注意，这里我在 <code>~/app/repository</code> 有两个目录，cache 用于存放 ivy 下载的文件，m2 用于存放 maven 的仓库。</p>
 
 <h1 id="python">Python开发环境</h1>
 
@@ -519,7 +485,7 @@ node_modules
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

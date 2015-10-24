@@ -112,16 +112,15 @@
 
 <h1 id="section">预览文章</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>source ~/.bash_profile
+<pre><code>source ~/.bash_profile
 jekyll server
 </code></pre>
-</div>
 
 <h1 id="about-me-">添加about me 边栏</h1>
 
 <p>参考<a href="http://www.the5fire.com/">the5fire的技术博客</a>在index.html页面加入如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;section&gt;
+<pre><code>&lt;section&gt;
 &lt;h4&gt;About me&lt;/h4&gt;
 &lt;div&gt;
  一个Java方案架构师，主要从事hadoop相关工作。&lt;a href="/about.html"&gt;更多信息&lt;/a&gt; 
@@ -133,40 +132,36 @@ jekyll server
 &lt;/div&gt;
 &lt;/section&gt;
 </code></pre>
-</div>
 
 <h1 id="about">添加about页面</h1>
 
 <p>在根目录创建about.md并修改，注意：文件开头几行内容如下</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>title: About
+<pre><code>title: About
 layout: page
 group: navigation
 </code></pre>
-</div>
 
 <h1 id="section-1">设置固定链接</h1>
 
 <p>在 _config.yml 里，找到 permalink，设置如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>permalink: /:categories/:year/:month/:day/:title 
+<pre><code>permalink: /:categories/:year/:month/:day/:title 
 </code></pre>
-</div>
 
 <h1 id="markdownredcarpet">修改，markdown实现为redcarpet</h1>
 
 <p>首先通过gem安装redcarpet，然后修改_config.yml：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>redcarpet:
+<pre><code>redcarpet:
   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify"]
 </code></pre>
-</div>
 
 <h1 id="section-2">首页添加最近文章</h1>
 
 <p>在index.html页面</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;section&gt;
+<pre><code>&lt;section&gt;
 &lt;h4&gt;Recent Posts&lt;/h4&gt;
 &lt;ul id="recent_posts"&gt;{ % for rpost in site.posts limit: 15 %}
 &lt;li class="post"&gt;
@@ -175,13 +170,12 @@ group: navigation
 &lt;/ul&gt;
 &lt;/section&gt;
 </code></pre>
-</div>
 
 <h1 id="section-3">首页为每篇文章添加分类、标签、发表日期以及评论连接</h1>
 
-<p>在index.html页面找到<code class="highlighter-rouge">&lt;h3&gt;&lt;a href="{ { BASE_PATH }}{ { post.url }}"&gt;{ { post.title }}&lt;/a&gt;&lt;/h3&gt;</code>，在下面添加：</p>
+<p>在index.html页面找到<code>&lt;h3&gt;&lt;a href="{ { BASE_PATH }}{ { post.url }}"&gt;{ { post.title }}&lt;/a&gt;&lt;/h3&gt;</code>，在下面添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;div class="c9"&gt;
+<pre><code> &lt;div class="c9"&gt;
 	Categories：
 		{ %for cg in post.categories % }
 		&lt;a href="/categories.html#-ref"&gt;&lt;/a&gt;
@@ -202,13 +196,12 @@ group: navigation
 	&lt;a href='#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;"&gt;Comments&lt;/a&gt;
 &lt;/div&gt;
 </code></pre>
-</div>
 
 <h1 id="h1h2">修改h1、h2等标题字体</h1>
 
-<p>主要是参考<a href="http://www.ituring.com.cn/">图灵社区</a>的css，在<code class="highlighter-rouge">assets/themes/twitter/css/style.css</code>中添加如下css代码：</p>
+<p>主要是参考<a href="http://www.ituring.com.cn/">图灵社区</a>的css，在<code>assets/themes/twitter/css/style.css</code>中添加如下css代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>h1,h2,h3,h4,h5,h6{margin:18px 0 9px;font-family:inherit;font-weight:normal;color:inherit;text-rendering:optimizelegibility;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{font-weight:normal;color:#999999;}
+<pre><code>h1,h2,h3,h4,h5,h6{margin:18px 0 9px;font-family:inherit;font-weight:normal;color:inherit;text-rendering:optimizelegibility;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{font-weight:normal;color:#999999;}
 h1{font-size:30px;line-height:36px;}h1 small{font-size:18px;}
 h2{font-size:24px;line-height:36px;}h2 small{font-size:18px;}
 h3{font-size:18px;line-height:27px;}h3 small{font-size:14px;}
@@ -217,13 +210,12 @@ h4{font-size:14px;}h4 small{font-size:12px;}
 h5{font-size:12px;}
 h6{font-size:11px;color:#999999;text-transform:uppercase;}
 </code></pre>
-</div>
 
 <h1 id="section-4">添加返回顶部功能</h1>
 
-<p>同样是参考了<a href="http://www.ituring.com.cn/">图灵社区</a>的css和网上的一篇js实现。在<code class="highlighter-rouge">assets/themes/twitter/css/style.css</code>：</p>
+<p>同样是参考了<a href="http://www.ituring.com.cn/">图灵社区</a>的css和网上的一篇js实现。在<code>assets/themes/twitter/css/style.css</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.backToTop {
+<pre><code>.backToTop {
     display: block;
     width: 40px;
     height: 32px;
@@ -244,11 +236,10 @@ h6{font-size:11px;color:#999999;text-transform:uppercase;}
     filter: Alpha(opacity=60);
 }
 </code></pre>
-</div>
 
-<p>在<code class="highlighter-rouge">assets/themes/twitter/js</code>添加jquery和main.js，main.js内容如下：</p>
+<p>在<code>assets/themes/twitter/js</code>添加jquery和main.js，main.js内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jQuery.noConflict();
+<pre><code>jQuery.noConflict();
 jQuery(document).ready(function(){
 	var backToTopTxt = "▲", backToTopEle = jQuery('&lt;div class="backToTop"&gt;&lt;/div&gt;').appendTo(jQuery("body")).text(backToTopTxt).attr("title","Back top top").click(function() {
 	    jQuery("html, body").animate({ scrollTop: 0 }, 120);
@@ -266,23 +257,21 @@ jQuery(document).ready(function(){
 	jQuery('div.main a,div.pic a').attr('target', '_blank');
 });
 </code></pre>
-</div>
 
 <h1 id="section-5">添加文章版权说明</h1>
 
-<p>在<code class="highlighter-rouge">_includes/themes/twitter/post.html</code>中文章主体下面添加如下代码：</p>
+<p>在<code>_includes/themes/twitter/post.html</code>中文章主体下面添加如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;hr&gt;
+<pre><code>&lt;hr&gt;
 &lt;div class="copyright"&gt;
 &lt;p&gt;&lt;strong&gt;本文固定链接：&lt;/strong&gt;&lt;a href='{ {page.url}}'&gt;http://blog.javachen.com/2013/08/31/my-jekyll-config.html&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;原创文章,转载请注明出处：&lt;/strong&gt;&lt;a href='{ {page.url}}'&gt;JavaChen Blog&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 </code></pre>
-</div>
 
-<p>并在<code class="highlighter-rouge">assets/themes/twitter/css/style.css</code>中添加如下css代码：</p>
+<p>并在<code>assets/themes/twitter/css/style.css</code>中添加如下css代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.copyright {
+<pre><code>.copyright {
 margin: 10px 0;
 padding: 10px 20px;
 line-height: 1;
@@ -290,40 +279,36 @@ border-radius: 5px;
 background: #f5f5f5;
 }
 </code></pre>
-</div>
 
 <h1 id="read-more">添加read more功能</h1>
 <p>参考<a href="http://truongtx.me/2013/05/01/jekyll-read-more-feature-without-any-plugin/">Jekyll - Read More without plugin</a>，在index.html找到 ，然后修改为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">if</span><span class="w"> </span><span class="err">post.content</span><span class="w"> </span><span class="err">contains</span><span class="w"> </span><span class="nt">"&lt;!-- more --&gt;"</span><span class="w"> </span><span class="err">%}</span><span class="w">
-</span><span class="p">{</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="err">post.content</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">split:</span><span class="nt">"&lt;!-- more --&gt;"</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">first</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">}}</span><span class="w">
-</span><span class="err">&lt;h</span><span class="mi">4</span><span class="err">&gt;&lt;a</span><span class="w"> </span><span class="err">href='</span><span class="p">{</span><span class="w"> </span><span class="err">{post.url</span><span class="p">}</span><span class="err">}'</span><span class="w"> </span><span class="err">title='Read</span><span class="w"> </span><span class="err">more...'&gt;Read</span><span class="w"> </span><span class="err">more...&lt;/a&gt;&lt;/h</span><span class="mi">4</span><span class="err">&gt;</span><span class="w">
-</span><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">else</span><span class="w"> </span><span class="err">%</span><span class="p">}</span><span class="w">
-</span><span class="p">{</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="err">post.content</span><span class="p">}</span><span class="err">}</span><span class="w">
-</span><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">endif</span><span class="w"> </span><span class="err">%</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code>{ % if post.content contains "&lt;!-- more --&gt;" %}
+{ { post.content | split:"&lt;!-- more --&gt;" | first % }}
+&lt;h4&gt;&lt;a href='{ {post.url}}' title='Read more...'&gt;Read more...&lt;/a&gt;&lt;/h4&gt;
+{ % else %}
+{ { post.content}}
+{ % endif %}
+</code></pre>
 
-<p>然后，在文章中添加<code class="highlighter-rouge">&lt;!-- more --&gt;</code>即可。</p>
+<p>然后，在文章中添加<code>&lt;!-- more --&gt;</code>即可。</p>
 
 <h1 id="section-6">添加搜索栏</h1>
 
-<p>参考<a href="http://truongtx.me/2012/12/28/jekyll-create-simple-search-box/">Jekyll Bootstrap - Create Simple Search box</a>，在<code class="highlighter-rouge">_includes/themes/twitter/default.html</code>导航菜单下面添加：</p>
+<p>参考<a href="http://truongtx.me/2012/12/28/jekyll-create-simple-search-box/">Jekyll Bootstrap - Create Simple Search box</a>，在<code>_includes/themes/twitter/default.html</code>导航菜单下面添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;form class="navbar-search pull-left" id="search-form"&gt;
+<pre><code>&lt;form class="navbar-search pull-left" id="search-form"&gt;
   &lt;input type="text" id="google-search" class="search-query" placeholder="Search"&gt;
 &lt;/form
 </code></pre>
-</div>
 
 <p>添加js：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jQuery("#search-form").submit(function(){
+<pre><code>jQuery("#search-form").submit(function(){
 	var query = document.getElementById("google-search").value;
 	window.open("http://google.com/search?q=" + query+ "%20site:" + "http://blog.javachen.com");
 });
 </code></pre>
-</div>
 
 <h1 id="section-7">其他</h1>
 
@@ -388,7 +373,7 @@ background: #f5f5f5;
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

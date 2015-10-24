@@ -109,29 +109,27 @@
 
 <p>brew 安装 postgresql ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install postgresql
+<pre><code class="language-bash">$ brew install postgresql
 </code></pre>
-</div>
 
 <p>查看安装的版本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pg_ctl -V
-pg_ctl <span class="o">(</span>PostgreSQL<span class="o">)</span> 9.3.5
+<pre><code class="language-bash">$ pg_ctl -V
+pg_ctl (PostgreSQL) 9.3.5
 </code></pre>
-</div>
 
 <p>安装成功之后，安装路径为：/usr/local/var/postgres</p>
 
 <p>接下来，初始化数据库：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>initdb /usr/local/var/postgres
-The files belonging to this database system will be owned by user <span class="s2">"june"</span>.
+<pre><code class="language-bash">$ initdb /usr/local/var/postgres
+The files belonging to this database system will be owned by user "june".
 This user must also own the server process.
 
-The database cluster will be initialized with locale <span class="s2">"zh_CN.UTF-8"</span>.
-The default database encoding has accordingly been <span class="nb">set </span>to <span class="s2">"UTF8"</span>.
-initdb: could not find suitable text search configuration <span class="k">for </span>locale <span class="s2">"zh_CN.UTF-8"</span>
-The default text search configuration will be <span class="nb">set </span>to <span class="s2">"simple"</span>.
+The database cluster will be initialized with locale "zh_CN.UTF-8".
+The default database encoding has accordingly been set to "UTF8".
+initdb: could not find suitable text search configuration for locale "zh_CN.UTF-8"
+The default text search configuration will be set to "simple".
 
 Data page checksums are disabled.
 
@@ -140,11 +138,11 @@ creating subdirectories ... ok
 selecting default max_connections ... 100
 selecting default shared_buffers ... 128MB
 creating configuration files ... ok
-creating template1 database <span class="k">in</span> /usr/local/var/postgres/base/1 ... ok
+creating template1 database in /usr/local/var/postgres/base/1 ... ok
 initializing pg_authid ... ok
 initializing dependencies ... ok
 creating system views ... ok
-loading system objects<span class="s1">' descriptions ... ok
+loading system objects' descriptions ... ok
 creating collations ... ok
 creating conversions ... ok
 creating dictionaries ... ok
@@ -165,38 +163,33 @@ Success. You can now start the database server using:
     postgres -D /usr/local/var/postgres
 or
     pg_ctl -D /usr/local/var/postgres -l logfile start
-</span></code></pre>
-</div>
+</code></pre>
 
 <p>配置开机登陆（可选）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir -p ~/Library/LaunchAgents
-<span class="gp">$ </span>cp /usr/local/Cellar/postgresql/9.3.5_1/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
-<span class="gp">$ </span>launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+<pre><code class="language-bash">$ mkdir -p ~/Library/LaunchAgents
+$ cp /usr/local/Cellar/postgresql/9.3.5_1/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+$ launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 </code></pre>
-</div>
 
 <p>手动启动 postgresql</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+<pre><code class="language-bash">$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 </code></pre>
-</div>
 
 <p>查看状态：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log status
+<pre><code class="language-bash">pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log status
 </code></pre>
-</div>
 
 <p>停止：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log stop -s -m fast
+<pre><code class="language-bash">$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log stop -s -m fast
 </code></pre>
-</div>
 
 <p>查看进程：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ps auxwww | grep postgres
+<pre><code class="language-bash">$ ps auxwww | grep postgres
 june            56126   0.0  0.0  2432772    644 s000  S+    5:01下午   0:00.00 grep postgres
 june            56058   0.0  0.0  2467360    584   ??  Ss    5:00下午   0:00.00 postgres: stats collector process
 june            56057   0.0  0.0  2611808   1744   ??  Ss    5:00下午   0:00.00 postgres: autovacuum launcher process
@@ -205,26 +198,23 @@ june            56055   0.0  0.0  2611676    944   ??  Ss    5:00下午   0:00.0
 june            56054   0.0  0.0  2611676    756   ??  Ss    5:00下午   0:00.00 postgres: checkpointer process
 june            56044   0.0  0.2  2611676  14096 s000  S     5:00下午   0:00.02 /usr/local/Cellar/postgresql/9.3.5_1/bin/postgres -D /usr/local/var/postgres
 </code></pre>
-</div>
 
 <p>创建用户和数据库：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#createuser will prompt you for a password, enter it twice.</span>
-<span class="gp">$ </span>createuser  -P <span class="nb">test</span>
-<span class="gp">$ </span>createdb -Otest -Eutf8 test_db
-<span class="gp">$ </span>psql
-<span class="gp">postgres=# </span>GRANT ALL PRIVILEGES ON <span class="nb">test </span>TO <span class="nb">test</span>;
-<span class="gp">postgres=# </span><span class="se">\q</span>
+<pre><code class="language-bash">#createuser will prompt you for a password, enter it twice.
+$ createuser  -P test
+$ createdb -Otest -Eutf8 test_db
+$ psql
+postgres=# GRANT ALL PRIVILEGES ON test TO test;
+postgres=# \q
 </code></pre>
-</div>
 
 <p>进入命令行模式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>psql -U <span class="nb">test </span>test_db -h localhost -W
+<pre><code class="language-bash">$ psql -U test test_db -h localhost -W
 </code></pre>
-</div>
 
-<p>如果出现 <code class="highlighter-rouge">FATAL: Ident authentication failed for user</code>，是因为：</p>
+<p>如果出现 <code>FATAL: Ident authentication failed for user</code>，是因为：</p>
 
 <blockquote>
   <p>This is because by default PostgreSQL uses ‘ident’ authentication i.e it checks if the username exists on the system. You need to change authentication mode to ‘trust’ as we do not want to add a system user.<br />
@@ -233,26 +223,23 @@ Modify the settings in “pg_hba.conf” to use ‘trust’ authentication.</p>
 
 <p>请修改 /usr/local/var/postgres/pg_hba.conf 为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>host    all             all             127.0.0.1/32            trust
+<pre><code>host    all             all             127.0.0.1/32            trust
 # IPv6 local connections:
 host    all             all             ::1/128                 trust
 </code></pre>
-</div>
 
 <p>安装 pgadmin，下载地址：<a href="http://www.pgadmin.org/download/macosx.php">http://www.pgadmin.org/download/macosx.php</a></p>
 
 <h1 id="section-1">卸载</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew uninstall postgres
+<pre><code class="language-bash">$ brew uninstall postgres
 </code></pre>
-</div>
 
 <p>如果配置了开机登陆：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-<span class="gp">$ </span>rm -rf ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+<pre><code class="language-bash">$ launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+$ rm -rf ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -303,7 +290,7 @@ host    all             all             ::1/128                 trust
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

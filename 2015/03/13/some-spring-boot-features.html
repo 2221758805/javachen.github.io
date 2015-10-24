@@ -107,17 +107,16 @@
               <div id="post-text">
                     <h1 id="springapplication">SpringApplication</h1>
 
-<p>SpringApplication 类是启动 Spring Boot 应用的入口类，你可以创建一个包含 <code class="highlighter-rouge">main()</code> 方法的类，来运行 <code class="highlighter-rouge">SpringApplication.run</code> 这个静态方法：</p>
+<p>SpringApplication 类是启动 Spring Boot 应用的入口类，你可以创建一个包含 <code>main()</code> 方法的类，来运行 <code>SpringApplication.run</code> 这个静态方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-<span class="o">}</span>
+<pre><code class="language-java">public static void main(String[] args) {
+    SpringApplication.run(MySpringConfiguration.class, args);
+}
 </code></pre>
-</div>
 
 <p>运行该类会有如下输出：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  .   ____          _            __ _ _
+<pre><code>  .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
@@ -125,40 +124,37 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::   v1.2.2.RELEASE
 </code></pre>
-</div>
 
 <p>上面的输出的图案可以通过 banner.txt 文件进行定制。在你的 classpath 中添加 banner.txt 文件，可以在该文件内设置如下变量：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">${application.version}</code>：MANIFEST.MF 文件中的应用版本号</li>
-  <li><code class="highlighter-rouge">${application.formatted-version}</code></li>
-  <li><code class="highlighter-rouge">${spring-boot.version}</code>：你正在使用的 Spring Boot 版本号</li>
-  <li><code class="highlighter-rouge">${spring-boot.formatted-version}</code></li>
+  <li><code>${application.version}</code>：MANIFEST.MF 文件中的应用版本号</li>
+  <li><code>${application.formatted-version}</code></li>
+  <li><code>${spring-boot.version}</code>：你正在使用的 Spring Boot 版本号</li>
+  <li><code>${spring-boot.formatted-version}</code></li>
 </ul>
 
 <p>上面这些变量也可以通过 application.properties  来设置，后面再作介绍。</p>
 
 <p>此外，你还可以通过代码进行设置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SpringApplication</span> <span class="n">app</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SpringApplication</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-    <span class="n">app</span><span class="o">.</span><span class="na">setShowBanner</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-    <span class="n">app</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
-<span class="o">}</span>
+<pre><code class="language-java">public static void main(String[] args) {
+    SpringApplication app = new SpringApplication(MySpringConfiguration.class);
+    app.setShowBanner(false);
+    app.run(args);
+}
 </code></pre>
-</div>
 
 <p>或者使用流式 API:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="nf">SpringApplicationBuilder</span><span class="p">(</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">showBanner</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">sources</span><span class="o">(</span><span class="n">Parent</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">child</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+<pre><code class="language-java">new SpringApplicationBuilder()
+    .showBanner(false)
+    .sources(Parent.class)
+    .child(Application.class)
+    .run(args);
 </code></pre>
-</div>
 
-<p>SpringApplication 启动过程会触发一些事件，你可以针对这些事件通过 <code class="highlighter-rouge">SpringApplication.addListeners(…​)</code> 添加一些监听器:</p>
+<p>SpringApplication 启动过程会触发一些事件，你可以针对这些事件通过 <code>SpringApplication.addListeners(…​)</code> 添加一些监听器:</p>
 
 <ul>
   <li>ApplicationStartedEvent</li>
@@ -167,105 +163,98 @@
   <li>ApplicationFailedEvent</li>
 </ul>
 
-<p>SpringApplication 会注册一个 shutdown hook 以便在应用退出的时候能够保证 <code class="highlighter-rouge">ApplicationContext</code> 优雅地关闭，这样能够保证所有 Spring lifecycle 的回调都会被执行，包括 DisposableBean 接口的实现类以及 @PreDestroy 注解。</p>
+<p>SpringApplication 会注册一个 shutdown hook 以便在应用退出的时候能够保证 <code>ApplicationContext</code> 优雅地关闭，这样能够保证所有 Spring lifecycle 的回调都会被执行，包括 DisposableBean 接口的实现类以及 @PreDestroy 注解。</p>
 
 <p>另外，你也可以实现 org.springframework.boot.ExitCodeGenerator 接口来定义你自己的退出时候的逻辑。</p>
 
 <h1 id="externalized-configuration">Externalized Configuration</h1>
 
-<p>Spring Boot 允许你针对不同的环境配置不同的配置参数，你可以使用 properties文件、YAML 文件、环境变量或者命令行参数来修改应用的配置。你可以在代码中使用 <code class="highlighter-rouge">@Value</code> 注解来获取配置参数的值。</p>
+<p>Spring Boot 允许你针对不同的环境配置不同的配置参数，你可以使用 properties文件、YAML 文件、环境变量或者命令行参数来修改应用的配置。你可以在代码中使用 <code>@Value</code> 注解来获取配置参数的值。</p>
 
-<p>Spring Boot 使用一个特别的 <code class="highlighter-rouge">PropertySource</code> 来按顺序加载配置，加载顺序如下：</p>
+<p>Spring Boot 使用一个特别的 <code>PropertySource</code> 来按顺序加载配置，加载顺序如下：</p>
 
 <ul>
   <li>命令行参数</li>
-  <li><code class="highlighter-rouge">java:comp/env</code> 中的 JNDI 属性</li>
+  <li><code>java:comp/env</code> 中的 JNDI 属性</li>
   <li>Java 系统环境变量</li>
   <li>操作系统环境变量</li>
-  <li><code class="highlighter-rouge">RandomValuePropertySource</code>，随机值，使用 <code class="highlighter-rouge">random.*</code> 来定义</li>
+  <li><code>RandomValuePropertySource</code>，随机值，使用 <code>random.*</code> 来定义</li>
   <li>jar 包外的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
   <li>jar 包内的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
   <li>jar 包外的 Application 配置，如 application.properties 和 application.yml 文件</li>
   <li>jar 包内的 Application 配置，如 application.properties 和 application.yml 文件</li>
   <li>标有 @Configuration 注解的类上的 @PropertySource 注解</li>
-  <li>默认值，使用 <code class="highlighter-rouge">SpringApplication.setDefaultProperties</code> 设置的</li>
+  <li>默认值，使用 <code>SpringApplication.setDefaultProperties</code> 设置的</li>
 </ul>
 
 <p>对于下面的代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.stereotype.*</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.*</span>
+<pre><code class="language-java">import org.springframework.stereotype.*
+import org.springframework.beans.factory.annotation.*
 
-<span class="nd">@Component</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBean</span> <span class="o">{</span>
+@Component
+public class MyBean {
 
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${name}"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    @Value("${name}")
+    private String name;
 
-    <span class="c1">// ...</span>
+    // ...
 
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
-<p>你可以在 application.properties 中定义一个 name 变量，或者在运行该 jar 时候，指定一个命令行参数（以 <code class="highlighter-rouge">--</code> 标识），例如：</p>
+<p>你可以在 application.properties 中定义一个 name 变量，或者在运行该 jar 时候，指定一个命令行参数（以 <code>--</code> 标识），例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>java -jar app.jar --name<span class="o">=</span><span class="s2">"Spring"</span>
+<pre><code class="language-bash">java -jar app.jar --name="Spring"
 </code></pre>
-</div>
 
 <p>RandomValuePropertySource 类型变量的示例如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">my.secret</span><span class="p">=</span><span class="s">${random.value}</span>
-<span class="py">my.number</span><span class="p">=</span><span class="s">${random.int}</span>
-<span class="py">my.bignumber</span><span class="p">=</span><span class="s">${random.long}</span>
-<span class="py">my.number.less.than.ten</span><span class="p">=</span><span class="s">${random.int(10)}</span>
-<span class="py">my.number.in.range</span><span class="p">=</span><span class="s">${random.int[1024,65536]}</span>
+<pre><code class="language-properties">my.secret=${random.value}
+my.number=${random.int}
+my.bignumber=${random.long}
+my.number.less.than.ten=${random.int(10)}
+my.number.in.range=${random.int[1024,65536]}
 </code></pre>
-</div>
 
-<p>SpringApplication 会在以下路径查找 <code class="highlighter-rouge">application.properties</code> 并加载该文件：</p>
+<p>SpringApplication 会在以下路径查找 <code>application.properties</code> 并加载该文件：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">/config</code> 目录下</li>
+  <li><code>/config</code> 目录下</li>
   <li>当前目录</li>
-  <li>classpath 中 <code class="highlighter-rouge">/config</code> 包下</li>
+  <li>classpath 中 <code>/config</code> 包下</li>
   <li>classpath 根路径下</li>
 </ul>
 
-<p>另外，你也可以通过 <code class="highlighter-rouge">spring.config.location</code> 来指定 <code class="highlighter-rouge">application.properties</code> 文件的存放路径，或者通过 <code class="highlighter-rouge">spring.config.name</code> 指定该文件的名称，例如：</p>
+<p>另外，你也可以通过 <code>spring.config.location</code> 来指定 <code>application.properties</code> 文件的存放路径，或者通过 <code>spring.config.name</code> 指定该文件的名称，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
+<pre><code>$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
 </code></pre>
-</div>
 
 <p>或者</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar myproject.jar --spring.config.name=myproject
+<pre><code>$ java -jar myproject.jar --spring.config.name=myproject
 </code></pre>
-</div>
 
 <h1 id="profiles">Profiles</h1>
 
-<p>你可以使用 <code class="highlighter-rouge">@Profile</code> 注解来标注应用使用的环境</p>
+<p>你可以使用 <code>@Profile</code> 注解来标注应用使用的环境</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
-<span class="nd">@Profile</span><span class="o">(</span><span class="s">"production"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductionConfiguration</span> <span class="o">{</span>
+<pre><code class="language-java">@Configuration
+@Profile("production")
+public class ProductionConfiguration {
 
-    <span class="c1">// ...</span>
+    // ...
 
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
-<p>可以使用 <code class="highlighter-rouge">spring.profiles.active</code> 变量来定义应用激活的 profile：</p>
+<p>可以使用 <code>spring.profiles.active</code> 变量来定义应用激活的 profile：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">spring.profiles.active</span><span class="p">=</span><span class="s">dev,hsqldb</span>
+<pre><code class="language-properties">spring.profiles.active=dev,hsqldb
 </code></pre>
-</div>
 
-<p>还可以通过  SpringApplication 来设置，调用 <code class="highlighter-rouge">SpringApplication.setAdditionalProfiles(…​)</code> 代码即可。</p>
+<p>还可以通过  SpringApplication 来设置，调用 <code>SpringApplication.setAdditionalProfiles(…​)</code> 代码即可。</p>
 
 <h1 id="section">日志</h1>
 
@@ -273,24 +262,22 @@
 
 <p>默认情况下，如果你使用了 Starter POMs ，则会使用 Logback 来记录日志。</p>
 
-<p>默认情况，是输出 INFO 类型的日志，你可以通过设置命令行参数 <code class="highlighter-rouge">--debug</code> 来设置：</p>
+<p>默认情况，是输出 INFO 类型的日志，你可以通过设置命令行参数 <code>--debug</code> 来设置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar myapp.jar --debug
+<pre><code class="language-bash">$ java -jar myapp.jar --debug
 </code></pre>
-</div>
 
-<p>如果你的终端支持 ANSI ，则日志支持彩色输出，这个可以通过 <code class="highlighter-rouge">spring.output.ansi.enabled</code> 设置，可配置的值有：<code class="highlighter-rouge">ALWAYS</code>、<code class="highlighter-rouge">DETECT</code>、<code class="highlighter-rouge">NEVER</code>。</p>
+<p>如果你的终端支持 ANSI ，则日志支持彩色输出，这个可以通过 <code>spring.output.ansi.enabled</code> 设置，可配置的值有：<code>ALWAYS</code>、<code>DETECT</code>、<code>NEVER</code>。</p>
 
-<p>可以通过 <code class="highlighter-rouge">logging.file</code> 和 <code class="highlighter-rouge">logging.path</code> 设置日志输出文件名称和路径。</p>
+<p>可以通过 <code>logging.file</code> 和 <code>logging.path</code> 设置日志输出文件名称和路径。</p>
 
-<p>日志级别使用 <code class="highlighter-rouge">logging.level.*=LEVEL</code> 来定义，例如：</p>
+<p>日志级别使用 <code>logging.level.*=LEVEL</code> 来定义，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">logging.level.org.springframework.web</span><span class="p">:</span> <span class="s">DEBUG</span>
-<span class="py">logging.level.org.hibernate</span><span class="p">:</span> <span class="s">ERROR</span>
+<pre><code class="language-properties">logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
 </code></pre>
-</div>
 
-<p>Spring Boot 通过 <code class="highlighter-rouge">logging.config</code> 来定义日志的配置文件存放路径，对于不同的日志系统，配置文件的名称不同：</p>
+<p>Spring Boot 通过 <code>logging.config</code> 来定义日志的配置文件存放路径，对于不同的日志系统，配置文件的名称不同：</p>
 
 <table>
   <thead>
@@ -321,26 +308,24 @@
 
 <h1 id="section-1">生产环境的一些特性</h1>
 
-<p><code class="highlighter-rouge">spring-boot-actuator</code> 模块提供了一些生产环境的特性，使用 <code class="highlighter-rouge">spring-boot-starter-actuator</code> 这个 Starter POM 可以开启该特性。</p>
+<p><code>spring-boot-actuator</code> 模块提供了一些生产环境的特性，使用 <code>spring-boot-starter-actuator</code> 这个 Starter POM 可以开启该特性。</p>
 
 <p>对于 Maven ，添加</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependencies&gt;</span>
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencies&gt;</span>
+<pre><code class="language-xml">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
 </code></pre>
-</div>
 
 <p>对于 Gradle，添加</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">compile</span><span class="o">(</span><span class="s2">"org.springframework.boot:spring-boot-starter-actuator"</span><span class="o">)</span>
-<span class="o">}</span>
+<pre><code class="language-groovy">dependencies {
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+}
 </code></pre>
-</div>
 
 <h1 id="section-2">参考文章</h1>
 
@@ -399,7 +384,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -117,43 +117,40 @@
 
 <h2 id="rpm">1. 安装所需要的rpm包</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>rpm -ivh Percona-Server-shared-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
+<pre><code>rpm -ivh Percona-Server-shared-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
 rpm -ivh Percona-Server-client-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
 rpm -ivh Percona-Server-server-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
 </code></pre>
-</div>
 
 <p><strong>注意:</strong></p>
 
-<p>第三个包依赖前2个包，第三个包安装时可能会报错，需要将系统中原先的mysql-libs卸载（<code class="highlighter-rouge">yum remove mysql-libs</code>）</p>
+<p>第三个包依赖前2个包，第三个包安装时可能会报错，需要将系统中原先的mysql-libs卸载（<code>yum remove mysql-libs</code>）</p>
 
-<p>没有yum使用<code class="highlighter-rouge">rpm -e --nodeps</code>的方式卸载安装包，可以使用<code class="highlighter-rouge">rpm -qa | grep mysql</code>的方式查看安装的包</p>
+<p>没有yum使用<code>rpm -e --nodeps</code>的方式卸载安装包，可以使用<code>rpm -qa | grep mysql</code>的方式查看安装的包</p>
 
 <h2 id="mysql">2. 启动mysql</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#service mysql start 
+<pre><code>#service mysql start 
 </code></pre>
-</div>
 
 <p>停止：stop 重启：restart，查看状态：status</p>
 
 <h2 id="section-2">3. 设置远程登录</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#mysql
+<pre><code>#mysql
 mysql&gt; grant all PRIVILEGES on test.* to test@'%' identified by 'test';
 mysql&gt;flush privileges;
 </code></pre>
-</div>
 
 <p>将test数据库的权限授予test用户，登录密码是test，%代表所有ip。</p>
 
 <h2 id="section-3">4. 配置文件</h2>
 
-<p>rpm包默认配置启动文件模板<code class="highlighter-rouge">/usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf</code>，可以将他拷贝到<code class="highlighter-rouge">/etc/my.cnf</code>作为配置文件使用。</p>
+<p>rpm包默认配置启动文件模板<code>/usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf</code>，可以将他拷贝到<code>/etc/my.cnf</code>作为配置文件使用。</p>
 
 <p>配置文件修改举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
+<pre><code>$ cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
 $ vim /etc/my.cnf 			#将需要修改的参数做如下填写
 [mysqld]
 # These are commonly set, remove the # and set as required.
@@ -166,11 +163,10 @@ innodb_file_format=barracuda
 innodb_file_per_table=true
 innodb_large_prefix=on
 </code></pre>
-</div>
 
-<p>上面参数作用，可以解决建索引时<code class="highlighter-rouge">Specified key was too long; max key length is 767 bytes</code>的报错，拓展支持的最大索引长度，如使用上述功能建表时加<code class="highlighter-rouge">ROW_FORMAT=DYNAMIC</code></p>
+<p>上面参数作用，可以解决建索引时<code>Specified key was too long; max key length is 767 bytes</code>的报错，拓展支持的最大索引长度，如使用上述功能建表时加<code>ROW_FORMAT=DYNAMIC</code></p>
 
-<p>数据目录默认：<code class="highlighter-rouge">/var/lib/mysql/</code></p>
+<p>数据目录默认：<code>/var/lib/mysql/</code></p>
 
                     <br/>
                     <div class="well">
@@ -221,7 +217,7 @@ innodb_large_prefix=on
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

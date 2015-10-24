@@ -105,7 +105,7 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>schema.xml是Solr一个配置文件，它包含了你的文档所有的字段，以及当文档被加入索引或查询字段时，这些字段是如何被处理的。这个文件被存储在Solr主文件夹下的conf目录下，默认的路径<code class="highlighter-rouge">./solr/conf/schema.xml</code>，也可以是Solr webapp的类加载器所能确定的路径。在下载的Solr包里，有一个schema的样例文件，用户可以从那个文件出发，来观察如何编写自己的Schema.xml。</p>
+                    <p>schema.xml是Solr一个配置文件，它包含了你的文档所有的字段，以及当文档被加入索引或查询字段时，这些字段是如何被处理的。这个文件被存储在Solr主文件夹下的conf目录下，默认的路径<code>./solr/conf/schema.xml</code>，也可以是Solr webapp的类加载器所能确定的路径。在下载的Solr包里，有一个schema的样例文件，用户可以从那个文件出发，来观察如何编写自己的Schema.xml。</p>
 
 <h1 id="type">type节点</h1>
 
@@ -131,19 +131,18 @@
 
 <p>一个标准的分词：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"text_general"</span> <span class="na">class=</span><span class="s">"solr.TextField"</span> <span class="na">positionIncrementGap=</span><span class="s">"100"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;analyzer</span> <span class="na">type=</span><span class="s">"index"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;tokenizer</span> <span class="na">class=</span><span class="s">"solr.StandardTokenizerFactory"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"solr.LowerCaseFilterFactory"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/analyzer&gt;</span>
-    <span class="nt">&lt;analyzer</span> <span class="na">type=</span><span class="s">"query"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;tokenizer</span> <span class="na">class=</span><span class="s">"solr.StandardTokenizerFactory"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"solr.LowerCaseFilterFactory"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"solr.StopFilterFactory"</span> <span class="na">ignoreCase=</span><span class="s">"true"</span> <span class="na">words=</span><span class="s">"stopwords.txt"</span> <span class="na">enablePositionIncrements=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/analyzer&gt;</span>
-<span class="nt">&lt;/fieldType&gt;</span>
+<pre><code class="language-xml">&lt;fieldType name="text_general" class="solr.TextField" positionIncrementGap="100"&gt;
+    &lt;analyzer type="index"&gt;
+        &lt;tokenizer class="solr.StandardTokenizerFactory" /&gt;
+        &lt;filter class="solr.LowerCaseFilterFactory" /&gt;
+    &lt;/analyzer&gt;
+    &lt;analyzer type="query"&gt;
+        &lt;tokenizer class="solr.StandardTokenizerFactory" /&gt;
+        &lt;filter class="solr.LowerCaseFilterFactory" /&gt;
+        &lt;filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" /&gt;
+    &lt;/analyzer&gt;
+&lt;/fieldType&gt;
 </code></pre>
-</div>
 
 <p>分词用的依旧是fieldType，为的是在下面的field中能够用到。有两个analyzer，一个是index，一个是query，index是针对于所有，query是针对于搜索。</p>
 
@@ -151,13 +150,12 @@
 
 <p>你也可以定义一个analyzer，例如使用mmseg4j进行中文分词：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"text_zh"</span> <span class="na">class=</span><span class="s">"solr.TextField"</span> <span class="na">positionIncrementGap=</span><span class="s">"100"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;analyzer&gt;</span> 
-        <span class="nt">&lt;tokenizer</span> <span class="na">class=</span><span class="s">"com.chenlb.mmseg4j.solr.MMSegTokenizerFactory"</span> <span class="na">mode=</span><span class="s">"complex"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/analyzer&gt;</span>
-<span class="nt">&lt;/fieldType&gt;</span>
+<pre><code class="language-xml">&lt;fieldType name="text_zh" class="solr.TextField" positionIncrementGap="100"&gt;
+    &lt;analyzer&gt; 
+        &lt;tokenizer class="com.chenlb.mmseg4j.solr.MMSegTokenizerFactory" mode="complex" /&gt;
+    &lt;/analyzer&gt;
+&lt;/fieldType&gt;
 </code></pre>
-</div>
 
 <h1 id="filed">filed节点</h1>
 
@@ -180,18 +178,16 @@
 
 <p>举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"manu_exact"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">indexed=</span><span class="s">"false"</span> <span class="na">stored=</span><span class="s">"false"</span> <span class="na">docValues=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;field name="manu_exact" type="string" indexed="false" stored="false" docValues="true" /&gt;
 </code></pre>
-</div>
 
 <h1 id="copyfield">copyField节点</h1>
 
 <p>如果我们的搜索需要搜索多个字段该怎么办呢？这时候，我们就可以使用copyField。代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;copyField</span> <span class="na">source=</span><span class="s">"name"</span> <span class="na">dest=</span><span class="s">"all"</span> <span class="na">maxChars=</span><span class="s">"30000"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;copyField</span> <span class="na">source=</span><span class="s">"address"</span> <span class="na">dest=</span><span class="s">"all"</span> <span class="na">maxChars=</span><span class="s">"30000"</span><span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;copyField source="name" dest="all" maxChars="30000"/&gt;
+&lt;copyField source="address" dest="all" maxChars="30000"/&gt;
 </code></pre>
-</div>
 
 <p>作用：</p>
 
@@ -218,13 +214,12 @@
 
 <p>动态字段，没有具体名称的字段，用dynamicField字段</p>
 
-<p>如：name为<code class="highlighter-rouge">*_i</code>，定义它的type为int，那么在使用这个字段的时候，任务以<code class="highlighter-rouge">_i</code>结果的字段都被认为符合这个定义。如<code class="highlighter-rouge">name_i</code>、 <code class="highlighter-rouge">school_i</code></p>
+<p>如：name为<code>*_i</code>，定义它的type为int，那么在使用这个字段的时候，任务以<code>_i</code>结果的字段都被认为符合这个定义。如<code>name_i</code>、 <code>school_i</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_i"</span>  <span class="na">type=</span><span class="s">"int"</span>    <span class="na">indexed=</span><span class="s">"true"</span>  <span class="na">stored=</span><span class="s">"true"</span><span class="nt">/&gt;</span> 
-<span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_s"</span>  <span class="na">type=</span><span class="s">"string"</span>  <span class="na">indexed=</span><span class="s">"true"</span>  <span class="na">stored=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;dynamicField</span> <span class="na">name=</span><span class="s">"*_l"</span>  <span class="na">type=</span><span class="s">"long"</span>   <span class="na">indexed=</span><span class="s">"true"</span>  <span class="na">stored=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/&gt; 
+&lt;dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/&gt;
+&lt;dynamicField name="*_l"  type="long"   indexed="true"  stored="true"/&gt;
 </code></pre>
-</div>
 
 <h1 id="uniquekey">uniqueKey节点</h1>
 
@@ -232,25 +227,22 @@
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;uniqueKey&gt;</span>id<span class="nt">&lt;/uniqueKey&gt;</span>
+<pre><code class="language-xml">&lt;uniqueKey&gt;id&lt;/uniqueKey&gt;
 </code></pre>
-</div>
 
 <h1 id="defaultsearchfield">defaultSearchField节点</h1>
 
 <p>默认搜索的字段，我们已经将需要搜索的字段拷贝至all字段了，在这里设为all即可。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;defaultSearchField&gt;</span>all<span class="nt">&lt;/defaultSearchField&gt;</span>
+<pre><code class="language-xml">&lt;defaultSearchField&gt;all&lt;/defaultSearchField&gt;
 </code></pre>
-</div>
 
 <h1 id="solrqueryparser">solrQueryParser节点</h1>
 
 <p>默认搜索操作符参数，及搜索短语间的逻辑，用AND增加准确率，用OR增加覆盖面，建议用AND，也可在搜索语句中定义。例如搜索“手机 苹果”，使用AND默认搜索为“手机AND苹果“。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;solrQueryParser</span> <span class="na">defaultOperator=</span><span class="s">"OR"</span><span class="nt">/&gt;</span> 
+<pre><code class="language-xml">&lt;solrQueryParser defaultOperator="OR"/&gt; 
 </code></pre>
-</div>
 
 <h1 id="similarity">similarity节点</h1>
 
@@ -258,33 +250,30 @@
 
 <p>你可以使用默认的工厂类来创建一个实例，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;similarity</span> <span class="na">class=</span><span class="s">"solr.DefaultSimilarityFactory"</span><span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;similarity class="solr.DefaultSimilarityFactory"/&gt;
 </code></pre>
-</div>
 
 <p>你也可以使用其他的工厂类，然后设置一些可选的初始化参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;similarity</span> <span class="na">class=</span><span class="s">"solr.DFRSimilarityFactory"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"basicModel"</span><span class="nt">&gt;</span>P<span class="nt">&lt;/str&gt;</span>
-  <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"afterEffect"</span><span class="nt">&gt;</span>L<span class="nt">&lt;/str&gt;</span>
-  <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"normalization"</span><span class="nt">&gt;</span>H2<span class="nt">&lt;/str&gt;</span>
-  <span class="nt">&lt;float</span> <span class="na">name=</span><span class="s">"c"</span><span class="nt">&gt;</span>7<span class="nt">&lt;/float&gt;</span>
-<span class="nt">&lt;/similarity&gt;</span>
+<pre><code class="language-xml">&lt;similarity class="solr.DFRSimilarityFactory"&gt;
+  &lt;str name="basicModel"&gt;P&lt;/str&gt;
+  &lt;str name="afterEffect"&gt;L&lt;/str&gt;
+  &lt;str name="normalization"&gt;H2&lt;/str&gt;
+  &lt;float name="c"&gt;7&lt;/float&gt;
+&lt;/similarity&gt;
 </code></pre>
-</div>
 
 <p>在Solr 4中，你可以为每一个field配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">"text_ib"</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;analyzer/&gt;</span>
-   <span class="nt">&lt;similarity</span> <span class="na">class=</span><span class="s">"solr.IBSimilarityFactory"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"distribution"</span><span class="nt">&gt;</span>SPL<span class="nt">&lt;/str&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"lambda"</span><span class="nt">&gt;</span>DF<span class="nt">&lt;/str&gt;</span>
-      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">"normalization"</span><span class="nt">&gt;</span>H2<span class="nt">&lt;/str&gt;</span>
-   <span class="nt">&lt;/similarity&gt;</span>
-<span class="nt">&lt;/fieldType&gt;</span>
+<pre><code class="language-xml">&lt;fieldType name="text_ib"&gt;
+   &lt;analyzer/&gt;
+   &lt;similarity class="solr.IBSimilarityFactory"&gt;
+      &lt;str name="distribution"&gt;SPL&lt;/str&gt;
+      &lt;str name="lambda"&gt;DF&lt;/str&gt;
+      &lt;str name="normalization"&gt;H2&lt;/str&gt;
+   &lt;/similarity&gt;
+&lt;/fieldType&gt;
 </code></pre>
-</div>
 
 <p>上面例子中，使用了DFRSimilarityFactory和IBSimilarityFactory，这里还有一些其他的实现类。在Solr 4.2中加入了SweetSpotSimilarityFactory。其他还有：BM25SimilarityFactory、SchemaSimilarityFactory等。</p>
 
@@ -344,7 +333,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

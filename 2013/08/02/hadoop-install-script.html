@@ -107,7 +107,7 @@
               <div id="post-text">
                     <p>之前写过一些如何安装Cloudera Hadoop的文章，安装hadoop过程中，最开始是手动安装apache版本的hadoop，其次是使用Intel的IDH管理界面安装IDH的hadoop，再然后分别手动和通过cloudera manager安装hadoop，也使用bigtop-util yum方式安装过apache的hadoop。</p>
 
-<p>安装过程中参考了很多网上的文章，解压缩过cloudera的<code class="highlighter-rouge">cloudera-manager-installer.bin</code>，发现并修复了IDH shell脚本中关于puppt的自认为是bug的一个bug，最后整理出了一个自动安装hadoop的shell脚本，脚本托管在github上面: <a href="https://github.com/javachen/hadoop-install">hadoop-install</a>。</p>
+<p>安装过程中参考了很多网上的文章，解压缩过cloudera的<code>cloudera-manager-installer.bin</code>，发现并修复了IDH shell脚本中关于puppt的自认为是bug的一个bug，最后整理出了一个自动安装hadoop的shell脚本，脚本托管在github上面: <a href="https://github.com/javachen/hadoop-install">hadoop-install</a>。</p>
 
 <!-- more -->
 
@@ -146,7 +146,7 @@
 
 <h2 id="section-1">检测操作系统版本</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>( grep -i "CentOS" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=centos
+<pre><code>( grep -i "CentOS" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=centos
 ( grep -i "Red[[:blank:]]*Hat[[:blank:]]*Enterprise[[:blank:]]*Linux" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=rhel
 ( grep -i "Oracle[[:blank:]]*Linux" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=oel
 ( grep -i "Asianux[[:blank:]]*Server" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=an
@@ -157,33 +157,29 @@ major_revision=`grep -oP '\d+' /etc/issue | sed -n "1,1p"`
 minor_revision=`grep -oP '\d+' /etc/issue | sed -n "2,2p"`
 OS_RELEASE="$major_revision.$minor_revision"
 </code></pre>
-</div>
 
 <h2 id="root">修改root密码</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>echo 'redhat'|passwd root --stdin
+<pre><code>echo 'redhat'|passwd root --stdin
 </code></pre>
-</div>
 
 <h2 id="dns">修改dns</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># Set up nameservers.
+<pre><code># Set up nameservers.
 # http://ithelpblog.com/os/linux/redhat/centos-redhat/howto-fix-couldnt-resolve-host-on-centos-redhat-rhel-fedora/
 # http://stackoverflow.com/a/850731/1486325
 echo "nameserver 8.8.8.8" | tee -a /etc/resolv.conf
 echo "nameserver 8.8.4.4" | tee -a /etc/resolv.conf
 </code></pre>
-</div>
 
 <h2 id="section-2">修改操作系统时区</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+<pre><code>cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 </code></pre>
-</div>
 
 <h2 id="hosts">修改hosts文件</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cat &gt; /etc/hosts &lt;&lt;EOF
+<pre><code>cat &gt; /etc/hosts &lt;&lt;EOF
 127.0.0.1       localhost
 
 192.168.56.121 cdh1
@@ -191,17 +187,15 @@ echo "nameserver 8.8.4.4" | tee -a /etc/resolv.conf
 192.168.56.123 cdh3
 EOF
 </code></pre>
-</div>
 
 <h2 id="ba">去掉b文件中包括a文件的内容</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>grep -vf a b &gt;result.log
+<pre><code>grep -vf a b &gt;result.log
 </code></pre>
-</div>
 
 <h2 id="file-max">修改file-max</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>echo -e "Global file limit ..."
+<pre><code>echo -e "Global file limit ..."
 rst=`grep "^fs.file-max" /etc/sysctl.conf`
 if [ "x$rst" = "x" ] ; then
 	echo "fs.file-max = 727680" &gt;&gt; /etc/sysctl.conf || exit $?
@@ -209,18 +203,16 @@ else
 	sed -i "s:^fs.file-max.*:fs.file-max = 727680:g" /etc/sysctl.conf
 fi
 </code></pre>
-</div>
 
 <h2 id="ssh">生成ssh公要</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[ ! -d ~/.ssh ] &amp;&amp; ( mkdir ~/.ssh ) &amp;&amp; ( chmod 600 ~/.ssh )
+<pre><code>[ ! -d ~/.ssh ] &amp;&amp; ( mkdir ~/.ssh ) &amp;&amp; ( chmod 600 ~/.ssh )
 yes|ssh-keygen -f ~/.ssh/id_rsa -t rsa -N "" &amp;&amp; ( chmod 600 ~/.ssh/id_rsa.pub )
 </code></pre>
-</div>
 
 <h2 id="ssh-1">ssh设置无密码登陆</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>set timeout 20
+<pre><code>set timeout 20
 
 set host [lindex $argv 0]
 set password [lindex $argv 1]
@@ -243,11 +235,10 @@ expect {
 expect eof
 #interact
 </code></pre>
-</div>
 
 <h2 id="javahome">配置JAVA_HOME</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>### JAVA_HOME ###
+<pre><code>### JAVA_HOME ###
 if [ -f ~/.bashrc ] ; then
     sed -i '/^export[[:space:]]\{1,\}JAVA_HOME[[:space:]]\{0,\}=/d' ~/.bashrc
     sed -i '/^export[[:space:]]\{1,\}CLASSPATH[[:space:]]\{0,\}=/d' ~/.bashrc
@@ -262,17 +253,15 @@ alternatives --install /usr/bin/java java /usr/java/latest 5
 alternatives --set java /usr/java/latest 
 source ~/.bashrc
 </code></pre>
-</div>
 
 <h2 id="section-3">格式化集群</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>su -s /bin/bash hdfs -c 'yes Y | hadoop namenode -format &gt;&gt; /tmp/format.log 2&gt;&amp;1'
+<pre><code>su -s /bin/bash hdfs -c 'yes Y | hadoop namenode -format &gt;&gt; /tmp/format.log 2&gt;&amp;1'
 </code></pre>
-</div>
 
 <h2 id="hadoop-1">创建hadoop目录</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>su -s /bin/bash hdfs -c "hadoop fs -chmod a+rw /"
+<pre><code>su -s /bin/bash hdfs -c "hadoop fs -chmod a+rw /"
 while read dir user group perm
 do
      su -s /bin/bash hdfs -c "hadoop fs -mkdir -R $dir &amp;&amp; hadoop fs -chmod -R $perm $dir &amp;&amp; hadoop fs -chown -R $user:$group $dir"
@@ -290,11 +279,10 @@ done &lt;&lt; EOF
 /user/hive hive hadoop 777
 EOF
 </code></pre>
-</div>
 
 <h2 id="hivepostgresql">hive中安装并初始化postgresql</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>yum install postgresql-server postgresql-jdbc -y &gt;/dev/null
+<pre><code>yum install postgresql-server postgresql-jdbc -y &gt;/dev/null
 chkconfig postgresql on
 rm -rf /var/lib/pgsql/data
 rm -rf /var/run/postgresql/.s.PGSQL.5432
@@ -317,7 +305,6 @@ su -c "cd ; /usr/bin/psql --command \"GRANT ALL privileges ON DATABASE metastore
 su -c "cd ; /usr/bin/psql -U hiveuser -d metastore -f /usr/lib/hive/scripts/metastore/upgrade/postgres/hive-schema-0.10.0.postgres.sql" postgres
 su -c "cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsql/data" postgres
 </code></pre>
-</div>
 
 <h1 id="section-4">总结</h1>
 
@@ -379,7 +366,7 @@ su -c "cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsql/data" postgres
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

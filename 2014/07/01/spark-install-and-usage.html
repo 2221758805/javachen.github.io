@@ -111,8 +111,8 @@
 
 <ul>
   <li>操作系统：CentOs 6.5</li>
-  <li>Hadoop 版本：<code class="highlighter-rouge">cdh-5.4.0</code></li>
-  <li>Spark 版本：<code class="highlighter-rouge">cdh5-1.3.0_5.4.0</code></li>
+  <li>Hadoop 版本：<code>cdh-5.4.0</code></li>
+  <li>Spark 版本：<code>cdh5-1.3.0_5.4.0</code></li>
 </ul>
 
 <p>关于 yum 源的配置以及 Hadoop 集群的安装，请参考 <a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>。</p>
@@ -121,7 +121,7 @@
 
 <p>首先查看 Spark 相关的包有哪些：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum list |grep spark
+<pre><code class="language-bash">$ yum list |grep spark
 spark-core.noarch                  1.3.0+cdh5.4.0+24-1.cdh5.4.0.p0.52.el6
 spark-history-server.noarch        1.3.0+cdh5.4.0+24-1.cdh5.4.0.p0.52.el6
 spark-master.noarch                1.3.0+cdh5.4.0+24-1.cdh5.4.0.p0.52.el6
@@ -129,65 +129,58 @@ spark-python.noarch                1.3.0+cdh5.4.0+24-1.cdh5.4.0.p0.52.el6
 spark-worker.noarch                1.3.0+cdh5.4.0+24-1.cdh5.4.0.p0.52.el6
 hue-spark.x86_64                   3.7.0+cdh5.4.0+1145-1.cdh5.4.0.p0.58.el6
 </code></pre>
-</div>
 
 <p>以上包作用如下：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">spark-core</code>: spark 核心功能</li>
-  <li><code class="highlighter-rouge">spark-worker</code>: spark-worker 初始化脚本</li>
-  <li><code class="highlighter-rouge">spark-master</code>: spark-master 初始化脚本</li>
-  <li><code class="highlighter-rouge">spark-python</code>: spark 的 Python 客户端</li>
-  <li><code class="highlighter-rouge">hue-spark</code>: spark 和 hue 集成包</li>
-  <li><code class="highlighter-rouge">spark-history-server</code></li>
+  <li><code>spark-core</code>: spark 核心功能</li>
+  <li><code>spark-worker</code>: spark-worker 初始化脚本</li>
+  <li><code>spark-master</code>: spark-master 初始化脚本</li>
+  <li><code>spark-python</code>: spark 的 Python 客户端</li>
+  <li><code>hue-spark</code>: spark 和 hue 集成包</li>
+  <li><code>spark-history-server</code></li>
 </ul>
 
 <p>在已经存在的 Hadoop 集群中，选择一个节点来安装 Spark Master，其余节点安装 Spark worker ，例如：在 cdh1 上安装 master，在 cdh1、cdh2、cdh3 上安装 worker：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 在 cdh1 节点上运行</span>
-<span class="gp">$ </span>sudo yum install spark-core spark-master spark-worker spark-python spark-history-server -y
+<pre><code class="language-bash"># 在 cdh1 节点上运行
+$ sudo yum install spark-core spark-master spark-worker spark-python spark-history-server -y
 
-<span class="c"># 在 cdh1、cdh2、cdh3 上运行</span>
-<span class="gp">$ </span>sudo yum install spark-core spark-worker spark-python -y
+# 在 cdh1、cdh2、cdh3 上运行
+$ sudo yum install spark-core spark-worker spark-python -y
 </code></pre>
-</div>
 
 <p>安装成功后，我的集群各节点部署如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cdh1节点:  spark-master、spark-worker、spark-history-server
+<pre><code>cdh1节点:  spark-master、spark-worker、spark-history-server
 cdh2节点:  spark-worker 
 cdh3节点:  spark-worker 
 </code></pre>
-</div>
 
 <h1 id="section-1">2. 配置</h1>
 
 <h2 id="section-2">2.1 修改配置文件</h2>
 
-<p>设置环境变量，在 <code class="highlighter-rouge">.bashrc</code> 或者 <code class="highlighter-rouge">/etc/profile</code> 中加入下面一行，并使其生效：</p>
+<p>设置环境变量，在 <code>.bashrc</code> 或者 <code>/etc/profile</code> 中加入下面一行，并使其生效：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="err">export</span> <span class="py">SPARK_HOME</span><span class="p">=</span><span class="s">/usr/lib/spark</span>
+<pre><code class="language-properties">export SPARK_HOME=/usr/lib/spark
 </code></pre>
-</div>
 
-<p>可以修改配置文件 <code class="highlighter-rouge">/etc/spark/conf/spark-env.sh</code>，其内容如下，你可以根据需要做一些修改，例如，修改 master 的主机名称为cdh1。</p>
+<p>可以修改配置文件 <code>/etc/spark/conf/spark-env.sh</code>，其内容如下，你可以根据需要做一些修改，例如，修改 master 的主机名称为cdh1。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 设置 master 主机名称</span>
-<span class="nb">export </span><span class="nv">STANDALONE_SPARK_MASTER_HOST</span><span class="o">=</span>cdh1
+<pre><code class="language-bash"># 设置 master 主机名称
+export STANDALONE_SPARK_MASTER_HOST=cdh1
 </code></pre>
-</div>
 
-<p>设置 shuffle 和 RDD 数据存储路径，该值默认为<code class="highlighter-rouge">/tmp</code>。使用默认值，可能会出现<code class="highlighter-rouge">No space left on device</code>的异常，建议修改为空间较大的分区中的一个目录。</p>
+<p>设置 shuffle 和 RDD 数据存储路径，该值默认为<code>/tmp</code>。使用默认值，可能会出现<code>No space left on device</code>的异常，建议修改为空间较大的分区中的一个目录。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">SPARK_LOCAL_DIRS</span><span class="o">=</span>/data/spark
+<pre><code class="language-bash">export SPARK_LOCAL_DIRS=/data/spark
 </code></pre>
-</div>
 
-<p>如果你和我一样使用的是虚拟机运行 spark，则你可能需要修改 spark 进程使用的 jvm 大小（关于 jvm 大小设置的相关逻辑见 <code class="highlighter-rouge">/usr/lib/spark/bin/spark-class</code>）：</p>
+<p>如果你和我一样使用的是虚拟机运行 spark，则你可能需要修改 spark 进程使用的 jvm 大小（关于 jvm 大小设置的相关逻辑见 <code>/usr/lib/spark/bin/spark-class</code>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">SPARK_DAEMON_MEMORY</span><span class="o">=</span>256m
+<pre><code class="language-bash">export SPARK_DAEMON_MEMORY=256m
 </code></pre>
-</div>
 
 <p>更多spark相关的配置参数，请参考 <a href="https://spark.apache.org/docs/latest/configuration.html">Spark Configuration</a>。</p>
 
@@ -195,66 +188,58 @@ cdh3节点:  spark-worker
 
 <p>在运行Spark应用程序的时候，driver会提供一个webUI给出应用程序的运行信息，但是该webUI随着应用程序的完成而关闭端口，也就是说，Spark应用程序运行完后，将无法查看应用程序的历史记录。Spark history server就是为了应对这种情况而产生的，通过配置，Spark应用程序在运行完应用程序之后，将应用程序的运行信息写入指定目录，而Spark history server可以将这些运行信息装载并以web的方式供用户浏览。</p>
 
-<p>创建 <code class="highlighter-rouge">/etc/spark/conf/spark-defaults.conf</code>：</p>
+<p>创建 <code>/etc/spark/conf/spark-defaults.conf</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cp /etc/spark/conf/spark-defaults.conf.template /etc/spark/conf/spark-defaults.conf
+<pre><code class="language-bash">cp /etc/spark/conf/spark-defaults.conf.template /etc/spark/conf/spark-defaults.conf
 </code></pre>
-</div>
 
 <p>添加下面配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">spark.master</span><span class="p">=</span><span class="s">spark://cdh1:7077</span>
-<span class="py">spark.eventLog.dir</span><span class="p">=</span><span class="s">/user/spark/applicationHistory</span>
-<span class="py">spark.eventLog.enabled</span><span class="p">=</span><span class="s">true</span>
-<span class="py">spark.yarn.historyServer.address</span><span class="p">=</span><span class="s">cdh1:18082</span>
+<pre><code class="language-properties">spark.master=spark://cdh1:7077
+spark.eventLog.dir=/user/spark/applicationHistory
+spark.eventLog.enabled=true
+spark.yarn.historyServer.address=cdh1:18082
 </code></pre>
-</div>
 
-<p>如果你是在hdfs上运行Spark，则执行下面命令创建<code class="highlighter-rouge">/user/spark/applicationHistory</code>目录：</p>
+<p>如果你是在hdfs上运行Spark，则执行下面命令创建<code>/user/spark/applicationHistory</code>目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo -u hdfs hadoop fs -mkdir /user/spark
-<span class="gp">$ </span>sudo -u hdfs hadoop fs -mkdir /user/spark/applicationHistory
-<span class="gp">$ </span>sudo -u hdfs hadoop fs -chown -R spark:spark /user/spark
-<span class="gp">$ </span>sudo -u hdfs hadoop fs -chmod 1777 /user/spark/applicationHistory
+<pre><code class="language-bash">$ sudo -u hdfs hadoop fs -mkdir /user/spark
+$ sudo -u hdfs hadoop fs -mkdir /user/spark/applicationHistory
+$ sudo -u hdfs hadoop fs -chown -R spark:spark /user/spark
+$ sudo -u hdfs hadoop fs -chmod 1777 /user/spark/applicationHistory
 </code></pre>
-</div>
 
-<p>设置 <code class="highlighter-rouge">spark.history.fs.logDirectory</code> 参数：</p>
+<p>设置 <code>spark.history.fs.logDirectory</code> 参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">SPARK_HISTORY_OPTS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$SPARK_HISTORY_OPTS</span><span class="s2"> -Dspark.history.fs.logDirectory=/tmp/spark -Dspark.history.ui.port=18082"</span>
+<pre><code class="language-bash">export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=/tmp/spark -Dspark.history.ui.port=18082"
 </code></pre>
-</div>
 
 <p>创建 /tmp/spark 目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir -p /tmp/spark
-<span class="gp">$ </span>chown spark:spark /tmp/spark
+<pre><code class="language-bash">$ mkdir -p /tmp/spark
+$ chown spark:spark /tmp/spark
 </code></pre>
-</div>
 
 <p>如果集群配置了 kerberos ，则添加下面配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">HOSTNAME</span><span class="o">=</span><span class="sb">`</span>hostname -f<span class="sb">`</span>
-<span class="nb">export </span><span class="nv">SPARK_HISTORY_OPTS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$SPARK_HISTORY_OPTS</span><span class="s2"> -Dspark.history.kerberos.enabled=true -Dspark.history.kerberos.principal=spark/</span><span class="k">${</span><span class="nv">HOSTNAME</span><span class="k">}</span><span class="s2">@LASHOU.COM -Dspark.history.kerberos.keytab=/etc/spark/conf/spark.keytab -Dspark.history.ui.acls.enable=true"</span>
+<pre><code class="language-bash">HOSTNAME=`hostname -f`
+export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS -Dspark.history.kerberos.enabled=true -Dspark.history.kerberos.principal=spark/${HOSTNAME}@LASHOU.COM -Dspark.history.kerberos.keytab=/etc/spark/conf/spark.keytab -Dspark.history.ui.acls.enable=true"
 </code></pre>
-</div>
 
 <h2 id="hive">2.3 和Hive集成</h2>
 
 <p>Spark和hive集成，最好是将hive的配置文件链接到Spark的配置文件目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ln -s /etc/hive/conf/hive-site.xml /etc/spark/conf/hive-site.xml
+<pre><code class="language-bash">$ ln -s /etc/hive/conf/hive-site.xml /etc/spark/conf/hive-site.xml
 </code></pre>
-</div>
 
 <h2 id="section-3">2.4 同步配置文件</h2>
 
 <p>修改完 cdh1 节点上的配置文件之后，需要同步到其他节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>scp -r /etc/spark/conf  cdh2:/etc/spark
+<pre><code class="language-bash">scp -r /etc/spark/conf  cdh2:/etc/spark
 scp -r /etc/spark/conf  cdh3:/etc/spark
 </code></pre>
-</div>
 
 <h1 id="section-4">3. 启动和停止</h1>
 
@@ -262,85 +247,78 @@ scp -r /etc/spark/conf  cdh3:/etc/spark
 
 <p>启动脚本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 在 cdh1 节点上运行</span>
-<span class="gp">$ </span>sudo service spark-master start
+<pre><code class="language-bash"># 在 cdh1 节点上运行
+$ sudo service spark-master start
 
-<span class="c"># 在 cdh1 节点上运行，如果 hadoop 集群配置了 kerberos，则运行之前需要先获取 spark 用户的凭证</span>
-<span class="c"># kinit -k -t /etc/spark/conf/spark.keytab spark/cdh1@JAVACHEN.COM</span>
-<span class="gp">$ </span>sudo service spark-history-server start
+# 在 cdh1 节点上运行，如果 hadoop 集群配置了 kerberos，则运行之前需要先获取 spark 用户的凭证
+# kinit -k -t /etc/spark/conf/spark.keytab spark/cdh1@JAVACHEN.COM
+$ sudo service spark-history-server start
 
-<span class="c"># 在cdh2、cdh3 节点上运行</span>
-<span class="gp">$ </span>sudo service spark-worker start
+# 在cdh2、cdh3 节点上运行
+$ sudo service spark-worker start
 </code></pre>
-</div>
 
 <p>停止脚本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo service spark-master stop
-<span class="gp">$ </span>sudo service spark-worker stop
-<span class="gp">$ </span>sudo service spark-history-server stop
+<pre><code class="language-bash">$ sudo service spark-master stop
+$ sudo service spark-worker stop
+$ sudo service spark-history-server stop
 </code></pre>
-</div>
 
 <p>当然，你还可以设置开机启动：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo chkconfig spark-master on
-<span class="gp">$ </span>sudo chkconfig spark-worker on
-<span class="gp">$ </span>sudo chkconfig spark-history-server on
+<pre><code class="language-bash">$ sudo chkconfig spark-master on
+$ sudo chkconfig spark-worker on
+$ sudo chkconfig spark-history-server on
 </code></pre>
-</div>
 
 <h2 id="spark-">3.2 使用 Spark 自带脚本管理集群</h2>
 
-<p>另外，你也可以使用 Spark 自带的脚本来启动和停止，这些脚本在 <code class="highlighter-rouge">/usr/lib/spark/sbin</code> 目录下：</p>
+<p>另外，你也可以使用 Spark 自带的脚本来启动和停止，这些脚本在 <code>/usr/lib/spark/sbin</code> 目录下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ls /usr/lib/spark/sbin
+<pre><code class="language-bash">$ ls /usr/lib/spark/sbin
 slaves.sh        spark-daemons.sh  start-master.sh  stop-all.sh
 spark-config.sh  spark-executor    start-slave.sh   stop-master.sh
 spark-daemon.sh  start-all.sh      start-slaves.sh  stop-slaves.sh
 </code></pre>
-</div>
 
-<p>在master节点修改 <code class="highlighter-rouge">/etc/spark/conf/slaves</code> 文件添加worker节点的主机名称，并且还需要在master和worker节点之间配置无密码登陆。</p>
+<p>在master节点修改 <code>/etc/spark/conf/slaves</code> 文件添加worker节点的主机名称，并且还需要在master和worker节点之间配置无密码登陆。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># A Spark Worker will be started on each of the machines listed below.
+<pre><code># A Spark Worker will be started on each of the machines listed below.
 cdh2
 cdh3
 </code></pre>
-</div>
 
 <p>然后，你也可以通过下面脚本启动 master 和 worker：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /usr/lib/spark/sbin
-<span class="gp">$ </span>./start-master.sh
-<span class="gp">$ </span>./start-slaves.sh
+<pre><code class="language-bash">$ cd /usr/lib/spark/sbin
+$ ./start-master.sh
+$ ./start-slaves.sh
 </code></pre>
-</div>
 
-<p>当然，你也可以通过<code class="highlighter-rouge">spark-class</code>脚本来启动，例如，下面脚本以standalone模式启动worker：</p>
+<p>当然，你也可以通过<code>spark-class</code>脚本来启动，例如，下面脚本以standalone模式启动worker：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./bin/spark-class org.apache.spark.deploy.worker.Worker spark://cdh1:18080
+<pre><code class="language-bash">$ ./bin/spark-class org.apache.spark.deploy.worker.Worker spark://cdh1:18080
 </code></pre>
-</div>
 
 <h2 id="web">3.3 访问web界面</h2>
 
 <p>你可以通过 <a href="http://cdh1:18080/">http://cdh1:18080/</a> 访问 spark master 的 web 界面。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/spark/spark-master-web-ui.jpg" alt="spark-master-web-ui" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/spark/spark-master-web-ui.jpg" alt="spark-master-web-ui" /></p>
 
 <p>访问Spark History Server页面：http://cdh1:18082/。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/spark/spark-hs-web-ui.jpg" alt="spark-hs-web-ui" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/spark/spark-hs-web-ui.jpg" alt="spark-hs-web-ui" /></p>
 
-<p>注意：我这里使用的是CDH版本的 Spark，Spark master UI的端口为<code class="highlighter-rouge">18080</code>，不是 Apache Spark 的 <code class="highlighter-rouge">8080</code> 端口。CDH发行版中Spark使用的端口列表如下：</p>
+<p>注意：我这里使用的是CDH版本的 Spark，Spark master UI的端口为<code>18080</code>，不是 Apache Spark 的 <code>8080</code> 端口。CDH发行版中Spark使用的端口列表如下：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">7077</code> – Default Master RPC port</li>
-  <li><code class="highlighter-rouge">7078</code> – Default Worker RPC port</li>
-  <li><code class="highlighter-rouge">18080</code> – Default Master web UI port</li>
-  <li><code class="highlighter-rouge">18081</code> – Default Worker web UI port</li>
-  <li><code class="highlighter-rouge">18080</code> – Default HistoryServer web UI port</li>
+  <li><code>7077</code> – Default Master RPC port</li>
+  <li><code>7078</code> – Default Worker RPC port</li>
+  <li><code>18080</code> – Default Master web UI port</li>
+  <li><code>18081</code> – Default Worker web UI port</li>
+  <li><code>18080</code> – Default HistoryServer web UI port</li>
 </ul>
 
 <h1 id="section-6">4. 测试</h1>
@@ -372,19 +350,18 @@ cdh3
 
 <p>你可以使用交互式命令spark-shell、pyspark或者<a href="https://spark.apache.org/docs/latest/submitting-applications.html">spark-submit script</a>连接到集群，下面以wordcount程序为例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spark-shell --master spark://cdh1:7077
-<span class="gp">scala&gt; </span>val file <span class="o">=</span> sc.textFile<span class="o">(</span><span class="s2">"hdfs://cdh1:8020/tmp/test.txt"</span><span class="o">)</span>
-<span class="gp">scala&gt; </span>val counts <span class="o">=</span> file.flatMap<span class="o">(</span>line <span class="o">=</span>&gt; line.split<span class="o">(</span><span class="s2">" "</span><span class="o">))</span>.map<span class="o">(</span>word <span class="o">=</span>&gt; <span class="o">(</span>word, 1<span class="o">))</span>.reduceByKey<span class="o">(</span>_ + _<span class="o">)</span>
-<span class="gp">scala&gt; </span>counts.count<span class="o">()</span>
-<span class="gp">scala&gt; </span>counts.saveAsTextFile<span class="o">(</span><span class="s2">"hdfs://cdh1:8020/tmp/output"</span><span class="o">)</span>
+<pre><code class="language-bash">$ spark-shell --master spark://cdh1:7077
+scala&gt; val file = sc.textFile("hdfs://cdh1:8020/tmp/test.txt")
+scala&gt; val counts = file.flatMap(line =&gt; line.split(" ")).map(word =&gt; (word, 1)).reduceByKey(_ + _)
+scala&gt; counts.count()
+scala&gt; counts.saveAsTextFile("hdfs://cdh1:8020/tmp/output")
 </code></pre>
-</div>
 
 <p>如果运行成功，可以打开浏览器访问 http://cdh1:4040 查看应用运行情况。</p>
 
 <p>运行过程中，可能会出现下面的异常：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>14/10/24 14:51:40 WARN hdfs.BlockReaderLocal: The short-circuit local reads feature cannot be used because libhadoop cannot be loaded.
+<pre><code>14/10/24 14:51:40 WARN hdfs.BlockReaderLocal: The short-circuit local reads feature cannot be used because libhadoop cannot be loaded.
 14/10/24 14:51:40 ERROR lzo.GPLNativeCodeLoader: Could not load native gpl library
 java.lang.UnsatisfiedLinkError: no gplcompression in java.library.path
 	at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1738)
@@ -398,25 +375,22 @@ java.lang.UnsatisfiedLinkError: no gplcompression in java.library.path
 	at org.apache.hadoop.conf.Configuration.getClassByName(Configuration.java:1801)
 	at org.apache.hadoop.io.compress.CompressionCodecFactory.getCodecClasses(CompressionCodecFactory.java:128)
 </code></pre>
-</div>
 
 <p>解决方法可以参考 <a href="http://blog.csdn.net/pelick/article/details/11599391">Spark连接Hadoop读取HDFS问题小结</a> 这篇文章，执行以下命令，然后重启服务即可：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/lib/hadoop/lib/native/libgplcompression.so <span class="nv">$JAVA_HOME</span>/jre/lib/amd64/
-cp /usr/lib/hadoop/lib/native/libhadoop.so <span class="nv">$JAVA_HOME</span>/jre/lib/amd64/
-cp /usr/lib/hadoop/lib/native/libsnappy.so <span class="nv">$JAVA_HOME</span>/jre/lib/amd64/
+<pre><code class="language-bash">cp /usr/lib/hadoop/lib/native/libgplcompression.so $JAVA_HOME/jre/lib/amd64/
+cp /usr/lib/hadoop/lib/native/libhadoop.so $JAVA_HOME/jre/lib/amd64/
+cp /usr/lib/hadoop/lib/native/libsnappy.so $JAVA_HOME/jre/lib/amd64/
 </code></pre>
-</div>
 
 <p>使用 spark-submit 以 Standalone 模式运行 SparkPi 程序的命令如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spark-submit --class org.apache.spark.examples.SparkPi  --master spark://cdh1:7077 /usr/lib/spark/lib/spark-examples-1.3.0-cdh5.4.0-hadoop2.6.0-cdh5.4.0.jar 10
+<pre><code class="language-bash">$ spark-submit --class org.apache.spark.examples.SparkPi  --master spark://cdh1:7077 /usr/lib/spark/lib/spark-examples-1.3.0-cdh5.4.0-hadoop2.6.0-cdh5.4.0.jar 10
 </code></pre>
-</div>
 
-<p><strong>需要说明的是</strong>：<code class="highlighter-rouge">Standalone mode does not support talking to a kerberized HDFS</code>，如果你以 <code class="highlighter-rouge">spark-shell --master spark://cdh1:7077</code> 方式访问安装有 kerberos 的 HDFS 集群上访问数据时，会出现下面异常:</p>
+<p><strong>需要说明的是</strong>：<code>Standalone mode does not support talking to a kerberized HDFS</code>，如果你以 <code>spark-shell --master spark://cdh1:7077</code> 方式访问安装有 kerberos 的 HDFS 集群上访问数据时，会出现下面异常:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>15/04/02 11:58:32 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool
+<pre><code>15/04/02 11:58:32 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool
 org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 0.0 failed 4 times, most recent failure: Lost task 0.3 in stage 0.0 (TID 6, bj03-bi-pro-hdpnamenn): java.io.IOException: Failed on local exception: java.io.IOException: org.apache.hadoop.security.AccessControlException: Client cannot authenticate via:[TOKEN, KERBEROS]; Host Details : local host is: "cdh1/192.168.56.121"; destination host is: "192.168.56.121":8020;
         org.apache.hadoop.net.NetUtils.wrapException(NetUtils.java:764)
         org.apache.hadoop.ipc.Client.call(Client.java:1415)
@@ -424,7 +398,6 @@ org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in sta
         org.apache.hadoop.ipc.ProtobufRpcEngine$Invoker.invoke(ProtobufRpcEngine.java:206)
         com.sun.proxy.$Proxy17.getBlockLocations(Unknown Source)
 </code></pre>
-</div>
 
 <h2 id="spark-on-mesos-">4.2 Spark On Mesos 模式</h2>
 
@@ -436,66 +409,61 @@ org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in sta
 
 <p>CDH Spark中，以 cluster 模式启动，命令如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spark-submit --class path.to.your.Class --deploy-mode cluster --master yarn <span class="o">[</span>options] &lt;app jar&gt; <span class="o">[</span>app options]
+<pre><code class="language-bash">$ spark-submit --class path.to.your.Class --deploy-mode cluster --master yarn [options] &lt;app jar&gt; [app options]
 </code></pre>
-</div>
 
 <p>CDH Spark中，以 client 模式启动，命令如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spark-submit --class path.to.your.Class --deploy-mode client --master yarn <span class="o">[</span>options] &lt;app jar&gt; <span class="o">[</span>app options]
+<pre><code class="language-bash">$ spark-submit --class path.to.your.Class --deploy-mode client --master yarn [options] &lt;app jar&gt; [app options]
 </code></pre>
-</div>
 
 <p>以SparkPi程序为例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spark-submit --class org.apache.spark.examples.SparkPi <span class="se">\</span>
-    --deploy-mode cluster  <span class="se">\</span>
-    --master yarn  <span class="se">\</span>
-    --num-executors 3 <span class="se">\</span>
-    --driver-memory 4g <span class="se">\</span>
-    --executor-memory 2g <span class="se">\</span>
-    --executor-cores 1 <span class="se">\</span>
-    --queue thequeue <span class="se">\</span>
-    /usr/lib/spark/lib/spark-examples-1.3.0-cdh5.4.0-hadoop2.6.0-cdh5.4.0.jar <span class="se">\</span>
+<pre><code class="language-bash">$ spark-submit --class org.apache.spark.examples.SparkPi \
+    --deploy-mode cluster  \
+    --master yarn  \
+    --num-executors 3 \
+    --driver-memory 4g \
+    --executor-memory 2g \
+    --executor-cores 1 \
+    --queue thequeue \
+    /usr/lib/spark/lib/spark-examples-1.3.0-cdh5.4.0-hadoop2.6.0-cdh5.4.0.jar \
     10
 </code></pre>
-</div>
 
-<p>另外，运行在 YARN 集群之上的时候，可以手动把 spark-assembly 相关的 jar 包拷贝到 hdfs 上去，然后设置 <code class="highlighter-rouge">SPARK_JAR</code> 环境变量：</p>
+<p>另外，运行在 YARN 集群之上的时候，可以手动把 spark-assembly 相关的 jar 包拷贝到 hdfs 上去，然后设置 <code>SPARK_JAR</code> 环境变量：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hdfs dfs -mkdir -p /user/spark/share/lib
-<span class="gp">$ </span>hdfs dfs -put <span class="nv">$SPARK_HOME</span>/lib/spark-assembly.jar  /user/spark/share/lib/spark-assembly.jar
+<pre><code class="language-bash">$ hdfs dfs -mkdir -p /user/spark/share/lib
+$ hdfs dfs -put $SPARK_HOME/lib/spark-assembly.jar  /user/spark/share/lib/spark-assembly.jar
 
-<span class="gp">$ </span><span class="nv">SPARK_JAR</span><span class="o">=</span>hdfs://&lt;nn&gt;:&lt;port&gt;/user/spark/share/lib/spark-assembly.jar
+$ SPARK_JAR=hdfs://&lt;nn&gt;:&lt;port&gt;/user/spark/share/lib/spark-assembly.jar
 </code></pre>
-</div>
 
 <h1 id="spark-sql">5. Spark-SQL</h1>
 
 <p>Spark 安装包中包括了 Spark-SQL ，运行 spark-sql 命令，在 cdh5.2 中会出现下面异常：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /usr/lib/spark/bin
-<span class="gp">$ </span>./spark-sql
+<pre><code class="language-bash">$ cd /usr/lib/spark/bin
+$ ./spark-sql
 java.lang.ClassNotFoundException: org.apache.spark.sql.hive.thriftserver.SparkSQLCLIDriver
-	at java.net.URLClassLoader<span class="nv">$1</span>.run<span class="o">(</span>URLClassLoader.java:202<span class="o">)</span>
-	at java.security.AccessController.doPrivileged<span class="o">(</span>Native Method<span class="o">)</span>
-	at java.net.URLClassLoader.findClass<span class="o">(</span>URLClassLoader.java:190<span class="o">)</span>
-	at java.lang.ClassLoader.loadClass<span class="o">(</span>ClassLoader.java:306<span class="o">)</span>
-	at java.lang.ClassLoader.loadClass<span class="o">(</span>ClassLoader.java:247<span class="o">)</span>
-	at java.lang.Class.forName0<span class="o">(</span>Native Method<span class="o">)</span>
-	at java.lang.Class.forName<span class="o">(</span>Class.java:247<span class="o">)</span>
-	at org.apache.spark.deploy.SparkSubmit<span class="nv">$.</span>launch<span class="o">(</span>SparkSubmit.scala:319<span class="o">)</span>
-	at org.apache.spark.deploy.SparkSubmit<span class="nv">$.</span>main<span class="o">(</span>SparkSubmit.scala:75<span class="o">)</span>
-	at org.apache.spark.deploy.SparkSubmit.main<span class="o">(</span>SparkSubmit.scala<span class="o">)</span>
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:247)
+	at org.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:319)
+	at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)
+	at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
 
 Failed to load Spark SQL CLI main class org.apache.spark.sql.hive.thriftserver.SparkSQLCLIDriver.
 You need to build Spark with -Phive.
 </code></pre>
-</div>
 
 <p>在 cdh5.4 中会出现下面异常：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Caused by: java.lang.ClassNotFoundException: org.apache.hadoop.hive.cli.CliDriver
+<pre><code>Caused by: java.lang.ClassNotFoundException: org.apache.hadoop.hive.cli.CliDriver
   at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
   at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
   at java.security.AccessController.doPrivileged(Native Method)
@@ -505,7 +473,6 @@ You need to build Spark with -Phive.
   at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
   ... 18 more
 </code></pre>
-</div>
 
 <p>从上可以知道  Spark-SQL 编译时没有集成 Hive，故需要重新编译 spark 源代码。</p>
 
@@ -515,44 +482,41 @@ You need to build Spark with -Phive.
 
 <p>下载cdh5-1.3.0_5.4.0分支的代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone git@github.com:cloudera/spark.git
-<span class="gp">$ </span><span class="nb">cd </span>spark
-<span class="gp">$ </span>git checkout -b origin/cdh5-1.3.0_5.4.0
+<pre><code class="language-bash">$ git clone git@github.com:cloudera/spark.git
+$ cd spark
+$ git checkout -b origin/cdh5-1.3.0_5.4.0
 </code></pre>
-</div>
 
-<p>使用maven 编译，先修改根目录下的 pom.xml，添加一行 <code class="highlighter-rouge">&lt;module&gt;sql/hive-thriftserver&lt;/module&gt;</code>：</p>
+<p>使用maven 编译，先修改根目录下的 pom.xml，添加一行 <code>&lt;module&gt;sql/hive-thriftserver&lt;/module&gt;</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;modules&gt;</span>
-    <span class="nt">&lt;module&gt;</span>core<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>bagel<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>graphx<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>mllib<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>tools<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>streaming<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/catalyst<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/core<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/hive<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/hive-thriftserver<span class="nt">&lt;/module&gt;</span> <span class="c">&lt;!--添加的一行--&gt;</span>
-    <span class="nt">&lt;module&gt;</span>repl<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>assembly<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/twitter<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/kafka<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/flume<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/flume-sink<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/zeromq<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/mqtt<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>examples<span class="nt">&lt;/module&gt;</span>
-  <span class="nt">&lt;/modules&gt;</span>
+<pre><code class="language-xml">&lt;modules&gt;
+    &lt;module&gt;core&lt;/module&gt;
+    &lt;module&gt;bagel&lt;/module&gt;
+    &lt;module&gt;graphx&lt;/module&gt;
+    &lt;module&gt;mllib&lt;/module&gt;
+    &lt;module&gt;tools&lt;/module&gt;
+    &lt;module&gt;streaming&lt;/module&gt;
+    &lt;module&gt;sql/catalyst&lt;/module&gt;
+    &lt;module&gt;sql/core&lt;/module&gt;
+    &lt;module&gt;sql/hive&lt;/module&gt;
+    &lt;module&gt;sql/hive-thriftserver&lt;/module&gt; &lt;!--添加的一行--&gt;
+    &lt;module&gt;repl&lt;/module&gt;
+    &lt;module&gt;assembly&lt;/module&gt;
+    &lt;module&gt;external/twitter&lt;/module&gt;
+    &lt;module&gt;external/kafka&lt;/module&gt;
+    &lt;module&gt;external/flume&lt;/module&gt;
+    &lt;module&gt;external/flume-sink&lt;/module&gt;
+    &lt;module&gt;external/zeromq&lt;/module&gt;
+    &lt;module&gt;external/mqtt&lt;/module&gt;
+    &lt;module&gt;examples&lt;/module&gt;
+  &lt;/modules&gt;
 </code></pre>
-</div>
 
 <p>然后运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">"-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"</span>
-<span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -Phive-thriftserver -DskipTests clean package
+<pre><code class="language-bash">$ export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
+$ mvn -Pyarn -Dhadoop.version=2.6.0-cdh5.4.0 -Phive -Phive-thriftserver -DskipTests clean package
 </code></pre>
-</div>
 
 <p>如果编译成功之后， 会在 assembly/target/scala-2.10 目录下生成：spark-assembly-1.3.0-cdh5.4.0.jar，在 examples/target/scala-2.10 目录下生成：spark-examples-1.3.0-cdh5.4.0.jar，然后将 spark-assembly-1.3.0-cdh5.4.0.jar 拷贝到 /usr/lib/spark/lib 目录，然后再来运行 spark-sql。</p>
 
@@ -565,12 +529,12 @@ You need to build Spark with -Phive.
 <p>本文主要介绍了 CDH5 集群中 Spark 的安装过程以及三种集群运行模式：</p>
 
 <ul>
-  <li>Standalone – <code class="highlighter-rouge">spark-shell --master spark://host:port</code></li>
-  <li>Apache Mesos – <code class="highlighter-rouge">spark-shell --master mesos://host:port</code></li>
-  <li>Hadoop YARN – <code class="highlighter-rouge">spark-shell --master yarn</code></li>
+  <li>Standalone – <code>spark-shell --master spark://host:port</code></li>
+  <li>Apache Mesos – <code>spark-shell --master mesos://host:port</code></li>
+  <li>Hadoop YARN – <code>spark-shell --master yarn</code></li>
 </ul>
 
-<p>如果以本地模式运行，则为 <code class="highlighter-rouge">spark-shell --master local</code>。</p>
+<p>如果以本地模式运行，则为 <code>spark-shell --master local</code>。</p>
 
 <p>关于 Spark 的更多介绍可以参考官网或者一些<a href="http://colobu.com/tags/Spark/">中文翻译的文章</a>。</p>
 
@@ -635,7 +599,7 @@ You need to build Spark with -Phive.
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

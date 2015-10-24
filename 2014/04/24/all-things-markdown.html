@@ -125,11 +125,11 @@
 
 <h2 id="html">兼容 HTML</h2>
 
-<p>要在Markdown中输写HTML区块元素，比如<code class="highlighter-rouge">&lt;div&gt;</code>、<code class="highlighter-rouge">&lt;table&gt;</code>、<code class="highlighter-rouge">&lt;pre&gt;</code>、<code class="highlighter-rouge">&lt;p&gt;</code> 等标签，必须在前后加上空行与其它内容区隔开，还要求它们的开始标签与结尾标签不能用制表符或空格来缩进。Markdown 的生成器有足够智能，不会在 HTML 区块标签外加上不必要的 <code class="highlighter-rouge">&lt;p&gt;</code> 标签。</p>
+<p>要在Markdown中输写HTML区块元素，比如<code>&lt;div&gt;</code>、<code>&lt;table&gt;</code>、<code>&lt;pre&gt;</code>、<code>&lt;p&gt;</code> 等标签，必须在前后加上空行与其它内容区隔开，还要求它们的开始标签与结尾标签不能用制表符或空格来缩进。Markdown 的生成器有足够智能，不会在 HTML 区块标签外加上不必要的 <code>&lt;p&gt;</code> 标签。</p>
 
 <p>例子如下，在 Markdown 文件里加上一段 HTML 表格：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>这是一个普通段落。
+<pre><code>这是一个普通段落。
 
 &lt;table&gt;
     &lt;tr&gt;
@@ -144,20 +144,19 @@
 
 这是另一个普通段落。
 </code></pre>
-</div>
 
 <p>请注意:</p>
 
 <ul>
   <li>在 HTML 区块标签间的 Markdown 格式语法将不会被处理。</li>
-  <li>HTML 的区段（行内）标签如 <code class="highlighter-rouge">&lt;span&gt;</code>、<code class="highlighter-rouge">&lt;cite&gt;</code>、<code class="highlighter-rouge">&lt;del&gt;</code> 可以在 Markdown 的段落、列表或是标题里随意使用。</li>
+  <li>HTML 的区段（行内）标签如 <code>&lt;span&gt;</code>、<code>&lt;cite&gt;</code>、<code>&lt;del&gt;</code> 可以在 Markdown 的段落、列表或是标题里随意使用。</li>
 </ul>
 
 <h2 id="section-1">特殊字符自动转换</h2>
 
-<p>Markdown会对一些特殊字符进行转化，如：<code class="highlighter-rouge">&amp;</code>、<code class="highlighter-rouge">©</code>、<code class="highlighter-rouge">&lt;</code>、<code class="highlighter-rouge">&gt;</code>,如果<code class="highlighter-rouge">&lt;</code>、<code class="highlighter-rouge">&gt;</code>用作html标签的界定符，则不会对其转换。</p>
+<p>Markdown会对一些特殊字符进行转化，如：<code>&amp;</code>、<code>©</code>、<code>&lt;</code>、<code>&gt;</code>,如果<code>&lt;</code>、<code>&gt;</code>用作html标签的界定符，则不会对其转换。</p>
 
-<p>不过需要注意的是，code 范围内，不论是行内还是区块， <code class="highlighter-rouge">&lt;</code> 和 <code class="highlighter-rouge">&amp;</code> 两个符号都一定会被转换成 HTML 实体。</p>
+<p>不过需要注意的是，code 范围内，不论是行内还是区块， <code>&lt;</code> 和 <code>&amp;</code> 两个符号都一定会被转换成 HTML 实体。</p>
 
 <h1 id="a-idsyntaxa"><a id="Syntax">语法</a></h1>
 
@@ -167,31 +166,29 @@
 
 <p>类 Atx 形式则是在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># This is an &lt;h1&gt; tag
+<pre><code># This is an &lt;h1&gt; tag
 ## This is an &lt;h2&gt; tag
 ###### This is an &lt;h6&gt; tag
 </code></pre>
-</div>
 
 <p>你可以选择性地「闭合」类 atx 样式的标题，这纯粹只是美观用的，若是觉得这样看起来比较舒适，你就可以在行尾加上 #，而行尾的 # 数量也不用和开头一样（行首的井字符数量决定标题的阶数）</p>
 
 <p>类 Setext 形式是用底线的形式，利用 = （最高阶标题）和 - （第二阶标题），例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>This is an H1
+<pre><code>This is an H1
 =============
 
 This is an H2
 -------------
 </code></pre>
-</div>
 
 <p>任何数量的 = 和 - 都可以有效果。</p>
 
 <h2 id="section-3">强调</h2>
 
-<p>Markdown 使用星号（<code class="highlighter-rouge">*</code>）和底线（<code class="highlighter-rouge">_</code>）作为标记强调字词的符号，被 <code class="highlighter-rouge">*</code> 或 <code class="highlighter-rouge">_</code> 包围的字词会被转成用 <code class="highlighter-rouge">&lt;em&gt;</code> 标签包围，用两个 <code class="highlighter-rouge">*</code> 或 <code class="highlighter-rouge">_</code> 包起来的话，则会被转成 <code class="highlighter-rouge">&lt;strong&gt;</code>，例如：</p>
+<p>Markdown 使用星号（<code>*</code>）和底线（<code>_</code>）作为标记强调字词的符号，被 <code>*</code> 或 <code>_</code> 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围，用两个 <code>*</code> 或 <code>_</code> 包起来的话，则会被转成 <code>&lt;strong&gt;</code>，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>*This text will be italic*
+<pre><code>*This text will be italic*
 _This will also be italic_
 
 **This text will be bold**
@@ -199,11 +196,10 @@ __This will also be bold__
 
 *You **can** combine them*
 </code></pre>
-</div>
 
 <h2 id="section-4">断行</h2>
 
-<p>如果你真的想在Markdown中插入换行标签<code class="highlighter-rouge">&lt;br/&gt;</code>，你可以在行尾输入两个或以上的空格，然后回车。 这样插入换行十分麻烦，但是“每个换行都转换为<code class="highlighter-rouge">&lt;br/&gt;</code>”在 Markdown中并不合适，所以只在你确定你需要时手动添加。</p>
+<p>如果你真的想在Markdown中插入换行标签<code>&lt;br/&gt;</code>，你可以在行尾输入两个或以上的空格，然后回车。 这样插入换行十分麻烦，但是“每个换行都转换为<code>&lt;br/&gt;</code>”在 Markdown中并不合适，所以只在你确定你需要时手动添加。</p>
 
 <h2 id="section-5">列表</h2>
 
@@ -213,74 +209,68 @@ __This will also be bold__
 
 <p>无序列表使用星号、加号或是减号作为列表标记：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>*   Red
+<pre><code>*   Red
 *   Green
 *   Blue
 </code></pre>
-</div>
 
 <h3 id="section-7">有序</h3>
 
 <p>有序列表则使用数字接着一个英文句点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1.  Bird
+<pre><code>1.  Bird
 2.  McHale
 3.  Parish
 </code></pre>
-</div>
 
 <p>很重要的一点是，你在列表标记上使用的数字并不会影响输出的 HTML 结果。</p>
 
 <p>如果你的列表标记写成：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1.  Bird
+<pre><code>1.  Bird
 1.  McHale
 1.  Parish
 </code></pre>
-</div>
 <p>或甚至是：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>3. Bird
+<pre><code>3. Bird
 1. McHale
 8. Parish
 </code></pre>
-</div>
 
 <p>你都会得到完全相同的 HTML 输出。</p>
 
 <p>注意：</p>
 
 <ul>
-  <li>如果列表项目间用空行分开，在输出 HTML 时 Markdown 就会将项目内容用 <code class="highlighter-rouge">&lt;p&gt;</code> 标签包起来</li>
+  <li>如果列表项目间用空行分开，在输出 HTML 时 Markdown 就会将项目内容用 <code>&lt;p&gt;</code> 标签包起来</li>
   <li>列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符</li>
   <li>如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符</li>
 </ul>
 
 <h2 id="section-8">区块引用</h2>
 
-<p>Markdown 标记区块引用是使用类似 email 中用 <code class="highlighter-rouge">&gt;</code> 的引用方式。</p>
+<p>Markdown 标记区块引用是使用类似 email 中用 <code>&gt;</code> 的引用方式。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>As Kanye West said:
+<pre><code>As Kanye West said:
 
 &gt; We're living the future so
 &gt; the present is our past.
 </code></pre>
-</div>
 
-<p><strong>Markdown 也允许你偷懒只在整个段落的第一行最前面加上 <code class="highlighter-rouge">&gt;</code></strong></p>
+<p><strong>Markdown 也允许你偷懒只在整个段落的第一行最前面加上 <code>&gt;</code></strong></p>
 
 <p>区块引用可以嵌套（例如：引用内的引用），只要根据层次加上不同数量的 &gt; ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; This is the first level of quoting.
+<pre><code>&gt; This is the first level of quoting.
 &gt;
 &gt; &gt; This is nested blockquote.
 &gt;
 &gt; Back to the first level.
 </code></pre>
-</div>
 <p>引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; ## 这是一个标题。
+<pre><code>&gt; ## 这是一个标题。
 &gt; 
 &gt; 1.   这是第一行列表项。
 &gt; 2.   这是第二行列表项。
@@ -289,31 +279,28 @@ __This will also be bold__
 &gt; 
 &gt;     return shell_exec("echo $input | $markdown_script");
 </code></pre>
-</div>
 
 <h2 id="section-9">分隔线</h2>
 
 <p>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>* * *
+<pre><code>* * *
 ***
 *****
 - - -
 ---------------------------------------
 </code></pre>
-</div>
 
 <h2 id="section-10">代码区块</h2>
 
-<p>和程序相关的写作或是标签语言原始码通常会有已经排版好的代码区块，通常这些区块我们并不希望它以一般段落文件的方式去排版，而是照原来的样子显示，Markdown 会用 <code class="highlighter-rouge">&lt;pre&gt;</code> 和 <code class="highlighter-rouge">&lt;code&gt;</code> 标签来把代码区块包起来。</p>
+<p>和程序相关的写作或是标签语言原始码通常会有已经排版好的代码区块，通常这些区块我们并不希望它以一般段落文件的方式去排版，而是照原来的样子显示，Markdown 会用 <code>&lt;pre&gt;</code> 和 <code>&lt;code&gt;</code> 标签来把代码区块包起来。</p>
 
 <p>要在 Markdown 中建立代码区块很简单，只要简单地缩进 4 个空格或是 1 个制表符就可以</p>
 
 <h2 id="section-11">内联代码</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>I think you should use an `&lt;addr&gt;` element here instead.
+<pre><code>I think you should use an `&lt;addr&gt;` element here instead.
 </code></pre>
-</div>
 
 <h2 id="section-12">链接</h2>
 
@@ -323,76 +310,66 @@ __This will also be bold__
 
 <p>要建立一个<strong>行内式的链接</strong>，只要在方块括号后面紧接着圆括号并插入网址链接即可，如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>This is [an example](http://example.com/ "Title") inline link.
+<pre><code>This is [an example](http://example.com/ "Title") inline link.
 [This link](http://example.net/) has no title attribute.
 </code></pre>
-</div>
 
 <p><strong>参考式的链接</strong>**是在链接文字的括号后面再接上另一个方括号，而在第二个方括号里面要填入用以辨识链接的标记：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>This is [an example][id] reference-style link.
+<pre><code>This is [an example][id] reference-style link.
 </code></pre>
-</div>
 
 <p>你也可以选择性地在两个方括号中间加上一个空格：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>This is [an example] [id] reference-style link.
+<pre><code>This is [an example] [id] reference-style link.
 </code></pre>
-</div>
 
 <p>接着，在文件的任意处，你可以把这个标记的链接内容定义出来（<strong>注意去掉冒号前面空格</strong>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[id] : http://example.com/  "Optional Title Here"
+<pre><code>[id] : http://example.com/  "Optional Title Here"
 </code></pre>
-</div>
 
-<p>引用本地资源，可以使用相对路径：<code class="highlighter-rouge">[about me](/about/)</code></p>
+<p>引用本地资源，可以使用相对路径：<code>[about me](/about/)</code></p>
 
 <p><strong>隐式链接</strong>标记功能让你可以省略指定链接标记，这种情形下，链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号，如果你要让 “Google” 链接到 google.com，你可以简化成：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[Google][]
+<pre><code>[Google][]
 </code></pre>
-</div>
 <p>然后定义链接内容（<strong>注意去掉冒号前面空格</strong>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[Google] : http://google.com/
+<pre><code>[Google] : http://google.com/
 </code></pre>
-</div>
 
 <p>由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Visit [Daring Fireball][] for more information.
+<pre><code>Visit [Daring Fireball][] for more information.
 </code></pre>
-</div>
 <p>然后接着定义链接（<strong>注意去掉冒号前面空格</strong>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[Daring Fireball] : http://daringfireball.net/
+<pre><code>[Daring Fireball] : http://daringfireball.net/
 </code></pre>
-</div>
 
 <p>链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样。</p>
 
 <p>下面是一个参考式链接的范例（<strong>注意去掉冒号前面空格</strong>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>I get 10 times more traffic from [Google] [1] than from
+<pre><code>I get 10 times more traffic from [Google] [1] than from
 [Yahoo] [2] or [MSN] [3].
 
 [1] : http://google.com/        "Google"
 [2] : http://search.yahoo.com/  "Yahoo Search"
 [3] : http://search.msn.com/    "MSN Search"
 </code></pre>
-</div>
 
 <p>如果改成用链接名称的方式写（<strong>注意去掉冒号前面空格</strong>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>I get 10 times more traffic from [Google][] than from
+<pre><code>I get 10 times more traffic from [Google][] than from
 [Yahoo][] or [MSN][].
 
   [google] : http://google.com/        "Google"
   [yahoo] :  http://search.yahoo.com/  "Yahoo Search"
   [msn] :    http://search.msn.com/    "MSN Search"
 </code></pre>
-</div>
 
 <h2 id="section-13">图片</h2>
 
@@ -400,11 +377,10 @@ __This will also be bold__
 
 <p>行内式的图片语法看起来像是：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>![Alt text](/path/to/img.jpg)
+<pre><code>![Alt text](/path/to/img.jpg)
 
 ![Alt text](/path/to/img.jpg "Optional title")
 </code></pre>
-</div>
 
 <p>详细叙述如下：</p>
 
@@ -416,14 +392,12 @@ __This will also be bold__
 
 <p>参考式的图片语法则长得像这样：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>![Alt text][id]
+<pre><code>![Alt text][id]
 </code></pre>
-</div>
 <p>「id」是图片参考的名称，图片参考的定义方式则和连结参考一样（<strong>注意去掉冒号前面空格</strong>）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[id] : url/to/image  "Optional title attribute"
+<pre><code>[id] : url/to/image  "Optional title attribute"
 </code></pre>
-</div>
 
 <p>到目前为止， Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <img /> 标签。</p>
 
@@ -431,39 +405,34 @@ __This will also be bold__
 
 <p>Markdown 支持以比较简短的自动链接形式来处理网址和电子邮件信箱，只要是用方括号包起来， Markdown 就会自动把它转成链接。一般网址的链接文字就和链接地址一样，例如</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;http://example.com/&gt;
+<pre><code>&lt;http://example.com/&gt;
 </code></pre>
-</div>
 
 <p>Markdown 会转为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;a href="http://example.com/"&gt;http://example.com/&lt;/a&gt;
+<pre><code>&lt;a href="http://example.com/"&gt;http://example.com/&lt;/a&gt;
 </code></pre>
-</div>
 
 <p>邮址的自动链接也很类似，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;address@example.com&gt;
+<pre><code>&lt;address@example.com&gt;
 </code></pre>
-</div>
 
 <p>Markdown 会转成：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;a href="mailto:address@example.com"&gt;address@example.com&lt;/a&gt;
+<pre><code>&lt;a href="mailto:address@example.com"&gt;address@example.com&lt;/a&gt;
 </code></pre>
-</div>
 
 <h2 id="section-15">反斜杠</h2>
 
-<p>Markdown 可以利用反斜杠来插入一些在语法中有其它意义的符号，例如：如果你想要用星号加在文字旁边的方式来做出强调效果（但不用 <code class="highlighter-rouge">&lt;em&gt;</code> 标签），你可以在星号的前面加上反斜杠：</p>
+<p>Markdown 可以利用反斜杠来插入一些在语法中有其它意义的符号，例如：如果你想要用星号加在文字旁边的方式来做出强调效果（但不用 <code>&lt;em&gt;</code> 标签），你可以在星号的前面加上反斜杠：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>\*literal asterisks\*
+<pre><code>\*literal asterisks\*
 </code></pre>
-</div>
 
 <p>Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的符号：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>\   反斜线
+<pre><code>\   反斜线
 `   反引号
 *   星号
 _   底线
@@ -476,21 +445,19 @@ _   底线
 .   英文句点
 !   惊叹号
 </code></pre>
-</div>
 
 <h2 id="section-16">表格</h2>
 
-<p>使用语法解释引擎 Redcarpet(需要开启<code class="highlighter-rouge">tables</code>选项)，则表格如下定义：</p>
+<p>使用语法解释引擎 Redcarpet(需要开启<code>tables</code>选项)，则表格如下定义：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>|head1 head1 head1|head2 head2 head2|head3 head3 head3|head4 head4 head4|
+<pre><code>|head1 head1 head1|head2 head2 head2|head3 head3 head3|head4 head4 head4|
 |---|:---|:---:|---:|
 |row1text1|row1text3|row1text3|row1text4|
 |row2text1|row2text3|row2text3|row2text4|
 </code></pre>
-</div>
-<p>其中<code class="highlighter-rouge">:</code>所在位置表示表格的位置对齐</p>
+<p>其中<code>:</code>所在位置表示表格的位置对齐</p>
 
-<p>添加 <code class="highlighter-rouge">table thead tobody th tr td</code> 样式后显示的效果是：</p>
+<p>添加 <code>table thead tobody th tr td</code> 样式后显示的效果是：</p>
 
 <table>
   <thead>
@@ -519,12 +486,11 @@ _   底线
 
 <p>Github中定义表格方式如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>First Header | Second Header
+<pre><code>First Header | Second Header
 ------------ | -------------
 Content from cell 1 | Content from cell 2
 Content in the first column | Content in the second column
 </code></pre>
-</div>
 
 <p>显示的效果如下：</p>
 
@@ -727,7 +693,7 @@ editor for Markdown</li>
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

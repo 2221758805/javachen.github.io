@@ -105,185 +105,170 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>Scala中没有静态方法或静态字段，但可以使用<code class="highlighter-rouge">object</code>这个语法结构来实现相同的功能。对象与类在语法层面上很相似，除了不能提供构造器参数外，对象可以拥有类的所有特性。</p>
+                    <p>Scala中没有静态方法或静态字段，但可以使用<code>object</code>这个语法结构来实现相同的功能。对象与类在语法层面上很相似，除了不能提供构造器参数外，对象可以拥有类的所有特性。</p>
 
-<p>Scala的object定义了<code class="highlighter-rouge">单个实例</code>，其可以用来存放工具函数或常量等：</p>
+<p>Scala的object定义了<code>单个实例</code>，其可以用来存放工具函数或常量等：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">Timer</span> <span class="o">{</span>
-  <span class="k">var</span> <span class="n">count</span> <span class="k">=</span> <span class="mi">0</span>
+<pre><code class="language-scala">object Timer {
+  var count = 0
 
-  <span class="k">def</span> <span class="n">currentCount</span><span class="o">()</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">count</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  def currentCount(): Long = {
+    count += 1
+    count
+  }
+}
 </code></pre>
-</div>
 
 <p>使用object中的常量或方法，通过object名称直接调用，对象构造器在对象第一次被使用时调用（如果某对象一直未被使用，那么其构造器也不会被调用）。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">currentCount</span><span class="o">()</span>
-<span class="n">res52</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">1</span>
+<pre><code class="language-scala">scala&gt; Timer.currentCount()
+res52: Long = 1
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">currentCount</span>
-<span class="n">res53</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">2</span>
+scala&gt; Timer.currentCount
+res53: Long = 2
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">count</span>
-<span class="n">res54</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">2</span>
+scala&gt; Timer.count
+res54: Int = 2
 </code></pre>
-</div>
 
 <p>object的构造器不接受参数传递。</p>
 
 <h1 id="section">伴生对象</h1>
 
-<p>对象如果与某个类同名，那么它就是一个<code class="highlighter-rouge">伴生对象</code>。<strong>类和它的伴生对象必须在同一个源文件中</strong>，可以将在Java类中定义的静态常量、方法等放置到Scala的类的伴生对象中。</p>
+<p>对象如果与某个类同名，那么它就是一个<code>伴生对象</code>。<strong>类和它的伴生对象必须在同一个源文件中</strong>，可以将在Java类中定义的静态常量、方法等放置到Scala的类的伴生对象中。</p>
 
-<p>类可以访问伴生对象私有属性，但是必须通过<code class="highlighter-rouge">伴生对象.属性名</code> 或 <code class="highlighter-rouge">伴生对象.方法</code> 调用，伴生对象也可以访问类的私有属性。</p>
+<p>类可以访问伴生对象私有属性，但是必须通过<code>伴生对象.属性名</code> 或 <code>伴生对象.方法</code> 调用，伴生对象也可以访问类的私有属性。</p>
 
 <p>伴生对象是类的一个特殊实例。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Counter</span><span class="o">{</span>
-    <span class="k">def</span> <span class="n">getTotalCounter</span><span class="o">()</span><span class="k">=</span> <span class="nc">Counter</span><span class="o">.</span><span class="n">getCount</span>
-<span class="o">}</span>
+<pre><code class="language-scala">class Counter{
+    def getTotalCounter()= Counter.getCount
+}
 
-<span class="k">object</span> <span class="nc">Counter</span><span class="o">{</span>
-    <span class="k">private</span> <span class="k">var</span> <span class="n">cnt</span> <span class="k">=</span> <span class="mi">0</span>
-    <span class="k">private</span> <span class="k">def</span> <span class="n">getCount</span><span class="o">()</span><span class="k">=</span> <span class="n">cnt</span>
-<span class="o">}</span>
+object Counter{
+    private var cnt = 0
+    private def getCount()= cnt
+}
 </code></pre>
-</div>
 
 <p>对象可以继承类，以及一个或多个特质，其结果是一个继承了指定类以及特质的类的对象，同时拥有在对象定义中给出的所有特性。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">abstract</span> <span class="k">class</span> <span class="nc">Person</span><span class="o">(</span><span class="k">var</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="k">var</span> <span class="n">age</span><span class="k">:</span><span class="kt">Int</span><span class="o">){</span>
-    <span class="k">def</span> <span class="n">info</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span>
-<span class="o">}</span>
+<pre><code class="language-scala">abstract class Person(var name:String, var age:Int){
+    def info():Unit
+}
 
-<span class="k">object</span> <span class="nc">XiaoMing</span> <span class="k">extends</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"XiaoMing"</span><span class="o">,</span> <span class="mi">5</span><span class="o">){</span>
-    <span class="k">def</span> <span class="n">info</span><span class="o">(){</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">" name is "</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">", age is "</span><span class="o">+</span><span class="n">age</span><span class="o">)</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+object XiaoMing extends Person("XiaoMing", 5){
+    def info(){
+        println(" name is "+name+", age is "+age)
+    }
+}
 </code></pre>
-</div>
 
-<p>Java程序通常从一个public类的main方法开始。而<strong>在Scala中，程序从对象的main方法开始</strong>，方法的类型是 <code class="highlighter-rouge">Array[String] =&gt; Unit</code>。</p>
+<p>Java程序通常从一个public类的main方法开始。而<strong>在Scala中，程序从对象的main方法开始</strong>，方法的类型是 <code>Array[String] =&gt; Unit</code>。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">Hello</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Hello, world!"</span><span class="o">)</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+<pre><code class="language-scala">object Hello {
+  def main(args: Array[String]) {
+    println("Hello, world!")
+  }
+}
 </code></pre>
-</div>
 
-<p>除此之外，<code class="highlighter-rouge">还可以扩展App特质</code>，然后将程序代码放在构造器内即可，命令行参数从args属性获取。</p>
+<p>除此之外，<code>还可以扩展App特质</code>，然后将程序代码放在构造器内即可，命令行参数从args属性获取。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">Hello</span> <span class="k">extends</span> <span class="nc">App</span> <span class="o">{</span>
-  <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Hello, "</span> <span class="o">+</span> <span class="n">args</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
-  <span class="k">else</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Hello, world!"</span><span class="o">)</span>
-<span class="o">}</span>
+<pre><code class="language-scala">object Hello extends App {
+  if (args.length &gt; 0)
+    println("Hello, " + args(0))
+  else
+    println("Hello, world!")
+}
 </code></pre>
-</div>
 
 <h1 id="apply-">apply 方法</h1>
 
-<p><strong>apply方法是对象的一类特有方法，一般可用于创建伴生类</strong>。apply方法可以用简洁的方式调用，形如<code class="highlighter-rouge">Object(args..)</code>， 当然，你也可以跟其他方法一样调用，<code class="highlighter-rouge">Object.apply(args...)</code>，这两种写法的结果是一样的。</p>
+<p><strong>apply方法是对象的一类特有方法，一般可用于创建伴生类</strong>。apply方法可以用简洁的方式调用，形如<code>Object(args..)</code>， 当然，你也可以跟其他方法一样调用，<code>Object.apply(args...)</code>，这两种写法的结果是一样的。</p>
 
-<p>现在，当你看到<code class="highlighter-rouge">List(1,2,3)</code>这样的语句就不会感到奇怪了，这只是<code class="highlighter-rouge">List.apply(1,2,3)</code>的简写而已。</p>
+<p>现在，当你看到<code>List(1,2,3)</code>这样的语句就不会感到奇怪了，这只是<code>List.apply(1,2,3)</code>的简写而已。</p>
 
 <p>使用apply方法的好处是，<em>在创建对象时，可以省去使用new关键字</em>。</p>
 
 <p>当类或对象有一个主要用途的时候，apply方法为你提供了一个很好的语法糖。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">Foo</span> <span class="o">{}</span>
-<span class="n">defined</span> <span class="k">class</span> <span class="nc">Foo</span>
+<pre><code class="language-scala">scala&gt; class Foo {}
+defined class Foo
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">object</span> <span class="nc">FooMaker</span> <span class="o">{</span>
-     <span class="o">|</span>   <span class="k">def</span> <span class="n">apply</span><span class="o">()</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Foo</span>
-     <span class="o">|</span> <span class="o">}</span>
-<span class="n">defined</span> <span class="n">module</span> <span class="nc">FooMaker</span>
+scala&gt; object FooMaker {
+     |   def apply() = new Foo
+     | }
+defined module FooMaker
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">newFoo</span> <span class="k">=</span> <span class="nc">FooMaker</span><span class="o">()</span> <span class="c1">//没有new
-</span><span class="n">newFoo</span><span class="k">:</span> <span class="kt">Foo</span> <span class="o">=</span> <span class="nc">Foo</span><span class="k">@</span><span class="mi">5</span><span class="n">b83f762</span>
+scala&gt; val newFoo = FooMaker() //没有new
+newFoo: Foo = Foo@5b83f762
 </code></pre>
-</div>
 
 <p>或者：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">Bar</span> <span class="o">{</span>
-     <span class="o">|</span>   <span class="k">def</span> <span class="n">apply</span><span class="o">()</span> <span class="k">=</span> <span class="mi">0</span>
-     <span class="o">|</span> <span class="o">}</span>
-<span class="n">defined</span> <span class="k">class</span> <span class="nc">Bar</span>
+<pre><code class="language-scala">scala&gt; class Bar {
+     |   def apply() = 0
+     | }
+defined class Bar
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">bar</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Bar</span>
-<span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span> <span class="o">=</span> <span class="nc">Bar</span><span class="k">@</span><span class="mi">47711479</span>
+scala&gt; val bar = new Bar
+bar: Bar = Bar@47711479
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">bar</span><span class="o">()</span>
-<span class="n">res8</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+scala&gt; bar()
+res8: Int = 0
 </code></pre>
-</div>
 
 <h1 id="section-1">枚举</h1>
 
-<p>在Scala中并没有<code class="highlighter-rouge">枚举</code>类型，但在标准类库中提供了<code class="highlighter-rouge">Enumeration</code>类来获得枚举。扩展Enumeration类后，调用<code class="highlighter-rouge">Value</code>方法来初始化枚举中的可能值。</p>
+<p>在Scala中并没有<code>枚举</code>类型，但在标准类库中提供了<code>Enumeration</code>类来获得枚举。扩展Enumeration类后，调用<code>Value</code>方法来初始化枚举中的可能值。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">TrafficLightColor</span> <span class="k">extends</span> <span class="nc">Enumeration</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="nc">Red</span><span class="o">,</span> <span class="nc">Yellow</span><span class="o">,</span> <span class="nc">Green</span> <span class="k">=</span> <span class="nc">Value</span>
-<span class="o">}</span>
+<pre><code class="language-scala">object TrafficLightColor extends Enumeration {
+  val Red, Yellow, Green = Value
+}
 </code></pre>
-</div>
 
 <p>上述实例中代码可以改为下面这样，区别是：Value方法每次返回内部类Value的新实例。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="nc">Red</span> <span class="k">=</span> <span class="nc">Value</span>
-<span class="k">val</span> <span class="nc">Yellow</span> <span class="k">=</span> <span class="nc">Value</span>
-<span class="k">val</span> <span class="nc">Green</span> <span class="k">=</span> <span class="nc">Value</span>
+<pre><code class="language-scala">val Red = Value
+val Yellow = Value
+val Green = Value
 </code></pre>
-</div>
 
 <p>用Value方法初始化枚举类变量时，Value方法会返回内部类的新实例，且该内部类也叫Value。另外，在调用Value方法时，也可传入ID、名称两参数。如果未指定ID，默认从零开始，后面参数的ID是前一参数ID值加1。如果未指定名称，默认与属性字段同名。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">TrafficLight</span> <span class="k">extends</span> <span class="nc">Enumeration</span><span class="o">{</span>
-     <span class="k">val</span> <span class="nc">Red</span> <span class="k">=</span> <span class="nc">Value</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"Stop"</span><span class="o">)</span>
-     <span class="k">val</span> <span class="nc">Yellow</span> <span class="k">=</span> <span class="nc">Value</span><span class="o">(</span><span class="s">"Wait"</span><span class="o">)</span>    <span class="c1">//可以单独传名称
-</span>     <span class="k">val</span> <span class="nc">Green</span> <span class="k">=</span> <span class="nc">Value</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span> <span class="c1">//可以单独传ID
-</span><span class="o">}</span>
+<pre><code class="language-scala">object TrafficLight extends Enumeration{
+     val Red = Value(1, "Stop")
+     val Yellow = Value("Wait")    //可以单独传名称
+     val Green = Value(4) //可以单独传ID
+}
 </code></pre>
-</div>
 
 <p>上例中，Yellow属性就仅定义了名称，Green仅定义ID。</p>
 
-<p>参数在不指定名称时，默认参数的Value为字段名。枚举类型的值是 <code class="highlighter-rouge">对象名.Value</code> ，如上例中的枚举类型是 TrafficLight.Value。</p>
+<p>参数在不指定名称时，默认参数的Value为字段名。枚举类型的值是 <code>对象名.Value</code> ，如上例中的枚举类型是 TrafficLight.Value。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nc">TrafficLight</span><span class="o">.</span><span class="nc">Green</span>
-<span class="c1">//TrafficLight.Value = Green
-</span></code></pre>
-</div>
+<pre><code class="language-scala">TrafficLight.Green
+//TrafficLight.Value = Green
+</code></pre>
 
 <p>通过id方法获取枚举类型值的ID:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nc">TrafficLight</span><span class="o">.</span><span class="nc">Yellow</span><span class="o">.</span><span class="n">id</span>
-<span class="c1">//Int = 2
-</span></code></pre>
-</div>
+<pre><code class="language-scala">TrafficLight.Yellow.id
+//Int = 2
+</code></pre>
 
 <p>通过values方法获取所有枚举值的集合:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nc">TrafficLight</span><span class="o">.</span><span class="n">values</span>
-<span class="c1">//TrafficLight.ValueSet = TrafficLight.ValueSet(Stop, Wait, Green)
-</span></code></pre>
-</div>
+<pre><code class="language-scala">TrafficLight.values
+//TrafficLight.ValueSet = TrafficLight.ValueSet(Stop, Wait, Green)
+</code></pre>
 
 <p>通过ID来获取对应的枚举对象:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nc">TrafficLight</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-<span class="c1">//TrafficLight.Value = Stop
-</span></code></pre>
-</div>
+<pre><code class="language-scala">TrafficLight(1)
+//TrafficLight.Value = Stop
+</code></pre>
 
 <h1 id="section-2">参考文章</h1>
 
@@ -340,7 +325,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -117,51 +117,45 @@
 
 <p>c.分别修改每个虚拟机的ip，DHCP或手动设置</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>vim /etc/sysconfig/network-scripts/ifcfg-eth0
+<pre><code>vim /etc/sysconfig/network-scripts/ifcfg-eth0
 vim /etc/udev/rules.d/70-persistent-net.rules  #删掉第一个，修改第二个名字为eth0
 start_udev
 </code></pre>
-</div>
 
 <p>d.修改主机名</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>vim /etc/sysconfig/network
+<pre><code>vim /etc/sysconfig/network
 </code></pre>
-</div>
 
 <p>e.每个虚拟机中修改hosts：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>192.168.56.100 rhel-june
+<pre><code>192.168.56.100 rhel-june
 192.168.56.101 rhel-june-1
 192.168.56.102 rhel-june-2
 </code></pre>
-</div>
 
 <p>最后机器列表为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>rhel-june:   192.168.56.100
+<pre><code>rhel-june:   192.168.56.100
 rhel-june-1: 192.168.56.101
 rhel-june-2: 192.168.56.102
 </code></pre>
-</div>
 
 <h1 id="section-2">机群规划</h1>
 
 <p>版本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop:1.1.1
+<pre><code>hadoop:1.1.1
 JDK:1.6.0_38
 </code></pre>
-</div>
 
 <p>集群各节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>NameNode:192.168.56.100
+<pre><code>NameNode:192.168.56.100
 NameSecondary:192.168.56.100
 DataNode:192.168.56.101
 DataNode:192.168.56.102
 </code></pre>
-</div>
 
 <h1 id="section-3">安装过程</h1>
 
@@ -169,63 +163,55 @@ DataNode:192.168.56.102
 
 <p>b.修改以下配置文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>core-site.xml
+<pre><code>core-site.xml
 hdfs-site.sml
 mapred-site.xml
 </code></pre>
-</div>
 
 <p>c.设置master、slaves文件</p>
 
 <p>master中内容为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	192.168.56.100
+<pre><code>	192.168.56.100
 </code></pre>
-</div>
 
 <p>slaves中内容为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	192.168.56.101
+<pre><code>	192.168.56.101
 	192.168.56.102
 </code></pre>
-</div>
 
 <p>d.设置环境变量</p>
 
-<p>方便执行java命令及hadoop命令. 使用root登录，<code class="highlighter-rouge">vi ~/.bash_profile</code>追加下列信息</p>
+<p>方便执行java命令及hadoop命令. 使用root登录，<code>vi ~/.bash_profile</code>追加下列信息</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export JAVA_HOME=/opt/jdk1.6.0_38
+<pre><code>export JAVA_HOME=/opt/jdk1.6.0_38
 export HADOOP_INSTALL=/opt/hadoop-1.1.1
 export PATH=$PATH:$HADOOP_INSTALL/bin:$JAVA_HOME/bin
 </code></pre>
-</div>
 
-<p>e.修改hadoop脚本中<code class="highlighter-rouge">JAVA_HOME</code>：<code class="highlighter-rouge">/opt/hadoop-1.1.1/conf/hadoop-env.sh</code></p>
+<p>e.修改hadoop脚本中<code>JAVA_HOME</code>：<code>/opt/hadoop-1.1.1/conf/hadoop-env.sh</code></p>
 
 <p>f.格式化namenode</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop namenode -format
+<pre><code>hadoop namenode -format
 </code></pre>
-</div>
 
 <p>g.启动hdfs集群</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sh /opt/hadoop-1.1.1/bin/start-all.sh
+<pre><code>sh /opt/hadoop-1.1.1/bin/start-all.sh
 </code></pre>
-</div>
 
 <p>h.查看节点进程</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jps
+<pre><code>jps
 </code></pre>
-</div>
 
 <h1 id="section-4">查看状态</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://rhel-june:50030/
+<pre><code>http://rhel-june:50030/
 http://rhel-june:50070/
 </code></pre>
-</div>
 
 
                     <br/>
@@ -279,7 +265,7 @@ http://rhel-june:50070/
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

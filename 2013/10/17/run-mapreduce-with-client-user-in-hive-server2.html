@@ -123,23 +123,21 @@
 
 <p>如果你是以服务的方式启动hive-server2进程，则启动hive-server2的用户为hive,运行mapreduce的用户也为hive，启动脚本如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/etc/init.d/hive-server2 start
+<pre><code>/etc/init.d/hive-server2 start
 </code></pre>
-</div>
 
 <p>如果你以命令行方式启动hive-server2进程，则启动hive-server2的用户为root,运行mapreduce的用户也为root，启动脚本如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hive --service hiveserver2
+<pre><code>hive --service hiveserver2
 </code></pre>
-</div>
 
 <p>为什么是上面的结论？这要从hive-server2的启动过程开始说明。</p>
 
 <!-- more -->
 
-<p>查看HiveServer2.java的代码可以看到，hive-server2启动时会依次启动<code class="highlighter-rouge">cliService</code>和<code class="highlighter-rouge">thriftCLIService</code>，查看cliService的init()方法，可以看到如下代码：</p>
+<p>查看HiveServer2.java的代码可以看到，hive-server2启动时会依次启动<code>cliService</code>和<code>thriftCLIService</code>，查看cliService的init()方法，可以看到如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public synchronized void init(HiveConf hiveConf) {
+<pre><code>public synchronized void init(HiveConf hiveConf) {
     this.hiveConf = hiveConf;
 
     sessionManager = new SessionManager();
@@ -156,26 +154,23 @@
     super.init(hiveConf);
   }
 </code></pre>
-</div>
 
 <p>从上面的代码可以看到在cliService初始化过程中会做登陆（从kertab中登陆）和获取用户名的操作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ShimLoader.getHadoopShims().getUGIForConf(hiveConf)
+<pre><code>ShimLoader.getHadoopShims().getUGIForConf(hiveConf)
 </code></pre>
-</div>
 
 <p>上面代码最终会调用HadoopShimsSecure类的getUGIForConf方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@Override
+<pre><code>@Override
 public UserGroupInformation getUGIForConf(Configuration conf) throws IOException {
   return UserGroupInformation.getCurrentUser();
 }
 </code></pre>
-</div>
 
 <p>UserGroupInformation.getCurrentUser()代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> public synchronized
+<pre><code> public synchronized
   static UserGroupInformation getCurrentUser() throws IOException {
     AccessControlContext context = AccessController.getContext();
     Subject subject = Subject.getSubject(context);
@@ -186,11 +181,10 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
     }
   }
 </code></pre>
-</div>
 
-<p>因为这时候服务刚启动，subject为空，故if分支会调用<code class="highlighter-rouge">getLoginUser()</code>方法，其代码如下：</p>
+<p>因为这时候服务刚启动，subject为空，故if分支会调用<code>getLoginUser()</code>方法，其代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  public synchronized 
+<pre><code>  public synchronized 
   static UserGroupInformation getLoginUser() throws IOException {
     if (loginUser == null) {
       try {
@@ -231,35 +225,34 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
     return loginUser;
   }
 </code></pre>
-</div>
 
 <p>因为是第一次调用getLoginUser(),故loginUser为空，接下来会创建LoginContext并调用其login方法，login方法最终会调用HadoopLoginModule的commit()方法。</p>
 
 <p>下图是从hive-server2启动到执行HadoopLoginModule的commit()方法的调用图：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2013/hive-server2-invoke.png" alt="hive-server2启动过程" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/hive-server2-invoke.png" alt="hive-server2启动过程" /></p>
 
 <p>获取登陆用户的关键代码就在commit()，逻辑如下：</p>
 
 <ul>
   <li>如果使用了kerberos，则为kerberos登陆用户。hive-server2中如何使用kerberos登陆，请查看官方文档。</li>
-  <li>如果kerberos用户为空并且没有开启security，则从系统环境变量中取<code class="highlighter-rouge">HADOOP_USER_NAME</code>的值</li>
-  <li>如果环境变量中没有设置<code class="highlighter-rouge">HADOOP_USER_NAME</code>，则使用系统用户，即启动hive-server2进程的用户。</li>
+  <li>如果kerberos用户为空并且没有开启security，则从系统环境变量中取<code>HADOOP_USER_NAME</code>的值</li>
+  <li>如果环境变量中没有设置<code>HADOOP_USER_NAME</code>，则使用系统用户，即启动hive-server2进程的用户。</li>
 </ul>
 
 <h2 id="section-1">小结</h2>
 
-<p>hive-server2启动过程中会做登陆操作并获取到登陆用户，启动之后再次调用<code class="highlighter-rouge">UserGroupInformation.getCurrentUser()</code>取到的用户就为登陆用户了，这样会导致所有请求到hive-server2的hql最后都会以这个用户来运行mapreduce。</p>
+<p>hive-server2启动过程中会做登陆操作并获取到登陆用户，启动之后再次调用<code>UserGroupInformation.getCurrentUser()</code>取到的用户就为登陆用户了，这样会导致所有请求到hive-server2的hql最后都会以这个用户来运行mapreduce。</p>
 
 <h1 id="hive">提交hive任务</h1>
 
 <p>现在来看hive任务是怎么提交到yarn服务端然后运行mapreduce的。</p>
 
-<p>为了调试简单，我在本机eclipse的hive源代码中配置<code class="highlighter-rouge">hive-site.xml、core-site.xml、mapred.xml、yarn-site.xml</code>连接测试集群,添加缺少的yarn依赖并解决hive-builtins中报错的问题，然后运行HiveServer2类的main方法。<em>注意</em>，我的电脑当前登陆用户为june，故启动hive-server2的用户为june。</p>
+<p>为了调试简单，我在本机eclipse的hive源代码中配置<code>hive-site.xml、core-site.xml、mapred.xml、yarn-site.xml</code>连接测试集群,添加缺少的yarn依赖并解决hive-builtins中报错的问题，然后运行HiveServer2类的main方法。<em>注意</em>，我的电脑当前登陆用户为june，故启动hive-server2的用户为june。</p>
 
 <p>然后，在运行jdbc测试类，运行一个简单的sql语句，大概如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public static void test() {
+<pre><code>public static void test() {
 	try {
 		Class.forName("org.apache.hive.jdbc.HiveDriver");
 
@@ -283,25 +276,23 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
 	}
 }
 </code></pre>
-</div>
 
-<p>查看yarn监控地址<code class="highlighter-rouge">http://192.168.56.101:8088/cluster</code>，可以看到提交的mapreduce任务由june用户来运行。</p>
+<p>查看yarn监控地址<code>http://192.168.56.101:8088/cluster</code>，可以看到提交的mapreduce任务由june用户来运行。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2013/20131017-01.png" alt="yarn cluster monitor page" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/20131017-01.png" alt="yarn cluster monitor page" /></p>
 
-<p>如何修改mapreduce任务的运行用户呢？如果了解hive提交mapreduce任务的过程的话，就应该知道hive任务会通过<code class="highlighter-rouge">org.apache.hadoop.mapred.JobClient</code>来提交。在JobClient的init方法中有如下代码：</p>
+<p>如何修改mapreduce任务的运行用户呢？如果了解hive提交mapreduce任务的过程的话，就应该知道hive任务会通过<code>org.apache.hadoop.mapred.JobClient</code>来提交。在JobClient的init方法中有如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  public void init(JobConf conf) throws IOException {
+<pre><code>  public void init(JobConf conf) throws IOException {
     setConf(conf);
     cluster = new Cluster(conf);
     clientUgi = UserGroupInformation.getCurrentUser();
   }
 </code></pre>
-</div>
 
 <p>JobClient类中提交mapreduce任务的代码如下，见submitJobInternal方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Job job = clientUgi.doAs(new PrivilegedExceptionAction&lt;Job&gt; () {
+<pre><code>Job job = clientUgi.doAs(new PrivilegedExceptionAction&lt;Job&gt; () {
 	@Override
 	public Job run() throws IOException, ClassNotFoundException, 
 	  InterruptedException {
@@ -311,7 +302,6 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
 	}
 });
 </code></pre>
-</div>
 
 <p>从前面知道，hive-server2启动中会进行登陆操作并且登陆用户为june，故clientUgi对应的登陆用户也为june，故提交的mapreduce任务也通过june用户来运行。</p>
 
@@ -319,7 +309,7 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
 
 <p>从上面代码可以知道，修改clientUgi的获取方式就可以改变提交任务的用户。UserGroupInformation中存在如下静态方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  public static UserGroupInformation createRemoteUser(String user) {
+<pre><code>  public static UserGroupInformation createRemoteUser(String user) {
     if (user == null || "".equals(user)) {
       throw new IllegalArgumentException("Null user");
     }
@@ -330,11 +320,10 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
     return result;
   }
 </code></pre>
-</div>
 
 <p>故可以尝试使用该方法，修改JobClient的init方法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> public void init(JobConf conf) throws IOException {
+<pre><code> public void init(JobConf conf) throws IOException {
     setConf(conf);
     cluster = new Cluster(conf);
     if(UserGroupInformation.isSecurityEnabled()){
@@ -345,7 +334,6 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
     }
   }
 </code></pre>
-</div>
 
 <p>上面代码是在没有开启security的情况下，从环境变量（myExecuteName）获取jdbc客户端指定的用户名，然后创建一个远程的UserGroupInformation。</p>
 
@@ -356,15 +344,15 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
   <li>没有使用jdbc连接信息中的用户，是因为这样会导致每次获取jdbc连接的时候都要指定用户名，这样就没法使用已有的连接池。</li>
 </ol>
 
-<p>编译代码、替换class文件，然后重新运行HiveServer2以及jdbc测试类，查看yarn监控地址<code class="highlighter-rouge">http://192.168.56.101:8088/cluster</code>，截图如下：</p>
+<p>编译代码、替换class文件，然后重新运行HiveServer2以及jdbc测试类，查看yarn监控地址<code>http://192.168.56.101:8088/cluster</code>，截图如下：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2013/20131017-02.png" alt="yarn cluster monitor page" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/20131017-02.png" alt="yarn cluster monitor page" /></p>
 
 <p>这时候mapreduce的运行用户变为NoName，这是因为从JobConf环境变量中找不到myExecuteName变量而使用默认值NoName的原因。</p>
 
 <p>查看hive-server2运行日志，会发现任务运行失败，关键异常信息如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Caused by: org.apache.hadoop.security.AccessControlException: Permission denied: user=NoName, access=WRITE, inode="/tmp/hive-june/hive_2013-10-18_21-18-12_812_378750610917949668/_tmp.-ext-10001":june:hadoop:drwxr-xr-x
+<pre><code>Caused by: org.apache.hadoop.security.AccessControlException: Permission denied: user=NoName, access=WRITE, inode="/tmp/hive-june/hive_2013-10-18_21-18-12_812_378750610917949668/_tmp.-ext-10001":june:hadoop:drwxr-xr-x
 	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.check(FSPermissionChecker.java:224)
 	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.check(FSPermissionChecker.java:204)
 	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:149)
@@ -377,24 +365,22 @@ public UserGroupInformation getUGIForConf(Configuration conf) throws IOException
 	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.rename(NameNodeRpcServer.java:610)
 	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.rename
 </code></pre>
-</div>
 
 <p>出现上述异常是因为，mapreduce任务在运行过程中会生成一些临时文件，而NoName用户对临时文件没有写的权限，这些临时文件属于june用户。查看hdfs文件如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@edh1 lib]# hadoop fs -ls /tmp/
+<pre><code>[root@edh1 lib]# hadoop fs -ls /tmp/
 Found 6 items
 drwx------   - june hadoop          0 2013-10-15 01:33 /tmp/hadoop-yarn
 drwxr-xr-x   - june hadoop          0 2013-10-16 06:52 /tmp/hive-june
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">/tmp/hive-june</code>是hive执行过程中保存在hdfs的路径，由<code class="highlighter-rouge">hive.exec.scratchdir</code>定义，其默认值为<code class="highlighter-rouge">/tmp/hive-${user.name}</code>，而且这个文件是在<code class="highlighter-rouge">org.apache.hadoop.hive.ql.Context</code>类的构造方法中获取并在ExecDriver类的execute(DriverContext driverContext)方法中创建的。</p>
+<p><code>/tmp/hive-june</code>是hive执行过程中保存在hdfs的路径，由<code>hive.exec.scratchdir</code>定义，其默认值为<code>/tmp/hive-${user.name}</code>，而且这个文件是在<code>org.apache.hadoop.hive.ql.Context</code>类的构造方法中获取并在ExecDriver类的execute(DriverContext driverContext)方法中创建的。</p>
 
-<p>类似这样的权限问题还会出现在hdfs文件<code class="highlighter-rouge">重命名、删除临时目录的时候</code>。为了避免出现这样的异常，需要修改<code class="highlighter-rouge">hive.exec.scratchdir</code>为当前用户对应的临时目录路径，并使用当前登陆用户创建、重命名、删除临时目录。</p>
+<p>类似这样的权限问题还会出现在hdfs文件<code>重命名、删除临时目录的时候</code>。为了避免出现这样的异常，需要修改<code>hive.exec.scratchdir</code>为当前用户对应的临时目录路径，并使用当前登陆用户创建、重命名、删除临时目录。</p>
 
-<p>修改获取<code class="highlighter-rouge">hive.exec.scratchdir</code>对应的临时目录代码如下，在Context类的够找方法中修改：</p>
+<p>修改获取<code>hive.exec.scratchdir</code>对应的临时目录代码如下，在Context类的够找方法中修改：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    String user = conf.get(myExecuteName，“”);
+<pre><code>    String user = conf.get(myExecuteName，“”);
 
     if (user != null &amp;&amp; user.trim().length() &gt; 0) {
       nonLocalScratchPath =
@@ -405,23 +391,21 @@ drwxr-xr-x   - june hadoop          0 2013-10-16 06:52 /tmp/hive-june
               executionId);
     }
 </code></pre>
-</div>
 
 <p>找到这些操作对应的代码似乎太过复杂了，修改的地方也有很多，因为这里是使用的hive-server2，故在对应的jdbc代码中修改似乎会简单很多，例如修改HiveSessionImpl类的以下三个方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public OperationHandle executeStatement(String statement, Map&lt;String, String&gt; confOverlay) throws HiveSQLException{}
+<pre><code>public OperationHandle executeStatement(String statement, Map&lt;String, String&gt; confOverlay) throws HiveSQLException{}
 
 public void cancelOperation(final OperationHandle opHandle) throws HiveSQLException {}
 
 public void closeOperation(final OperationHandle opHandle) throws HiveSQLException {}
 </code></pre>
-</div>
 
 <p>第一个方法是运行sql语句，第二个方法是取消运行，第三个方法是关闭连接。</p>
 
-<p>executeStatement中所做的修改如下，将<code class="highlighter-rouge">operation.run();</code>改为：</p>
+<p>executeStatement中所做的修改如下，将<code>operation.run();</code>改为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    if (operation instanceof SQLOperation) {
+<pre><code>    if (operation instanceof SQLOperation) {
         try {
           String user = hiveConf.getVar(ConfVars.HIVE_SERVER2_MAPREDUCE_USERNAME);
           ugi = UserGroupInformation.createRemoteUser(user);
@@ -441,13 +425,12 @@ public void closeOperation(final OperationHandle opHandle) throws HiveSQLExcepti
         operation.run();
       }
 </code></pre>
-</div>
 
 <p>这里添加了判断，当operation操作时，才执行下面代码，这是为了保证从hive环境变量中获取myExecuteName的值不为空时才创建UserGroupInformation。</p>
 
 <p>myExecuteName是新定义的hive变量，主要是用于jdbc客户端通过set语句设置myExecuteName的值为当前登陆用户名称，然后在执行sql语句。代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Statement stmt = conn.createStatement();
+<pre><code>Statement stmt = conn.createStatement();
 
 stmt.execute("set myExecuteName=aaaa");
 ResultSet rs = stmt.executeQuery("select count(1) from t");
@@ -455,22 +438,20 @@ ResultSet rs = stmt.executeQuery("select count(1) from t");
 while (rs.next())
 	System.out.println(rs.getString(1));
 </code></pre>
-</div>
 
 <h2 id="section-4">小结</h2>
 
 <p>上面修改的类包括：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>org.apache.hadoop.mapred.JobClient //从环境变量获取从jdbc客户端传过来的用户，即myExecuteName的值，然后以该值运行mapreduce用户
+<pre><code>org.apache.hadoop.mapred.JobClient //从环境变量获取从jdbc客户端传过来的用户，即myExecuteName的值，然后以该值运行mapreduce用户
 org.apache.hadoop.hive.ql.Context  //修改hive.exec.scratchdir的地址为从jdbc客户端传过来的用户对应的临时目录
 org.apache.hive.service.cli.session.HiveSessionImpl //修改运行sql、取消操作、关闭连接对应的方法
 </code></pre>
-</div>
 
 <h1 id="section-5">测试</h1>
 <p>是用javachen用户测试,hdfs上的临时目录如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@edh1 lib]# hadoop fs -ls /tmp/
+<pre><code>[root@edh1 lib]# hadoop fs -ls /tmp/
 Found 7 items
 drwx------   - june         hadoop          0 2013-10-15 01:33 /tmp/hadoop-yarn
 drwxr-xr-x   - javachen.com hadoop          0 2013-10-16 07:30 /tmp/hive-javachen.com
@@ -478,11 +459,10 @@ drwxr-xr-x   - june         hadoop          0 2013-10-16 06:52 /tmp/hive-june
 drwxr-xr-x   - root         hadoop          0 2013-10-15 14:13 /tmp/hive-root
 drwxrwxrwt   - yarn         mapred          0 2013-10-16 07:30 /tmp/logs
 </code></pre>
-</div>
 
 <p>监控页面截图：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2013/20131017-03.png" alt="yarn cluster monitor page" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/20131017-03.png" alt="yarn cluster monitor page" /></p>
 
 <p>除了简单测试之外，还需要测试修改后的代码是否影响源代码的运行以及hive cli的运行。</p>
 
@@ -547,7 +527,7 @@ drwxrwxrwt   - yarn         mapred          0 2013-10-16 07:30 /tmp/logs
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

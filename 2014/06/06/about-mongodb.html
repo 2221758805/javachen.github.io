@@ -117,7 +117,7 @@
 
 <p>存储在集合中的文档，被存储为键-值对的形式。键用于唯一标识一个文档，为字符串类型，而值则可以是各中复杂的文件类型。我们称这种存储形式为BSON（Binary Serialized dOcument Format）。</p>
 
-<p>MongoDB 把数据存储在文件中（默认路径为：<code class="highlighter-rouge">/data/db</code>），为提高效率使用内存映射文件进行管理。MongoDB的主要目标是在键/值存储方式（提供了高性能和高度伸缩性）以及传统的 RDBMS 系统（丰富的功能）架起一座桥梁，集两者的优势于一身。</p>
+<p>MongoDB 把数据存储在文件中（默认路径为：<code>/data/db</code>），为提高效率使用内存映射文件进行管理。MongoDB的主要目标是在键/值存储方式（提供了高性能和高度伸缩性）以及传统的 RDBMS 系统（丰富的功能）架起一座桥梁，集两者的优势于一身。</p>
 
 <p>根据官方网站的描述，Mongo 适合用于以下场景：</p>
 
@@ -143,9 +143,8 @@
 
 <p>如果你使用的时mac系统，你可以通过 brewhome 来安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ brew install mongodb
+<pre><code>$ brew install mongodb
 </code></pre>
-</div>
 
 <h1 id="mongodb-2">MongoDB的管理</h1>
 
@@ -155,18 +154,17 @@
 
 <p>通过执行mongod来启动MongoDB服务器:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ mongod
+<pre><code>$ mongod
 </code></pre>
-</div>
 
-<p>mongod有很多的配置启动选项的，可以通过<code class="highlighter-rouge">mongod --help</code>来查看，其中有一些主要的选项：</p>
+<p>mongod有很多的配置启动选项的，可以通过<code>mongod --help</code>来查看，其中有一些主要的选项：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">--dbpath</code>：指定数据目录，默认是<code class="highlighter-rouge">/data/db/</code>。每个mongod进程都需要独立的目录，启动mongod时就会在数据目录中创建mongod.lock文件，防止其他mongod进程使用该数据目录。</li>
-  <li><code class="highlighter-rouge">--port</code>：指定服务器监听的端口，默认是<code class="highlighter-rouge">27017</code>。</li>
-  <li><code class="highlighter-rouge">--fork</code>：以守护进程的方式运行MongoDB。</li>
-  <li><code class="highlighter-rouge">--logpath</code>：指定日志输出路径，如果不指定则会在终端输出。每次启动都会覆盖原来的日志，如果不想覆盖就要用<code class="highlighter-rouge">--logappend</code>选项。</li>
-  <li><code class="highlighter-rouge">--config</code>：指定配置文件，加载命令行未指定的各种选项。我们可以讲我们需要用到的选项写在某个文件中，然后通过该选项来指定这个文件就不必每次启动mongod时都要写。</li>
+  <li><code>--dbpath</code>：指定数据目录，默认是<code>/data/db/</code>。每个mongod进程都需要独立的目录，启动mongod时就会在数据目录中创建mongod.lock文件，防止其他mongod进程使用该数据目录。</li>
+  <li><code>--port</code>：指定服务器监听的端口，默认是<code>27017</code>。</li>
+  <li><code>--fork</code>：以守护进程的方式运行MongoDB。</li>
+  <li><code>--logpath</code>：指定日志输出路径，如果不指定则会在终端输出。每次启动都会覆盖原来的日志，如果不想覆盖就要用<code>--logappend</code>选项。</li>
+  <li><code>--config</code>：指定配置文件，加载命令行未指定的各种选项。我们可以讲我们需要用到的选项写在某个文件中，然后通过该选项来指定这个文件就不必每次启动mongod时都要写。</li>
 </ul>
 
 <p>2).数据备份</p>
@@ -177,37 +175,34 @@
 
 <p>b. mongodump和mongorestore</p>
 
-<p>bin 中还有 mongodump 和 mongorestore 两个可执行文件，这个是对MongoDB的某个数据库进行备份，可以在MongoDB正在运行时进行备份，比如备份test数据库，然后将备份的数据库文件再倒入别的MongoDB服务器上。这种备份的方式备份的不是最新数据，只是已经写入MongoDB中的数据，可能还有的数据在缓存中没有写入，那么这部分数据就是备份不到的。mongodump和mongorestore也可以通过<code class="highlighter-rouge">--help</code>查询所有选项。</p>
+<p>bin 中还有 mongodump 和 mongorestore 两个可执行文件，这个是对MongoDB的某个数据库进行备份，可以在MongoDB正在运行时进行备份，比如备份test数据库，然后将备份的数据库文件再倒入别的MongoDB服务器上。这种备份的方式备份的不是最新数据，只是已经写入MongoDB中的数据，可能还有的数据在缓存中没有写入，那么这部分数据就是备份不到的。mongodump和mongorestore也可以通过<code>--help</code>查询所有选项。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mongodump -d text -o test_db
+<pre><code class="language-bash">$ mongodump -d text -o test_db
 connected to: 127.0.0.1
 2014-06-06T12:54:59.741+0800 DATABASE: text	 to 	test_db/text
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">-d</code>是指定数据库，<code class="highlighter-rouge">-o</code>是输出备份文件，上面将 test 数据库备份为 test_db 文件。</p>
+<p><code>-d</code>是指定数据库，<code>-o</code>是输出备份文件，上面将 test 数据库备份为 test_db 文件。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mongorestore --port 27017 -d temple --drop test_db/test/
+<pre><code class="language-bash">$ mongorestore --port 27017 -d temple --drop test_db/test/
 </code></pre>
-</div>
 
-<p>这里将上面备份出来的 test 数据库现在重新导入到 temple 数据库，<code class="highlighter-rouge">--drop</code>代表如果有了 temple 数据库则将其中的所有集合删除，不指定就会和原来 temple 中的集合合并。</p>
+<p>这里将上面备份出来的 test 数据库现在重新导入到 temple 数据库，<code>--drop</code>代表如果有了 temple 数据库则将其中的所有集合删除，不指定就会和原来 temple 中的集合合并。</p>
 
 <p>c. mongoexport和mongoimport</p>
 
-<p>备份某个数据库中的某个表，同样可以通过<code class="highlighter-rouge">--help</code>来查看所有的选项，当然mongoexport也是可以不统计的备份，但是却不一定是最新数据。</p>
+<p>备份某个数据库中的某个表，同样可以通过<code>--help</code>来查看所有的选项，当然mongoexport也是可以不统计的备份，但是却不一定是最新数据。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ mongoexport --port 27017 -d zhihu -c zh_user -o zh_user 
+<pre><code>$ mongoexport --port 27017 -d zhihu -c zh_user -o zh_user 
 $ mongoimport --port 9352 -d temple -c user zh_user
 </code></pre>
-</div>
-<p><code class="highlighter-rouge">-c</code>表示 collection 集合，上面将 zhihu 库中的 zh_user 集合备份出来为 zh_user 文件，然后再导入到 temple 库中的user集合。</p>
+<p><code>-c</code>表示 collection 集合，上面将 zhihu 库中的 zh_user 集合备份出来为 zh_user 文件，然后再导入到 temple 库中的user集合。</p>
 
 <p>d. sync和锁</p>
 
 <p>mongodump和mongoexport对都可以不停MongoDB服务器来进行备份，但是却失去了获取实时数据的能力，而fsync命令也能在不停MongoDB的情况下备份实时数据，它的实现其实就是上锁，阻止对数据库的写入操作，然后将缓冲区的数据写入磁盘，备份后再解锁。在这个期间，任何对数据库的写入操作都会阻塞，直到锁被释放。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; db.runCommand({"fsync" : 1, "lock" : 1})
+<pre><code>&gt; db.runCommand({"fsync" : 1, "lock" : 1})
 {
         "info" : "now locked against writes, use db.fsyncUnlock() to unlock",
         "seeAlso" : "http://dochub.mongodb.org/core/fsynccommand",
@@ -219,7 +214,6 @@ $ mongoimport --port 9352 -d temple -c user zh_user
 &gt; db.fsyncUnlock()
 { "ok" : 1, "info" : "unlock completed" }
 </code></pre>
-</div>
 
 <h1 id="section">数据类型</h1>
 
@@ -228,22 +222,22 @@ $ mongoimport --port 9352 -d temple -c user zh_user
 <p>下面是MongoDB的支持的数据类型：</p>
 
 <ul>
-  <li>null    null用于表示空值或者不存在的字段。 <code class="highlighter-rouge"><span class="p">{</span><span class="nt">"x"</span><span class="p">:</span><span class="kc">null</span><span class="p">}</span></code></li>
-  <li>布尔   布尔类型有两个值’true’和’false1’。 <code class="highlighter-rouge"><span class="p">{</span><span class="nt">"X"</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span></code></li>
+  <li>null    null用于表示空值或者不存在的字段。 <code>{"x":null}</code></li>
+  <li>布尔   布尔类型有两个值’true’和’false1’。 <code>{"X":true}</code></li>
   <li>32位整数  类型不可用。JavaScript仅支持64位浮点数，所以32位整数会被自动转换。</li>
   <li>64位整数  不支持这个类型。shell会使用一个特殊的内嵌文档来显示64位整数。</li>
-  <li>64位浮点数  shell中的数字都是这种类型。下面的表示都是浮点数： <code class="highlighter-rouge"><span class="p">{</span><span class="nt">"X"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">3.1415926</span><span class="p">}</span><span class="w"> </span><span class="p">{</span><span class="nt">"X"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span></code></li>
-  <li>字符串   UTF-8字符串都可表示为字符串类型的数据： <code class="highlighter-rouge"><span class="p">{</span><span class="nt">"x"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"foobar"</span><span class="p">}</span></code></li>
+  <li>64位浮点数  shell中的数字都是这种类型。下面的表示都是浮点数： <code>{"X" : 3.1415926} {"X" : 3}</code></li>
+  <li>字符串   UTF-8字符串都可表示为字符串类型的数据： <code>{"x" : "foobar"}</code></li>
   <li>符号  不支持这种类型。shell将数据库里的符号类型转换成字符串。</li>
-  <li>对象id  对象id是文档的12字节的唯一ID：<code class="highlighter-rouge"><span class="p">{</span><span class="nt">"_id"</span><span class="p">:</span><span class="err">ObjectId()</span><span class="w"> </span><span class="p">}</span></code></li>
-  <li>日期  日期类型存储的是从标准纪元开始的毫秒数。不存储时区： <code class="highlighter-rouge"><span class="p">{</span><span class="nt">"X"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">new</span><span class="w"> </span><span class="err">Date()</span><span class="p">}</span></code></li>
-  <li>正则表达式  文档中可以包含正则表达式，采用JavaScript的正则表达式语法：<code class="highlighter-rouge"><span class="p">{</span><span class="nt">"x"</span><span class="p">:</span><span class="w"> </span><span class="err">/foobar/i</span><span class="p">}</span></code></li>
-  <li>代码  文档中还可以包含JavaScript代码：<code class="highlighter-rouge"><span class="p">{</span><span class="nt">"x"</span><span class="p">:</span><span class="w"> </span><span class="err">function()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">/*</span><span class="w"> </span><span class="err">……</span><span class="w"> </span><span class="err">*/</span><span class="w"> </span><span class="p">}}</span></code></li>
+  <li>对象id  对象id是文档的12字节的唯一ID：<code>{"_id":ObjectId() }</code></li>
+  <li>日期  日期类型存储的是从标准纪元开始的毫秒数。不存储时区： <code>{"X" : new Date()}</code></li>
+  <li>正则表达式  文档中可以包含正则表达式，采用JavaScript的正则表达式语法：<code>{"x": /foobar/i}</code></li>
+  <li>代码  文档中还可以包含JavaScript代码：<code>{"x": function() { /* …… */ }}</code></li>
   <li>二进制数据  二进制数据可以由任意字节的串组成。不过shell中无法使用。</li>
   <li>最大值  BSON包括一个特殊类型，表示可能的最大值。shell中没有这个类型。</li>
   <li>最小值  BSON包括一个特殊类型，表示可能的最小值。shell中没有这个类型。</li>
-  <li>未定义  文档中也可以使用未定义类型：<code class="highlighter-rouge"><span class="p">{</span><span class="nt">"x"</span><span class="p">:</span><span class="err">undefined</span><span class="p">}</span></code></li>
-  <li>数组  值的集合或者列表可以表示成数组：<code class="highlighter-rouge"><span class="p">{</span><span class="nt">"x"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"a"</span><span class="p">,</span><span class="w"> </span><span class="s2">"b"</span><span class="p">,</span><span class="w"> </span><span class="s2">"c"</span><span class="p">]}</span></code></li>
+  <li>未定义  文档中也可以使用未定义类型：<code>{"x":undefined}</code></li>
+  <li>数组  值的集合或者列表可以表示成数组：<code>{"x" : ["a", "b", "c"]}</code></li>
   <li>内嵌文档  文档可以包含别的文档，也可以作为值嵌入到父文档中，数据可以组织得更自然些，不用非得存成扁平结构的：{“x” : {“food” ： “noodle”}}</li>
 </ul>
 
@@ -251,9 +245,8 @@ $ mongoimport --port 9352 -d temple -c user zh_user
 
 <p>由于MongoDB中不同文档的同一个key的value数据类型可以不同，当我们根据某个key查询的时候会发生不同数据类型之间的比较。所以MongoDB内部设定了数据类型间的大小，顺序如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>最小值&lt;null&lt;数字(32位整数、63位整形、64位浮点数)&lt;字符串&lt;对象/文档&lt;数组&lt;二进制数据&lt;对象ID&lt;布尔型&lt;日期型&lt;时间戳&lt;正则&lt;最大值
+<pre><code>最小值&lt;null&lt;数字(32位整数、63位整形、64位浮点数)&lt;字符串&lt;对象/文档&lt;数组&lt;二进制数据&lt;对象ID&lt;布尔型&lt;日期型&lt;时间戳&lt;正则&lt;最大值
 </code></pre>
-</div>
 
 <h1 id="section-1">参考资料</h1>
 
@@ -313,7 +306,7 @@ $ mongoimport --port 9352 -d temple -c user zh_user
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

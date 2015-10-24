@@ -113,7 +113,7 @@
   <li>每个节点配置hosts</li>
   <li>每个节点配置时钟同步</li>
   <li>如果没有特殊要求，关闭防火墙</li>
-  <li>hadoop需要在<code class="highlighter-rouge">/tmp</code>目录下存放一些日志和临时文件，要求<code class="highlighter-rouge">/tmp</code>目录权限必须为<code class="highlighter-rouge">1777</code></li>
+  <li>hadoop需要在<code>/tmp</code>目录下存放一些日志和临时文件，要求<code>/tmp</code>目录权限必须为<code>1777</code></li>
 </ol>
 
 <hr />
@@ -122,19 +122,17 @@
 
 <h1 id="intelhadoopidh">使用intel的hadoop发行版IDH过程遇到问题：</h1>
 
-<p>1、 IDH集群中需要配置管理节点到集群各节点的无密码登录，公钥文件存放路径为<code class="highlighter-rouge">/etc/intelcloud</code>目录下，文件名称为<code class="highlighter-rouge">idh-id_rsa</code>。</p>
+<p>1、 IDH集群中需要配置管理节点到集群各节点的无密码登录，公钥文件存放路径为<code>/etc/intelcloud</code>目录下，文件名称为<code>idh-id_rsa</code>。</p>
 
 <p>如果在管理界面发现不能启动/停止hadoop组件的进程，请检查ssh无密码登录是否有问题。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i /etc/intelcloud/idh-id_rsa nodeX
+<pre><code>ssh -i /etc/intelcloud/idh-id_rsa nodeX
 </code></pre>
-</div>
 
 <p>如果存在问题，请重新配置无密码登录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>scp -i /etc/intelcloud/idh-id_rsa nodeX
+<pre><code>scp -i /etc/intelcloud/idh-id_rsa nodeX
 </code></pre>
-</div>
 
 <p>2、 IDH使用puppt和shell脚本来管理hadoop集群，shell脚本中有一处调用puppt的地方存在问题，详细说明待整理！！</p>
 
@@ -146,52 +144,46 @@
 
 <p>1、 在hive运行过程中会打印如下日志</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Starting Job = job_1374551537478_0001, Tracking URL = http://june-fedora:8088/proxy/application_1374551537478_0001/
+<pre><code>Starting Job = job_1374551537478_0001, Tracking URL = http://june-fedora:8088/proxy/application_1374551537478_0001/
 Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1374551537478_0001
 </code></pre>
-</div>
 
-<p>通过上面的<code class="highlighter-rouge">kill command</code>可以killjob，但是运行过程中发现提示错误，错误原因：<code class="highlighter-rouge">HADOOP_LIBEXEC_DIR</code>未做设置</p>
+<p>通过上面的<code>kill command</code>可以killjob，但是运行过程中发现提示错误，错误原因：<code>HADOOP_LIBEXEC_DIR</code>未做设置</p>
 
 <p>解决方法：在hadoop-env.sh中添加如下代码</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export HADOOP_LIBEXEC_DIR=$HADOOP_COMMON_HOME/libexec
+<pre><code>export HADOOP_LIBEXEC_DIR=$HADOOP_COMMON_HOME/libexec
 </code></pre>
-</div>
 
 <p>2、 查看java进程中发现，JVM参数中-Xmx重复出现</p>
 
-<p>解决办法：<code class="highlighter-rouge">/etc/hadoop/conf/hadoop-env.sh</code>去掉第二行。</p>
+<p>解决办法：<code>/etc/hadoop/conf/hadoop-env.sh</code>去掉第二行。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true $HADOOP_OPTS"
+<pre><code>export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true $HADOOP_OPTS"
 </code></pre>
-</div>
 
 <p>3、 hive中mapreduce运行为本地模式，而不是远程模式</p>
 
-<p>解决办法：<code class="highlighter-rouge">/etc/hadoop/conf/hadoop-env.sh</code>设置<code class="highlighter-rouge">HADOOP_MAPRED_HOME</code>变量</p>
+<p>解决办法：<code>/etc/hadoop/conf/hadoop-env.sh</code>设置<code>HADOOP_MAPRED_HOME</code>变量</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export HADOOP_MAPRED_HOME=/usr/lib/hadoop-mapreduce
+<pre><code>export HADOOP_MAPRED_HOME=/usr/lib/hadoop-mapreduce
 </code></pre>
-</div>
 
 <p>4、 如何设置hive的jvm启动参数</p>
 
 <p>hive脚本运行顺序：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hive--&gt;hive-config.sh--&gt;hive-env.sh--&gt;hadoop-config.sh--&gt;hadoop-env.sh
+<pre><code>hive--&gt;hive-config.sh--&gt;hive-env.sh--&gt;hadoop-config.sh--&gt;hadoop-env.sh
 </code></pre>
-</div>
 
-<p>故如果hadoop-env.sh中设置了<code class="highlighter-rouge">HADOOP_HEAPSIZE</code>，则hive-env.sh中设置的无效</p>
+<p>故如果hadoop-env.sh中设置了<code>HADOOP_HEAPSIZE</code>，则hive-env.sh中设置的无效</p>
 
 <p>5、如何设置JOB_HISTORYSERVER的jvm参数</p>
 
-<p>在<code class="highlighter-rouge">/etc/hadoop/conf/hadoop-env.sh</code>添加如下代码：</p>
+<p>在<code>/etc/hadoop/conf/hadoop-env.sh</code>添加如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export HADOOP_JOB_HISTORYSERVER_HEAPSIZE=256
+<pre><code>export HADOOP_JOB_HISTORYSERVER_HEAPSIZE=256
 </code></pre>
-</div>
 
 
                     <br/>
@@ -249,7 +241,7 @@ Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1374551537478_0001
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

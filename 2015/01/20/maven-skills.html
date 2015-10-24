@@ -109,15 +109,13 @@
 
 <p>命令行创建 maven 项目：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn archetype:generate -DgroupId<span class="o">=</span>com.javachen.spark -DartifactId<span class="o">=</span>spark-examples -DarchetypeArtifactId<span class="o">=</span>maven-archetype-quickstart -DinteractiveMode<span class="o">=</span><span class="nb">false</span>
+<pre><code class="language-bash">$ mvn archetype:generate -DgroupId=com.javachen.spark -DartifactId=spark-examples -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 </code></pre>
-</div>
 
 <p>Maven安装本地jar到本地仓库，举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn install:install-file -DgroupId<span class="o">=</span>com.gemstone.gemfire -DartifactId<span class="o">=</span>gfsh -Dversion<span class="o">=</span>6.6 -Dpackaging<span class="o">=</span>jar -Dfile<span class="o">=</span>/backup/gfsh-6.6.jar
+<pre><code class="language-bash">$ mvn install:install-file -DgroupId=com.gemstone.gemfire -DartifactId=gfsh -Dversion=6.6 -Dpackaging=jar -Dfile=/backup/gfsh-6.6.jar
 </code></pre>
-</div>
 
 <p>解决m2e插件maven-dependency-plugin问题：</p>
 
@@ -226,7 +224,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

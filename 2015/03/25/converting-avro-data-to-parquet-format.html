@@ -113,11 +113,10 @@
 
 <p>准备文本数据 a.txt 为 CSV 格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1,2
+<pre><code>1,2
 3,4
 4,5
 </code></pre>
-</div>
 
 <p>准备 Avro 测试数据，可以参考 <a href="/2015/03/25/how-to-load-some-avro-data-into-spark.html">将Avro数据加载到Spark</a> 一文。</p>
 
@@ -127,59 +126,54 @@
 
 <p>在 Hive 中创建一个表并导入数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">create</span> <span class="k">table</span> <span class="n">mycsvtable</span> <span class="p">(</span><span class="n">x</span> <span class="n">int</span><span class="p">,</span> <span class="n">y</span> <span class="n">int</span><span class="p">)</span>
-<span class="k">row</span> <span class="n">format</span> <span class="n">delimited</span>
-<span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
-<span class="n">STORED</span> <span class="k">AS</span> <span class="n">TEXTFILE</span><span class="p">;</span>
+<pre><code class="language-sql">create table mycsvtable (x int, y int)
+row format delimited
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
 
-<span class="k">LOAD</span> <span class="k">DATA</span> <span class="k">LOCAL</span> <span class="n">INPATH</span> <span class="s1">'a.txt'</span> <span class="n">OVERWRITE</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="n">mycsvtable</span><span class="p">;</span>
+LOAD DATA LOCAL INPATH 'a.txt' OVERWRITE INTO TABLE mycsvtable;
 </code></pre>
-</div>
 
 <p>创建 Parquet 表并转换数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">create</span> <span class="k">table</span> <span class="n">myparquettable</span> <span class="p">(</span><span class="n">a</span> <span class="n">INT</span><span class="p">,</span> <span class="n">b</span> <span class="n">INT</span><span class="p">)</span>
-<span class="n">STORED</span> <span class="k">AS</span> <span class="n">PARQUET</span>
-<span class="k">LOCATION</span> <span class="s1">'/tmp/data'</span><span class="p">;</span>
+<pre><code class="language-sql">create table myparquettable (a INT, b INT)
+STORED AS PARQUET
+LOCATION '/tmp/data';
 
-<span class="k">insert</span> <span class="n">overwrite</span> <span class="k">table</span> <span class="n">myparquettable</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">mycsvtable</span><span class="p">;</span>
+insert overwrite table myparquettable select * from mycsvtable;
 </code></pre>
-</div>
 
 <p>查看 hdfs 上生成的 myparquettable 表的数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ hadoop fs -ls /tmp/data
+<pre><code>$ hadoop fs -ls /tmp/data
 Found 1 items
 -rwxrwxrwx   3 hive hadoop        331 2015-03-25 15:50 /tmp/data/000000_0
 </code></pre>
-</div>
 
 <p>在 hive 中查看 myparquettable 表的数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span> <span class="p">(</span><span class="k">default</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">myparquettable</span><span class="p">;</span>
-<span class="n">OK</span>
-<span class="n">myparquettable</span><span class="p">.</span><span class="n">a</span>  <span class="n">myparquettable</span><span class="p">.</span><span class="n">b</span>
-<span class="mi">1</span> <span class="mi">2</span>
-<span class="mi">3</span> <span class="mi">4</span>
-<span class="mi">4</span> <span class="mi">5</span>
-<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">149</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">3</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<pre><code class="language-sql">hive (default)&gt; select * from myparquettable;
+OK
+myparquettable.a  myparquettable.b
+1 2
+3 4
+4 5
+Time taken: 0.149 seconds, Fetched: 3 row(s)
 </code></pre>
-</div>
 
 <p>查看 /tmp/data/000000_0 文件的 schema ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop parquet.tools.Main schema /tmp/data/000000_0
-message hive_schema <span class="o">{</span>
+<pre><code class="language-bash">$ hadoop parquet.tools.Main schema /tmp/data/000000_0
+message hive_schema {
   optional int32 a;
   optional int32 b;
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>查看 /tmp/data/000000_0 文件的元数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop parquet.tools.Main meta /tmp/data/000000_0
-creator:     parquet-mr version 1.5.0-cdh5.2.0 <span class="o">(</span>build 8e266e052e423af5 <span class="o">[</span>more]...
+<pre><code class="language-bash">$ hadoop parquet.tools.Main meta /tmp/data/000000_0
+creator:     parquet-mr version 1.5.0-cdh5.2.0 (build 8e266e052e423af5 [more]...
 
 file schema: hive_schema
 --------------------------------------------------------------------------------
@@ -188,40 +182,35 @@ b:           OPTIONAL INT32 R:0 D:1
 
 row group 1: RC:3 TS:102
 --------------------------------------------------------------------------------
-a:            INT32 UNCOMPRESSED DO:0 FPO:4 SZ:51/51/1.00 VC:3 ENC:BIT <span class="o">[</span>more]...
-b:            INT32 UNCOMPRESSED DO:0 FPO:55 SZ:51/51/1.00 VC:3 ENC:BI <span class="o">[</span>more]...
+a:            INT32 UNCOMPRESSED DO:0 FPO:4 SZ:51/51/1.00 VC:3 ENC:BIT [more]...
+b:            INT32 UNCOMPRESSED DO:0 FPO:55 SZ:51/51/1.00 VC:3 ENC:BI [more]...
 </code></pre>
-</div>
 
 <h1 id="avro--parquet">将 Avro 转换为 Parquet</h1>
 
 <p>使用 <a href="/2015/03/25/how-to-load-some-avro-data-into-spark.html">将Avro数据加载到Spark</a>  中的 schema 和 json 数据，从 json 数据生成 avro 数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
 </code></pre>
-</div>
 
 <p>将 twitter.avsc 和 twitter.avro 上传到 hdfs：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -put twitter.avsc
-<span class="gp">$ </span>hadoop fs -put twitter.avro
+<pre><code class="language-bash">$ hadoop fs -put twitter.avsc
+$ hadoop fs -put twitter.avro
 </code></pre>
-</div>
 
 <p>使用 https://github.com/laserson/avro2parquet 将 avro 转换为 parquet 格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop jar avro2parquet.jar twitter.avsc  twitter.avro /tmp/out
+<pre><code class="language-bash">$ hadoop jar avro2parquet.jar twitter.avsc  twitter.avro /tmp/out
 </code></pre>
-</div>
 
 <p>然后，在 hive 中创建表并导入数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">create</span> <span class="k">table</span> <span class="n">tweets_parquet</span> <span class="p">(</span><span class="n">username</span> <span class="n">string</span><span class="p">,</span> <span class="n">tweet</span> <span class="n">string</span><span class="p">,</span> <span class="k">timestamp</span> <span class="n">bigint</span><span class="p">)</span> 
-<span class="n">STORED</span> <span class="k">AS</span> <span class="n">PARQUET</span><span class="p">;</span>
+<pre><code class="language-sql">create table tweets_parquet (username string, tweet string, timestamp bigint) 
+STORED AS PARQUET;
 
-<span class="k">load</span> <span class="k">data</span> <span class="n">inpath</span> <span class="s1">'/tmp/out/part-m-00000.snappy.parquet'</span> <span class="n">overwrite</span> <span class="k">into</span> <span class="k">table</span> <span class="n">tweets_parquet</span><span class="p">;</span>
+load data inpath '/tmp/out/part-m-00000.snappy.parquet' overwrite into table tweets_parquet;
 </code></pre>
-</div>
 
 <p>接下来，可以查询数据并查看 parquet 文件的 schema 和元数据，方法同上文。</p>
 
@@ -282,7 +271,7 @@ b:            INT32 UNCOMPRESSED DO:0 FPO:55 SZ:51/51/1.00 VC:3 ENC:BI <span cla
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

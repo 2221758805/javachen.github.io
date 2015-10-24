@@ -109,35 +109,35 @@
 
 <p>现在的操作系统是多任务操作系统。多线程是实现多任务的一种方式。</p>
 
-<p><code class="highlighter-rouge">进程</code> 是指一个内存中运行的应用程序，每个进程都有自己独立的一块内存空间，一个进程中可以启动多个线程。比如在 Windows 系统中，一个运行的 exe 就是一个进程。</p>
+<p><code>进程</code> 是指一个内存中运行的应用程序，每个进程都有自己独立的一块内存空间，一个进程中可以启动多个线程。比如在 Windows 系统中，一个运行的 exe 就是一个进程。</p>
 
-<p><code class="highlighter-rouge">线程</code> 是指进程中的一个执行流程，一个进程中可以运行多个线程。比如 <code class="highlighter-rouge">java.exe</code> 进程中可以运行很多线程。<code class="highlighter-rouge">线程总是属于某个进程，进程中的多个线程共享进程的内存</code>。</p>
+<p><code>线程</code> 是指进程中的一个执行流程，一个进程中可以运行多个线程。比如 <code>java.exe</code> 进程中可以运行很多线程。<code>线程总是属于某个进程，进程中的多个线程共享进程的内存</code>。</p>
 
-<p><code class="highlighter-rouge">同时</code> 执行是人的感觉，<strong>在线程之间实际上轮换执行</strong>。</p>
+<p><code>同时</code> 执行是人的感觉，<strong>在线程之间实际上轮换执行</strong>。</p>
 
 <blockquote>
   <p>多线程间堆空间共享，栈空间独立。堆存的是地址，栈存的是变量（如：局部变量）。这部分内容结合 <a href="/2014/04/09/note-about-jvm-memery-model.html">Java 内存模型</a> 来理解。</p>
 </blockquote>
 
-<p>创建线程两种方式：<code class="highlighter-rouge">继承Thread类</code> 或 <code class="highlighter-rouge">实现Runnable接口</code>。</p>
+<p>创建线程两种方式：<code>继承Thread类</code> 或 <code>实现Runnable接口</code>。</p>
 
 <p>Thread 对象代表一个线程，一个 Thread 类实例只是一个对象，像 Java 中的任何其他对象一样，具有变量和方法，生死于堆上。</p>
 
 <p>Java 中，每个线程都有一个调用栈，即使不在程序中创建任何新的线程，线程也在后台运行着。</p>
 
-<p>一个 Java 应用总是从 <code class="highlighter-rouge">main()</code> 方法开始运行，<code class="highlighter-rouge">mian()</code> 方法运行在一个线程内，它被称为主线程。</p>
+<p>一个 Java 应用总是从 <code>main()</code> 方法开始运行，<code>mian()</code> 方法运行在一个线程内，它被称为主线程。</p>
 
 <p>一旦创建一个新的线程，就产生一个新的调用栈。</p>
 
 <p>多线程共同访问的同一个对象（临界资源），如果破坏了不可分割的操作（原子操作），就会造成数据不一致的情况。</p>
 
-<p>线程总体分两类：<code class="highlighter-rouge">用户线程</code> 和<code class="highlighter-rouge">守候线程</code>。</p>
+<p>线程总体分两类：<code>用户线程</code> 和<code>守候线程</code>。</p>
 
 <p>当所有用户线程执行完毕的时候，JVM自动关闭。但是守候线程却不独立于JVM，守候线程一般是由操作系统或者用户自己创建的。</p>
 
 <h1 id="section-1">线程状态图</h1>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/thread-state.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/thread-state.jpg" alt="" /></p>
 
 <p>说明：<br />
 线程共包括以下5种状态。</p>
@@ -145,63 +145,61 @@
 <ul>
   <li>
     <ol>
-      <li><code class="highlighter-rouge">新建状态(New)</code>： 线程对象被创建后，就进入了新建状态。例如，<code class="highlighter-rouge">Thread thread = new Thread()</code>。</li>
+      <li><code>新建状态(New)</code>： 线程对象被创建后，就进入了新建状态。例如，<code>Thread thread = new Thread()</code>。</li>
     </ol>
   </li>
   <li>
     <ol>
-      <li><code class="highlighter-rouge">就绪状态(Runnable)</code>： 也被称为“可执行状态”。线程对象被创建后，其它线程调用了该对象的 <code class="highlighter-rouge">start()</code> 方法，从而来启动该线程。例如，<code class="highlighter-rouge">thread.start()</code>。运行中的线程调用 <code class="highlighter-rouge">yield()</code> 之后也会进入就绪状态。处于就绪状态的线程，随时可能被 CPU 调度执行。</li>
+      <li><code>就绪状态(Runnable)</code>： 也被称为“可执行状态”。线程对象被创建后，其它线程调用了该对象的 <code>start()</code> 方法，从而来启动该线程。例如，<code>thread.start()</code>。运行中的线程调用 <code>yield()</code> 之后也会进入就绪状态。处于就绪状态的线程，随时可能被 CPU 调度执行。</li>
     </ol>
   </li>
   <li>
     <ol>
-      <li><code class="highlighter-rouge">运行状态(Running)</code>： 线程获取CPU权限进行执行。需要注意的是，线程只能从就绪状态进入到运行状态。</li>
+      <li><code>运行状态(Running)</code>： 线程获取CPU权限进行执行。需要注意的是，线程只能从就绪状态进入到运行状态。</li>
     </ol>
   </li>
   <li>
     <ol>
-      <li><code class="highlighter-rouge">阻塞状态(Blocked)</code>： 阻塞状态是线程因为某种原因放弃 CPU 使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：
+      <li><code>阻塞状态(Blocked)</code>： 阻塞状态是线程因为某种原因放弃 CPU 使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：
         <ul>
-          <li>a) 等待阻塞 – 通过调用线程的 <code class="highlighter-rouge">wait()</code> 方法，让线程等待某工作的完成。</li>
+          <li>a) 等待阻塞 – 通过调用线程的 <code>wait()</code> 方法，让线程等待某工作的完成。</li>
           <li>b) 同步阻塞 – 线程在获取 synchronized 同步锁失败(因为锁被其它线程所占用)，它会进入同步阻塞状态。</li>
-          <li>b) 其他阻塞 – 通过调用线程的 <code class="highlighter-rouge">sleep()</code> 或 <code class="highlighter-rouge">join()</code> 或发出了 I/O 请求时，线程会进入到阻塞状态。当 <code class="highlighter-rouge">sleep()</code> 状态超时、<code class="highlighter-rouge">join()</code> 等待线程终止或者超时、或者 I/O 处理完毕时，线程重新转入就绪状态。</li>
+          <li>b) 其他阻塞 – 通过调用线程的 <code>sleep()</code> 或 <code>join()</code> 或发出了 I/O 请求时，线程会进入到阻塞状态。当 <code>sleep()</code> 状态超时、<code>join()</code> 等待线程终止或者超时、或者 I/O 处理完毕时，线程重新转入就绪状态。</li>
         </ul>
       </li>
     </ol>
   </li>
   <li>
     <ol>
-      <li><code class="highlighter-rouge">死亡状态(Dead)</code>：线程执行完了或者因异常退出了 <code class="highlighter-rouge">run()</code> 方法，该线程结束生命周期。</li>
+      <li><code>死亡状态(Dead)</code>：线程执行完了或者因异常退出了 <code>run()</code> 方法，该线程结束生命周期。</li>
     </ol>
   </li>
 </ul>
 
 <h1 id="thread--runnable">Thread 和 Runnable</h1>
 
-<p>Runnable 是一个接口，该接口中只包含了一个 <code class="highlighter-rouge">run()</code> 方法。它的定义如下：</p>
+<p>Runnable 是一个接口，该接口中只包含了一个 <code>run()</code> 方法。它的定义如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Runnable</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="n">run</span><span class="o">();</span>
-<span class="o">}</span>
+<pre><code class="language-java">public interface Runnable {
+    public abstract void run();
+}
 </code></pre>
-</div>
 
-<p>我们可以定义一个类 A 实现 Runnable 接口；然后，通过 <code class="highlighter-rouge">new Thread(new A())</code> 等方式新建线程。</p>
+<p>我们可以定义一个类 A 实现 Runnable 接口；然后，通过 <code>new Thread(new A())</code> 等方式新建线程。</p>
 
 <p>Thread 是一个类。Thread 本身就实现了 Runnable 接口。它的声明如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Thread</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">()</span> <span class="o">{}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">target</span><span class="o">)</span> <span class="o">{}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">ThreadGroup</span> <span class="n">group</span><span class="o">,</span> <span class="n">Runnable</span> <span class="n">target</span><span class="o">){}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">ThreadGroup</span> <span class="n">group</span><span class="o">,</span> <span class="n">String</span> <span class="n">name</span><span class="o">){}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">target</span><span class="o">,</span> <span class="n">String</span> <span class="n">name</span><span class="o">){}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">ThreadGroup</span> <span class="n">group</span><span class="o">,</span> <span class="n">Runnable</span> <span class="n">target</span><span class="o">,</span> <span class="n">String</span> <span class="n">name</span><span class="o">){}</span>
-	<span class="kd">public</span> <span class="n">Thread</span><span class="o">(</span><span class="n">ThreadGroup</span> <span class="n">group</span><span class="o">,</span> <span class="n">Runnable</span> <span class="n">target</span><span class="o">,</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span><span class="kt">long</span> <span class="n">stackSize</span><span class="o">){}</span>
-<span class="o">}</span>
+<pre><code class="language-java">public class Thread implements Runnable {
+	public Thread() {}
+	public Thread(Runnable target) {}
+	public Thread(ThreadGroup group, Runnable target){}
+	public Thread(String name){}
+	public Thread(ThreadGroup group, String name){}
+	public Thread(Runnable target, String name){}
+	public Thread(ThreadGroup group, Runnable target, String name){}
+	public Thread(ThreadGroup group, Runnable target, String name,long stackSize){}
+}
 </code></pre>
-</div>
 
 <p><strong>相同点</strong>：</p>
 
@@ -215,86 +213,84 @@
 
 <h2 id="section-2">创建和运行线程的两种方法：</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//测试Runnable类实现的多线程程序 </span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DoSomething</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span> 
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span> 
+<pre><code class="language-java">//测试Runnable类实现的多线程程序 
+public class DoSomething implements Runnable { 
+    private String name; 
 
-    <span class="kd">public</span> <span class="n">DoSomething</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span> 
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span> 
-    <span class="o">}</span> 
+    public DoSomething(String name) { 
+        this.name = name; 
+    } 
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span> 
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span> 
-            <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">100000000</span><span class="o">;</span> <span class="n">k</span><span class="o">++)</span> <span class="o">;</span> 
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": "</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span> 
-        <span class="o">}</span> 
-    <span class="o">}</span> 
-<span class="o">}</span>
+    public void run() { 
+        for (int i = 0; i &lt; 5; i++) { 
+            for (long k = 0; k &lt; 100000000; k++) ; 
+            System.out.println(name + ": " + i); 
+        } 
+    } 
+}
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestRunnable</span> <span class="o">{</span> 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span> 
-        <span class="n">DoSomething</span> <span class="n">ds1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DoSomething</span><span class="o">(</span><span class="s">"javachen"</span><span class="o">);</span> 
-        <span class="n">DoSomething</span> <span class="n">ds2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DoSomething</span><span class="o">(</span><span class="s">"blog"</span><span class="o">);</span> 
+public class TestRunnable { 
+    public static void main(String[] args) { 
+        DoSomething ds1 = new DoSomething("javachen"); 
+        DoSomething ds2 = new DoSomething("blog"); 
 
-        <span class="n">Thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">ds1</span><span class="o">);</span> 
-        <span class="n">Thread</span> <span class="n">t2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">ds2</span><span class="o">);</span> 
+        Thread t1 = new Thread(ds1); 
+        Thread t2 = new Thread(ds2); 
 
-        <span class="n">t1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span> 
-        <span class="n">t2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span> 
-    <span class="o">}</span> 
-<span class="o">}</span>
+        t1.start(); 
+        t2.start(); 
+    } 
+}
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//测试扩展Thread类实现的多线程程序 </span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestThread</span> <span class="kd">extends</span> <span class="n">Thread</span><span class="o">{</span> 
-    <span class="kd">public</span> <span class="n">TestThread</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span> 
-        <span class="kd">super</span><span class="o">(</span><span class="n">name</span><span class="o">);</span> 
-    <span class="o">}</span> 
+<pre><code class="language-java">//测试扩展Thread类实现的多线程程序 
+public class TestThread extends Thread{ 
+    public TestThread(String name) { 
+        super(name); 
+    } 
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span> 
-        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="o">;</span><span class="n">i</span><span class="o">++){</span> 
-            <span class="k">for</span><span class="o">(</span><span class="kt">long</span> <span class="n">k</span><span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span><span class="mi">100000000</span><span class="o">;</span><span class="n">k</span><span class="o">++);</span> 
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">" :"</span><span class="o">+</span><span class="n">i</span><span class="o">);</span> 
-        <span class="o">}</span> 
-    <span class="o">}</span> 
+    public void run() { 
+        for(int i = 0;i&lt;5;i++){ 
+            for(long k= 0; k &lt;100000000;k++); 
+            System.out.println(this.getName()+" :"+i); 
+        } 
+    } 
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span> 
-        <span class="n">Thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TestThread</span><span class="o">(</span><span class="s">"javachen"</span><span class="o">);</span> 
-        <span class="n">Thread</span> <span class="n">t2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TestThread</span><span class="o">(</span><span class="s">"blog"</span><span class="o">);</span> 
-        <span class="n">t1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span> 
-        <span class="n">t2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span> 
-    <span class="o">}</span> 
-<span class="o">}</span>
+    public static void main(String[] args) { 
+        Thread t1 = new TestThread("javachen"); 
+        Thread t2 = new TestThread("blog"); 
+        t1.start(); 
+        t2.start(); 
+    } 
+}
 </code></pre>
-</div>
 
 <h2 id="start--run">start() 和 run()</h2>
 
 <ul>
   <li>
-    <p><code class="highlighter-rouge">start()</code>：它的作用是启动一个新线程，新线程会执行相应的 <code class="highlighter-rouge">run()</code>方法。<code class="highlighter-rouge">start()</code> 不能被重复调用。</p>
+    <p><code>start()</code>：它的作用是启动一个新线程，新线程会执行相应的 <code>run()</code>方法。<code>start()</code> 不能被重复调用。</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">run()</code>：和普通的成员方法一样，可以被重复调用。单独调用 <code class="highlighter-rouge">run()</code> 的话，会在当前线程中执行 <code class="highlighter-rouge">run()</code>，而并不会启动新线程！</p>
+    <p><code>run()</code>：和普通的成员方法一样，可以被重复调用。单独调用 <code>run()</code> 的话，会在当前线程中执行 <code>run()</code>，而并不会启动新线程！</p>
   </li>
 </ul>
 
-<p>在调用 <code class="highlighter-rouge">start()</code>方法之前，线程处于新状态中，新状态指有一个 Thread 对象，但还没有一个真正的线程。</p>
+<p>在调用 <code>start()</code>方法之前，线程处于新状态中，新状态指有一个 Thread 对象，但还没有一个真正的线程。</p>
 
-<p>在调用 <code class="highlighter-rouge">start()</code>方法之后，发生了一系列复杂的事情：</p>
+<p>在调用 <code>start()</code>方法之后，发生了一系列复杂的事情：</p>
 
 <ul>
   <li>启动新的执行线程（具有新的调用栈）；</li>
   <li>该线程从新状态转移到可运行状态；</li>
-  <li>当该线程获得机会执行时，其目标 <code class="highlighter-rouge">run()</code>方法将运行。</li>
+  <li>当该线程获得机会执行时，其目标 <code>run()</code>方法将运行。</li>
 </ul>
 
 <h2 id="wait-notify-notifyall">wait(), notify(), notifyAll()</h2>
 
-<p>在 Object.java 中，定义了 <code class="highlighter-rouge">wait()</code>, <code class="highlighter-rouge">notify()</code> 和 <code class="highlighter-rouge">notifyAll()</code> 等接口。<code class="highlighter-rouge">wait()</code> 的作用是让<strong>当前线程</strong>进入等待状态，同时，<code class="highlighter-rouge">wait()</code> 也会让当前线程释放它所持有的锁。而 <code class="highlighter-rouge">notify()</code> 和 <code class="highlighter-rouge">notifyAll()</code> 的作用，则是唤醒当前对象上的等待线程；<code class="highlighter-rouge">notify()</code> 是唤醒单个线程，而 <code class="highlighter-rouge">notifyAll()</code>是唤醒所有的线程。</p>
+<p>在 Object.java 中，定义了 <code>wait()</code>, <code>notify()</code> 和 <code>notifyAll()</code> 等接口。<code>wait()</code> 的作用是让<strong>当前线程</strong>进入等待状态，同时，<code>wait()</code> 也会让当前线程释放它所持有的锁。而 <code>notify()</code> 和 <code>notifyAll()</code> 的作用，则是唤醒当前对象上的等待线程；<code>notify()</code> 是唤醒单个线程，而 <code>notifyAll()</code>是唤醒所有的线程。</p>
 
-<p><code class="highlighter-rouge">notify()</code>,<code class="highlighter-rouge"> wait()</code> 依赖于“同步锁”，而“同步锁”是对象锁持有，并且每个对象有且仅有一个！</p>
+<p><code>notify()</code>,<code> wait()</code> 依赖于“同步锁”，而“同步锁”是对象锁持有，并且每个对象有且仅有一个！</p>
 
 <p>在 java 中，任何对象都有一个锁池，用来存放等待该对象锁标记的线程，线程阻塞在对象锁池中时，不会释放其所拥有的其它对象的锁标记。</p>
 
@@ -317,33 +313,32 @@
 
 <h2 id="yield">yield()</h2>
 
-<p><code class="highlighter-rouge">Thread.yield()</code> 方法作用是：暂停当前正在执行的线程对象，并执行其他线程。</p>
+<p><code>Thread.yield()</code> 方法作用是：暂停当前正在执行的线程对象，并执行其他线程。</p>
 
-<p><code class="highlighter-rouge">yield()</code> 应该做的是让当前运行线程回到可运行状态，以允许具有相同优先级的其他线程获得运行机会。因此，使用 <code class="highlighter-rouge">yield()</code> 的目的是让相同优先级的线程之间能适当的轮转执行。</p>
+<p><code>yield()</code> 应该做的是让当前运行线程回到可运行状态，以允许具有相同优先级的其他线程获得运行机会。因此，使用 <code>yield()</code> 的目的是让相同优先级的线程之间能适当的轮转执行。</p>
 
-<p>但是，实际中无法保证 <code class="highlighter-rouge">yield()</code> 达到让步目的，因为让步的线程还有可能被线程调度程序再次选中。</p>
+<p>但是，实际中无法保证 <code>yield()</code> 达到让步目的，因为让步的线程还有可能被线程调度程序再次选中。</p>
 
-<p>结论：<code class="highlighter-rouge">yield()</code>从未导致线程转到等待/睡眠/阻塞状态。在大多数情况下，<code class="highlighter-rouge">yield()</code> 将导致线程从运行状态转到可运行状态，但有可能没有效果。</p>
+<p>结论：<code>yield()</code>从未导致线程转到等待/睡眠/阻塞状态。在大多数情况下，<code>yield()</code> 将导致线程从运行状态转到可运行状态，但有可能没有效果。</p>
 
 <p><strong>wait()是会线程释放它所持有对象的同步锁，而yield()方法不会释放锁。</strong></p>
 
 <h2 id="sleep">sleep()</h2>
 
-<p><code class="highlighter-rouge">sleep()</code> 的作用是让当前线程休眠，即当前线程会从 <code class="highlighter-rouge">运行状态</code> 进入到 <code class="highlighter-rouge">休眠(阻塞)状态</code> 。<code class="highlighter-rouge">sleep()</code> 会指定休眠时间，线程休眠的时间会大于/等于该休眠时间；在线程重新被唤醒时，它会由 <code class="highlighter-rouge">阻塞状态</code> 变成 <code class="highlighter-rouge">就绪状态</code>，从而等待 cpu 的调度执行。</p>
+<p><code>sleep()</code> 的作用是让当前线程休眠，即当前线程会从 <code>运行状态</code> 进入到 <code>休眠(阻塞)状态</code> 。<code>sleep()</code> 会指定休眠时间，线程休眠的时间会大于/等于该休眠时间；在线程重新被唤醒时，它会由 <code>阻塞状态</code> 变成 <code>就绪状态</code>，从而等待 cpu 的调度执行。</p>
 
 <p><strong>wait()会释放对象的同步锁，而sleep()则不会释放锁。</strong></p>
 
 <h2 id="join">join()</h2>
 
-<p>Thread的非静态方法 <code class="highlighter-rouge">join()</code> 让一个线程 B “加入” 到另外一个线程 A 的尾部。在 A 执行完毕之前，B 不能工作。例如：</p>
+<p>Thread的非静态方法 <code>join()</code> 让一个线程 B “加入” 到另外一个线程 A 的尾部。在 A 执行完毕之前，B 不能工作。例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Thread</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyThread</span><span class="o">();</span>
-<span class="n">t</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-<span class="n">t</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+<pre><code class="language-java">Thread t = new MyThread();
+t.start();
+t.join();
 </code></pre>
-</div>
 
-<p>另外，<code class="highlighter-rouge">join()</code> 方法还有带超时限制的重载版本。 例如 <code class="highlighter-rouge">t.join(5000);</code> 让线程等待5000毫秒，如果超过这个时间，则停止等待，变为可运行状态。</p>
+<p>另外，<code>join()</code> 方法还有带超时限制的重载版本。 例如 <code>t.join(5000);</code> 让线程等待5000毫秒，如果超过这个时间，则停止等待，变为可运行状态。</p>
 
 <h2 id="interrupt">interrupt()</h2>
 
@@ -351,7 +346,7 @@
 
 <p>本线程中断自己是被允许的；其它线程调用本线程的 interrupt() 方法时，会通过 checkAccess() 检查权限。这有可能抛出 SecurityException 异常。</p>
 
-<p>如果本线程是处于阻塞状态：调用线程的wait(), wait(long)或 wait(long, int)会让它进入等待(阻塞)状态，或者调用线程的join(), join(long), join(long, int), sleep(long), sleep(long, int) 也会让它进入阻塞状态。若线程在阻塞状态时，调用了它的 <code class="highlighter-rouge">interrupt()</code>方法，那么它的“中断状态”会被清除并且会收到一个 InterruptedException 异常。</p>
+<p>如果本线程是处于阻塞状态：调用线程的wait(), wait(long)或 wait(long, int)会让它进入等待(阻塞)状态，或者调用线程的join(), join(long), join(long, int), sleep(long), sleep(long, int) 也会让它进入阻塞状态。若线程在阻塞状态时，调用了它的 <code>interrupt()</code>方法，那么它的“中断状态”会被清除并且会收到一个 InterruptedException 异常。</p>
 
 <p>例如，线程通过 wait() 进入阻塞状态，此时通过 interrupt() 中断该线程；调用 interrupt() 会立即将线程的中断标记设为“true”，但是由于线程处于阻塞状态，所以该“中断标记”会立即被清除为“false”，同时，会产生一个 InterruptedException 的异常。</p>
 
@@ -373,7 +368,7 @@
 
 <p>当程序运行到 synchronized 同步方法或代码块时才该对象锁才起作用。</p>
 
-<p>一个对象只有一个锁。所以，如果一个线程获得该锁，就没有其他线程可以获得锁，直到第一个线程释放（或返回）锁。这也意味着任何其他线程都不能进入该对象上的 synchronized 方法或代码块，直到该锁被释放。<code class="highlighter-rouge">释放锁</code> 是指持锁线程退出了synchronized同步方法或代码块。</p>
+<p>一个对象只有一个锁。所以，如果一个线程获得该锁，就没有其他线程可以获得锁，直到第一个线程释放（或返回）锁。这也意味着任何其他线程都不能进入该对象上的 synchronized 方法或代码块，直到该锁被释放。<code>释放锁</code> 是指持锁线程退出了synchronized同步方法或代码块。</p>
 
 <p><strong>关于锁和同步，有一下几个要点</strong>：</p>
 
@@ -391,31 +386,30 @@
 
 <p>举例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//对方法同步</span>
-<span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">int</span> <span class="nf">getX</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">x</span><span class="o">++;</span>
-<span class="o">}</span>
+<pre><code class="language-java">//对方法同步
+public synchronized int getX() {
+    return x++;
+}
 
-<span class="c1">//对代码块同步</span>
-<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getX</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>    
+//对代码块同步
+public int getX() {
+    synchronized (this) {
+        return x;
+    }
+}    
 
-<span class="c1">//对静态方法同步</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">synchronized</span> <span class="kt">int</span> <span class="nf">setName</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
-    <span class="n">Xxx</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-<span class="o">}</span>
+//对静态方法同步
+public static synchronized int setName(String name){
+    Xxx.name = name;
+}
 
-<span class="c1">//对静态方法中的代码块同步</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">setName</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
-    <span class="kd">synchronized</span><span class="o">(</span><span class="n">Xxx</span><span class="o">.</span><span class="na">class</span><span class="o">){</span>
-        <span class="n">Xxx</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+//对静态方法中的代码块同步
+public static int setName(String name){
+    synchronized(Xxx.class){
+        Xxx.name = name;
+    }
+}
 </code></pre>
-</div>
 
 <h1 id="section-4">参考资料</h1>
 
@@ -474,7 +468,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

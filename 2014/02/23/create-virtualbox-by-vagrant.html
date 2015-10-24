@@ -119,55 +119,48 @@
 
 <p>例如下载 CentOS6.5：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ wget https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box
+<pre><code>$ wget https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box
 </code></pre>
-</div>
 
 <h1 id="box-1">添加box</h1>
 
 <p>首先查看已经添加的box：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>vagrant box list
+<pre><code class="language-bash">$ vagrant box list
 </code></pre>
-</div>
 
 <p>添加新的box，可以是远程地址也可以是本地文件，建议先下载到本地再进行添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>vagrant box add centos6.5 ./centos65-x86_64-20140116.box
+<pre><code class="language-bash">$ vagrant box add centos6.5 ./centos65-x86_64-20140116.box
 </code></pre>
-</div>
 
 <p>其语法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>vagrant box add <span class="o">{</span>title<span class="o">}</span> <span class="o">{</span>url<span class="o">}</span>
+<pre><code class="language-bash">vagrant box add {title} {url}
 </code></pre>
-</div>
 
-<p>box 被安装在 <code class="highlighter-rouge">~/.vagrant.d/boxes</code> 目录下面。</p>
+<p>box 被安装在 <code>~/.vagrant.d/boxes</code> 目录下面。</p>
 
 <h1 id="section">创建虚拟机</h1>
 
 <p>先创建一个目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir -p ~/workspace/vagrant/cdh
+<pre><code class="language-bash">$ mkdir -p ~/workspace/vagrant/cdh
 </code></pre>
-</div>
 
 <p>初始化，使用 centos6.5 box：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> ~/workspace/vagrant/cdh
-<span class="gp">$ </span>vagrant init centos6.5
+<pre><code class="language-bash">$ cd ~/workspace/vagrant/cdh
+$ vagrant init centos6.5
 </code></pre>
-</div>
 
 <p>输出如下日志：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>A `Vagrantfile` has been placed in this directory. You are now
+<pre><code>A `Vagrantfile` has been placed in this directory. You are now
 ready to `vagrant up` your first virtual environment! Please read
 the comments in the Vagrantfile as well as documentation on
 `vagrantup.com` for more information on using Vagrant.
 </code></pre>
-</div>
 
 <p>在当前目录生成了 Vagrantfile 文件。</p>
 
@@ -175,31 +168,30 @@ the comments in the Vagrantfile as well as documentation on
 
 <p>修改文件如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1"># -*- mode: ruby -*-</span>
-<span class="c1"># vi: set ft=ruby :</span>
+<pre><code class="language-ruby"># -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-<span class="c1"># Vagrantfile API/syntax version. Don't touch unless you know what you're doing!</span>
-<span class="no">VAGRANTFILE_API_VERSION</span> <span class="o">=</span> <span class="s2">"2"</span>
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
 
-<span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">3</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
-    <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">define</span> <span class="n">vm_name</span> <span class="o">=</span> <span class="s2">"cdh</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span>  <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-        <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provider</span> <span class="s2">"virtualbox"</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
-            <span class="n">v</span><span class="p">.</span><span class="nf">customize</span> <span class="p">[</span><span class="s2">"modifyvm"</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">"--name"</span><span class="p">,</span> <span class="n">vm_name</span><span class="p">,</span> <span class="s2">"--memory"</span><span class="p">,</span> <span class="s2">"2048"</span><span class="p">,</span><span class="s1">'--cpus'</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="k">end</span>
-        <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">box</span> <span class="o">=</span> <span class="s2">"centos6.5"</span>
-        <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">hostname</span> <span class="o">=</span><span class="n">vm_name</span>
-        <span class="n">config</span><span class="p">.</span><span class="nf">ssh</span><span class="p">.</span><span class="nf">username</span> <span class="o">=</span> <span class="s2">"vagrant"</span>
-        <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip: </span><span class="s2">"192.168.56.12</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span>
-	  	<span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="ss">:shell</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">"bootstrap.sh"</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
+  (1..3).each do |i|
+    config.vm.define vm_name = "cdh#{i}"  do |config|
+        config.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--name", vm_name, "--memory", "2048",'--cpus', 1]
+        end
+        config.vm.box = "centos6.5"
+        config.vm.hostname =vm_name
+        config.ssh.username = "vagrant"
+        config.vm.network :private_network, ip: "192.168.56.12#{i}"
+	  	config.vm.provision :shell, :path =&gt; "bootstrap.sh"
+    end
+  end
+end
 </code></pre>
-</div>
 
-<p>上面的文件中定义了三个虚拟机，三个虚拟机的名字和 hostname 分别为cdh1、cdh2、cdh3，网络使用的是 <code class="highlighter-rouge">host-only</code> 网络。</p>
+<p>上面的文件中定义了三个虚拟机，三个虚拟机的名字和 hostname 分别为cdh1、cdh2、cdh3，网络使用的是 <code>host-only</code> 网络。</p>
 
 <p>在启动成功之后，会运行 bootstrap.sh 脚本，你可以编写你自己的脚本。</p>
 
@@ -207,32 +199,30 @@ the comments in the Vagrantfile as well as documentation on
 
 <p>执行以下命令会依次启动三个虚拟机：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>vagrant up
+<pre><code class="language-bash">$ vagrant up
 </code></pre>
-</div>
 
 <p>启动成功之后，就可以通过 ssh 登陆到虚拟机：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>vagrant ssh cdh1
+<pre><code class="language-bash">$ vagrant ssh cdh1
 </code></pre>
-</div>
 
 <h1 id="section-2">虚拟机的初始化设置</h1>
 
 <p>创建好的虚拟机有很多地方没有设置，有一些软件没有安装，可以编写一个shell脚本（例如，命名为 bootstrap.sh）进行手动执行,也可以通过provision启动之后自动运行。该脚本内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<pre><code class="language-bash">#!/usr/bin/env bash
 
-<span class="c"># The output of all these installation steps is noisy. With this utility</span>
-<span class="c"># the progress report is nice and concise.</span>
-<span class="k">function </span>install <span class="o">{</span>
-    <span class="nb">echo </span>Installing <span class="nv">$1</span>
-    <span class="nb">shift
-    </span>yum -y install <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> &gt;/dev/null 2&gt;&amp;1
-<span class="o">}</span>
+# The output of all these installation steps is noisy. With this utility
+# the progress report is nice and concise.
+function install {
+    echo Installing $1
+    shift
+    yum -y install "$@" &gt;/dev/null 2&gt;&amp;1
+}
 
-<span class="nb">echo</span> <span class="s2">"Update /etc/hosts"</span>
-cat &gt; /etc/hosts <span class="sh">&lt;&lt;EOF
+echo "Update /etc/hosts"
+cat &gt; /etc/hosts &lt;&lt;EOF
 127.0.0.1       localhost
 
 192.168.56.121 cdh1
@@ -240,40 +230,40 @@ cat &gt; /etc/hosts <span class="sh">&lt;&lt;EOF
 192.168.56.123 cdh3
 EOF
 
-</span><span class="nb">echo</span> <span class="s2">"Remove unused logs"</span>
+echo "Remove unused logs"
 sudo rm -rf /root/anaconda-ks.cfg /root/install.log /root/install.log.syslog /root/install-post.log
 
-<span class="nb">echo</span> <span class="s2">"Disable iptables"</span>
-setenforce 0 &gt;/dev/null 2&gt;&amp;1 <span class="o">&amp;&amp;</span> iptables -F
+echo "Disable iptables"
+setenforce 0 &gt;/dev/null 2&gt;&amp;1 &amp;&amp; iptables -F
 
-<span class="c">### Set env ###</span>
-<span class="nb">echo</span> <span class="s2">"export LC_ALL=en_US.UTF-8"</span>  &gt;&gt;  /etc/profile
+### Set env ###
+echo "export LC_ALL=en_US.UTF-8"  &gt;&gt;  /etc/profile
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-<span class="nb">echo</span> <span class="s2">"Setup yum repos"</span>
-rm -rf /etc/yum.repos.d/<span class="k">*</span>
-cp /vagrant/<span class="k">*</span>.repo /etc/yum.repos.d/
+echo "Setup yum repos"
+rm -rf /etc/yum.repos.d/*
+cp /vagrant/*.repo /etc/yum.repos.d/
 yum clean all &gt;/dev/null 2&gt;&amp;1
 
-<span class="nb">echo</span> <span class="s2">"Setup root account"</span>
-<span class="c"># Setup sudo to allow no-password sudo for "admin". Additionally,</span>
-<span class="c"># make "admin" an exempt group so that the PATH is inherited.</span>
+echo "Setup root account"
+# Setup sudo to allow no-password sudo for "admin". Additionally,
+# make "admin" an exempt group so that the PATH is inherited.
 cp /etc/sudoers /etc/sudoers.orig
-<span class="nb">echo</span> <span class="s2">"root            ALL=(ALL)               NOPASSWD: ALL"</span> &gt;&gt; /etc/sudoers
-<span class="nb">echo</span> <span class="s1">'redhat'</span>|passwd root --stdin &gt;/dev/null 2&gt;&amp;1
+echo "root            ALL=(ALL)               NOPASSWD: ALL" &gt;&gt; /etc/sudoers
+echo 'redhat'|passwd root --stdin &gt;/dev/null 2&gt;&amp;1
 
-<span class="nb">echo</span> <span class="s2">"Setup nameservers"</span>
-<span class="c"># http://ithelpblog.com/os/linux/redhat/centos-redhat/howto-fix-couldnt-resolve-host-on-centos-redhat-rhel-fedora/</span>
-<span class="c"># http://stackoverflow.com/a/850731/1486325</span>
-<span class="nb">echo</span> <span class="s2">"nameserver 8.8.8.8"</span> | tee -a /etc/resolv.conf
-<span class="nb">echo</span> <span class="s2">"nameserver 8.8.4.4"</span> | tee -a /etc/resolv.conf
+echo "Setup nameservers"
+# http://ithelpblog.com/os/linux/redhat/centos-redhat/howto-fix-couldnt-resolve-host-on-centos-redhat-rhel-fedora/
+# http://stackoverflow.com/a/850731/1486325
+echo "nameserver 8.8.8.8" | tee -a /etc/resolv.conf
+echo "nameserver 8.8.4.4" | tee -a /etc/resolv.conf
 
-<span class="nb">echo</span> <span class="s2">"Setup ssh"</span>
-<span class="o">[</span> ! -d /root/.ssh <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">(</span> mkdir /root/.ssh <span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span> chmod 600 /root/.ssh  <span class="o">)</span> <span class="o">&amp;&amp;</span> yes|ssh-keygen -f ~/.ssh/id_rsa -t rsa -N <span class="s2">""</span>
+echo "Setup ssh"
+[ ! -d /root/.ssh ] &amp;&amp; ( mkdir /root/.ssh ) &amp;&amp; ( chmod 600 /root/.ssh  ) &amp;&amp; yes|ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ""
 
 install Git git
-install <span class="s2">"Base tools"</span> vim wget curl
-install <span class="s2">"Hadoop dependencies"</span> expect rsync pssh
+install "Base tools" vim wget curl
+install "Hadoop dependencies" expect rsync pssh
 
 install PostgreSQL postgresql-server postgresql-jdbc
 sudo -u postgres createuser --superuser vagrant
@@ -281,9 +271,8 @@ sudo -u postgres createdb -O vagrant test1
 sudo -u postgres createdb -O vagrant test2
 
 
-<span class="nb">echo</span> <span class="s1">'All set, rock on!'</span>
+echo 'All set, rock on!'
 </code></pre>
-</div>
 
 <p>以上脚本主要做了以下几件事：</p>
 
@@ -299,7 +288,7 @@ sudo -u postgres createdb -O vagrant test2
 
 <p>以上所有配置可以在 <a href="https://github.com/javachen/snippets/tree/master/vagrant/cdh">这里找</a> 找到，其中 cdh.repo 内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[cdh]
+<pre><code>[cdh]
 name=cdh
 baseurl=http://192.168.56.1/cdh/5.2.0/
 enabled=1
@@ -311,7 +300,6 @@ baseurl=http://192.168.56.1/hadoop-repo/
 enabled=1
 gpgcheck=0
 </code></pre>
-</div>
 
 <p>上面文件包括 cdh 和 hadoop 相关的一些依赖，这些需要通过 apache 服务在宿主机上配置好。</p>
 
@@ -325,9 +313,8 @@ gpgcheck=0
 
 <p>1.在虚拟机中选择一个节点为管理节点，然后下载仓库</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/javachen/hadoop-install.git
+<pre><code class="language-bash">$ git clone https://github.com/javachen/hadoop-install.git
 </code></pre>
-</div>
 
 <p>2.进入 hadoop-install/shell 目录，参考 READEME.md 中说明来安装集群。</p>
 
@@ -382,7 +369,7 @@ gpgcheck=0
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

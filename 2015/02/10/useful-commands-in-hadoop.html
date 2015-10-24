@@ -109,76 +109,66 @@
 
 <p>解压 gz 文件到文本文件</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -text /hdfs_path/compressed_file.gz | hadoop fs -put - /tmp/uncompressed-file.txt
+<pre><code class="language-bash">$ hadoop fs -text /hdfs_path/compressed_file.gz | hadoop fs -put - /tmp/uncompressed-file.txt
 </code></pre>
-</div>
 
 <p>解压本地文件 gz 文件并上传到 hdfs</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gunzip -c filename.txt.gz | hadoop fs -put - /tmp/filename.txt
+<pre><code class="language-bash">$ gunzip -c filename.txt.gz | hadoop fs -put - /tmp/filename.txt
 </code></pre>
-</div>
 
 <p>使用 awk 处理 csv 文件，参考 <a href="http://grepalex.com/2013/01/17/awk-with-hadoop-streaming/">Using awk and friends with Hadoop</a>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -cat people.txt | awk -F<span class="s2">","</span> <span class="s1">'{ print $1","$2","$3$4$5 }'</span> | hadoop fs -put - people-coalesed.txt
+<pre><code class="language-bash">$ hadoop fs -cat people.txt | awk -F"," '{ print $1","$2","$3$4$5 }' | hadoop fs -put - people-coalesed.txt
 </code></pre>
-</div>
 
 <p>创建 lzo 文件、上传到 hdfs 并添加索引：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>lzop -Uf data.txt
-<span class="gp">$ </span>hadoop fs -moveFromLocal data.txt.lzo /tmp/
-<span class="c"># 1. 单机</span>
-<span class="gp">$ </span>hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.LzoIndexer /tmp/data.txt.lzo
+<pre><code class="language-bash">$ lzop -Uf data.txt
+$ hadoop fs -moveFromLocal data.txt.lzo /tmp/
+# 1. 单机
+$ hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.LzoIndexer /tmp/data.txt.lzo
 
-<span class="c"># 2. 运行 mr</span>
-<span class="gp">$ </span>hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.DistributedLzoIndexer /tmp/data.txt.lzo
+# 2. 运行 mr
+$ hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.DistributedLzoIndexer /tmp/data.txt.lzo
 </code></pre>
-</div>
 
 <p>如果 people.txt 通过 lzo 压缩了，则可以使用下面命令解压缩、处理数据、压缩文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -cat people.txt.lzo | lzop -dc | awk -F<span class="s2">","</span> <span class="s1">'{ print $1","$2","$3$4$5 }'</span> | lzop -c | hadoop fs -put - people-coalesed.txt.lzo
+<pre><code class="language-bash">$ hadoop fs -cat people.txt.lzo | lzop -dc | awk -F"," '{ print $1","$2","$3$4$5 }' | lzop -c | hadoop fs -put - people-coalesed.txt.lzo
 </code></pre>
-</div>
 
 <h2 id="hive">hive</h2>
 
 <p>后台运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>nohup hive -f sample.hql &gt; output.out 2&gt;&amp;1 &amp; 
+<pre><code class="language-bash">$ nohup hive -f sample.hql &gt; output.out 2&gt;&amp;1 &amp; 
 
-<span class="gp">$ </span>nohup hive --database <span class="s2">"default"</span> -e <span class="s2">"select * from tablename;"</span> &gt; output.out 2&gt;&amp;1 &amp; 
+$ nohup hive --database "default" -e "select * from tablename;" &gt; output.out 2&gt;&amp;1 &amp; 
 </code></pre>
-</div>
 
 <p>替换分隔符：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive --database <span class="s2">"default"</span> -f query.hql  2&gt; err.txt | sed <span class="s1">'s/[\t]/,/g'</span> 1&gt; output.txt 
+<pre><code class="language-bash">$ hive --database "default" -f query.hql  2&gt; err.txt | sed 's/[\t]/,/g' 1&gt; output.txt 
 </code></pre>
-</div>
 
 <p>打印表头：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive --database <span class="s2">"default"</span> -e <span class="s2">"SHOW COLUMNS FROM table_name;"</span> | tr <span class="s1">'[:lower:]'</span> <span class="s1">'[:upper:]'</span> | tr <span class="s1">'\n'</span> <span class="s1">','</span> 1&gt; headers.txt
+<pre><code class="language-bash">$ hive --database "default" -e "SHOW COLUMNS FROM table_name;" | tr '[:lower:]' '[:upper:]' | tr '\n' ',' 1&gt; headers.txt
 
-<span class="gp">$ </span>hive --database <span class="s2">"default"</span> -e <span class="s2">"SET hive.cli.print.header=true; select * from table_name limit 0;"</span> | tr <span class="s1">'[:lower:]'</span> <span class="s1">'[:upper:]'</span> | sed <span class="s1">'s/[\t]/,/g'</span>  1&gt; headers.txt
+$ hive --database "default" -e "SET hive.cli.print.header=true; select * from table_name limit 0;" | tr '[:lower:]' '[:upper:]' | sed 's/[\t]/,/g'  1&gt; headers.txt
 </code></pre>
-</div>
 
 <p>查看执行时间：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive -e <span class="s2">"select * from tablename;"</span>  2&gt; err.txt  1&gt; out.txt 
-<span class="gp">$ </span>cat err.txt | grep <span class="s2">"Time taken:"</span> | awk <span class="s1">'{print $3,$6}'</span>
+<pre><code class="language-bash">$ hive -e "select * from tablename;"  2&gt; err.txt  1&gt; out.txt 
+$ cat err.txt | grep "Time taken:" | awk '{print $3,$6}'
 </code></pre>
-</div>
 
 <p>hive 中如何避免用科学计数法表示浮点数？参考 <a href="http://www.zhihu.com/question/28887115">http://www.zhihu.com/question/28887115</a> ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">java_method</span><span class="p">(</span><span class="nv">"String"</span><span class="p">,</span> <span class="nv">"format"</span><span class="p">,</span> <span class="nv">"%f"</span><span class="p">,</span> <span class="n">my_column</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">LIMIT</span> <span class="mi">1</span>
+<pre><code class="language-sql">SELECT java_method("String", "format", "%f", my_column) FROM mytable LIMIT 1
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -229,7 +219,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

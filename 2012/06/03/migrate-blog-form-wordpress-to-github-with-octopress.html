@@ -146,7 +146,7 @@
 <p>至此，Octopress所需的环境已经搭建成功。</p>
 
 <h1 id="step2---github-pages">Step2 - 连接GitHub Pages</h1>
-<p>首先，你得有一个GitHub的帐号，并且已经创建了一个新的Repository。如果你准备用自己的域名的话，Repository的名称可以随便取，不过正常人在正常情况下，一般都是以域名取名的。如果你没有自己的域名，GitHub是提供二级域名使用的，但是你得把Repository取名为<code class="highlighter-rouge">你的帐号.github.com</code>，并且，部署的时候会占用你的master分支。</p>
+<p>首先，你得有一个GitHub的帐号，并且已经创建了一个新的Repository。如果你准备用自己的域名的话，Repository的名称可以随便取，不过正常人在正常情况下，一般都是以域名取名的。如果你没有自己的域名，GitHub是提供二级域名使用的，但是你得把Repository取名为<code>你的帐号.github.com</code>，并且，部署的时候会占用你的master分支。</p>
 
 <p><em>Tips：</em><br />
 如果用自己的一级域名，记得把source/CNAME文件内的域名改成你的一级域名，还有在dns管理中把域名的A Record指向IP：207.97.227.245；<br />
@@ -167,7 +167,7 @@
 	simple_search: http://google.com/search<br />
 	description:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>date_format: "%Y年%m月%d日"
+<pre><code>date_format: "%Y年%m月%d日"
 
 subscribe_rss: /atom.xml
 subscribe_email:
@@ -186,7 +186,6 @@ category_dir: categories
 markdown: rdiscount
 pygments: false # default python pygments have been replaced by pygments.rb
 </code></pre>
-</div>
 
 <h1 id="step4---">Step4 - 部署</h1>
 
@@ -196,7 +195,7 @@ pygments: false # default python pygments have been replaced by pygments.rb
 当你看到“Github Pages deploy complete”后，就表示你大功已成。Enjoy!</p>
 
 <p><em>Tips：</em><br />
-Octopress提供的所有rake方法，可以运行<code class="highlighter-rouge">rake -T</code>查看。<br />
+Octopress提供的所有rake方法，可以运行<code>rake -T</code>查看。<br />
 如果在执行上述命令中ruby报错，则需要一一修复错误，这一步是没有接触过ruby的人比较苦恼的。</p>
 
 <h1 id="step5---wordpressoctopress">Step5 - 从Wordpress迁移到Octopress</h1>
@@ -205,7 +204,7 @@ Octopress提供的所有rake方法，可以运行<code class="highlighter-rouge"
 Octopress由于是纯静态，所以没有办法存储用户评论了，我们可以使用DISQUS提供的“云评论”服务。首先安装DISQUS的WordPress插件，在插件设置中我们可以将现有的评论内容导入到DISQUS中。DISQUS处理导入数据的时间比较长，往往需要24小时甚至以上的时间。</p>
 
 <h3 id="section">备份文章内容</h3>
-<p>在WordPress后台我们可以将整站数据备份成一个.xml文件下载下来。同时，我原先文章中的图片都是直接在Wordpress后台上传的，所以要把服务器上<code class="highlighter-rouge">wp-content/uploads</code>下的所有文件备份下来。</p>
+<p>在WordPress后台我们可以将整站数据备份成一个.xml文件下载下来。同时，我原先文章中的图片都是直接在Wordpress后台上传的，所以要把服务器上<code>wp-content/uploads</code>下的所有文件备份下来。</p>
 
 <h2 id="section-1">迁移</h2>
 <p>### 迁移文章<br />
@@ -232,10 +231,9 @@ jekyll本身提供了一个从WordPress迁移文章的工具，不过对中文�
 <p>可以参考<a href="http://log4d.com/2012/05/image-host/">使用独立图床子域名</a></p>
 
 <h1 id="step6---">Step6 - 再次部署</h1>
-<div class="highlighter-rouge"><pre class="highlight"><code>rake generate
+<pre><code>rake generate
 rake deploy
 </code></pre>
-</div>
 
 <h1 id="section-4">参考文章</h1>
 
@@ -297,7 +295,7 @@ rake deploy
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

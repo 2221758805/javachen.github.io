@@ -111,7 +111,7 @@
 
 <p>dhtmlxGrid是一个拥有强大的数据绑定、优秀的大数据展示性能并支持ajax的JavaScript表格控件。该组件易于使用并通过富客户端的API提供了很大的扩展性。dhtmlxGrid支持不同的数据源（XML, JSON, CSV, JavaScript 数组和HTML表格），如果需要的话，还可以从自定义的xml中加载数据。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>跨浏览器
+<pre><code>跨浏览器
 使用JavaScript API进行控制
 Ajax支持
 简单的JavaScript 或者XML 配置
@@ -139,11 +139,10 @@ Cell支持数学方程式
 服务器端排序
 广泛的事件处理
 </code></pre>
-</div>
 
 <h2>Step 1 – 引入文件</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt; link rel ="STYLESHEET" type="text/css" href="codebase/dhtmlxgrid.css" /&gt;
+<pre><code>&lt; link rel ="STYLESHEET" type="text/css" href="codebase/dhtmlxgrid.css" /&gt;
 &lt; script src="codebase/dhtmlxcommon.js"&gt;&lt; /script&gt;
 &lt; script src="codebase/dhtmlxgrid.js"&gt;&lt; /script&gt;
 &lt; script src="codebase/dhtmlxgridcell.js"&gt;&lt; /script&gt;
@@ -151,22 +150,19 @@ Cell支持数学方程式
     //we'll write script commands here
 &lt; /script&gt;
 </code></pre>
-</div>
 
 <h2>Step 2 – 放置gird</h2>
 <p>有两种方式在一个页面放置grid，这里减少最常用的方法：创建一个div并给id熟悉设置一个惟一值。例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt; div id="mygrid_container" style="width:600px;height:150px;"&gt;&lt; /div&gt;
+<pre><code>&lt; div id="mygrid_container" style="width:600px;height:150px;"&gt;&lt; /div&gt;
 </code></pre>
-</div>
 
 <p>下面初始化参数，首先定一个mygrid变量，然后定一个doInitGrid方法，方法内部进行mygrid初始化工作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> var mygrid;
+<pre><code> var mygrid;
  function doInitGrid(){
  }
 </code></pre>
-</div>
 
 <p>doInitGrid方法会包括以下代码：</p>
 
@@ -174,7 +170,7 @@ Cell支持数学方程式
   <li>使用dhtmlXGridObject构造方法创建一个基于我们之前创建的DIV的grid对象；</li>
   <li>设置grid图片路径。这个路径包括grid外观需要的所有图片。在大多数情况下该路径为“codebase/imgs/”. 该路径最后面的一个“/”很重要。 随便说一下，这个路径和你处理表格数据所使用的图片没有关系；</li>
   <li>使用setHeader 方法定义表头；</li>
-  <li>使用setInitWidths (单位为像素) 或setInitWidthsP (单位为百分比)定义列宽。 使用<code class="highlighter-rouge">*</code>代表让列自动使用所有表格宽度；</li>
+  <li>使用setInitWidths (单位为像素) 或setInitWidthsP (单位为百分比)定义列宽。 使用<code>*</code>代表让列自动使用所有表格宽度；</li>
   <li>定义一个列的水平对其方式。 Numeric values is better to align right;</li>
   <li>使用setSkin方法设置皮肤；</li>
   <li>最好使用这些设置通过init方法初始化grid。更多的参数之后再讨论。</li>
@@ -182,7 +178,7 @@ Cell支持数学方程式
 
 <p>目前，doInitGrid方法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mygrid = new dhtmlXGridObject('mygrid_container');
+<pre><code>mygrid = new dhtmlXGridObject('mygrid_container');
 mygrid.setImagePath("codebase/imgs/"); //指定图片路径
 mygrid.setHeader("Model,Qty,Price"); //设置表头显示
 grid.setInitWidths("*,150,150"); //设置列的初始宽度
@@ -190,13 +186,11 @@ grid.setColAlign("left,right,right"); //设置列的水平对其方式
 mygrid.setSkin("light"); //设置皮肤
 grid.init(); //显示调用初始化方法，必须的
 </code></pre>
-</div>
 
 <p>现在需要做的是运行该方法，可以将该方法加入body的onload方法里或是使用jquery的方法。下面使用body的onload方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt; body onload="doInitGrid();"&gt;&lt; /body&gt;
+<pre><code>&lt; body onload="doInitGrid();"&gt;&lt; /body&gt;
 </code></pre>
-</div>
 
 <p>这样在该页面初始化之后会显示如下：</p>
 
@@ -204,7 +198,7 @@ grid.init(); //显示调用初始化方法，必须的
 
 <p>说明：除了调用set方法之外，还可以如下风格定义：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mygrid = new dhtmlXGridObject({
+<pre><code>mygrid = new dhtmlXGridObject({
 		parent:"a_grid",
 		image_path:"codebase/imgs",
 		columns:[
@@ -222,33 +216,31 @@ grid.init(); //显示调用初始化方法，必须的
 		xml:"data.xml"
 	});
 </code></pre>
-</div>
 
 <h2>Step 3 – 填充数据</h2>
 <p>你已经知道了dhtmlxGrid可以加载xml或cvs或json数据，这里主要演示dhtmlxGrid加载json数据。</p>
 
 <p>在上面的例子中每行有三列，故我们的json数据如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-</span><span class="err">rows:[</span><span class="w">
-	</span><span class="err">{</span><span class="w">
-		</span><span class="err">id:</span><span class="w"> </span><span class="nt">"a"</span><span class="err">,</span><span class="w">
-		</span><span class="err">data</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Model</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">399</span><span class="p">]</span><span class="w">
-	</span><span class="p">}</span><span class="err">,</span><span class="w">
-	</span><span class="p">{</span><span class="w">
-	</span><span class="err">id:</span><span class="w"> </span><span class="nt">"b"</span><span class="err">,</span><span class="w">
-		</span><span class="err">data</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Model</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">649</span><span class="p">]</span><span class="w">
-	</span><span class="p">}</span><span class="err">,</span><span class="w">
-	</span><span class="p">{</span><span class="w">
-	    </span><span class="err">id:</span><span class="w"> </span><span class="nt">"c"</span><span class="err">,</span><span class="w">
-	       </span><span class="err">data</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">Model</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">70</span><span class="p">,</span><span class="w"> </span><span class="mi">499</span><span class="p">]</span><span class="w">
-	</span><span class="p">}</span><span class="w">
-</span><span class="err">]</span><span class="w">
-</span><span class="err">}</span><span class="w"> </span><span class="err">将上面存于data.json文件，然后在doInitGrid方法里调用以下方法：</span><span class="w">
+<pre><code>{
+rows:[
+	{
+		id: "a",
+		data: [Model 1, 100, 399]
+	},
+	{
+	id: "b",
+		data: [Model 2, 50, 649]
+	},
+	{
+	    id: "c",
+	       data: [ Model 3, 70, 499]
+	}
+]
+} 将上面存于data.json文件，然后在doInitGrid方法里调用以下方法：
 
-</span><span class="err">mygrid.load</span><span class="w"> </span><span class="err">(</span><span class="s2">"data.json"</span><span class="err">，,</span><span class="s2">"json"</span><span class="err">);</span><span class="w">
-</span></code></pre>
-</div>
+mygrid.load ("data.json"，,"json");
+</code></pre>
 
 <p>这时候页面展示如下：</p>
 <div class="pic"><img src="http://docs.dhtmlx.com/lib/exe/fetch.php?cache=&amp;media=dhtmlxgrid:step_3.png" alt="" /></div>
@@ -267,9 +259,8 @@ grid.init(); //显示调用初始化方法，必须的
 
 <p>接下来我们对上面的例子进行排序。上例中每行有三列，第一列为字符串，后两列为数字，故可以调用以下方法进行排序。注意，该方法应该在init方法之前执行。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mygrid.setColSorting("str,int,int");
+<pre><code>mygrid.setColSorting("str,int,int");
 </code></pre>
-</div>
 
 <p>这时候单击最后一列表头，结果如下：</p>
 <div class="pic"><img src="http://docs.dhtmlx.com/lib/exe/fetch.php?media=dhtmlxgrid:step_4.png" alt="" /></div>
@@ -280,9 +271,8 @@ grid.init(); //显示调用初始化方法，必须的
 <p>设定单元格的类型非常容易，其可以用一行代码定义。这里有一些常见的编辑器，如简单的编辑器代码为“ed”，多行编辑“txt”，只读单元格“ro”，复选框“ch”，价格的格式化“price”。<br />
 默认情况下所有的列是“ro”，也可以使用以下方法类设置编辑类型：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mygrid.setColTypes("ed,ed,price");
+<pre><code>mygrid.setColTypes("ed,ed,price");
 </code></pre>
-</div>
 
 <p>Excells格式化有以下几种：</p>
 
@@ -328,7 +318,7 @@ sub_row：允许单元格作为一个可展开的子单元格，就想查看明�
 
 <h2>Step 6 – 行操作方法</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>function addRow(){
+<pre><code>function addRow(){
 var newId = (new Date()).valueOf()
 mygrid.addRow(newId,"",mygrid.getRowsNum())
 mygrid.selectRow(mygrid.getRowIndex(newId),false,false,true);
@@ -338,7 +328,6 @@ var selId = mygrid.getSelectedId()
 mygrid.deleteRow(selId);
 }
 </code></pre>
-</div>
 
 <p>代码中addRow() 方法的一些说明：<br />
 * 创建一个惟一值 (number of millisecond since 1970) 来作为row的标识；<br />
@@ -352,17 +341,16 @@ mygrid.deleteRow(selId);
 <h2>Step 7 – 事件</h2>
 <p>添加事件调用attachEvent 方法，如下行选中事件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>function doOnRowSelected(rowID,celInd){
+<pre><code>function doOnRowSelected(rowID,celInd){
 alert("Selected row ID is "+rowID+"\nUser clicked cell with index "+celInd);
 }
 mygrid.attachEvent("onRowSelect",doOnRowSelected);
 </code></pre>
-</div>
 
 <h2>Step 8 – Code</h2>
 <p>最后的代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt; title&gt;dhtmlxGrid Sample Page&lt; /title&gt;
+<pre><code>&lt; title&gt;dhtmlxGrid Sample Page&lt; /title&gt;
 &lt; link rel="STYLESHEET" type="text/css" href="codebase/dhtmlxgrid.css" /&gt;
 &lt; script src="codebase/dhtmlxcommon.js"&gt;&lt; /script&gt;
 &lt; script src="codebase/dhtmlxgrid.js"&gt;&lt; /script&gt;
@@ -399,7 +387,6 @@ alert("Selected row ID is "+rowID+"\nUser clicked cell with index "+celInd);
 &lt; div id="mygrid_container" style="width:600px;height:150px;"&gt;&lt; /div&gt;
 &lt; /body&gt;
 </code></pre>
-</div>
 
 
                     <br/>
@@ -455,7 +442,7 @@ alert("Selected row ID is "+rowID+"\nUser clicked cell with index "+celInd);
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

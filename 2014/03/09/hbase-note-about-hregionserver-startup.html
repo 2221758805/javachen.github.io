@@ -111,27 +111,26 @@
 
 <p>运行HRegionServerStarter类启动HRegionServer：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">my</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">start</span><span class="o">;</span>
+<pre><code class="language-java">package my.test.start;
 
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.regionserver.HRegionServer</span><span class="o">;</span>
+import org.apache.hadoop.hbase.regionserver.HRegionServer;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HRegionServerStarter</span> <span class="o">{</span>
+public class HRegionServerStarter {
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="c1">//new HMasterStarter.ZookeeperThread().start();</span>
+    public static void main(String[] args) throws Exception {
+        //new HMasterStarter.ZookeeperThread().start();
 
-        <span class="n">HRegionServer</span><span class="o">.</span><span class="na">main</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">"start"</span> <span class="o">});</span>
-    <span class="o">}</span>
+        HRegionServer.main(new String[] { "start" });
+    }
 
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>同样参考<a href="/2014/03/09/hbase-note-about-hmaster-startup.html">HBase源码：HMaster启动过程</a>，运行HRegionServer.main方法，会通过反射创建一个HRegionServer实例，然后调用其run方法。</p>
 
 <p>HRegionServer类继承关系如下：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/hbase-hregionserver-class.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hbase-hregionserver-class.jpg" alt="" /></p>
 
 <h1 id="section">构造方法</h1>
 
@@ -141,14 +140,14 @@
   <li>设置服务端HConnection重试次数</li>
   <li>检查压缩编码，通过hbase.regionserver.codecs可以配置编码类，一一检测，判断是否支持其压缩算法。</li>
   <li>获取useHBaseChecksum值，是否开启hbase checksum校验</li>
-  <li>获取<code class="highlighter-rouge">hbase.regionserver.separate.hlog.for.meta</code>参数值</li>
+  <li>获取<code>hbase.regionserver.separate.hlog.for.meta</code>参数值</li>
   <li>获取客户端重复次数</li>
   <li>获取threadWakeFrequency值</li>
-  <li>获取<code class="highlighter-rouge">hbase.regionserver.msginterval</code>值</li>
+  <li>获取<code>hbase.regionserver.msginterval</code>值</li>
   <li>创建Sleeper对象，用于周期性休眠线程</li>
-  <li>获取最大扫描结果集大小，<code class="highlighter-rouge">hbase.client.scanner.max.result.size</code>，默认无穷大</li>
-  <li>获取<code class="highlighter-rouge">hbase.regionserver.numregionstoreport</code>值</li>
-  <li>获取rpctimeout值，<code class="highlighter-rouge">hbase.rpc.timeout</code>，默认60000</li>
+  <li>获取最大扫描结果集大小，<code>hbase.client.scanner.max.result.size</code>，默认无穷大</li>
+  <li>获取<code>hbase.regionserver.numregionstoreport</code>值</li>
+  <li>获取rpctimeout值，<code>hbase.rpc.timeout</code>，默认60000</li>
   <li>获取主机名和绑定的ip和端口，端口默认为60020</li>
   <li>创建rpcServer</li>
   <li>zk授权登录和hbase授权</li>
@@ -176,7 +175,7 @@
 	- 创建 healthCheckChore 	<br />
     - 创建 Leases<br />
       - 判断是否启动 HRegionThriftServer</li>
-      <li>参数<code class="highlighter-rouge">hbase.regionserver.nbreservationblocks</code>默认为4，默认会预留20M(每个5M,20M = 4*5M)的内存防止OOM</li>
+      <li>参数<code>hbase.regionserver.nbreservationblocks</code>默认为4，默认会预留20M(每个5M,20M = 4*5M)的内存防止OOM</li>
       <li>初始化rpcEngine = HBaseRPC.getProtocolEngine(conf)</li>
     </ul>
   </li>
@@ -327,7 +326,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

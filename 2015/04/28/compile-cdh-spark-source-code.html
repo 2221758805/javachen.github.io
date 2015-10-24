@@ -113,43 +113,39 @@
 
 <p>下载代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/javachen/spark
+<pre><code class="language-bash">$ git clone https://github.com/javachen/spark
 </code></pre>
-</div>
 
 <p>然后，切换到最新的分支，当前为 cdh5-1.3.0_5.4.0。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd </span>spark
-<span class="gp">$ </span>git checkout cdh5-1.3.0_5.4.0
+<pre><code class="language-bash">$ cd spark
+$ git checkout cdh5-1.3.0_5.4.0
 </code></pre>
-</div>
 
 <p>查看当前分支：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>⇒  git branch
-<span class="k">*</span> cdh5-1.3.0_5.4.0
+<pre><code class="language-bash">⇒  git branch
+* cdh5-1.3.0_5.4.0
   master
 </code></pre>
-</div>
 
 <p>如果spark发布了新的版本，需要同步到我自己维护的spark项目中，可以按以下步骤进行操作:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 添加远程仓库地址</span>
-<span class="gp">$ </span>git remote add cdh git@github.com:cloudera/spark.git
+<pre><code class="language-bash"># 添加远程仓库地址
+$ git remote add cdh git@github.com:cloudera/spark.git
 
-<span class="c"># 抓取远程仓库更新：</span>
-<span class="gp">$ </span>git fetch cdh
+# 抓取远程仓库更新：
+$ git fetch cdh
 
-<span class="c"># 假设cloudera发布了新的版本 cdh/cdh5-1.3.0_5.4.X</span>
-<span class="gp">$ </span>git checkout -b cdh5-1.3.0_5.4.X cdh/cdh5-1.3.0_5.4.X
+# 假设cloudera发布了新的版本 cdh/cdh5-1.3.0_5.4.X
+$ git checkout -b cdh5-1.3.0_5.4.X cdh/cdh5-1.3.0_5.4.X
 
-<span class="c"># 切换到新下载的分支 </span>
-<span class="gp">$ </span>git checkout cdh5-1.3.0_5.4.X
+# 切换到新下载的分支 
+$ git checkout cdh5-1.3.0_5.4.X
 
-<span class="c"># 将其提交到自己的远程仓库：</span>
-<span class="gp">$ </span>git push origin cdh5-1.3.0_5.4.X:cdh5-1.3.0_5.4.X
+# 将其提交到自己的远程仓库：
+$ git push origin cdh5-1.3.0_5.4.X:cdh5-1.3.0_5.4.X
 </code></pre>
-</div>
 
 <h1 id="section-1">编译</h1>
 
@@ -157,110 +153,101 @@
 
 <p>在mac上安装<a href="https://github.com/typesafehub/zinc">zinc</a>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install zinc
+<pre><code class="language-bash">$ brew install zinc
 </code></pre>
-</div>
 
 <h2 id="maven">使用maven编译</h2>
 
-<p>指定hadoop版本为<code class="highlighter-rouge">2.6.0-cdh5.4.0</code>，并集成yarn和hive：</p>
+<p>指定hadoop版本为<code>2.6.0-cdh5.4.0</code>，并集成yarn和hive：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">"-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"</span>
-<span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -DskipTests clean package
+<pre><code class="language-bash">$ export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
+$ mvn -Pyarn -Dhadoop.version=2.6.0-cdh5.4.0 -Phive -DskipTests clean package
 </code></pre>
-</div>
 
-<p>在CDH的spark中，要想集成<code class="highlighter-rouge">hive-thriftserver</code>进行编译，需要修改 pom.xml 文件，添加一行 <module>sql/hive-thriftserver</module>：</p>
+<p>在CDH的spark中，要想集成<code>hive-thriftserver</code>进行编译，需要修改 pom.xml 文件，添加一行 <module>sql/hive-thriftserver</module>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;modules&gt;</span>
-    <span class="nt">&lt;module&gt;</span>core<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>bagel<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>graphx<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>mllib<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>tools<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>streaming<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/catalyst<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/core<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/hive<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>sql/hive-thriftserver<span class="nt">&lt;/module&gt;</span> <span class="c">&lt;!--添加的一行--&gt;</span>
-    <span class="nt">&lt;module&gt;</span>repl<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>assembly<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/twitter<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/kafka<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/flume<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/flume-sink<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/zeromq<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>external/mqtt<span class="nt">&lt;/module&gt;</span>
-    <span class="nt">&lt;module&gt;</span>examples<span class="nt">&lt;/module&gt;</span>
-  <span class="nt">&lt;/modules&gt;</span>
+<pre><code class="language-xml">&lt;modules&gt;
+    &lt;module&gt;core&lt;/module&gt;
+    &lt;module&gt;bagel&lt;/module&gt;
+    &lt;module&gt;graphx&lt;/module&gt;
+    &lt;module&gt;mllib&lt;/module&gt;
+    &lt;module&gt;tools&lt;/module&gt;
+    &lt;module&gt;streaming&lt;/module&gt;
+    &lt;module&gt;sql/catalyst&lt;/module&gt;
+    &lt;module&gt;sql/core&lt;/module&gt;
+    &lt;module&gt;sql/hive&lt;/module&gt;
+    &lt;module&gt;sql/hive-thriftserver&lt;/module&gt; &lt;!--添加的一行--&gt;
+    &lt;module&gt;repl&lt;/module&gt;
+    &lt;module&gt;assembly&lt;/module&gt;
+    &lt;module&gt;external/twitter&lt;/module&gt;
+    &lt;module&gt;external/kafka&lt;/module&gt;
+    &lt;module&gt;external/flume&lt;/module&gt;
+    &lt;module&gt;external/flume-sink&lt;/module&gt;
+    &lt;module&gt;external/zeromq&lt;/module&gt;
+    &lt;module&gt;external/mqtt&lt;/module&gt;
+    &lt;module&gt;examples&lt;/module&gt;
+  &lt;/modules&gt;
 </code></pre>
-</div>
 
 <p>然后，再执行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">"-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"</span>
-<span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -Phive-thriftserver -DskipTests clean package
+<pre><code class="language-bash">$ export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
+$ mvn -Pyarn -Dhadoop.version=2.6.0-cdh5.4.0 -Phive -Phive-thriftserver -DskipTests clean package
 </code></pre>
-</div>
 
 <p>运行测试用例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive  <span class="nb">test</span>
+<pre><code class="language-bash">$ mvn -Pyarn -Dhadoop.version=2.6.0-cdh5.4.0 -Phive  test
 </code></pre>
-</div>
 
 <p>运行java8测试：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn install -DskipTests -Pjava8-tests
+<pre><code class="language-bash">$ mvn install -DskipTests -Pjava8-tests
 </code></pre>
-</div>
 
 <h2 id="sbt">使用sbt编译</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>build/sbt -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive assembly
+<pre><code class="language-bash">$ build/sbt -Pyarn -Dhadoop.version=2.6.0-cdh5.4.0 -Phive assembly
 </code></pre>
-</div>
 
 <h2 id="section-2">生成压缩包</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./make-distribution.sh
+<pre><code class="language-bash">$ ./make-distribution.sh
 </code></pre>
-</div>
 
 <h1 id="section-3">排错</h1>
 
 <ol>
-  <li><code class="highlighter-rouge"> Unable to find configuration file at location scalastyle-config.xml</code> 异常</li>
+  <li><code> Unable to find configuration file at location scalastyle-config.xml</code> 异常</li>
 </ol>
 
-<p>在idea中使用maven对examples模块运行<code class="highlighter-rouge">package</code>或者<code class="highlighter-rouge">install</code>命令会出现<code class="highlighter-rouge"> Unable to find configuration file at location scalastyle-config.xml</code>异常，解决办法是将根目录下的scalastyle-config.xml拷贝到examples目录下去，这是因为pom.xml中定义的是scalastyle-maven-plugin插件从maven运行的当前目录查找该文件。</p>
+<p>在idea中使用maven对examples模块运行<code>package</code>或者<code>install</code>命令会出现<code> Unable to find configuration file at location scalastyle-config.xml</code>异常，解决办法是将根目录下的scalastyle-config.xml拷贝到examples目录下去，这是因为pom.xml中定义的是scalastyle-maven-plugin插件从maven运行的当前目录查找该文件。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugin&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.scalastyle<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>scalastyle-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.4.0<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;configuration&gt;</span>
-      <span class="nt">&lt;verbose&gt;</span>false<span class="nt">&lt;/verbose&gt;</span>
-      <span class="nt">&lt;failOnViolation&gt;</span>true<span class="nt">&lt;/failOnViolation&gt;</span>
-      <span class="nt">&lt;includeTestSourceDirectory&gt;</span>false<span class="nt">&lt;/includeTestSourceDirectory&gt;</span>
-      <span class="nt">&lt;failOnWarning&gt;</span>false<span class="nt">&lt;/failOnWarning&gt;</span>
-      <span class="nt">&lt;sourceDirectory&gt;</span>${basedir}/src/main/scala<span class="nt">&lt;/sourceDirectory&gt;</span>
-      <span class="nt">&lt;testSourceDirectory&gt;</span>${basedir}/src/test/scala<span class="nt">&lt;/testSourceDirectory&gt;</span>
-      <span class="nt">&lt;configLocation&gt;</span>scalastyle-config.xml<span class="nt">&lt;/configLocation&gt;</span>
-      <span class="nt">&lt;outputFile&gt;</span>scalastyle-output.xml<span class="nt">&lt;/outputFile&gt;</span>
-      <span class="nt">&lt;outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/outputEncoding&gt;</span>
-    <span class="nt">&lt;/configuration&gt;</span>
-    <span class="nt">&lt;executions&gt;</span>
-      <span class="nt">&lt;execution&gt;</span>
-        <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
-        <span class="nt">&lt;goals&gt;</span>
-          <span class="nt">&lt;goal&gt;</span>check<span class="nt">&lt;/goal&gt;</span>
-        <span class="nt">&lt;/goals&gt;</span>
-      <span class="nt">&lt;/execution&gt;</span>
-    <span class="nt">&lt;/executions&gt;</span>
-<span class="nt">&lt;/plugin&gt;</span>
+<pre><code class="language-xml">&lt;plugin&gt;
+    &lt;groupId&gt;org.scalastyle&lt;/groupId&gt;
+    &lt;artifactId&gt;scalastyle-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;0.4.0&lt;/version&gt;
+    &lt;configuration&gt;
+      &lt;verbose&gt;false&lt;/verbose&gt;
+      &lt;failOnViolation&gt;true&lt;/failOnViolation&gt;
+      &lt;includeTestSourceDirectory&gt;false&lt;/includeTestSourceDirectory&gt;
+      &lt;failOnWarning&gt;false&lt;/failOnWarning&gt;
+      &lt;sourceDirectory&gt;${basedir}/src/main/scala&lt;/sourceDirectory&gt;
+      &lt;testSourceDirectory&gt;${basedir}/src/test/scala&lt;/testSourceDirectory&gt;
+      &lt;configLocation&gt;scalastyle-config.xml&lt;/configLocation&gt;
+      &lt;outputFile&gt;scalastyle-output.xml&lt;/outputFile&gt;
+      &lt;outputEncoding&gt;UTF-8&lt;/outputEncoding&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+      &lt;execution&gt;
+        &lt;phase&gt;package&lt;/phase&gt;
+        &lt;goals&gt;
+          &lt;goal&gt;check&lt;/goal&gt;
+        &lt;/goals&gt;
+      &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
 </code></pre>
-</div>
 
 <h1 id="section-4">参考</h1>
 
@@ -317,7 +304,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

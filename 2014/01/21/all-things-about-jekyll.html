@@ -108,60 +108,53 @@
                     <p>Jekyll是一个简洁的、特别针对博客平台的静态网站生成器。它使用一个模板目录作为网站布局的基础框架，并在其上运行Textile、Markdown或Liquid标记语言的转换器，最终生成一个完整的静态Web站点，可以被放置在Apache或者你喜欢的其他任何Web服务器上。它同时也是GitHub Pages、一个由GitHub提供的用于托管项目主页或博客的服务，在后台所运行的引擎。</p>
 
 <h1 id="section">1. 安装</h1>
-<p>Jekyll使用动态脚本语言Ruby写成。请首先下载并安装Ruby，目前需要的ruby版本为<code class="highlighter-rouge">1.9.1</code>。</p>
+<p>Jekyll使用动态脚本语言Ruby写成。请首先下载并安装Ruby，目前需要的ruby版本为<code>1.9.1</code>。</p>
 
 <p>在使用Jekyll之前，你可能想要对Ruby语言有一些初步了解（非必需）。</p>
 
-<p>安装Jekyll的最好方式是通过<code class="highlighter-rouge">RubyGems</code>：</p>
+<p>安装Jekyll的最好方式是通过<code>RubyGems</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>gem install jekyll
+<pre><code>gem install jekyll
 </code></pre>
-</div>
 
-<p>Jekyll依赖以下的gems模块：liquid、fast-stemmer、classifier、directory_watcher、syntax、maruku、kramdown、posix-spawn和albino。它们会被<code class="highlighter-rouge">gem install</code>命令自动安装。</p>
+<p>Jekyll依赖以下的gems模块：liquid、fast-stemmer、classifier、directory_watcher、syntax、maruku、kramdown、posix-spawn和albino。它们会被<code>gem install</code>命令自动安装。</p>
 
 <h1 id="section-1">2. 模板引擎</h1>
 
 <h2 id="rdiscount">2.1 RDiscount</h2>
 <p>如果你想用 RDiscount 取代 Maruku 作为你的Markdown标记语言转换引擎，只需确认安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>gem install rdiscount
+<pre><code>gem install rdiscount
 </code></pre>
-</div>
 
-<p>在你站点下的<code class="highlighter-rouge">_config.yml</code>文件中加入以下配置：</p>
+<p>在你站点下的<code>_config.yml</code>文件中加入以下配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>markdown: rdiscount
+<pre><code>markdown: rdiscount
 </code></pre>
-</div>
 
 <h2 id="redcloth">2.2 RedCloth</h2>
 
 <p>若要使用Textile标记语言，需要安装相应的转换引擎<a href="http://redcloth.org/">RedCloth</a>。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>gem install RedCloth
+<pre><code>gem install RedCloth
 </code></pre>
-</div>
 
 <h2 id="redcarpet">2.3 Redcarpet</h2>
 
 <p>Redcarpet是由GitHub自己人开发的，一直以来它被用于在GitHub上渲染Markdown格式文本（也就是<a href="http://github.github.com/github-flavored-markdown/">GitHub Flavored Markdown</a>）。由于API兼容性的原因，Jekyll以前的版本并不支持Redcarpet。现在，Jekyll 0.12.0终于增加了对Redcarpet 2引擎的支持，只需安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ gem install redcarpet
+<pre><code>$ gem install redcarpet
 </code></pre>
-</div>
 
-<p>把<code class="highlighter-rouge">_config.yml</code>中的Markdown引擎设置从：</p>
+<p>把<code>_config.yml</code>中的Markdown引擎设置从：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>markdown: rdiscount
+<pre><code>markdown: rdiscount
 </code></pre>
-</div>
 
 <p>改为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>markdown: redcarpet
+<pre><code>markdown: redcarpet
 </code></pre>
-</div>
 
 <p>就可以迁移到Redcarpet上了。</p>
 
@@ -194,7 +187,7 @@
 
 <p>一个典型的Jekyll站点通常具有如下结构：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.
+<pre><code>.
 |-- _config.yml
 |-- _includes
 |-- _layouts
@@ -204,26 +197,24 @@
 |-- _site
 `-- index.html
 </code></pre>
-</div>
 
 <p>以下是每部分功能的简述：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">_config.yml</code>。保存Jekyll配置的文件。虽然绝大部分选项可以通过命令行参数指定，但将它们写入配置文件可以使你在每次执行时不必记住它们。</li>
-  <li><code class="highlighter-rouge">_includes</code>。该目录存放可以与<code class="highlighter-rouge">_layouts</code>和<code class="highlighter-rouge">_posts</code>混合、匹配并重用的文件。Liquid标签<code class="highlighter-rouge"><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">include</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="p">}</span></code>可以用于嵌入文件<code class="highlighter-rouge">_includes/file.ext</code>。</li>
-  <li><code class="highlighter-rouge">_layouts</code>。该目录存放用来插入帖子的网页布局模板。页面布局基于类似博客平台的一个帖子接一个帖子的原则，通过YAML前置数据定义。Liquid标签用于在页面上插入帖子的文本内容。</li>
-  <li><code class="highlighter-rouge">_posts</code>。该目录下存放的可以说成是你的”动态内容”。这些文件的格式很重要，它们的命名模式必须遵循 <code class="highlighter-rouge">YEAR-MONTH-DATE-title.MARKUP</code> 。每一个帖子的固定链接URL可以作弹性的调整，但帖子的发布日期和转换所使用的标记语言会根据且仅根据文件名中的相应部分来识别。</li>
-  <li><code class="highlighter-rouge">_site</code>。这里是Jekyll用以存放最终生成站点的根路径位置。也许把它加到你的 <code class="highlighter-rouge">.gitignore</code> 列表中会是个不错的主意。</li>
+  <li><code>_config.yml</code>。保存Jekyll配置的文件。虽然绝大部分选项可以通过命令行参数指定，但将它们写入配置文件可以使你在每次执行时不必记住它们。</li>
+  <li><code>_includes</code>。该目录存放可以与<code>_layouts</code>和<code>_posts</code>混合、匹配并重用的文件。Liquid标签<code>{ % include % }</code>可以用于嵌入文件<code>_includes/file.ext</code>。</li>
+  <li><code>_layouts</code>。该目录存放用来插入帖子的网页布局模板。页面布局基于类似博客平台的一个帖子接一个帖子的原则，通过YAML前置数据定义。Liquid标签用于在页面上插入帖子的文本内容。</li>
+  <li><code>_posts</code>。该目录下存放的可以说成是你的”动态内容”。这些文件的格式很重要，它们的命名模式必须遵循 <code>YEAR-MONTH-DATE-title.MARKUP</code> 。每一个帖子的固定链接URL可以作弹性的调整，但帖子的发布日期和转换所使用的标记语言会根据且仅根据文件名中的相应部分来识别。</li>
+  <li><code>_site</code>。这里是Jekyll用以存放最终生成站点的根路径位置。也许把它加到你的 <code>.gitignore</code> 列表中会是个不错的主意。</li>
 </ul>
 
 <h1 id="section-3">4. 运行、部署</h1>
 <p>通常直接在命令行下使用可执行的Ruby脚本 jekyll ，它可以从gem安装。如果要启动一个临时的Web服务器并测试你的Jekyll站点，执行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jekyll --server
+<pre><code>jekyll --server
 </code></pre>
-</div>
 
-<p>然后在浏览器中访问 <code class="highlighter-rouge">http://localhost:4000</code> 或 <code class="highlighter-rouge">http://0.0.0.0:4000</code> 。当然这里还有其他许多参数选项可以使用。</p>
+<p>然后在浏览器中访问 <code>http://localhost:4000</code> 或 <code>http://0.0.0.0:4000</code> 。当然这里还有其他许多参数选项可以使用。</p>
 
 <p>由于Jekyll所做的仅仅是生成一个包含HTML等静态网站文件的目录（_site），它可以通过简单的拷贝（scp）、远程同步（rsync）、ftp上传或git等方式部署到任何Web服务器上，例如github、gitcafe、qiniu。</p>
 
@@ -231,51 +222,48 @@
 
 <h2 id="section-5">使用表格</h2>
 
-<p>使用redcarpet模板引擎，通过gem安装redcarpet并修改<code class="highlighter-rouge">_config.yml</code></p>
+<p>使用redcarpet模板引擎，通过gem安装redcarpet并修改<code>_config.yml</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>markdown: redcarpet
+<pre><code>markdown: redcarpet
 redcarpet: 
     extensions: ["tables"]
 </code></pre>
-</div>
 
 <p>在 Markdwon 文件中可以依据以下语法进行书写</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>|head1 head1 head1|head2 head2 head2|head3 head3 head3|head4 head4 head4|
+<pre><code>|head1 head1 head1|head2 head2 head2|head3 head3 head3|head4 head4 head4|
 |---|:---|:---:|---:|
 |row1text1|row1text3|row1text3|row1text4|
 |row2text1|row2text3|row2text3|row2text4|
 </code></pre>
-</div>
 <p>然后添加如下样式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">table</span> <span class="p">{</span>
-<span class="nl">margin-bottom</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
-<span class="nl">max-width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-<span class="nl">border-collapse</span><span class="p">:</span> <span class="nb">collapse</span><span class="p">;</span>
-<span class="nl">transition</span><span class="p">:</span> <span class="n">all</span> <span class="m">0.3s</span><span class="p">;</span>
-<span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0.167</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="nt">table</span> <span class="p">{</span>
-<span class="nl">border-collapse</span><span class="p">:</span> <span class="nb">collapse</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nt">table</span> <span class="nt">thead</span><span class="o">&gt;</span><span class="nt">tr</span> <span class="p">{</span>
-<span class="nl">background-color</span><span class="p">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">249</span><span class="p">,</span><span class="m">249</span><span class="p">,</span><span class="m">249</span><span class="p">,</span><span class="m">0.9</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="nt">table</span> <span class="nt">thead</span> <span class="nt">tr</span> <span class="nt">th</span> <span class="p">{</span>
-<span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0.167</span><span class="p">);</span>
-<span class="nl">border-top</span><span class="p">:</span> <span class="m">0px</span> <span class="nb">none</span><span class="p">;</span>
-<span class="nl">border-bottom-width</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>
-<span class="nl">vertical-align</span><span class="p">:</span> <span class="nb">bottom</span><span class="p">;</span>
-<span class="nl">padding</span><span class="p">:</span> <span class="m">8px</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nt">table</span> <span class="nt">tbody</span> <span class="nt">tr</span> <span class="nt">td</span> <span class="p">{</span>
-<span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0.167</span><span class="p">);</span>
-<span class="nl">vertical-align</span><span class="p">:</span> <span class="nb">top</span><span class="p">;</span>
-<span class="nl">padding</span><span class="p">:</span> <span class="m">8px</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-css">table {
+margin-bottom: 20px;
+max-width: 100%;
+border-collapse: collapse;
+transition: all 0.3s;
+border: 1px solid rgba(0,0,0,0.167);
+}
+table {
+border-collapse: collapse;
+}
+table thead&gt;tr {
+background-color: rgba(249,249,249,0.9);
+}
+table thead tr th {
+border: 1px solid rgba(0,0,0,0.167);
+border-top: 0px none;
+border-bottom-width: 2px;
+vertical-align: bottom;
+padding: 8px;
+}
+table tbody tr td {
+border: 1px solid rgba(0,0,0,0.167);
+vertical-align: top;
+padding: 8px;
+}
 </code></pre>
-</div>
 
 <h1 id="section-6">6. 其他静态网站生成器</h1>
 <p>如果想要尝试一些其他的静态网页生成器，这里是一个简略的列表：</p>
@@ -373,7 +361,7 @@ redcarpet:
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

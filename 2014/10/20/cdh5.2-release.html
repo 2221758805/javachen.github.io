@@ -114,7 +114,7 @@
 <p>Avro 版本使用1.7.6，重要的一些改变：</p>
 
 <ul>
-  <li><a href="https://issues.apache.org/jira/browse/AVRO-1398">AVRO-1398</a>。增加同步间隔，从16k 调整到64k，该参数可以在 mapreduce 的配置参数中通过 <code class="highlighter-rouge">avro.mapred.sync.interval</code> 参数来设置</li>
+  <li><a href="https://issues.apache.org/jira/browse/AVRO-1398">AVRO-1398</a>。增加同步间隔，从16k 调整到64k，该参数可以在 mapreduce 的配置参数中通过 <code>avro.mapred.sync.interval</code> 参数来设置</li>
   <li><a href="https://issues.apache.org/jira/browse/AVRO-1355">AVRO-1355</a>。schema 中不能包括相同的 field 名称。</li>
 </ul>
 
@@ -139,7 +139,7 @@
 
 <p>CDH 5.2 提供了一个 mapper 端 shuffle 的优化实现，使用该实现需要修改原来的实现类，默认未开启该实现。</p>
 
-<p>可以修改 ­<code class="highlighter-rouge">mapreduce.job.map.output.collector.class</code> 参数为 <code class="highlighter-rouge">org.apache.hadoop.mapred.nativetask.NativeMapOutputCollectorDelegator</code>来开启该特性。</p>
+<p>可以修改 ­<code>mapreduce.job.map.output.collector.class</code> 参数为 <code>org.apache.hadoop.mapred.nativetask.NativeMapOutputCollectorDelegator</code>来开启该特性。</p>
 
 <p>使用了自定义的可写的类型或者比较器时，无法使用该特性。</p>
 
@@ -149,8 +149,8 @@
   <li>
     <p>Fair Scheduler 新特性：</p>
   </li>
-  <li>允许为每个队列设置 <code class="highlighter-rouge">fairsharePreemptionThreshold</code> 属性，该值在 fair-scheduler.xml 中设置，默认值为0.5</li>
-  <li>允许为每个队列设置 <code class="highlighter-rouge">fairsharePreemptionTimeout</code> 属性，该值在 fair-scheduler.xml 中设置</li>
+  <li>允许为每个队列设置 <code>fairsharePreemptionThreshold</code> 属性，该值在 fair-scheduler.xml 中设置，默认值为0.5</li>
+  <li>允许为每个队列设置 <code>fairsharePreemptionTimeout</code> 属性，该值在 fair-scheduler.xml 中设置</li>
   <li>在 web ui 中可以显示 Steady Fair Share</li>
   <li>
     <p>Fair Scheduler 改进：</p>
@@ -214,7 +214,7 @@
   <li>HiveServer2 可以配置 hiverc 文件，当连接的时候，自动执行该文件内容</li>
   <li>Permanent UDFs</li>
   <li>HiveServer2 添加 session 和操作超时</li>
-  <li>Beeline 接受一个 <code class="highlighter-rouge">-i</code> 参数执行初始化的 sql 文件</li>
+  <li>Beeline 接受一个 <code>-i</code> 参数执行初始化的 sql 文件</li>
   <li>新的 join 语法(implicit joins)</li>
   <li>建表语句支持 AVRO 存储格式</li>
   <li>Hive 支持额外的数据类型：</li>
@@ -230,13 +230,13 @@
 <ul>
   <li>添加 <a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_scalability.html#spill_to_disk_unique_1">spill to disk</a> 支持，当内存不够时自动转换到磁盘上进行处理。</li>
   <li>子查询改进：</li>
-  <li><code class="highlighter-rouge">WHERE</code> 语句中支持子查询，可以用于 <code class="highlighter-rouge">in</code> 查询</li>
-  <li>支持 <code class="highlighter-rouge">EXISTS</code> 和  <code class="highlighter-rouge">NOT EXISTS</code> 操作</li>
-  <li>子查询中可以使用 <code class="highlighter-rouge">IN</code> 和 <code class="highlighter-rouge">NOT IN</code></li>
-  <li>where 语句可以使用如下语句： <code class="highlighter-rouge">WHERE column = (SELECT MAX(some_other_column FROM table)</code> 或者 <code class="highlighter-rouge">WHERE column IN (SELECT some_other_column FROM table WHERE conditions)</code></li>
+  <li><code>WHERE</code> 语句中支持子查询，可以用于 <code>in</code> 查询</li>
+  <li>支持 <code>EXISTS</code> 和  <code>NOT EXISTS</code> 操作</li>
+  <li>子查询中可以使用 <code>IN</code> 和 <code>NOT IN</code></li>
+  <li>where 语句可以使用如下语句： <code>WHERE column = (SELECT MAX(some_other_column FROM table)</code> 或者 <code>WHERE column IN (SELECT some_other_column FROM table WHERE conditions)</code></li>
   <li>Correlated subqueries let you cross-reference values from the outer query block and the subquery.</li>
   <li>Scalar subqueries let you substitute the result of single-value aggregate functions such as MAX(), MIN(), COUNT(), or AVG(), where you would normally use a numeric value in a WHERE clause.</li>
-  <li>添加几个聚合函数： <code class="highlighter-rouge">RANK()</code>, <code class="highlighter-rouge">LAG()</code>, <code class="highlighter-rouge">LEAD(</code>), <code class="highlighter-rouge">FIRST_VALUE()</code></li>
+  <li>添加几个聚合函数： <code>RANK()</code>, <code>LAG()</code>, <code>LEAD(</code>), <code>FIRST_VALUE()</code></li>
   <li>添加新的数据类型：</li>
   <li>VARCHAR</li>
   <li>char</li>
@@ -250,16 +250,16 @@
   <li>–disk_spill_encryption</li>
   <li>Impala 可以读取 gzip, bzip, 或 Snappy 的压缩数据</li>
   <li>Query hints can now use comment notation, /* +hint_name */ or – +hint_name，更详细说明见：<a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_hints.html#hints">Hints</a></li>
-  <li><code class="highlighter-rouge">QUERY_TIMEOUT_S</code> 用于设置查询超时时间。</li>
-  <li>添加 <code class="highlighter-rouge">VAR_SAMP()</code> 和 <code class="highlighter-rouge">VAR_POP()</code>，分别为 <code class="highlighter-rouge">VARIANCE_SAMP()</code> 和 <code class="highlighter-rouge">VARIANCE_POP()</code> 别名</li>
+  <li><code>QUERY_TIMEOUT_S</code> 用于设置查询超时时间。</li>
+  <li>添加 <code>VAR_SAMP()</code> 和 <code>VAR_POP()</code>，分别为 <code>VARIANCE_SAMP()</code> 和 <code>VARIANCE_POP()</code> 别名</li>
   <li>添加新的日期和时间类型函数：DATE_PART()</li>
-  <li><a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_appx_count_distinct.html#appx_count_distinct">APPX_COUNT_DISTINCT</a>，如果设置该参数，impala 会用 <code class="highlighter-rouge">NDV()</code> 函数代替 <code class="highlighter-rouge">COUNT(DISTINCT)</code>，加快查询速度并支持多个 <code class="highlighter-rouge">COUNT(DISTINCT)</code> 操作</li>
-  <li>添加 <code class="highlighter-rouge">DECODE()</code> 函数，是 <code class="highlighter-rouge">CASE()</code> 函数的一种简写方式，详细参考 <a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_conditional_functions.html#conditional_functions">Impala Conditional Functions</a></li>
+  <li><a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_appx_count_distinct.html#appx_count_distinct">APPX_COUNT_DISTINCT</a>，如果设置该参数，impala 会用 <code>NDV()</code> 函数代替 <code>COUNT(DISTINCT)</code>，加快查询速度并支持多个 <code>COUNT(DISTINCT)</code> 操作</li>
+  <li>添加 <code>DECODE()</code> 函数，是 <code>CASE()</code> 函数的一种简写方式，详细参考 <a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_conditional_functions.html#conditional_functions">Impala Conditional Functions</a></li>
   <li>STDDEV(), STDDEV_POP(), STDDEV_SAMP(), VARIANCE(), VARIANCE_POP(), VARIANCE_SAMP(), NDV() 返回 double 类型</li>
-  <li>Parquet 块大小默认值由 1G 改为256M，也可以通过 <code class="highlighter-rouge">PARQUET_FILE_SIZE</code> 参数设置</li>
-  <li>支持 Anti-joins，可以使用 <code class="highlighter-rouge">LEFT ANTI JOIN</code> 和 <code class="highlighter-rouge">RIGHT ANTI JOIN</code> 语句</li>
-  <li>impala-shell 中可以执行 set 语句，可以设置 <code class="highlighter-rouge">PARQUET_FILE_SIZE</code>、<code class="highlighter-rouge">MEM_LIMIT</code>和 <code class="highlighter-rouge">SYNC_DDL</code> 等参数，详细说明见：<a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_set.html#set">SET Statement</a></li>
-  <li>impala-shell 可以读取 <code class="highlighter-rouge">$HOME/.impalarc</code> 中的配置，详细说明见：<a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_shell_options.html#shell_options">impala-shell Configuration Options</a></li>
+  <li>Parquet 块大小默认值由 1G 改为256M，也可以通过 <code>PARQUET_FILE_SIZE</code> 参数设置</li>
+  <li>支持 Anti-joins，可以使用 <code>LEFT ANTI JOIN</code> 和 <code>RIGHT ANTI JOIN</code> 语句</li>
+  <li>impala-shell 中可以执行 set 语句，可以设置 <code>PARQUET_FILE_SIZE</code>、<code>MEM_LIMIT</code>和 <code>SYNC_DDL</code> 等参数，详细说明见：<a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_set.html#set">SET Statement</a></li>
+  <li>impala-shell 可以读取 <code>$HOME/.impalarc</code> 中的配置，详细说明见：<a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/impala_shell_options.html#shell_options">impala-shell Configuration Options</a></li>
 </ul>
 
 <h2 id="kite">1.8 Kite</h2>
@@ -297,11 +297,11 @@
 
 <ul>
   <li>当没有快照目录时，getSnapshottableDirListing() 方法返回 null</li>
-  <li>NameNode ` -finalize<code class="highlighter-rouge"> 启动参数被删除，为了完成集群的升级，应该使用 </code>hdfs dfsadmin -finalizeUpgrade` 命令</li>
+  <li>NameNode ` -finalize<code> 启动参数被删除，为了完成集群的升级，应该使用 </code>hdfs dfsadmin -finalizeUpgrade` 命令</li>
   <li>libhdfs 函数返回正确的错误码</li>
   <li>HDFS balancer 命令运行错误时候返回0，运行成功返回1</li>
   <li>Disable symlinks temporarily</li>
-  <li>Files named <code class="highlighter-rouge">.snapshot</code> or <code class="highlighter-rouge">.reserved</code> must not exist within HDFS.</li>
+  <li>Files named <code>.snapshot</code> or <code>.reserved</code> must not exist within HDFS.</li>
 </ul>
 
 <p><em>Change in High-Availability Support</em>：</p>
@@ -314,13 +314,13 @@
   <li>CATALINA_BASE 变量不再用于决定一个组件是否配置为 YARN 或者 MRv1</li>
   <li>YARN Fair Scheduler ACL change. Root queue defaults to everybody, and other queues default to nobody.</li>
   <li>YARN 高可用配置参数修改了 key 名称</li>
-  <li><code class="highlighter-rouge">YARN_HOME</code> 改为 <code class="highlighter-rouge">HADOOP_YARN_HOME</code></li>
+  <li><code>YARN_HOME</code> 改为 <code>HADOOP_YARN_HOME</code></li>
   <li>yarn-site.xml 中的以下参数改名：</li>
-  <li><code class="highlighter-rouge">mapreduce.shuffle</code> 改为 <code class="highlighter-rouge">mapreduce_shuffle</code></li>
-  <li><code class="highlighter-rouge">yarn.nodemanager.aux-services.mapreduce.shuffle.class</code> 改为 <code class="highlighter-rouge">yarn.nodemanager.aux-services.mapreduce_shuffle.class</code></li>
-  <li><code class="highlighter-rouge">yarn.resourcemanager.resourcemanager.connect.max.wait.secs</code> 改为 <code class="highlighter-rouge">yarn.resourcemanager.connect.max-wait.secs</code></li>
-  <li><code class="highlighter-rouge">yarn.resourcemanager.resourcemanager.connect.retry_interval.secs</code> 改名为 <code class="highlighter-rouge">yarn.resourcemanager.connect.retry-interval.secs</code></li>
-  <li><code class="highlighter-rouge">yarn.resourcemanager.am.max-retries</code> 改名为 <code class="highlighter-rouge">yarn.resourcemanager.am.max-attempts</code></li>
+  <li><code>mapreduce.shuffle</code> 改为 <code>mapreduce_shuffle</code></li>
+  <li><code>yarn.nodemanager.aux-services.mapreduce.shuffle.class</code> 改为 <code>yarn.nodemanager.aux-services.mapreduce_shuffle.class</code></li>
+  <li><code>yarn.resourcemanager.resourcemanager.connect.max.wait.secs</code> 改为 <code>yarn.resourcemanager.connect.max-wait.secs</code></li>
+  <li><code>yarn.resourcemanager.resourcemanager.connect.retry_interval.secs</code> 改名为 <code>yarn.resourcemanager.connect.retry-interval.secs</code></li>
+  <li><code>yarn.resourcemanager.am.max-retries</code> 改名为 <code>yarn.resourcemanager.am.max-attempts</code></li>
 </ul>
 
 <h2 id="hbase">2.3 HBase</h2>
@@ -331,9 +331,8 @@
 
 <p>CDH 5 提供一个新的离线命令用于升级元数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>schemaTool -d &lt;dbType&gt; -upgradeSchema
+<pre><code>schemaTool -d &lt;dbType&gt; -upgradeSchema
 </code></pre>
-</div>
 
 <p>CDH 4.x 和 CDH 5 中不兼容的地方：</p>
 
@@ -362,58 +361,54 @@
 
 <p>查看是否开启</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cat /sys/kernel/mm/redhat_transparent_hugepage/defrag
+<pre><code>cat /sys/kernel/mm/redhat_transparent_hugepage/defrag
 </code></pre>
-</div>
 
 <p>关闭该特性，并将其加入到 /etc/rc.local</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>echo never &gt; /sys/kernel/mm/redhat_transparent_hugepage/defrag
+<pre><code>echo never &gt; /sys/kernel/mm/redhat_transparent_hugepage/defrag
 </code></pre>
-</div>
 
 <p>2、设置 swap 交换</p>
 
 <p>查看是否开启：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cat /proc/sys/vm/swappiness
+<pre><code>cat /proc/sys/vm/swappiness
 </code></pre>
-</div>
 
 <p>On most systems, it is set to 60 by default. This is not suitable for Hadoop clusters nodes, because it can cause processes to get swapped out even when there is free memory available. This can affect stability and performance, and may cause problems such as lengthy garbage collection pauses for important system daemons.</p>
 
 <p>建议修改为0：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysctl -w vm.swappiness=0 
+<pre><code>sysctl -w vm.swappiness=0 
 </code></pre>
-</div>
 
 <p>3、Improving Performance in Shuffle Handler and IFile Reader</p>
 
 <p>Shuffle Handler，开启预先读取数据：</p>
 
 <ul>
-  <li>对于 YARN，设置 <code class="highlighter-rouge">mapreduce.shuffle.readahead.bytes</code>，默认值为4MB</li>
-  <li>对于 MRv1，设置 <code class="highlighter-rouge">mapred.tasktracker.shuffle.readahead.bytes</code>，默认值为4MB</li>
+  <li>对于 YARN，设置 <code>mapreduce.shuffle.readahead.bytes</code>，默认值为4MB</li>
+  <li>对于 MRv1，设置 <code>mapred.tasktracker.shuffle.readahead.bytes</code>，默认值为4MB</li>
 </ul>
 
-<p>IFile Reader，开启预先读取IFile文件可以改进合并文件性能，开启该特性，请设置 <code class="highlighter-rouge">mapreduce.ifile.readahead property</code> 为 true，默认值为 true，更进一步，可以设置 <code class="highlighter-rouge">mapreduce.ifile.readahead.bytes</code> 参数值，该值默认为4MB</p>
+<p>IFile Reader，开启预先读取IFile文件可以改进合并文件性能，开启该特性，请设置 <code>mapreduce.ifile.readahead property</code> 为 true，默认值为 true，更进一步，可以设置 <code>mapreduce.ifile.readahead.bytes</code> 参数值，该值默认为4MB</p>
 
 <p>4、MapReduce配置最佳实践</p>
 
-<p>设置 <code class="highlighter-rouge">mapreduce.tasktracker.outofband.heartbeat</code> 为 true，该值默认为 false</p>
+<p>设置 <code>mapreduce.tasktracker.outofband.heartbeat</code> 为 true，该值默认为 false</p>
 
-<p>在一个小集群中，设置 JobTracker heartbeat 间隔到一个更小的值，参数为 <code class="highlighter-rouge">apreduce.jobtracker.heartbeat.interval.min</code> ，默认值为10</p>
+<p>在一个小集群中，设置 JobTracker heartbeat 间隔到一个更小的值，参数为 <code>apreduce.jobtracker.heartbeat.interval.min</code> ，默认值为10</p>
 
 <p>5、立即启动 MapReduce 的 JVM</p>
 
-<p>对于小任务，设置 <code class="highlighter-rouge">mapred.reduce.slowstart.completed.maps</code> 值为0，对于比较大的任务，最大设置为 50%</p>
+<p>对于小任务，设置 <code>mapred.reduce.slowstart.completed.maps</code> 值为0，对于比较大的任务，最大设置为 50%</p>
 
 <p>6、调整 MRv1 日志级别</p>
 
 <ul>
-  <li><code class="highlighter-rouge">mapreduce.map.log.level</code></li>
-  <li><code class="highlighter-rouge">mapreduce.reduce.log.level</code></li>
+  <li><code>mapreduce.map.log.level</code></li>
+  <li><code>mapreduce.reduce.log.level</code></li>
 </ul>
 
 <h1 id="section-2">4. 存在的问题</h1>
@@ -464,7 +459,7 @@
   <li>Hive’s Timestamp type cannot be stored in Parquet</li>
   <li>Hive’s Decimal type cannot be stored in Parquet and Avro</li>
   <li>Hive creates an invalid table if you specify more than one partition with alter table</li>
-  <li>PostgreSQL 9.0+ requires additional configuration，需要设置 <code class="highlighter-rouge">standard_conforming_strings</code> 为 off</li>
+  <li>PostgreSQL 9.0+ requires additional configuration，需要设置 <code>standard_conforming_strings</code> 为 off</li>
   <li>Setting hive.optimize.skewjoin to true causes long running queries to fail</li>
   <li>JDBC - executeUpdate does not returns the number of rows modified</li>
   <li>Hive Auth (Grant/Revoke/Show Grant) statements do not support fully qualified table names (default.tab1)</li>
@@ -532,7 +527,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

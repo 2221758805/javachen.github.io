@@ -107,40 +107,39 @@
               <div id="post-text">
                     <h1 id="states">创建states文件</h1>
 
-<p>在<code class="highlighter-rouge">/srv/salt</code>目录下创建jdk目录，并在jdk目录创建init.sls文件，init.sls文件内容如下：</p>
+<p>在<code>/srv/salt</code>目录下创建jdk目录，并在jdk目录创建init.sls文件，init.sls文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">jdk</span><span class="o">-</span><span class="nb">file</span><span class="p">:</span>
- <span class="nb">file</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span>
-   <span class="o">-</span> <span class="n">source</span><span class="p">:</span> <span class="n">salt</span><span class="p">:</span><span class="o">//</span><span class="n">jdk</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">6.0</span><span class="n">_39</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-   <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">6.0</span><span class="n">_39</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-   <span class="o">-</span> <span class="n">include_empty</span><span class="p">:</span> <span class="bp">True</span>
+<pre><code class="language-python">jdk-file:
+ file.managed:
+   - source: salt://jdk/files/jdk1.6.0_39.tar.gz
+   - name: /usr/java/jdk1.6.0_39.tar.gz
+   - include_empty: True
  
-<span class="n">jdk</span><span class="o">-</span><span class="n">install</span><span class="p">:</span>
- <span class="n">cmd</span><span class="o">.</span><span class="n">run</span><span class="p">:</span>
-   <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s">'/bin/tar -zxf jdk1.6.0_39.tar.gz &amp;&amp; /bin/ln -s jdk1.6.0_39  latest '</span>
-   <span class="o">-</span> <span class="n">cwd</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span>
-   <span class="o">-</span> <span class="n">unless</span><span class="p">:</span> <span class="s">'test -e jdk1.6.0_39'</span>
-   <span class="o">-</span> <span class="n">require</span><span class="p">:</span>
-     <span class="o">-</span> <span class="nb">file</span><span class="p">:</span> <span class="n">jdk</span><span class="o">-</span><span class="nb">file</span>
+jdk-install:
+ cmd.run:
+   - name: '/bin/tar -zxf jdk1.6.0_39.tar.gz &amp;&amp; /bin/ln -s jdk1.6.0_39  latest '
+   - cwd: /usr/java
+   - unless: 'test -e jdk1.6.0_39'
+   - require:
+     - file: jdk-file
  
-<span class="n">jdk</span><span class="o">-</span><span class="n">rmzip</span><span class="p">:</span>
-  <span class="nb">file</span><span class="o">.</span><span class="n">absent</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">6.0</span><span class="n">_39</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+jdk-rmzip:
+  file.absent:
+    - name: /usr/java/jdk1.6.0_39.tar.gz
  
-<span class="o">/</span><span class="n">root</span><span class="o">/.</span><span class="n">bashrc</span><span class="p">:</span>
-  <span class="nb">file</span><span class="o">.</span><span class="n">append</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">text</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">export</span> <span class="n">JAVA_HOME</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">latest</span>
-      <span class="o">-</span> <span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="err">$</span><span class="n">JAVA_HOME</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="err">$</span><span class="n">PATH</span>
+/root/.bashrc:
+  file.append:
+    - text:
+      - export JAVA_HOME=/usr/java/latest
+      - export PATH=$JAVA_HOME/bin:$PATH
 </code></pre>
-</div>
 
-<p>上面sls文件需要引用<code class="highlighter-rouge">jdk1.6.0_39.tar.gz</code>文件，故需要下载jdk1.6.0_39.bin安装之后将其打包成<code class="highlighter-rouge">jdk1.6.0_39.tar.gz</code>拷贝到<code class="highlighter-rouge">/srv/salt/jdk/files</code>目录。</p>
+<p>上面sls文件需要引用<code>jdk1.6.0_39.tar.gz</code>文件，故需要下载jdk1.6.0_39.bin安装之后将其打包成<code>jdk1.6.0_39.tar.gz</code>拷贝到<code>/srv/salt/jdk/files</code>目录。</p>
 
 <p>init.sls文件执行过程包括以下几个步骤：</p>
 
 <ul>
-  <li>jdk-file，将<code class="highlighter-rouge">salt://jdk/files/jdk1.6.0_39.tar.gz</code>文件拷贝到<code class="highlighter-rouge">/usr/java</code></li>
+  <li>jdk-file，将<code>salt://jdk/files/jdk1.6.0_39.tar.gz</code>文件拷贝到<code>/usr/java</code></li>
   <li>jdk-install，解压文件</li>
   <li>jdk-rmzip，删除压缩包</li>
   <li>/root/.bashrc，设置JAVA_HOME</li>
@@ -148,17 +147,16 @@
 
 <p>修改top.sls文件（该步骤为可选），添加jdk.init:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">base</span><span class="p">:</span>
-  <span class="s">'*'</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">jdk</span><span class="o">.</span><span class="n">init</span>
+<pre><code class="language-python">base:
+  '*':
+    - jdk.init
 </code></pre>
-</div>
 
 <h1 id="section">测试运行</h1>
 
 <p>在master上运行下面命令，并观察运行结果：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>root@sk1 vagrant]# salt <span class="s1">'*'</span> state.sls jdk
+<pre><code class="language-bash">[root@sk1 vagrant]# salt '*' state.sls jdk
 sk2:
 ----------
           ID: jdk-file
@@ -175,7 +173,7 @@ sk2:
 ----------
           ID: jdk-install
     Function: cmd.run
-        Name: /bin/tar -zxf jdk1.6.0_39.tar.gz <span class="o">&amp;&amp;</span> /bin/ln -s jdk1.6.0_39  latest
+        Name: /bin/tar -zxf jdk1.6.0_39.tar.gz &amp;&amp; /bin/ln -s jdk1.6.0_39  latest
       Result: True
      Comment: unless execution succeeded
      Changes:  
@@ -202,46 +200,41 @@ Failed:    0
 ------------
 Total:     4
 </code></pre>
-</div>
 
 <p>从上可以看出成功了4个，失败为0。</p>
 
 <p>安装了jdk之后，需要重启minion(还需要<strong>修改minion启动脚本，让minion加载上系统环境变量</strong>，详细说明，见<a href="/2013/11/11/install-saltstack-and-halite.html">安装SaltStack和halite</a>)才能通过下面脚本运行java相关的命令，如java、jps等等：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">salt</span> <span class="s">'*'</span> <span class="n">cmd</span><span class="o">.</span><span class="n">run</span> <span class="s">'jps'</span>
+<pre><code class="language-python">salt '*' cmd.run 'jps'
 </code></pre>
-</div>
 
 <p>否则，你需要通过下面脚本来执行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">salt</span> <span class="s">'*'</span> <span class="n">cmd</span><span class="o">.</span><span class="n">run</span> <span class="s">'source /root/.bashrc ;jps'</span>
+<pre><code class="language-python">salt '*' cmd.run 'source /root/.bashrc ;jps'
 </code></pre>
-</div>
 
 <h1 id="pillar">设置pillar</h1>
 
-<p>将上面的<code class="highlighter-rouge">jdk/init.sls</code>文件修改为通过pillar引用变量</p>
+<p>将上面的<code>jdk/init.sls</code>文件修改为通过pillar引用变量</p>
 
-<p>a.首先在<code class="highlighter-rouge">/srv/pillar</code>目录创建jdk目录，并在jdk目录下创建init.sls文件，内容如下：</p>
+<p>a.首先在<code>/srv/pillar</code>目录创建jdk目录，并在jdk目录下创建init.sls文件，内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">jdk</span><span class="p">:</span>
-  <span class="n">name</span><span class="p">:</span> <span class="n">jdk1</span><span class="o">.</span><span class="mf">6.0</span><span class="n">_39</span>
-  <span class="n">srvpath</span><span class="p">:</span> <span class="n">salt</span><span class="p">:</span><span class="o">//</span><span class="n">jdk</span><span class="o">/</span><span class="n">files</span> 
-  <span class="n">homepath</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span>
+<pre><code class="language-python">jdk:
+  name: jdk1.6.0_39
+  srvpath: salt://jdk/files 
+  homepath: /usr/java
 </code></pre>
-</div>
 
-<p>b.在<code class="highlighter-rouge">/srv/pillar/top.sls</code>中添加jdk.init</p>
+<p>b.在<code>/srv/pillar/top.sls</code>中添加jdk.init</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">base</span><span class="p">:</span>
-  <span class="s">'*'</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">jdk</span><span class="o">.</span><span class="n">init</span>
+<pre><code class="language-python">base:
+  '*':
+    - jdk.init
 </code></pre>
-</div>
 
-<p>c.修改<code class="highlighter-rouge">/srv/salt/jdk/init.sls</code>文件为从pillar引入变量，内容如下：</p>
+<p>c.修改<code>/srv/salt/jdk/init.sls</code>文件为从pillar引入变量，内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jdk-file:
+<pre><code>jdk-file:
   file.managed:
     - source: {{pillar['jdk']['srvpath']}}/{{pillar['jdk']['name']}}.tar.gz
     - name: {{pillar['jdk']['homepath']}}/{{pillar['jdk']['name']}}.tar.gz
@@ -263,7 +256,6 @@ jdk-rmzip:
       - export JAVA_HOME={{pillar['jdk']['homepath']}}/{{pillar['jdk']['name']}}
       - export PATH=$JAVA_HOME/bin:$PATH
 </code></pre>
-</div>
 
 <p>d.参考上面，再次测试一遍</p>
 
@@ -316,7 +308,7 @@ jdk-rmzip:
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

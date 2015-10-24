@@ -109,35 +109,34 @@
 
 <p>配置为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">highlighter</span><span class="pi">:</span> <span class="s">pygments</span>
-<span class="s">markdown</span><span class="pi">:</span> <span class="s">redcarpet</span>  <span class="c1"># [ maruku | rdiscount | kramdown | redcarpet ]</span>
+<pre><code class="language-yaml">highlighter: pygments
+markdown: redcarpet  # [ maruku | rdiscount | kramdown | redcarpet ]
 
-<span class="s">redcarpet</span><span class="pi">:</span>
-    <span class="s">extensions</span><span class="pi">:</span>
-        <span class="pi">-</span> <span class="s">fenced_code_blocks</span>
-        <span class="pi">-</span> <span class="s">no_intra_emphasis</span>
-        <span class="pi">-</span> <span class="s">strikethrough</span>
-        <span class="pi">-</span> <span class="s">autolink</span>
-        <span class="pi">-</span> <span class="s">tables</span>
-        <span class="pi">-</span> <span class="s">superscript</span>
-        <span class="pi">-</span> <span class="s">highlight</span>
-        <span class="pi">-</span> <span class="s">prettify</span>
-        <span class="pi">-</span> <span class="s">with_toc_data</span>
+redcarpet:
+    extensions:
+        - fenced_code_blocks
+        - no_intra_emphasis
+        - strikethrough
+        - autolink
+        - tables
+        - superscript
+        - highlight
+        - prettify
+        - with_toc_data
 </code></pre>
-</div>
 
 <p>redcarpet有几个扩展：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">fenced_code_blocks</code> 解析代码块，使用3个或3个以上 ~ 或者 ` 包围起来的文本会被解析为代码块，你可以在开头指定代码的语言类型</li>
-  <li><code class="highlighter-rouge">no_intra_emphasis</code> 不解析单词中的下划线</li>
-  <li><code class="highlighter-rouge">strikethrough</code> 支持两个 ~ 包围的文本，解析为删除线</li>
-  <li><code class="highlighter-rouge">space_after_headers</code> #后面必须加空格，否则不会被解析为标题</li>
-  <li><code class="highlighter-rouge">autolink</code> 自动检查文本中 http https ftp 等协议的链接文本，将之解析为链接。没有以 http:// 开头，而是直接以 www. 开头的同样会被检查到</li>
-  <li><code class="highlighter-rouge">hard_wrap</code> 如果 Markdown 文本中有折行的话，会转换为标签</li>
-  <li><code class="highlighter-rouge">tables</code> 表格</li>
-  <li><code class="highlighter-rouge">superscript</code> 上标，例如 : <code class="highlighter-rouge">this is the 2^(nd) time</code> ，效果为：this is the 2^(nd) time</li>
-  <li><code class="highlighter-rouge">with_toc_data</code> 给生成的 Header 标签增加锚点</li>
+  <li><code>fenced_code_blocks</code> 解析代码块，使用3个或3个以上 ~ 或者 ` 包围起来的文本会被解析为代码块，你可以在开头指定代码的语言类型</li>
+  <li><code>no_intra_emphasis</code> 不解析单词中的下划线</li>
+  <li><code>strikethrough</code> 支持两个 ~ 包围的文本，解析为删除线</li>
+  <li><code>space_after_headers</code> #后面必须加空格，否则不会被解析为标题</li>
+  <li><code>autolink</code> 自动检查文本中 http https ftp 等协议的链接文本，将之解析为链接。没有以 http:// 开头，而是直接以 www. 开头的同样会被检查到</li>
+  <li><code>hard_wrap</code> 如果 Markdown 文本中有折行的话，会转换为标签</li>
+  <li><code>tables</code> 表格</li>
+  <li><code>superscript</code> 上标，例如 : <code>this is the 2^(nd) time</code> ，效果为：this is the 2^(nd) time</li>
+  <li><code>with_toc_data</code> 给生成的 Header 标签增加锚点</li>
 </ul>
 
 <h1 id="section">语法</h1>
@@ -146,14 +145,13 @@
 
 <p>标题</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># 测试 h1
+<pre><code># 测试 h1
 ## 测试 h2
 ### 测试 h3
 #### 测试 h4
 ##### 测试 h5
 ###### 测试 h6
 </code></pre>
-</div>
 
 <p>效果：</p>
 
@@ -168,11 +166,10 @@
 
 <p>无序列表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>* 项目1
+<pre><code>* 项目1
 * 项目2
 * 项目3
 </code></pre>
-</div>
 
 <p>效果：</p>
 
@@ -184,13 +181,12 @@
 
 <p>有序列表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1. 项目1
+<pre><code>1. 项目1
 2. 项目2
 3. 项目3
    * 项目1
    * 项目2
 </code></pre>
-</div>
 
 <p>效果：</p>
 
@@ -209,11 +205,10 @@
 
 <p>文字格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>**这是文字粗体格式**
+<pre><code>**这是文字粗体格式**
 *这是文字斜体格式*
 ~~在文字上添加删除线~~
 </code></pre>
-</div>
 
 <p>效果：</p>
 
@@ -225,61 +220,55 @@
 
 <p>自动链接</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;http://blog.javachen.com&gt;
+<pre><code class="language-bash"> &lt;http://blog.javachen.com&gt;
  &lt;XhstormR@foxmail.com&gt;
 </code></pre>
-</div>
 
 <p>插入链接</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="o">[</span>link text]<span class="o">(</span>http://example.com/ <span class="s2">"optional title"</span><span class="o">)</span>
+<pre><code class="language-bash"> [link text](http://example.com/ "optional title")
 
- <span class="o">[</span>link text][id]
- <span class="o">[</span>id]: http://example.com/  <span class="s2">"optional title here"</span>
+ [link text][id]
+ [id]: http://example.com/  "optional title here"
 </code></pre>
-</div>
 
 <p>插入图片</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> ![]<span class="o">(</span>/path/to/img.jpg <span class="s2">"optional title"</span><span class="o">){</span>ImgCap<span class="o">}</span>alt text<span class="o">{</span>/ImgCap<span class="o">}</span>
+<pre><code class="language-bash"> ![](/path/to/img.jpg "optional title"){ImgCap}alt text{/ImgCap}
 </code></pre>
-</div>
 
 <p>图片链接</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="o">[</span>![][jane-eyre-pic]<span class="o">{</span>ImgCap<span class="o">}{</span>/ImgCap<span class="o">}][</span>jane-eyre-douban]
+<pre><code class="language-bash"> [![][jane-eyre-pic]{ImgCap}{/ImgCap}][jane-eyre-douban]
 
- <span class="o">[</span>jane-eyre-pic]: http://img3.douban.com/mpic/s1108264.jpg
- <span class="o">[</span>jane-eyre-douban]: http://book.douban.com/subject/1141406/
+ [jane-eyre-pic]: http://img3.douban.com/mpic/s1108264.jpg
+ [jane-eyre-douban]: http://book.douban.com/subject/1141406/
 </code></pre>
-</div>
 
 <h2 id="section-5">代码</h2>
 
-<p>行代码： <code class="highlighter-rouge">code</code></p>
+<p>行代码： <code>code</code></p>
 
 <p>用TAB键起始的段落，会被认为是代码块，或者使用三个`或~：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="sr">/* hello world demo */</span>
-<span class="c1">#include &lt;stdio.h&gt;</span>
-<span class="n">int</span> <span class="n">main</span><span class="p">(</span><span class="n">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
-<span class="p">{</span>
-        <span class="nb">printf</span><span class="p">(</span><span class="s2">"Hello, World!</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-ruby">/* hello world demo */
+#include &lt;stdio.h&gt;
+int main(int argc, char **argv)
+{
+        printf("Hello, World!\n");
+        return 0;
+}
 </code></pre>
-</div>
 
 <h2 id="section-6">表格</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>|head1|head2|head3|head4
+<pre><code>|head1|head2|head3|head4
 |---|:---|---:|:---:|
 |row1text1|row1text2|row1text3|row1text4
 |row2text1|row2text2|row2text3|row2text4
 |row3text1|row3text2|row3text3|row3text4
 |row4text1|row4text2|row4text3|row4text4
 </code></pre>
-</div>
 
 <p>效果：</p>
 
@@ -322,10 +311,9 @@
 
 <h2 id="section-7">引用</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; 第一行引用文字
+<pre><code>&gt; 第一行引用文字
 &gt; 第二行引用文字
 </code></pre>
-</div>
 
 <blockquote>
   <p>第一行引用文字<br />
@@ -334,9 +322,8 @@
 
 <h2 id="section-8">水平线</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>***
+<pre><code>***
 </code></pre>
-</div>
 
 <hr />
 
@@ -398,7 +385,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -122,10 +122,9 @@
 <p>## 2.1 依赖<br />
 OpenTSDB依赖jdk和<a href="http://www.gnuplot.info/">Gnuplot</a>，Gnuplot需要提前安装，版本要求为最小4.2,最大4.4,执行以下命令安装即可：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>yum install gnuplot autoconf
+<pre><code>yum install gnuplot autoconf
 apt-get install gnuplot
 </code></pre>
-</div>
 
 <p>OpenTSDB是用java编写的，但是项目构建不是用的java的方式而是使用的C、C++程序员构建项目的方式。运行时依赖：</p>
 
@@ -159,17 +158,15 @@ apt-get install gnuplot
 
 <p>首先安装必要依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>yum install gnuplot automake autoconf git -y
+<pre><code>yum install gnuplot automake autoconf git -y
 </code></pre>
-</div>
 
 <p>下载源代码，可以指定最新版本或者手动checkout</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>git clone git://github.com/OpenTSDB/opentsdb.git
+<pre><code>git clone git://github.com/OpenTSDB/opentsdb.git
 cd opentsdb
 ./build.sh
 </code></pre>
-</div>
 
 <h2 id="section-1">2.3 安装</h2>
 
@@ -181,12 +178,12 @@ cd opentsdb
   </li>
   <li>
     <ol>
-      <li>设置环境变量并创建opentsdb使用的表，需要设置的环境变量为<code class="highlighter-rouge">COMPRESSION</code>和<code class="highlighter-rouge">HBASE_HOME</code>，前者设置是否启用压缩，或者设置hbase home目录。如果使用压缩，则还需要安装lzo</li>
+      <li>设置环境变量并创建opentsdb使用的表，需要设置的环境变量为<code>COMPRESSION</code>和<code>HBASE_HOME</code>，前者设置是否启用压缩，或者设置hbase home目录。如果使用压缩，则还需要安装lzo</li>
     </ol>
   </li>
   <li>
     <ol>
-      <li>执行建表语句<code class="highlighter-rouge">src/create_table.sh</code></li>
+      <li>执行建表语句<code>src/create_table.sh</code></li>
     </ol>
   </li>
   <li>
@@ -196,15 +193,14 @@ cd opentsdb
   </li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>tsdtmp=${TMPDIR-'/tmp'}/tsd    # For best performance, make sure
+<pre><code>tsdtmp=${TMPDIR-'/tmp'}/tsd    # For best performance, make sure
 mkdir -p "$tsdtmp"             # your temporary directory uses tmpfs
 ./build/tsdb tsd --port=4242 --staticroot=build/staticroot --cachedir="$tsdtmp" --auto-metric
 </code></pre>
-</div>
 
-<p>如果你使用的是hbase集群，则你还需要设置<code class="highlighter-rouge">--zkquorum</code>，<code class="highlighter-rouge">--cachedir</code>对应的目录会产生一些临时文件，你可以设置cron定时任务进行删除。添加<code class="highlighter-rouge">--auto-metric</code>，则当新的数据被搜集时自动创建指标。</p>
+<p>如果你使用的是hbase集群，则你还需要设置<code>--zkquorum</code>，<code>--cachedir</code>对应的目录会产生一些临时文件，你可以设置cron定时任务进行删除。添加<code>--auto-metric</code>，则当新的数据被搜集时自动创建指标。</p>
 
-<p>你可以将这些参数编写到配置文件中，然后通过<code class="highlighter-rouge">--config</code>指定该文件所在路径。</p>
+<p>你可以将这些参数编写到配置文件中，然后通过<code>--config</code>指定该文件所在路径。</p>
 
 <ul>
   <li>
@@ -222,16 +218,15 @@ mkdir -p "$tsdtmp"             # your temporary directory uses tmpfs
 
 <p>OpenTSDB的配置参数可以在命令行指定，也可以在配置文件中指定。配置文件使用的是java的properties文件，文件中key为小写，支持逗号连接字符串但是不能有空格。所有的OpenTSDB属性都以tsdb开头，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># List of Zookeeper hosts that manage the HBase cluster
+<pre><code># List of Zookeeper hosts that manage the HBase cluster
 tsd.storage.hbase.zk_quorum = 192.168.1.100
 </code></pre>
-</div>
 
 <p>配置参数优先级：</p>
 
 <p>命令行参数 &gt; 配置文件 &gt; 默认值</p>
 
-<p>你可以在命令行中通过<code class="highlighter-rouge">--config</code>指定配置文件所在路径，如果没有指定，OpenTSDB会从以下路径寻找配置文件：</p>
+<p>你可以在命令行中通过<code>--config</code>指定配置文件所在路径，如果没有指定，OpenTSDB会从以下路径寻找配置文件：</p>
 
 <ul>
   <li>./opentsdb.conf</li>
@@ -269,7 +264,7 @@ tsd.storage.hbase.zk_quorum = 192.168.1.100
   <li>多个标签</li>
 </ul>
 
-<p><strong>Metric</strong>。一个可测量的单位的标称。<code class="highlighter-rouge">metric</code>不包括一个数值或一个时间，其仅仅是一个标签，包含数值和时间的叫<code class="highlighter-rouge">datapoints</code>，metric是用逗号连接的不允许有空格，例如：</p>
+<p><strong>Metric</strong>。一个可测量的单位的标称。<code>metric</code>不包括一个数值或一个时间，其仅仅是一个标签，包含数值和时间的叫<code>datapoints</code>，metric是用逗号连接的不允许有空格，例如：</p>
 
 <ul>
   <li>hours.worked</li>
@@ -285,38 +280,38 @@ tsd.storage.hbase.zk_quorum = 192.168.1.100
 
 <p><strong>Value</strong>。一个Value表示一个metric的实际数值。</p>
 
-<p><strong>UID</strong>。在OpenTSDB中，每一个metric、tagk或者tagv在创建的时候被分配一个唯一标识叫做UID，他们组合在一起可以创建一个序列的UID或者<code class="highlighter-rouge">TSUID</code>。在OpenTSDB的存储中，对于每一个metric、tagk或者tagv都存在从0开始的计数器，每来一个新的metric、tagk或者tagv，对应的计数器就会加1。当data point写到TSD时，UID是自动分配的。你也可以手动分配UID，前提是<code class="highlighter-rouge">auto metric</code>被设置为true。默认地，UID被编码为3Bytes，每一种UID类型最多可以有16,777,215个UID。你也可以修改源代码改为4Bytes。UID的展示有几种方式，最常见的方式是通过http api访问时，3 bytes的UID被编码为16进制的字符串。例如，UID为1的写为二进制的形式为<code class="highlighter-rouge">000000000000000000000001</code>，最为一个无符号的byte数组，其可以表示为<code class="highlighter-rouge">[0,0,1]</code>，编码为16进制字符串为<code class="highlighter-rouge">000001</code>,其中每一位左边都被补上0,如果其不足两位。故，UID为255的会显示为<code class="highlighter-rouge">[0,0,255]</code>和<code class="highlighter-rouge">0000FF</code>。</p>
+<p><strong>UID</strong>。在OpenTSDB中，每一个metric、tagk或者tagv在创建的时候被分配一个唯一标识叫做UID，他们组合在一起可以创建一个序列的UID或者<code>TSUID</code>。在OpenTSDB的存储中，对于每一个metric、tagk或者tagv都存在从0开始的计数器，每来一个新的metric、tagk或者tagv，对应的计数器就会加1。当data point写到TSD时，UID是自动分配的。你也可以手动分配UID，前提是<code>auto metric</code>被设置为true。默认地，UID被编码为3Bytes，每一种UID类型最多可以有16,777,215个UID。你也可以修改源代码改为4Bytes。UID的展示有几种方式，最常见的方式是通过http api访问时，3 bytes的UID被编码为16进制的字符串。例如，UID为1的写为二进制的形式为<code>000000000000000000000001</code>，最为一个无符号的byte数组，其可以表示为<code>[0,0,1]</code>，编码为16进制字符串为<code>000001</code>,其中每一位左边都被补上0,如果其不足两位。故，UID为255的会显示为<code>[0,0,255]</code>和<code>0000FF</code>。</p>
 
 <blockquote>
   <p>关于为什么使用UID而不使用hashes，可以参考：<a href="http://opentsdb.net/docs/build/html/user_guide/uids.html#why-uids">why-uids</a></p>
 </blockquote>
 
-<p><strong>TSUID</strong>。当一个data point被写到OpenTSDB时，其row key格式为：<code class="highlighter-rouge">&lt;metric_UID&gt;&lt;timestamp&gt;&lt;tagk1_UID&gt;&lt;tagv1_UID&gt;[...&lt;tagkN_UID&gt;&lt;tagvN_UID&gt;]</code>，不考虑时间戳的话，将其余部分都转换为UID，然后拼在一起，就可以组成为TSUID。</p>
+<p><strong>TSUID</strong>。当一个data point被写到OpenTSDB时，其row key格式为：<code>&lt;metric_UID&gt;&lt;timestamp&gt;&lt;tagk1_UID&gt;&lt;tagv1_UID&gt;[...&lt;tagkN_UID&gt;&lt;tagvN_UID&gt;]</code>，不考虑时间戳的话，将其余部分都转换为UID，然后拼在一起，就可以组成为TSUID。</p>
 
 <p><strong>Metadata</strong>。主要用于记录data point的一些附加的信息，方便搜索和跟踪，分为UIDMeta和TSMeta。</p>
 
-<p>每一个UID都有一个metadata记录保存在<code class="highlighter-rouge">tsdb-uid</code>表中，每一个UID包括一些不可变的字段，如<code class="highlighter-rouge">uid</code>、<code class="highlighter-rouge">type</code>、<code class="highlighter-rouge">name</code>和<code class="highlighter-rouge">created</code>字段表示什么时候被创建，还可以有一些额外字段，如<code class="highlighter-rouge">description</code>、<code class="highlighter-rouge">notes</code>、<code class="highlighter-rouge">displayName</code>和一些<code class="highlighter-rouge">custom</code> key/value对，详细信息，可以查看<a href="http://opentsdb.net/docs/build/html/api_http/uid/uidmeta.html"> /api/uid/uidmeta</a></p>
+<p>每一个UID都有一个metadata记录保存在<code>tsdb-uid</code>表中，每一个UID包括一些不可变的字段，如<code>uid</code>、<code>type</code>、<code>name</code>和<code>created</code>字段表示什么时候被创建，还可以有一些额外字段，如<code>description</code>、<code>notes</code>、<code>displayName</code>和一些<code>custom</code> key/value对，详细信息，可以查看<a href="http://opentsdb.net/docs/build/html/api_http/uid/uidmeta.html"> /api/uid/uidmeta</a></p>
 
-<p>同样，每一个TSUID可以对应一个TSMeta，记录在<code class="highlighter-rouge">tsdb-uid</code>中，其包括的字段有<code class="highlighter-rouge">tsuid</code>、<code class="highlighter-rouge">metric</code>、<code class="highlighter-rouge">tags</code>、<code class="highlighter-rouge">lastReceived</code>和<code class="highlighter-rouge">created</code>，可选的字段有<code class="highlighter-rouge">description</code>, <code class="highlighter-rouge">notes</code>，详细信息，可以查看<a href="http://opentsdb.net/docs/build/html/api_http/uid/tsmeta.html">/api/uid/tsmeta</a></p>
+<p>同样，每一个TSUID可以对应一个TSMeta，记录在<code>tsdb-uid</code>中，其包括的字段有<code>tsuid</code>、<code>metric</code>、<code>tags</code>、<code>lastReceived</code>和<code>created</code>，可选的字段有<code>description</code>, <code>notes</code>，详细信息，可以查看<a href="http://opentsdb.net/docs/build/html/api_http/uid/tsmeta.html">/api/uid/tsmeta</a></p>
 
 <p>开启Metadata有以下几个参数：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">tsd.core.meta.enable_realtime_uid</code></li>
-  <li><code class="highlighter-rouge">tsd.core.meta.enable_tsuid_tracking</code></li>
-  <li><code class="highlighter-rouge">tsd.core.meta.enable_tsuid_incrementing</code></li>
-  <li><code class="highlighter-rouge">tsd.core.meta.enable_realtime_ts</code></li>
+  <li><code>tsd.core.meta.enable_realtime_uid</code></li>
+  <li><code>tsd.core.meta.enable_tsuid_tracking</code></li>
+  <li><code>tsd.core.meta.enable_tsuid_incrementing</code></li>
+  <li><code>tsd.core.meta.enable_realtime_ts</code></li>
 </ul>
 
-<p>metadata的另外一个形式是<code class="highlighter-rouge">Annotations</code>，详细说明，请参考<a href="http://opentsdb.net/docs/build/html/user_guide/metadata.html#annotations">annotations</a></p>
+<p>metadata的另外一个形式是<code>Annotations</code>，详细说明，请参考<a href="http://opentsdb.net/docs/build/html/user_guide/metadata.html#annotations">annotations</a></p>
 
 <p><strong>Tree</strong></p>
 
 <h2 id="section-5">3.3 数据存储方式</h2>
 
-<p>OpenTSDB使用HBase作为后端存储，在安装OpenTSDB之前，需要先启动一个hbase节点或者集群，然后再执行建表语句<code class="highlighter-rouge">src/create_table.sh</code>创建hbase表。建表语句如下：</p>
+<p>OpenTSDB使用HBase作为后端存储，在安装OpenTSDB之前，需要先启动一个hbase节点或者集群，然后再执行建表语句<code>src/create_table.sh</code>创建hbase表。建表语句如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>create '$UID_TABLE',
+<pre><code>create '$UID_TABLE',
   {NAME =&gt; 'id', COMPRESSION =&gt; '$COMPRESSION', BLOOMFILTER =&gt; '$BLOOMFILTER'},
   {NAME =&gt; 'name', COMPRESSION =&gt; '$COMPRESSION', BLOOMFILTER =&gt; '$BLOOMFILTER'}
 
@@ -329,31 +324,28 @@ create '$TREE_TABLE',
 create '$META_TABLE',
   {NAME =&gt; 'name', COMPRESSION =&gt; '$COMPRESSION', BLOOMFILTER =&gt; '$BLOOMFILTER'}
 </code></pre>
-</div>
 
 <p>从上面可以看出一共创建了4张表，并且可以设置是否压缩、是否启用布隆过滤、保存版本号等等，如果追求hbase读写性能，还可以预建分区。</p>
 
 <h3 id="data-table-schema">3.3.1 Data Table Schema</h3>
 
-<p>在OpenTSDB中，所有数据存储在一张叫做<code class="highlighter-rouge">tsdb</code>的表中，这是为了充分利用hbase有序和region分布式的特点。所有的值都保存在列族<code class="highlighter-rouge">t</code>中。</p>
+<p>在OpenTSDB中，所有数据存储在一张叫做<code>tsdb</code>的表中，这是为了充分利用hbase有序和region分布式的特点。所有的值都保存在列族<code>t</code>中。</p>
 
-<p>rowkey为<code class="highlighter-rouge">&lt;metric_uid&gt;&lt;timestamp&gt;&lt;tagk1&gt;&lt;tagv1&gt;[...&lt;tagkN&gt;&lt;tagvN&gt;]</code>，UID默认编码为3 Bytes，而时间戳会编码为4 Bytes</p>
+<p>rowkey为<code>&lt;metric_uid&gt;&lt;timestamp&gt;&lt;tagk1&gt;&lt;tagv1&gt;[...&lt;tagkN&gt;&lt;tagvN&gt;]</code>，UID默认编码为3 Bytes，而时间戳会编码为4 Bytes</p>
 
 <p>OpenTSDB的tsdb启动之后，会监控指定的socket端口（默认为4242），接收到监控数据，包括指标、时间戳、数据、tag标签，tag标签包括tag名称ID和tag值ID。例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>myservice.latency.avg 1292148123 42 reqtype=foo host=web42
+<pre><code>myservice.latency.avg 1292148123 42 reqtype=foo host=web42
 </code></pre>
-</div>
 
 <p>对于指标myservice.latency.avg的ID为：[0, 0, -69],reqtype标签名称的ID为：[0, 0, 1], foo标签值的ID为：[0, 1, 11], 标签名称的ID为：[0, 0, 2] web42标签值的ID为：[0, -7, 42]，他们组成rowkey：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[0, 0, -69, 77, 4, -99, 32, 0, 0, 1, 0, 1, 11, 0, 0, 2, 0, -7, 42]
+<pre><code>[0, 0, -69, 77, 4, -99, 32, 0, 0, 1, 0, 1, 11, 0, 0, 2, 0, -7, 42]
  `-------'  `------------'  `-----'  `------'  `-----'  `-------'
  metric ID  base timestamp  name ID  value ID  name ID  value ID
                             `---------------'  `---------------'
                                 first tag         second tag
 </code></pre>
-</div>
 
 <p>row表示格式为： 每个数字对应1 byte</p>
 
@@ -374,59 +366,58 @@ create '$META_TABLE',
   <li>12 bits:相对row表示的小时的delta, 最多2^ 12 = 4096 &gt; 3600因此没有问题</li>
   <li>4 bits:format flags</li>
   <li>1 bit: an integer or floating point</li>
-  <li>3 bits: 标明数据的长度，其长度必须是1、2、4、8。<code class="highlighter-rouge">000</code>表示1个byte,<code class="highlighter-rouge">010</code>表示2byte，<code class="highlighter-rouge">011</code>表示4byte，<code class="highlighter-rouge">100</code>表示8byte</li>
+  <li>3 bits: 标明数据的长度，其长度必须是1、2、4、8。<code>000</code>表示1个byte,<code>010</code>表示2byte，<code>011</code>表示4byte，<code>100</code>表示8byte</li>
 </ul>
 
 <p>占用4 bytes时表示以毫秒为单位的偏移，格式为：</p>
 
 <ul>
-  <li>4 bits：十六进制的<code class="highlighter-rouge">1</code>或者<code class="highlighter-rouge">F</code></li>
+  <li>4 bits：十六进制的<code>1</code>或者<code>F</code></li>
   <li>22 bits:毫秒偏移</li>
   <li>2 bit:保留</li>
   <li>4 bits: format flags</li>
   <li>1 bit: an integer or floating point，0表示整数,1表示浮点数</li>
-  <li>3 bits: 标明数据的长度，其长度必须是1、2、4、8。<code class="highlighter-rouge">000</code>表示1个byte,<code class="highlighter-rouge">010</code>表示2byte，<code class="highlighter-rouge">011</code>表示4byte，<code class="highlighter-rouge">100</code>表示8byte</li>
+  <li>3 bits: 标明数据的长度，其长度必须是1、2、4、8。<code>000</code>表示1个byte,<code>010</code>表示2byte，<code>011</code>表示4byte，<code>100</code>表示8byte</li>
 </ul>
 
 <p><strong>举例：</strong></p>
 
-<p>对于时间戳为1292148123的数据点来说，其转换为以小时为单位的基准时间(去掉小时后的秒）为129214800,偏移为123,转换为二进制为<code class="highlighter-rouge">1111011</code>，因为该值为整数且长度为8位（对应为2byte，故最后3bit为<code class="highlighter-rouge">100</code>）,故其对应的列族名为：<code class="highlighter-rouge">0000011110110100</code>，将其转换为十六进制为<code class="highlighter-rouge">07B4</code></p>
+<p>对于时间戳为1292148123的数据点来说，其转换为以小时为单位的基准时间(去掉小时后的秒）为129214800,偏移为123,转换为二进制为<code>1111011</code>，因为该值为整数且长度为8位（对应为2byte，故最后3bit为<code>100</code>）,故其对应的列族名为：<code>0000011110110100</code>，将其转换为十六进制为<code>07B4</code></p>
 
 <p><strong>value</strong> 使用8bytes存储，既可以存储long,也可以存储double。</p>
 
-<p>总结一下，<code class="highlighter-rouge">tsdb</code>表结构如下：</p>
+<p>总结一下，<code>tsdb</code>表结构如下：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/opentsdb-tsdb-schema.png" alt="opentsdb-tsdb-schema" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/opentsdb-tsdb-schema.png" alt="opentsdb-tsdb-schema" /></p>
 
 <h3 id="uid-table-schema">3.3.2 UID Table Schema</h3>
 
-<p>一个单独的较小的表叫做<code class="highlighter-rouge">tsdb-uid</code>用来存储UID映射，包括正向的和反向的。存在两列族，一列族叫做<code class="highlighter-rouge">name</code>用来将一个UID映射到一个字符串，另一个列族叫做<code class="highlighter-rouge">id</code>，用来将字符串映射到UID。列族的每一行都至少有以下三列中的一个：</p>
+<p>一个单独的较小的表叫做<code>tsdb-uid</code>用来存储UID映射，包括正向的和反向的。存在两列族，一列族叫做<code>name</code>用来将一个UID映射到一个字符串，另一个列族叫做<code>id</code>，用来将字符串映射到UID。列族的每一行都至少有以下三列中的一个：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">metrics</code> 将metric的名称映射到UID</li>
-  <li><code class="highlighter-rouge">tagk</code> 将tag名称映射到UID</li>
-  <li><code class="highlighter-rouge">tagv</code> 将tag的值映射到UID</li>
+  <li><code>metrics</code> 将metric的名称映射到UID</li>
+  <li><code>tagk</code> 将tag名称映射到UID</li>
+  <li><code>tagv</code> 将tag的值映射到UID</li>
 </ul>
 
-<p>如果配置了metadata，则<code class="highlighter-rouge">name</code>列族还可以包括额外的metatata列。</p>
+<p>如果配置了metadata，则<code>name</code>列族还可以包括额外的metatata列。</p>
 
 <ul>
   <li><strong>id 列族</strong></li>
 </ul>
 
-<p><strong>Row Key</strong> - 将会是一个分配到UID的字符串，例如，对于一个指标可能有一个值为<code class="highlighter-rouge">sys.cpu.user</code>或者对于一个标签其值可能为<code class="highlighter-rouge">42</code></p>
+<p><strong>Row Key</strong> - 将会是一个分配到UID的字符串，例如，对于一个指标可能有一个值为<code>sys.cpu.user</code>或者对于一个标签其值可能为<code>42</code></p>
 
 <p><strong>Column Qualifiers</strong> - 上面三种列类型中一种。</p>
 
 <p><strong>Column Value</strong> - 一个无符号的整数，默认被编码为3个byte，其值为UID。</p>
 
-<p>例如以下几行数据是从<code class="highlighter-rouge">tsdb-uid</code>表中查询出来的数据，第一个列为row key，第二列为”列族:列名”，第三列为值，对应为UID</p>
+<p>例如以下几行数据是从<code>tsdb-uid</code>表中查询出来的数据，第一个列为row key，第二列为”列族:列名”，第三列为值，对应为UID</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>proc.stat.cpu id:metrics \x00\x00\x01
+<pre><code>proc.stat.cpu id:metrics \x00\x00\x01
 host id:tagk \x00\x00\x01
 cdh1 id:tagv \x00\x00\x01
 </code></pre>
-</div>
 
 <ul>
   <li><strong>name 列族</strong></li>
@@ -434,54 +425,51 @@ cdh1 id:tagv \x00\x00\x01
 
 <p><strong>Row Key</strong> - 为UID</p>
 
-<p><strong>Column Qualifiers</strong> - 上面三种列类型中一种或者为<code class="highlighter-rouge">metrics_meta</code>、<code class="highlighter-rouge">tagk_meta</code>、<code class="highlighter-rouge">tagv_meta</code></p>
+<p><strong>Column Qualifiers</strong> - 上面三种列类型中一种或者为<code>metrics_meta</code>、<code>tagk_meta</code>、<code>tagv_meta</code></p>
 
-<p><strong>Column Value</strong> - 与UID对应的字符串，对于一个<code class="highlighter-rouge">*_meta</code>列，其值将会是一个UTF-8编码的JSON格式字符串。不要在OpenTSDB外部去修改该值，其中的字段顺序会影响<code class="highlighter-rouge">CAS</code>调用。</p>
+<p><strong>Column Value</strong> - 与UID对应的字符串，对于一个<code>*_meta</code>列，其值将会是一个UTF-8编码的JSON格式字符串。不要在OpenTSDB外部去修改该值，其中的字段顺序会影响<code>CAS</code>调用。</p>
 
-<p>例如,以下几行数据是从<code class="highlighter-rouge">tsdb-uid</code>表中查询出来的数据，第一个列为row key，第二列为”列族:列名”，第三列为值，对应为UID</p>
+<p>例如,以下几行数据是从<code>tsdb-uid</code>表中查询出来的数据，第一个列为row key，第二列为”列族:列名”，第三列为值，对应为UID</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>\x00\x00\x01 name:metrics proc.stat.cpu
+<pre><code>\x00\x00\x01 name:metrics proc.stat.cpu
 \x00\x00\x01 name:tagk host
 \x00\x00\x01 name:tagv cdh1
 \x00\x00\x01 name:tagk_meta {"uid":"000001","type":"TAGK","name":"host","description":"","notes":"","created":1395213193,"custom":null,"displayName":""}
 \x00\x00\x01 name:tagv_meta {"uid":"000001","type":"TAGV","name":"cdh1","description":"","notes":"","created":1395213193,"custom":null,"displayName":""}
 \x00\x00\x01 name:metric_meta {"uid":"000001","type":"METRIC","name":"metrics proc.stat.cpu","description":"","notes":"","created":1395213193,"custom":null,"displayName":""}
 </code></pre>
-</div>
 
-<p>总结一下，<code class="highlighter-rouge">tsdb-uid</code>表结构如下：</p>
+<p>总结一下，<code>tsdb-uid</code>表结构如下：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/opentsdb-tsdb-uid-schema.png" alt="opentsdb-tsdb-uid-schema" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/opentsdb-tsdb-uid-schema.png" alt="opentsdb-tsdb-uid-schema" /></p>
 
 <p>上图对应的一个datapoint如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>proc.stat.cpu 1292148123 80 host=cdh1
+<pre><code>proc.stat.cpu 1292148123 80 host=cdh1
 </code></pre>
-</div>
 
-<p>从上图可以看出<code class="highlighter-rouge">tsdb-uid</code>的表结构以及数据存储方式，对于一个data point来说，其被保存到opentsdb之前，会对<code class="highlighter-rouge">metrics</code>、<code class="highlighter-rouge">tagk</code>、<code class="highlighter-rouge">tagv</code>、<code class="highlighter-rouge">metric_meta</code>、<code class="highlighter-rouge">tagk_meta</code>、<code class="highlighter-rouge">tagv_meta</code>生成一个UID（如上图中的<code class="highlighter-rouge">000001</code>）,然后将其插入hbase表中，rowkey为UID，同时会存储多行记录，分别保存<code class="highlighter-rouge">metrics</code>、<code class="highlighter-rouge">tagk</code>、<code class="highlighter-rouge">tagv</code>、<code class="highlighter-rouge">metric_meta</code>、<code class="highlighter-rouge">tagk_meta</code>、<code class="highlighter-rouge">tagv_meta</code>到UID的映射。</p>
+<p>从上图可以看出<code>tsdb-uid</code>的表结构以及数据存储方式，对于一个data point来说，其被保存到opentsdb之前，会对<code>metrics</code>、<code>tagk</code>、<code>tagv</code>、<code>metric_meta</code>、<code>tagk_meta</code>、<code>tagv_meta</code>生成一个UID（如上图中的<code>000001</code>）,然后将其插入hbase表中，rowkey为UID，同时会存储多行记录，分别保存<code>metrics</code>、<code>tagk</code>、<code>tagv</code>、<code>metric_meta</code>、<code>tagk_meta</code>、<code>tagv_meta</code>到UID的映射。</p>
 
 <h3 id="meta-table-schema">3.3.3 Meta Table Schema</h3>
 
-<p>这个表是OpenTSDB中不同时间序列的一个索引，可以用来存储一些额外的信息。这个表名称叫做<code class="highlighter-rouge">tsdb-meta</code>，该表只有一个列族<code class="highlighter-rouge">name</code>，两个列，分别为<code class="highlighter-rouge">ts_meta</code>、<code class="highlighter-rouge">ts_ctr</code>，该表中数据如下：</p>
+<p>这个表是OpenTSDB中不同时间序列的一个索引，可以用来存储一些额外的信息。这个表名称叫做<code>tsdb-meta</code>，该表只有一个列族<code>name</code>，两个列，分别为<code>ts_meta</code>、<code>ts_ctr</code>，该表中数据如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>\x00\x00\x01\x00\x00\x01\x00\x00\x01 name:ts_ctr \x00\x00\x00\x00\x00\x00\x00p
+<pre><code>\x00\x00\x01\x00\x00\x01\x00\x00\x01 name:ts_ctr \x00\x00\x00\x00\x00\x00\x00p
 \x00\x00\x01\x00\x00\x01\x00\x00\x01 name:ts_meta {"tsuid":"000001000001000001","displayName":"","description":"","notes":"","created":1395213196,"custom":null,"units":"","dataType":"","retention":0,"max":"NaN","min":"NaN"}
 
 \x00\x00\x02\x00\x00\x01\x00\x00\x01 name:ts_ctr \x00\x00\x00\x00\x00\x00\x00p
 \x00\x00\x02\x00\x00\x01\x00\x00\x01 name:ts_meta {"tsuid":"000002000001000001","displayName":"","description":"","notes":"","created":1395213196,"custom":null,"units":"","dataType":"","retention":0,"max":"NaN","min":"NaN"}
 </code></pre>
-</div>
 
-<p><strong>Row Key</strong> 和<code class="highlighter-rouge">tsdb</code>表一样，其中不包含时间戳，<code class="highlighter-rouge">&lt;metric_uid&gt;&lt;tagk1&gt;&lt;tagv1&gt;[...&lt;tagkN&gt;&lt;tagvN&gt;]</code></p>
+<p><strong>Row Key</strong> 和<code>tsdb</code>表一样，其中不包含时间戳，<code>&lt;metric_uid&gt;&lt;tagk1&gt;&lt;tagv1&gt;[...&lt;tagkN&gt;&lt;tagvN&gt;]</code></p>
 
 <p><strong>TSMeta Column</strong> 和UIDMeta相似，其为UTF-8编码的JSON格式字符串</p>
 
-<p><strong>ts_ctr Column</strong> 计数器，用来记录一个时间序列中存储的数据个数，其列名为<code class="highlighter-rouge">ts_ctr</code>，为8位有符号的整数。</p>
+<p><strong>ts_ctr Column</strong> 计数器，用来记录一个时间序列中存储的数据个数，其列名为<code>ts_ctr</code>，为8位有符号的整数。</p>
 
 <h3 id="tree-table-schema">3.3.4 Tree Table Schema</h3>
 
-<p>索引表，用于展示树状结构的，类似于文件系统，以方便其他系统使用，例如：<code class="highlighter-rouge">Graphite</code></p>
+<p>索引表，用于展示树状结构的，类似于文件系统，以方便其他系统使用，例如：<code>Graphite</code></p>
 
 <h2 id="section-6">3.4 如何写数据</h2>
 <p>## 3.5 如何查询数据<br />
@@ -489,24 +477,21 @@ cdh1 id:tagv \x00\x00\x01
 
 <p>tsdb支持以下参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@cdh1 build]# ./tsdb 
+<pre><code>[root@cdh1 build]# ./tsdb 
 usage: tsdb &lt;command&gt; [args]
 Valid commands: fsck, import, mkmetric, query, tsd, scan, uid
 </code></pre>
-</div>
 
 <p>通过以下命令创建指标：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>./tsdb mkmetric mysql.bytes_received mysql.bytes_sent
+<pre><code>./tsdb mkmetric mysql.bytes_received mysql.bytes_sent
 </code></pre>
-</div>
 
 <p>执行上述命令的结果如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>metrics mysql.bytes_received: [0, 0, -93]
+<pre><code>metrics mysql.bytes_received: [0, 0, -93]
 metrics mysql.bytes_sent: [0, 0, -92]
 </code></pre>
-</div>
 
 <h2 id="utilities">3.11 Utilities</h2>
 <p>## 3.12 Logging</p>
@@ -588,7 +573,7 @@ metrics mysql.bytes_sent: [0, 0, -92]
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

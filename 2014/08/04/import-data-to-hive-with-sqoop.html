@@ -111,9 +111,8 @@
 
 <p>使用 rpm 安装即可。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>yum install sqoop sqoop-metastore -y
+<pre><code>yum install sqoop sqoop-metastore -y
 </code></pre>
-</div>
 
 <blockquote>
   <p>安装完之后需要下载 mysql jar 包到 sqoop 的 lib 目录。</p>
@@ -121,16 +120,15 @@
 
 <p>这里使用 hive 的 metastore 的 mysql 数据库作为关系数据库，以 TBLS 表为例，该表结构和数据如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">TBLS</span> <span class="k">limit</span> <span class="mi">3</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------+-----------+-----+----------------+-----+--------+------+---------+----------------+------------------+-------------------+
-</span><span class="o">|</span><span class="n">TBL_ID</span><span class="o">|</span><span class="n">CREATE_TIME</span><span class="o">|</span><span class="n">DB_ID</span><span class="o">|</span><span class="n">LAST_ACCESS_TIME</span><span class="o">|</span><span class="k">OWNER</span><span class="o">|</span><span class="n">RETENTI</span> <span class="o">|</span> <span class="n">SD_ID</span><span class="o">|</span> <span class="n">TBL_NAME</span><span class="o">|</span> <span class="n">TBL_TYPE</span>       <span class="o">|</span><span class="n">VIEW_EXPANDED_TEXT</span><span class="o">|</span> <span class="n">VIEW_ORIGINAL_TEXT</span><span class="o">|</span>
-<span class="o">+</span><span class="c1">------+-----------+-----+----------------+-----+--------+------+---------+----------------+------------------+-------------------+
-</span><span class="o">|</span>    <span class="mi">34</span><span class="o">|</span><span class="mi">1406784308</span> <span class="o">|</span>    <span class="mi">8</span><span class="o">|</span>               <span class="mi">0</span><span class="o">|</span><span class="n">root</span> <span class="o">|</span>       <span class="mi">0</span><span class="o">|</span>    <span class="mi">45</span><span class="o">|</span> <span class="n">test1</span>   <span class="o">|</span> <span class="n">EXTERNAL_TABLE</span> <span class="o">|</span> <span class="k">NULL</span>             <span class="o">|</span> <span class="k">NULL</span>              <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">40</span><span class="o">|</span><span class="mi">1406797005</span> <span class="o">|</span>    <span class="mi">9</span><span class="o">|</span>               <span class="mi">0</span><span class="o">|</span><span class="n">root</span> <span class="o">|</span>       <span class="mi">0</span><span class="o">|</span>    <span class="mi">52</span><span class="o">|</span> <span class="n">test2</span>   <span class="o">|</span> <span class="n">EXTERNAL_TABLE</span> <span class="o">|</span> <span class="k">NULL</span>             <span class="o">|</span> <span class="k">NULL</span>              <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">42</span><span class="o">|</span><span class="mi">1407122307</span> <span class="o">|</span>    <span class="mi">7</span><span class="o">|</span>               <span class="mi">0</span><span class="o">|</span><span class="n">root</span> <span class="o">|</span>       <span class="mi">0</span><span class="o">|</span>    <span class="mi">59</span><span class="o">|</span> <span class="n">test3</span>   <span class="o">|</span> <span class="n">EXTERNAL_TABLE</span> <span class="o">|</span> <span class="k">NULL</span>             <span class="o">|</span> <span class="k">NULL</span>              <span class="o">|</span>
-<span class="o">+</span><span class="c1">------+-----------+-----+----------------+-----+--------+------+---------+----------------+------------------+-------------------+
-</span></code></pre>
-</div>
+<pre><code class="language-sql">mysql&gt; select * from TBLS limit 3;
++------+-----------+-----+----------------+-----+--------+------+---------+----------------+------------------+-------------------+
+|TBL_ID|CREATE_TIME|DB_ID|LAST_ACCESS_TIME|OWNER|RETENTI | SD_ID| TBL_NAME| TBL_TYPE       |VIEW_EXPANDED_TEXT| VIEW_ORIGINAL_TEXT|
++------+-----------+-----+----------------+-----+--------+------+---------+----------------+------------------+-------------------+
+|    34|1406784308 |    8|               0|root |       0|    45| test1   | EXTERNAL_TABLE | NULL             | NULL              |
+|    40|1406797005 |    9|               0|root |       0|    52| test2   | EXTERNAL_TABLE | NULL             | NULL              |
+|    42|1407122307 |    7|               0|root |       0|    59| test3   | EXTERNAL_TABLE | NULL             | NULL              |
++------+-----------+-----+----------------+-----+--------+------+---------+----------------+------------------+-------------------+
+</code></pre>
 
 <h1 id="section">2. 使用</h1>
 
@@ -138,53 +136,48 @@
 
 <p>查看 sqoop 命令说明：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop <span class="nb">help
-</span>usage: sqoop COMMAND <span class="o">[</span>ARGS]
+<pre><code class="language-bash">$ sqoop help
+usage: sqoop COMMAND [ARGS]
 
 Available commands:
   codegen            Generate code to interact with database records
   create-hive-table  Import a table definition into Hive
-  <span class="nb">eval               </span>Evaluate a SQL statement and display the results
-  <span class="nb">export             </span>Export an HDFS directory to a database table
-  <span class="nb">help               </span>List available commands
+  eval               Evaluate a SQL statement and display the results
+  export             Export an HDFS directory to a database table
+  help               List available commands
   import             Import a table from a database to HDFS
   import-all-tables  Import tables from a database to HDFS
   list-databases     List available databases on a server
-  list-tables        List available tables <span class="k">in </span>a database
+  list-tables        List available tables in a database
   version            Display version information
 
-See <span class="s1">'sqoop help COMMAND'</span> <span class="k">for </span>information on a specific command.
+See 'sqoop help COMMAND' for information on a specific command.
 </code></pre>
-</div>
 
 <p>你也可以查看某一个命令的使用说明：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --help
-<span class="gp">$ </span>sqoop <span class="nb">help </span>import
+<pre><code class="language-bash">$ sqoop import --help
+$ sqoop help import
 </code></pre>
-</div>
 
-<p>你也可以使用别名来代替 <code class="highlighter-rouge">sqoop (toolname)</code>：</p>
+<p>你也可以使用别名来代替 <code>sqoop (toolname)</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop-import
+<pre><code class="language-bash">$ sqoop-import
 </code></pre>
-</div>
 
 <p>sqoop import 的一个示例如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS
 </code></pre>
-</div>
 
-<p>你还可以使用 <code class="highlighter-rouge">--options-file</code> 来传入一个文件，使用这种方式可以重用一些配置参数：</p>
+<p>你还可以使用 <code>--options-file</code> 来传入一个文件，使用这种方式可以重用一些配置参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop --options-file /users/homer/work/import.txt --table TEST
+<pre><code class="language-bash">$ sqoop --options-file /users/homer/work/import.txt --table TEST
 </code></pre>
-</div>
 
 <p>/users/homer/work/import.txt 文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>import
+<pre><code>import
 --connect
 jdbc:mysql://192.168.56.121:3306/metastore
 --username
@@ -192,22 +185,20 @@ hiveuser
 --password 
 redhat
 </code></pre>
-</div>
 
 <h1 id="hdfs">2.2 导入数据到 hdfs</h1>
 
 <p>使用 sqoop-import 命令可以从关系数据库导入数据到 hdfs。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --target-dir /user/hive/result
 </code></pre>
-</div>
 
 <p>注意：</p>
 
 <ul>
   <li>mysql jdbc url 请使用 ip 地址</li>
   <li>如果重复执行，会提示目录已经存在，可以手动删除</li>
-  <li>如果不指定 <code class="highlighter-rouge">--target-dir</code>，导入到用户家目录下的 TBLS 目录</li>
+  <li>如果不指定 <code>--target-dir</code>，导入到用户家目录下的 TBLS 目录</li>
 </ul>
 
 <p>你还可以指定其他的参数：</p>
@@ -224,127 +215,127 @@ redhat
   <tbody>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--append</code></td>
+      <td style="text-align: left"><code>--append</code></td>
       <td>将数据追加到hdfs中已经存在的dataset中。使用该参数，sqoop将把数据先导入到一个临时目录中，然后重新给文件命名到一个正式的目录中，以避免和该目录中已存在的文件重名。</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--as-avrodatafile</code></td>
+      <td style="text-align: left"><code>--as-avrodatafile</code></td>
       <td>将数据导入到一个Avro数据文件中</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--as-sequencefile</code></td>
+      <td style="text-align: left"><code>--as-sequencefile</code></td>
       <td>将数据导入到一个sequence文件中</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--as-textfile</code></td>
+      <td style="text-align: left"><code>--as-textfile</code></td>
       <td>将数据导入到一个普通文本文件中，生成该文本文件后，可以在hive中通过sql语句查询出结果。</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--boundary-query &lt;statement&gt;</code></td>
-      <td>边界查询，也就是在导入前先通过SQL查询得到一个结果集，然后导入的数据就是该结果集内的数据，格式如：<code class="highlighter-rouge">--boundary-query 'select id,no from t where id = 3'</code>，表示导入的数据为id=3的记录，或者 <code class="highlighter-rouge">select min(&lt;split-by&gt;), max(&lt;split-by&gt;) from &lt;table name&gt;</code>，注意查询的字段中不能有数据类型为字符串的字段，否则会报错</td>
+      <td style="text-align: left"><code>--boundary-query &lt;statement&gt;</code></td>
+      <td>边界查询，也就是在导入前先通过SQL查询得到一个结果集，然后导入的数据就是该结果集内的数据，格式如：<code>--boundary-query 'select id,no from t where id = 3'</code>，表示导入的数据为id=3的记录，或者 <code>select min(&lt;split-by&gt;), max(&lt;split-by&gt;) from &lt;table name&gt;</code>，注意查询的字段中不能有数据类型为字符串的字段，否则会报错</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--columns&lt;col,col&gt;</code></td>
-      <td>指定要导入的字段值，格式如：<code class="highlighter-rouge">--columns id,username</code></td>
+      <td style="text-align: left"><code>--columns&lt;col,col&gt;</code></td>
+      <td>指定要导入的字段值，格式如：<code>--columns id,username</code></td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--direct</code></td>
+      <td style="text-align: left"><code>--direct</code></td>
       <td>直接导入模式，使用的是关系数据库自带的导入导出工具。官网上是说这样导入会更快</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--direct-split-size</code></td>
+      <td style="text-align: left"><code>--direct-split-size</code></td>
       <td>在使用上面direct直接导入的基础上，对导入的流按字节数分块，特别是使用直连模式从PostgreSQL导入数据的时候，可以将一个到达设定大小的文件分为几个独立的文件。</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--inline-lob-limit</code></td>
+      <td style="text-align: left"><code>--inline-lob-limit</code></td>
       <td>设定大对象数据类型的最大值</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">-m,--num-mappers</code></td>
+      <td style="text-align: left"><code>-m,--num-mappers</code></td>
       <td>启动N个map来并行导入数据，默认是4个，最好不要将数字设置为高于集群的节点数</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--query，-e &lt;sql&gt;</code></td>
-      <td>从查询结果中导入数据，该参数使用时必须指定<code class="highlighter-rouge">–target-dir</code>、<code class="highlighter-rouge">–hive-table</code>，在查询语句中一定要有where条件且在where条件中需要包含 <code class="highlighter-rouge">\$CONDITIONS</code>，示例：<code class="highlighter-rouge">--query 'select * from t where \$CONDITIONS ' --target-dir /tmp/t –hive-table t </code></td>
+      <td style="text-align: left"><code>--query，-e &lt;sql&gt;</code></td>
+      <td>从查询结果中导入数据，该参数使用时必须指定<code>–target-dir</code>、<code>–hive-table</code>，在查询语句中一定要有where条件且在where条件中需要包含 <code>\$CONDITIONS</code>，示例：<code>--query 'select * from t where \$CONDITIONS ' --target-dir /tmp/t –hive-table t </code></td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--split-by &lt;column&gt;</code></td>
+      <td style="text-align: left"><code>--split-by &lt;column&gt;</code></td>
       <td>表的列名，用来切分工作单元，一般后面跟主键ID</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--table &lt;table-name&gt;</code></td>
+      <td style="text-align: left"><code>--table &lt;table-name&gt;</code></td>
       <td>关系数据库表名，数据从该表中获取</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--delete-target-dir</code></td>
+      <td style="text-align: left"><code>--delete-target-dir</code></td>
       <td>删除目标目录</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--target-dir &lt;dir&gt;</code></td>
+      <td style="text-align: left"><code>--target-dir &lt;dir&gt;</code></td>
       <td>指定hdfs路径</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--warehouse-dir &lt;dir&gt;</code></td>
-      <td>与 <code class="highlighter-rouge">--target-dir</code> 不能同时使用，指定数据导入的存放目录，适用于hdfs导入，不适合导入hive目录</td>
+      <td style="text-align: left"><code>--warehouse-dir &lt;dir&gt;</code></td>
+      <td>与 <code>--target-dir</code> 不能同时使用，指定数据导入的存放目录，适用于hdfs导入，不适合导入hive目录</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--where</code></td>
-      <td>从关系数据库导入数据时的查询条件，示例：<code class="highlighter-rouge">--where "id = 2"</code></td>
+      <td style="text-align: left"><code>--where</code></td>
+      <td>从关系数据库导入数据时的查询条件，示例：<code>--where "id = 2"</code></td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">-z,--compress</code></td>
+      <td style="text-align: left"><code>-z,--compress</code></td>
       <td>压缩参数，默认情况下数据是没被压缩的，通过该参数可以使用gzip压缩算法对数据进行压缩，适用于SequenceFile, text文本文件, 和Avro文件</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--compression-codec</code></td>
+      <td style="text-align: left"><code>--compression-codec</code></td>
       <td>Hadoop压缩编码，默认是gzip</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--null-string &lt;null-string&gt;</code></td>
+      <td style="text-align: left"><code>--null-string &lt;null-string&gt;</code></td>
       <td>可选参数，如果没有指定，则字符串null将被使用</td>
       <td> </td>
     </tr>
     <tr>
       <td style="text-align: left"> </td>
-      <td style="text-align: left"><code class="highlighter-rouge">--null-non-string &lt;null-string&gt;</code></td>
+      <td style="text-align: left"><code>--null-non-string &lt;null-string&gt;</code></td>
       <td>可选参数，如果没有指定，则字符串null将被使用</td>
       <td> </td>
     </tr>
@@ -353,35 +344,31 @@ redhat
 
 <p>示例程序：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --columns <span class="s2">"tbl_id,create_time"</span> --where <span class="s2">"tbl_id &gt; 1"</span> --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --columns "tbl_id,create_time" --where "tbl_id &gt; 1" --target-dir /user/hive/result
 </code></pre>
-</div>
 
 <h3 id="sql-">使用 sql 语句</h3>
 
-<p>参照上表，使用 sql 语句查询时，需要指定 <code class="highlighter-rouge">$CONDITIONS</code></p>
+<p>参照上表，使用 sql 语句查询时，需要指定 <code>$CONDITIONS</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --query <span class="s1">'SELECT * from TBLS where \$CONDITIONS '</span> --split-by tbl_id -m 4 --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --query 'SELECT * from TBLS where \$CONDITIONS ' --split-by tbl_id -m 4 --target-dir /user/hive/result
 </code></pre>
-</div>
 
-<p>上面命令通过 <code class="highlighter-rouge">-m 1</code> 控制并发的 map 数。</p>
+<p>上面命令通过 <code>-m 1</code> 控制并发的 map 数。</p>
 
 <h3 id="direct-">使用 direct 模式：</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --delete-target-dir --direct --default-character-set UTF-8 --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --delete-target-dir --direct --default-character-set UTF-8 --target-dir /user/hive/result
 </code></pre>
-</div>
 
 <h3 id="section-2">指定文件输出格式：</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> --lines-terminated-by <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> --delete-target-dir  --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by "\t" --lines-terminated-by "\n" --delete-target-dir  --target-dir /user/hive/result
 </code></pre>
-</div>
 
 <p>这时候查看 hdfs 中数据(观察分隔符是否为制表符)：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -ls result
+<pre><code class="language-bash">$ hadoop fs -ls result
 Found 5 items
 -rw-r--r--   3 root hadoop          0 2014-08-04 16:07 result/_SUCCESS
 -rw-r--r--   3 root hadoop         69 2014-08-04 16:07 result/part-m-00000
@@ -389,26 +376,23 @@ Found 5 items
 -rw-r--r--   3 root hadoop        142 2014-08-04 16:07 result/part-m-00002
 -rw-r--r--   3 root hadoop         62 2014-08-04 16:07 result/part-m-00003
 
-<span class="gp">$ </span>hadoop fs -cat result/part-m-00000
+$ hadoop fs -cat result/part-m-00000
 34	1406784308	8	0	root	0	45	test1	EXTERNAL_TABLE	null	null	null
 
-<span class="gp">$ </span>hadoop fs -cat result/part-m-00002
+$ hadoop fs -cat result/part-m-00002
 40	1406797005	9	0	root	0	52	test2	EXTERNAL_TABLE	null	null	null
 42	1407122307	7	0	root	0	59	test3	EXTERNAL_TABLE	null	null	null
 </code></pre>
-</div>
 
 <p>指定空字符串：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> --lines-terminated-by <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> --delete-target-dir --null-string <span class="s1">'\\N'</span> --null-non-string <span class="s1">'\\N'</span> --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by "\t" --lines-terminated-by "\n" --delete-target-dir --null-string '\\N' --null-non-string '\\N' --target-dir /user/hive/result
 </code></pre>
-</div>
 
 <p>如果需要指定压缩：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> --lines-terminated-by <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> --delete-target-dir --null-string <span class="s1">'\\N'</span> --null-non-string <span class="s1">'\\N'</span> --compression-codec <span class="s2">"com.hadoop.compression.lzo.LzopCodec"</span> --target-dir /user/hive/result
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by "\t" --lines-terminated-by "\n" --delete-target-dir --null-string '\\N' --null-non-string '\\N' --compression-codec "com.hadoop.compression.lzo.LzopCodec" --target-dir /user/hive/result
 </code></pre>
-</div>
 
 <p>附：可选的文件参数如下表。</p>
 
@@ -421,28 +405,28 @@ Found 5 items
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--enclosed-by &lt;char&gt;</code></td>
-      <td style="text-align: left">给字段值前后加上指定的字符，比如双引号，示例：<code class="highlighter-rouge">--enclosed-by '\"'</code>，显示例子：”3”,”jimsss”,”dd@dd.com”</td>
+      <td style="text-align: left"><code>--enclosed-by &lt;char&gt;</code></td>
+      <td style="text-align: left">给字段值前后加上指定的字符，比如双引号，示例：<code>--enclosed-by '\"'</code>，显示例子：”3”,”jimsss”,”dd@dd.com”</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--escaped-by &lt;char&gt;</code></td>
-      <td style="text-align: left">给双引号作转义处理，如字段值为”测试”，经过 <code class="highlighter-rouge">--escaped-by "\\"</code> 处理后，在hdfs中的显示值为：<code class="highlighter-rouge">\"测试\"</code>，对单引号无效</td>
+      <td style="text-align: left"><code>--escaped-by &lt;char&gt;</code></td>
+      <td style="text-align: left">给双引号作转义处理，如字段值为”测试”，经过 <code>--escaped-by "\\"</code> 处理后，在hdfs中的显示值为：<code>\"测试\"</code>，对单引号无效</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--fields-terminated-by &lt;char&gt;</code></td>
-      <td style="text-align: left">设定每个字段是以什么符号作为结束的，默认是逗号，也可以改为其它符号，如句号<code class="highlighter-rouge">.</code>，示例如：<code class="highlighter-rouge">--fields-terminated-by</code></td>
+      <td style="text-align: left"><code>--fields-terminated-by &lt;char&gt;</code></td>
+      <td style="text-align: left">设定每个字段是以什么符号作为结束的，默认是逗号，也可以改为其它符号，如句号<code>.</code>，示例如：<code>--fields-terminated-by</code></td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--lines-terminated-by &lt;char&gt;</code></td>
-      <td style="text-align: left">设定每条记录行之间的分隔符，默认是换行串，但也可以设定自己所需要的字符串，示例如：<code class="highlighter-rouge">--lines-terminated-by "#"</code> 以#号分隔</td>
+      <td style="text-align: left"><code>--lines-terminated-by &lt;char&gt;</code></td>
+      <td style="text-align: left">设定每条记录行之间的分隔符，默认是换行串，但也可以设定自己所需要的字符串，示例如：<code>--lines-terminated-by "#"</code> 以#号分隔</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--mysql-delimiters</code></td>
-      <td style="text-align: left">Mysql默认的分隔符设置，字段之间以<code class="highlighter-rouge">,</code>隔开，行之间以换行<code class="highlighter-rouge">\n</code>隔开，默认转义符号是<code class="highlighter-rouge">\</code>，字段值以单引号<code class="highlighter-rouge">'</code>包含起来。</td>
+      <td style="text-align: left"><code>--mysql-delimiters</code></td>
+      <td style="text-align: left">Mysql默认的分隔符设置，字段之间以<code>,</code>隔开，行之间以换行<code>\n</code>隔开，默认转义符号是<code>\</code>，字段值以单引号<code>'</code>包含起来。</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--optionally-enclosed-by &lt;char&gt;</code></td>
-      <td style="text-align: left">enclosed-by是强制给每个字段值前后都加上指定的符号，而<code class="highlighter-rouge">--optionally-enclosed-by</code>只是给带有双引号或单引号的字段值加上指定的符号，故叫可选的</td>
+      <td style="text-align: left"><code>--optionally-enclosed-by &lt;char&gt;</code></td>
+      <td style="text-align: left">enclosed-by是强制给每个字段值前后都加上指定的符号，而<code>--optionally-enclosed-by</code>只是给带有双引号或单引号的字段值加上指定的符号，故叫可选的</td>
     </tr>
   </tbody>
 </table>
@@ -451,9 +435,8 @@ Found 5 items
 
 <p>生成与关系数据库表的表结构对应的HIVE表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop create-hive-table --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS 
+<pre><code class="language-bash">$ sqoop create-hive-table --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS 
 </code></pre>
-</div>
 
 <table>
   <thead>
@@ -464,23 +447,23 @@ Found 5 items
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--hive-home &lt;dir&gt;</code></td>
+      <td style="text-align: left"><code>--hive-home &lt;dir&gt;</code></td>
       <td style="text-align: left">Hive的安装目录，可以通过该参数覆盖掉默认的hive目录</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--hive-overwrite</code></td>
+      <td style="text-align: left"><code>--hive-overwrite</code></td>
       <td style="text-align: left">覆盖掉在hive表中已经存在的数据</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--create-hive-table</code></td>
+      <td style="text-align: left"><code>--create-hive-table</code></td>
       <td style="text-align: left">默认是false，如果目标表已经存在了，那么创建任务会失败</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--hive-table</code></td>
+      <td style="text-align: left"><code>--hive-table</code></td>
       <td style="text-align: left">后面接要创建的hive表</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--table</code></td>
+      <td style="text-align: left"><code>--table</code></td>
       <td style="text-align: left">指定关系数据库表名</td>
     </tr>
   </tbody>
@@ -490,53 +473,47 @@ Found 5 items
 
 <p>执行下面的命令会将 mysql 中的数据导入到 hdfs 中，然后创建一个hive 表，最后再将 hdfs 上的文件移动到 hive 表的目录下面。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> --lines-terminated-by <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> --hive-import --hive-overwrite --create-hive-table --hive-table dw_srclog.TBLS --delete-target-dir
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by "\t" --lines-terminated-by "\n" --hive-import --hive-overwrite --create-hive-table --hive-table dw_srclog.TBLS --delete-target-dir
 </code></pre>
-</div>
 
 <p>说明：</p>
 
 <ul>
   <li>可以在 hive 的表名前面指定数据库名称</li>
-  <li>可以通过 <code class="highlighter-rouge">--create-hive-table</code> 创建表，如果表已经存在则会执行失败</li>
+  <li>可以通过 <code>--create-hive-table</code> 创建表，如果表已经存在则会执行失败</li>
 </ul>
 
 <p>接下来可以查看 hive 中的数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive -e <span class="s1">'select * from dw_srclog.tbls'</span>
+<pre><code class="language-bash">$ hive -e 'select * from dw_srclog.tbls'
 34	1406784308	8	0	root	0	45	test1	EXTERNAL_TABLE	null	null	NULL
 40	1406797005	9	0	root	0	52	test2	EXTERNAL_TABLE	null	null	NULL
 42	1407122307	7	0	root	0	59	test3	EXTERNAL_TABLE	null	null	NULL
 </code></pre>
-</div>
 
 <p>直接查看文件内容：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -cat /user/hive/warehouse/dw_srclog.db/tbls/part-m-00000
+<pre><code class="language-bash">$ hadoop fs -cat /user/hive/warehouse/dw_srclog.db/tbls/part-m-00000
 34140678430880root045go_goodsEXTERNAL_TABLEnullnullnull
 40140679700590root052merchantEXTERNAL_TABLEnullnullnull
 </code></pre>
-</div>
 
 <p>从上面可见，数据导入到 hive 中之后分隔符为默认分隔符，参考上文你可以通过设置参数指定其他的分隔符。</p>
 
 <p>另外，Sqoop 默认地导入空值（NULL）为 null 字符串，而 hive 使用 \N 去标识空值（NULL），故你在 import 或者 export 时候，需要做相应的处理。在 import 时，使用如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import  ... --null-string <span class="s1">'\\N'</span> --null-non-string <span class="s1">'\\N'</span>
+<pre><code class="language-bash">$ sqoop import  ... --null-string '\\N' --null-non-string '\\N'
 </code></pre>
-</div>
 
 <p>在导出时，使用下面命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import  ... --input-null-string <span class="s1">''</span> --input-null-non-string <span class="s1">''</span>
+<pre><code class="language-bash">$ sqoop import  ... --input-null-string '' --input-null-non-string ''
 </code></pre>
-</div>
 
 <p>一个完整的例子如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> --lines-terminated-by <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> --hive-import --hive-overwrite --create-hive-table --hive-table dw_srclog.TBLS --null-string <span class="s1">'\\N'</span> --null-non-string <span class="s1">'\\N'</span> --compression-codec <span class="s2">"com.hadoop.compression.lzo.LzopCodec"</span>
+<pre><code class="language-bash">$ sqoop import --connect jdbc:mysql://192.168.56.121:3306/metastore --username hiveuser --password redhat --table TBLS --fields-terminated-by "\t" --lines-terminated-by "\n" --hive-import --hive-overwrite --create-hive-table --hive-table dw_srclog.TBLS --null-string '\\N' --null-non-string '\\N' --compression-codec "com.hadoop.compression.lzo.LzopCodec"
 </code></pre>
-</div>
 
 <h1 id="section-3">2.5 增量导入</h1>
 
@@ -549,15 +526,15 @@ Found 5 items
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--check-column (col)</code></td>
+      <td style="text-align: left"><code>--check-column (col)</code></td>
       <td style="text-align: left">用来作为判断的列名，如id</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--incremental (mode)</code></td>
+      <td style="text-align: left"><code>--incremental (mode)</code></td>
       <td style="text-align: left">append：追加，比如对大于last-value指定的值之后的记录进行追加导入。lastmodified：最后的修改时间，追加last-value指定的日期之后的记录</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--last-value (value)</code></td>
+      <td style="text-align: left"><code>--last-value (value)</code></td>
       <td style="text-align: left">指定自从上次导入后列的最大值（大于该指定的值），也可以自己设定某一值</td>
     </tr>
   </tbody>
@@ -567,11 +544,10 @@ Found 5 items
 
 <p>将HDFS中不同目录下面的数据合在一起，并存放在指定的目录中，示例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sqoop merge –new-data /test/p1/person –onto /test/p2/person –target-dir /test/merged –jar-file /opt/data/sqoop/person/Person.jar –class-name Person –merge-key id
+<pre><code class="language-bash">sqoop merge –new-data /test/p1/person –onto /test/p2/person –target-dir /test/merged –jar-file /opt/data/sqoop/person/Person.jar –class-name Person –merge-key id
 </code></pre>
-</div>
 
-<p>其中，<code class="highlighter-rouge">–class-name</code> 所指定的 class 名是对应于 Person.jar 中的 Person 类，而 Person.jar 是通过 Codegen 生成的</p>
+<p>其中，<code>–class-name</code> 所指定的 class 名是对应于 Person.jar 中的 Person 类，而 Person.jar 是通过 Codegen 生成的</p>
 
 <table>
   <thead>
@@ -582,27 +558,27 @@ Found 5 items
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--new-data &lt;path&gt;</code></td>
+      <td style="text-align: left"><code>--new-data &lt;path&gt;</code></td>
       <td style="text-align: left">Hdfs中存放数据的一个目录，该目录中的数据是希望在合并后能优先保留的，原则上一般是存放越新数据的目录就对应这个参数。</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--onto &lt;path&gt;</code></td>
+      <td style="text-align: left"><code>--onto &lt;path&gt;</code></td>
       <td style="text-align: left">Hdfs中存放数据的一个目录，该目录中的数据是希望在合并后能被更新数据替换掉的，原则上一般是存放越旧数据的目录就对应这个参数。</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--merge-key &lt;col&gt;</code></td>
+      <td style="text-align: left"><code>--merge-key &lt;col&gt;</code></td>
       <td style="text-align: left">合并键，一般是主键ID</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--jar-file &lt;file&gt;</code></td>
+      <td style="text-align: left"><code>--jar-file &lt;file&gt;</code></td>
       <td style="text-align: left">合并时引入的jar包，该jar包是通过Codegen工具生成的jar包</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--class-name &lt;class&gt;</code></td>
+      <td style="text-align: left"><code>--class-name &lt;class&gt;</code></td>
       <td style="text-align: left">对应的表名或对象名，该class类是包含在jar包中的。</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">--target-dir &lt;path&gt;</code></td>
+      <td style="text-align: left"><code>--target-dir &lt;path&gt;</code></td>
       <td style="text-align: left">合并后的数据在HDFS里的存放目录</td>
     </tr>
   </tbody>
@@ -664,7 +640,7 @@ Found 5 items
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

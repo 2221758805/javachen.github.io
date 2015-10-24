@@ -117,78 +117,76 @@
 
 <p>首先，在IDE里启动HMaster和HRegionServer：</p>
 
-<p>运行<code class="highlighter-rouge">/hbase/src/test/java/my/test/start/HMasterStarter.java</code>，当看到提示<code class="highlighter-rouge">Waiting for region servers count to settle</code>时，<br />
+<p>运行<code>/hbase/src/test/java/my/test/start/HMasterStarter.java</code>，当看到提示<code>Waiting for region servers count to settle</code>时，<br />
 再打开同目录中的HRegionServerStarter，统一运行该类。</p>
 
-<p>此时会有两个Console，在HMasterStarter这个Console最后出现<code class="highlighter-rouge">Master has completed initialization</code>，这样的信息时就表示它启动成功了，而HRegionServerStarter这个Console最后出现<code class="highlighter-rouge">Done with post open deploy task</code>这样的信息时说明它启动成功了。</p>
+<p>此时会有两个Console，在HMasterStarter这个Console最后出现<code>Master has completed initialization</code>，这样的信息时就表示它启动成功了，而HRegionServerStarter这个Console最后出现<code>Done with post open deploy task</code>这样的信息时说明它启动成功了。</p>
 
 <h1 id="main">main方法</h1>
 
 <p>运行HMasterStarter类启动HMaster：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">my</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">start</span><span class="o">;</span>
+<pre><code class="language-java">package my.test.start;
 
-<span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+import java.io.File;
 
-<span class="kn">import</span> <span class="nn">my.test.TestBase</span><span class="o">;</span>
+import my.test.TestBase;
 
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.HConstants</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.master.HMaster</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.zookeeper.MiniZooKeeperCluster</span><span class="o">;</span>
+import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.master.HMaster;
+import org.apache.hadoop.hbase.zookeeper.MiniZooKeeperCluster;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HMasterStarter</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">deleteRecursive</span><span class="o">(</span><span class="n">File</span><span class="o">[]</span> <span class="n">files</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">files</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">File</span> <span class="n">f</span> <span class="o">:</span> <span class="n">files</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">isDirectory</span><span class="o">())</span> <span class="o">{</span>
-                <span class="n">deleteRecursive</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">listFiles</span><span class="o">());</span>
-            <span class="o">}</span>
-            <span class="n">f</span><span class="o">.</span><span class="na">delete</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
+public class HMasterStarter {
+    public static void deleteRecursive(File[] files) {
+        if (files == null)
+            return;
+        for (File f : files) {
+            if (f.isDirectory()) {
+                deleteRecursive(f.listFiles());
+            }
+            f.delete();
+        }
+    }
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">File</span> <span class="n">f</span> <span class="o">=</span> <span class="n">TestBase</span><span class="o">.</span><span class="na">getTestDir</span><span class="o">();</span>
-        <span class="c1">//删除临时测试目录</span>
-        <span class="n">deleteRecursive</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">listFiles</span><span class="o">());</span>
+    public static void main(String[] args) throws Exception {
+        File f = TestBase.getTestDir();
+        //删除临时测试目录
+        deleteRecursive(f.listFiles());
 
-        <span class="k">new</span> <span class="n">ZookeeperThread</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="n">HMaster</span><span class="o">.</span><span class="na">main</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">"start"</span> <span class="o">});</span>
-    <span class="o">}</span>
+        new ZookeeperThread().start();
+        Thread.sleep(1000);
+        HMaster.main(new String[] { "start" });
+    }
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ZookeeperThread</span> <span class="kd">extends</span> <span class="n">Thread</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">MiniZooKeeperCluster</span> <span class="n">zooKeeperCluster</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MiniZooKeeperCluster</span><span class="o">();</span>
+    public static class ZookeeperThread extends Thread {
+        public void run() {
+            MiniZooKeeperCluster zooKeeperCluster = new MiniZooKeeperCluster();
 
-            <span class="n">File</span> <span class="n">zkDataPath</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">TestBase</span><span class="o">.</span><span class="na">sharedConf</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">HConstants</span><span class="o">.</span><span class="na">ZOOKEEPER_DATA_DIR</span><span class="o">));</span>
-            <span class="kt">int</span> <span class="n">zkClientPort</span> <span class="o">=</span> <span class="n">TestBase</span><span class="o">.</span><span class="na">sharedConf</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="n">HConstants</span><span class="o">.</span><span class="na">ZOOKEEPER_CLIENT_PORT</span><span class="o">,</span> <span class="mi">2181</span><span class="o">);</span>
-            <span class="n">zooKeeperCluster</span><span class="o">.</span><span class="na">setDefaultClientPort</span><span class="o">(</span><span class="n">zkClientPort</span><span class="o">);</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="n">zooKeeperCluster</span><span class="o">.</span><span class="na">startup</span><span class="o">(</span><span class="n">zkDataPath</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+            File zkDataPath = new File(TestBase.sharedConf.get(HConstants.ZOOKEEPER_DATA_DIR));
+            int zkClientPort = TestBase.sharedConf.getInt(HConstants.ZOOKEEPER_CLIENT_PORT, 2181);
+            zooKeeperCluster.setDefaultClientPort(zkClientPort);
+            try {
+                zooKeeperCluster.startup(zkDataPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
 </code></pre>
-</div>
 
 <p>HMaster的入口是main方法，main方法需要传递一个参数，start或者stop。</p>
 
 <p>main方法内首先打印hbase版本信息，然后在调用HMasterCommandLine的doMain方法。HMasterCommandLine继承自ServerCommandLine类并且ServerCommandLine类实现了Tool接口。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">doMain</span><span class="p">(</span><span class="n">String</span> <span class="n">args</span><span class="o">[])</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">ToolRunner</span><span class="o">.</span><span class="na">run</span><span class="o">(</span>
-      <span class="n">HBaseConfiguration</span><span class="o">.</span><span class="na">create</span><span class="o">(),</span> <span class="k">this</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">ret</span><span class="o">);</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+<pre><code class="language-java">public void doMain(String args[]) throws Exception {
+    int ret = ToolRunner.run(
+      HBaseConfiguration.create(), this, args);
+    if (ret != 0) {
+      System.exit(ret);
+    }
+  }
 </code></pre>
-</div>
 
 <p>doMain方法内会调用ToolRunner的run方法，查看ToolRunner类可以知道，实际上最后会调用HMasterCommandLine的run方法。</p>
 
@@ -202,7 +200,7 @@
 
 <p>HMaster类继承关系如下图：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2014/hbase-hmaster-class.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hbase-hmaster-class.jpg" alt="" /></p>
 
 <h1 id="hmaster-2">HMaster的构造方法</h1>
 
@@ -216,11 +214,11 @@
   <li>获取主机名称和master绑定的ip和端口号，端口号默认为60000</li>
   <li>设置regionserver的coprocessorhandler线程数为0</li>
   <li><strong>创建rpcServer</strong>（见下文分析）</li>
-  <li>初始化serverName，其值为：<code class="highlighter-rouge">192.168.1.129,60000,1404117936154</code></li>
+  <li>初始化serverName，其值为：<code>192.168.1.129,60000,1404117936154</code></li>
   <li>zk授权登录和hbase授权</li>
-  <li>设置当前线程名称：<code class="highlighter-rouge">master + "-" + this.serverName.toString()</code></li>
-  <li>判断是否开启复制：<code class="highlighter-rouge">Replication.decorateMasterConfiguration(this.conf);</code></li>
-  <li>设置<code class="highlighter-rouge">mapred.task.id</code>，如果其为空，则其值为：<code class="highlighter-rouge">"hb_m_" + this.serverName.toString()</code></li>
+  <li>设置当前线程名称：<code>master + "-" + this.serverName.toString()</code></li>
+  <li>判断是否开启复制：<code>Replication.decorateMasterConfiguration(this.conf);</code></li>
+  <li>设置<code>mapred.task.id</code>，如果其为空，则其值为：<code>"hb_m_" + this.serverName.toString()</code></li>
   <li><strong>创建ZooKeeperWatcher监听器</strong>（见下文分析），并在zookeeper上创建一些节点</li>
   <li>启动rpcServer中的线程</li>
   <li>创建一个MasterMetrics</li>
@@ -230,7 +228,7 @@
 
 <p>涉及到的参数有：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>hfile.block.cache.size
+<pre><code>hfile.block.cache.size
 hbase.master.dns.interface
 hbase.master.dns.nameserver
 hbase.master.port
@@ -248,20 +246,19 @@ hbase.node.health.script.frequency
 hbase.regionserver.separate.hlog.for.meta
 hbase.master.wait.for.log.splitting
 </code></pre>
-</div>
 
 <p>2、创建rpcServer并启动其中的线程：</p>
 
-<p>这部分涉及到RPC的使用，包括的知识点有<code class="highlighter-rouge">动态代理</code>、<code class="highlighter-rouge">Java NIO</code>等。</p>
+<p>这部分涉及到RPC的使用，包括的知识点有<code>动态代理</code>、<code>Java NIO</code>等。</p>
 
-<p>通过反射创建RpcEngine的实现类，实现类可以在配置文件中配置（<code class="highlighter-rouge">hbase.rpc.engine</code>），默认实现为WritableRpcEngine。<br />
+<p>通过反射创建RpcEngine的实现类，实现类可以在配置文件中配置（<code>hbase.rpc.engine</code>），默认实现为WritableRpcEngine。<br />
 调用getServer方法，其实也就是new一个HBaseServer类。</p>
 
 <p>构造方法中：</p>
 
 <ul>
   <li>启动一个Listener线程，功能是监听client的请求，将请求放入nio请求队列，逻辑如下：</li>
-  <li>–&gt;创建n个selector，和一个n个线程的readpool，n由<code class="highlighter-rouge">ipc.server.read.threadpool.size</code>决定，默认为10</li>
+  <li>–&gt;创建n个selector，和一个n个线程的readpool，n由<code>ipc.server.read.threadpool.size</code>决定，默认为10</li>
   <li>–&gt;读取每个请求的头和内容，将内容放入priorityQueue中</li>
   <li>启动一个Responder线程，功能是将响应队列里的数据写给各个client的connection通道，逻辑如下：</li>
   <li>–&gt;创建nio selector</li>
@@ -278,7 +275,7 @@ hbase.master.wait.for.log.splitting
 
 <p>构造函数中生成如下持久节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/hbase
+<pre><code>/hbase
 /hbase/root-region-server
 /hbase/rs
 /table/draining
@@ -291,7 +288,6 @@ hbase.master.wait.for.log.splitting
 /hbase/hbaseid
 /hbase/splitlog
 </code></pre>
-</div>
 
 <h1 id="run">run方法</h1>
 
@@ -321,7 +317,7 @@ hbase.master.wait.for.log.splitting
   <li>创建ActiveMasterManager</li>
   <li>ZooKeeperWatcher注册activeMasterManager监听器</li>
   <li>调用stallIfBackupMaster：<br />
-  –&gt;先检查配置项 “hbase.master.backup”，自己是否backup机器，如果是则直接block直至检查到系统中的active master挂掉（<code class="highlighter-rouge">zookeeper.session.timeout</code>，默认每3分钟检查一次）</li>
+  –&gt;先检查配置项 “hbase.master.backup”，自己是否backup机器，如果是则直接block直至检查到系统中的active master挂掉（<code>zookeeper.session.timeout</code>，默认每3分钟检查一次）</li>
   <li>创建clusterStatusTracker并启动</li>
   <li>调用activeMasterManager的blockUntilBecomingActiveMaster方法。
     <ul>
@@ -354,7 +350,7 @@ hbase.master.wait.for.log.splitting
       <li>创建SnapshotManager</li>
     </ul>
   </li>
-  <li>如果不是备份master，初始化MasterCoprocessorHost并执行startServiceThreads()。说明：<code class="highlighter-rouge">info server的启动移到构造函数了去了，这样可以早点通过Jetty服务器查看HMaster启动状态。</code>
+  <li>如果不是备份master，初始化MasterCoprocessorHost并执行startServiceThreads()。说明：<code>info server的启动移到构造函数了去了，这样可以早点通过Jetty服务器查看HMaster启动状态。</code>
     <ul>
       <li>创建一些executorService</li>
       <li>创建logCleaner并启动</li>
@@ -367,7 +363,7 @@ hbase.master.wait.for.log.splitting
     <ul>
       <li>a 至少等待4.5s，”hbase.master.wait.on.regionservers.timeout”</li>
       <li>b 成功启动regionserver节点数&gt;=1，”hbase.master.wait.on.regionservers.mintostart”</li>
-      <li>c 1.5s内没有regionsever死掉或重新启动，<code class="highlighter-rouge">hbase.master.wait.on.regionservers.interval</code>)</li>
+      <li>c 1.5s内没有regionsever死掉或重新启动，<code>hbase.master.wait.on.regionservers.interval</code>)</li>
     </ul>
   </li>
   <li>serverManager注册新的在线region server</li>
@@ -376,13 +372,13 @@ hbase.master.wait.for.log.splitting
     <ul>
       <li>–&gt;依次检查每一个hlog目录，查看它所属的region server是否online，如果是则不需要做任何动作，region server自己会恢复数据，如果不是，则需要将它分配给其它的region server</li>
       <li>–&gt;split是加锁操作:</li>
-      <li>–&gt; 创建一个新的hlogsplitter,遍历每一个server目录下的所有hlog文件，依次做如下操作。（如果遇到文件损坏等无法跳过的错误，配 置 <code class="highlighter-rouge">hbase.hlog.split.skip.errors=true</code> 以忽略之）</li>
-      <li>–&gt;启动<code class="highlighter-rouge">hbase.regionserver.hlog.splitlog.writer.threads</code>（默认为3）个线程，共使用128MB内存，启动这些写线程</li>
+      <li>–&gt; 创建一个新的hlogsplitter,遍历每一个server目录下的所有hlog文件，依次做如下操作。（如果遇到文件损坏等无法跳过的错误，配 置 <code>hbase.hlog.split.skip.errors=true</code> 以忽略之）</li>
+      <li>–&gt;启动<code>hbase.regionserver.hlog.splitlog.writer.threads</code>（默认为3）个线程，共使用128MB内存，启动这些写线程</li>
       <li>–&gt;先通过lease机制检查文件是否能够append，如果不能则死循环等待</li>
       <li>–&gt;把hlog中的内容全部加载到内存中（内存同时被几个写线程消费)）
         <ul>
-          <li>–&gt;把有损坏并且跳过的文件移到<code class="highlighter-rouge">/hbase/.corrupt/</code>目录中</li>
-          <li>–&gt; 把其余己经处理过的文件移到<code class="highlighter-rouge">/hbase/.oldlogs</code>中，然后删除原有的server目录</li>
+          <li>–&gt;把有损坏并且跳过的文件移到<code>/hbase/.corrupt/</code>目录中</li>
+          <li>–&gt; 把其余己经处理过的文件移到<code>/hbase/.oldlogs</code>中，然后删除原有的server目录</li>
           <li>–&gt; 等待写线程结束，返回新写的所有路径</li>
         </ul>
       </li>
@@ -407,7 +403,7 @@ hbase.master.wait.for.log.splitting
   <li>如果不是备份master
     <ul>
       <li>启动balancerChore线程，运行LoadBalancer</li>
-      <li>启动startCatalogJanitorChore，周期性扫描<code class="highlighter-rouge">.META.</code>表上未使用的region并回收</li>
+      <li>启动startCatalogJanitorChore，周期性扫描<code>.META.</code>表上未使用的region并回收</li>
       <li>registerMBean</li>
     </ul>
   </li>
@@ -417,7 +413,7 @@ hbase.master.wait.for.log.splitting
 
 <h1 id="masterfilesystem">MasterFileSystem构造方法</h1>
 
-<p>在<code class="highlighter-rouge">HMaster.finishInitialization</code>方法中触发了MasterFileSystem的构造方法，该类在HMaster类中会被以下类使用：</p>
+<p>在<code>HMaster.finishInitialization</code>方法中触发了MasterFileSystem的构造方法，该类在HMaster类中会被以下类使用：</p>
 
 <ul>
   <li>LogCleaner</li>
@@ -426,39 +422,38 @@ hbase.master.wait.for.log.splitting
 
 <p>另外该类可以完成拆分log的工作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cm">/**
+<pre><code class="language-java">  /**
    * Override to change master's splitLogAfterStartup. Used testing
    * @param mfs
-   */</span>
-  <span class="kd">protected</span> <span class="kt">void</span> <span class="n">splitLogAfterStartup</span><span class="o">(</span><span class="kd">final</span> <span class="n">MasterFileSystem</span> <span class="n">mfs</span><span class="o">){</span>
-    <span class="n">mfs</span><span class="o">.</span><span class="na">splitLogAfterStartup</span><span class="o">();</span>
-  <span class="o">}</span>
+   */
+  protected void splitLogAfterStartup(final MasterFileSystem mfs){
+    mfs.splitLogAfterStartup();
+  }
 </code></pre>
-</div>
 
 <p>这里主要是关心创建了哪些目录，其他用途暂不分析。</p>
 
 <p>1、接下来，看其构造方法运行过程：</p>
 
 <ul>
-  <li>获取rootdir：由参数<code class="highlighter-rouge">hbase.rootdir</code>配置</li>
-  <li>获取tempdir：<code class="highlighter-rouge">${hbase.rootdir}/.tmp</code></li>
-  <li>获取文件系统的uri，并设置到<code class="highlighter-rouge">fs.default.name</code>和<code class="highlighter-rouge">fs.defaultFS</code></li>
-  <li>判断是否进行分布式文件拆分，参数：<code class="highlighter-rouge">hbase.master.distributed.log.splitting</code>，如果需要，则创建SplitLogManager</li>
+  <li>获取rootdir：由参数<code>hbase.rootdir</code>配置</li>
+  <li>获取tempdir：<code>${hbase.rootdir}/.tmp</code></li>
+  <li>获取文件系统的uri，并设置到<code>fs.default.name</code>和<code>fs.defaultFS</code></li>
+  <li>判断是否进行分布式文件拆分，参数：<code>hbase.master.distributed.log.splitting</code>，如果需要，则创建SplitLogManager</li>
   <li>创建oldLogDir，调用createInitialFileSystemLayout方法
     <ul>
       <li>checkRootDir
         <ul>
-          <li>等待fs退出安全模式(默认10秒钟轮循一次，可通过参数<code class="highlighter-rouge">hbase.server.thread.wakefrequency</code>调整</li>
+          <li>等待fs退出安全模式(默认10秒钟轮循一次，可通过参数<code>hbase.server.thread.wakefrequency</code>调整</li>
           <li>如果hbase.rootdir目录不存在则创建它，然后在此目录中创建名为”hbase.version”的文件，内容是文件系统版本号，当前为7；如果hbase.rootdir目录已存在，则读出”hbase.version”文件的内容与当前的版本号相比，如果不相等，则打印错误信息(提示版本不对)，抛出异常FileSystemVersionException</li>
-          <li>检查<code class="highlighter-rouge">${hbase.rootdir}</code>目录下是否有名为”hbase.id”的文件，如果没有则创建它，内容是随机生成的UUID(总长度36位，由5部份组成，用”-“分隔)，如：6c43f934-37a2-4cae-9d49-3f5abfdc113d</li>
+          <li>检查<code>${hbase.rootdir}</code>目录下是否有名为”hbase.id”的文件，如果没有则创建它，内容是随机生成的UUID(总长度36位，由5部份组成，用”-“分隔)，如：6c43f934-37a2-4cae-9d49-3f5abfdc113d</li>
           <li>读出”hbase.id”的文件的内容存到clusterId字段</li>
           <li>判断hbase.rootdir目录中是否有”-ROOT-/70236052”目录，没有的话说明是第一次启动hbase，进入<strong>bootstrap</strong>方法</li>
-          <li>createRootTableInfo 建立”-ROOT-“表的描述文件，判断<code class="highlighter-rouge">hbase.rootdir/-ROOT-</code>目录中是否存在tableinfo开头的文件，另外还创建了.tmp目录</li>
+          <li>createRootTableInfo 建立”-ROOT-“表的描述文件，判断<code>hbase.rootdir/-ROOT-</code>目录中是否存在tableinfo开头的文件，另外还创建了.tmp目录</li>
         </ul>
       </li>
       <li>checkTempDir</li>
-      <li>如果oldLogDir（<code class="highlighter-rouge">${hbase.rootdir}/.oldlogs</code>）不存在，则创建</li>
+      <li>如果oldLogDir（<code>${hbase.rootdir}/.oldlogs</code>）不存在，则创建</li>
     </ul>
   </li>
 </ul>
@@ -475,23 +470,23 @@ hbase.master.wait.for.log.splitting
 <p>经过上面分析之后，来看看zookeeper创建的一些目录分布式由哪个类来监控的：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">/hbase</code></li>
-  <li><code class="highlighter-rouge">/hbase/root-region-server</code>：RootRegionTracker，监控root所在的regionserver</li>
-  <li><code class="highlighter-rouge">/hbase/rs</code>：RegionServerTracker，监控regionserver的上线和下线</li>
-  <li><code class="highlighter-rouge">/table/draining</code>：DrainingServerTracker，监听regionserver列表的变化</li>
-  <li><code class="highlighter-rouge">/hbase/master</code>：在HMaster中建立，并且是一个短暂结点，结点的值是HMaster的ServerName：<code class="highlighter-rouge">hostname,port,当前毫秒</code></li>
-  <li><code class="highlighter-rouge">/hbase/backup-masters</code></li>
-  <li><code class="highlighter-rouge">/hbase/shutdown</code>：ClusterStatusTracker，当HMaster启动之后，会将当前时间（<code class="highlighter-rouge">Bytes.toBytes(new java.util.Date().toString())</code>）存到该节点</li>
-  <li><code class="highlighter-rouge">/hbase/unassigned</code>：MetaNodeTracker</li>
-  <li><code class="highlighter-rouge">/hbase/table94</code></li>
-  <li><code class="highlighter-rouge">/hbase/table</code></li>
-  <li><code class="highlighter-rouge">/hbase/hbaseid</code>：在<code class="highlighter-rouge">HMaster.finishInitialization</code>方法中调用ClusterId.setClusterId建立，结点值是UUID</li>
-  <li><code class="highlighter-rouge">/hbase/splitlog</code></li>
+  <li><code>/hbase</code></li>
+  <li><code>/hbase/root-region-server</code>：RootRegionTracker，监控root所在的regionserver</li>
+  <li><code>/hbase/rs</code>：RegionServerTracker，监控regionserver的上线和下线</li>
+  <li><code>/table/draining</code>：DrainingServerTracker，监听regionserver列表的变化</li>
+  <li><code>/hbase/master</code>：在HMaster中建立，并且是一个短暂结点，结点的值是HMaster的ServerName：<code>hostname,port,当前毫秒</code></li>
+  <li><code>/hbase/backup-masters</code></li>
+  <li><code>/hbase/shutdown</code>：ClusterStatusTracker，当HMaster启动之后，会将当前时间（<code>Bytes.toBytes(new java.util.Date().toString())</code>）存到该节点</li>
+  <li><code>/hbase/unassigned</code>：MetaNodeTracker</li>
+  <li><code>/hbase/table94</code></li>
+  <li><code>/hbase/table</code></li>
+  <li><code>/hbase/hbaseid</code>：在<code>HMaster.finishInitialization</code>方法中调用ClusterId.setClusterId建立，结点值是UUID</li>
+  <li><code>/hbase/splitlog</code></li>
 </ul>
 
-<p>在HMaster启动之后，<code class="highlighter-rouge">${hbase.rootdir}</code>目录如下:</p>
+<p>在HMaster启动之后，<code>${hbase.rootdir}</code>目录如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.
+<pre><code>.
 ├── -ROOT-                            //"-ROOT-"表名
 │   ├── ..tableinfo.0000000001.crc    //crc校验文件
 │   ├── .tableinfo.0000000001
@@ -521,7 +516,6 @@ hbase.master.wait.for.log.splitting
 ├── hbase.id                         //集群uuid
 └── hbase.version                    //hbase版本
 </code></pre>
-</div>
 
 <p>简单总结一下HMaster启动过程做了哪些事情：</p>
 
@@ -599,7 +593,7 @@ hbase.master.wait.for.log.splitting
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

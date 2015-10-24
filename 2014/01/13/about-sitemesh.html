@@ -127,48 +127,45 @@
 
 <p>在pom.xml中添加如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-	<span class="nt">&lt;groupId&gt;</span>opensymphony<span class="nt">&lt;/groupId&gt;</span>
-	<span class="nt">&lt;artifactId&gt;</span>sitemesh<span class="nt">&lt;/artifactId&gt;</span>
-	<span class="nt">&lt;version&gt;</span>2.4.2<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
+<pre><code class="language-xml">&lt;dependency&gt;
+	&lt;groupId&gt;opensymphony&lt;/groupId&gt;
+	&lt;artifactId&gt;sitemesh&lt;/artifactId&gt;
+	&lt;version&gt;2.4.2&lt;/version&gt;
+	&lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
 </code></pre>
-</div>
 
 <h2 id="section">添加过滤器</h2>
 
 <p>在web.xml中添加过滤器：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;filter&gt;</span>
-	<span class="nt">&lt;filter-name&gt;</span>sitemesh<span class="nt">&lt;/filter-name&gt;</span>
-	<span class="nt">&lt;filter-class&gt;</span>com.opensymphony.module.sitemesh.filter.PageFilter<span class="nt">&lt;/filter-class&gt;</span>
-<span class="nt">&lt;/filter&gt;</span>
-<span class="nt">&lt;filter-mapping&gt;</span>
-	<span class="nt">&lt;filter-name&gt;</span>sitemesh<span class="nt">&lt;/filter-name&gt;</span>
-	<span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/filter-mapping&gt;</span>
+<pre><code class="language-xml">&lt;filter&gt;
+	&lt;filter-name&gt;sitemesh&lt;/filter-name&gt;
+	&lt;filter-class&gt;com.opensymphony.module.sitemesh.filter.PageFilter&lt;/filter-class&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+	&lt;filter-name&gt;sitemesh&lt;/filter-name&gt;
+	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
 </code></pre>
-</div>
 
 <h2 id="decoratorsxml">新建decorators.xml文件</h2>
 
 <p>在WEB-INF下新建decorators.xml文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="nt">&lt;decorators</span> <span class="na">defaultdir=</span><span class="s">"/WEB-INF/layouts/"</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- 此处用来定义不需要过滤的页面 --&gt;</span>
-    <span class="nt">&lt;excludes&gt;</span>
-        <span class="nt">&lt;pattern&gt;</span>/static/*<span class="nt">&lt;/pattern&gt;</span>
-    <span class="nt">&lt;/excludes&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;decorators defaultdir="/WEB-INF/layouts/"&gt;
+    &lt;!-- 此处用来定义不需要过滤的页面 --&gt;
+    &lt;excludes&gt;
+        &lt;pattern&gt;/static/*&lt;/pattern&gt;
+    &lt;/excludes&gt;
 
-    <span class="c">&lt;!-- 用来定义装饰器要过滤的页面 --&gt;</span>
-    <span class="nt">&lt;decorator</span> <span class="na">name=</span><span class="s">"default"</span> <span class="na">page=</span><span class="s">"default.jsp"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;pattern&gt;</span>/*<span class="nt">&lt;/pattern&gt;</span>
-    <span class="nt">&lt;/decorator&gt;</span>
-<span class="nt">&lt;/decorators&gt;</span>
+    &lt;!-- 用来定义装饰器要过滤的页面 --&gt;
+    &lt;decorator name="default" page="default.jsp"&gt;
+        &lt;pattern&gt;/*&lt;/pattern&gt;
+    &lt;/decorator&gt;
+&lt;/decorators&gt;
 </code></pre>
-</div>
 
 <p>理论上SiteMesh只会搞那些MIME type为html的页面，但在配置里先exclude掉一些静态内容和API的路径会更省心。</p>
 
@@ -176,24 +173,23 @@
 
 <p>在decorators.xml中定义了一个装饰页面default.jsp：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="err">&lt;</span> %@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;
-<span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;title&gt;</span>My Site - <span class="nt">&lt;decorator:title</span> <span class="na">default=</span><span class="s">"Welcome!"</span> <span class="nt">/&gt;&lt;/title&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html;charset=utf-8"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Cache-Control"</span> <span class="na">content=</span><span class="s">"no-store"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Pragma"</span> <span class="na">content=</span><span class="s">"no-cache"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Expires"</span> <span class="na">content=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;decorator:head</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"content"</span><span class="nt">&gt;</span>
-    	<span class="nt">&lt;decorator:body</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+<pre><code class="language-html">&lt; %@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My Site - &lt;decorator:title default="Welcome!" /&gt;&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
+    &lt;meta http-equiv="Cache-Control" content="no-store" /&gt;
+    &lt;meta http-equiv="Pragma" content="no-cache" /&gt;
+    &lt;meta http-equiv="Expires" content="0" /&gt;
+    &lt;decorator:head /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="content"&gt;
+    	&lt;decorator:body /&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-</div>
 
 <p>装饰模板中可以使用的Sitemesh标签有：</p>
 
@@ -201,77 +197,70 @@
   <li>取出被装饰页面的head标签中的内容。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;decorator:head /&gt;
+<pre><code>&lt;decorator:head /&gt;
 </code></pre>
-</div>
 
 <ul>
   <li>取出被装饰页面的body标签中的内容。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;decorator:body /&gt;
+<pre><code>&lt;decorator:body /&gt;
 </code></pre>
-</div>
 
 <ul>
   <li>取出被装饰页面的title标签中的内容。default为默认值</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;decorator:title default=""  /&gt;
+<pre><code>&lt;decorator:title default=""  /&gt;
 </code></pre>
-</div>
 
 <ul>
   <li>取出被装饰页面相关标签的属性值。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;decorator:getProperty property="" default=""  writeEntireProperty=""/&gt;
+<pre><code>&lt;decorator:getProperty property="" default=""  writeEntireProperty=""/&gt;
 </code></pre>
-</div>
 
 <ul>
   <li>将被装饰页面构造为一个对象，可以在装饰页面的JSP中直接引用。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;decorator:usePage id="" /&gt;
+<pre><code>&lt;decorator:usePage id="" /&gt;
 </code></pre>
-</div>
 
 <h2 id="testjsp">创建被装饰页面test.jsp</h2>
 
 <p>创建test.jsp如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;title&gt;</span>Hello world<span class="nt">&lt;/title&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;p&gt;</span>hello world.<span class="nt">&lt;/p&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Hello world&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;hello world.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-</div>
 
 <h2 id="section-1">测试</h2>
 
 <p>访问test.jsp页面，查看源代码会显示如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;title&gt;</span>My Site - Hello world<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html;charset=utf-8"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Cache-Control"</span> <span class="na">content=</span><span class="s">"no-store"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Pragma"</span> <span class="na">content=</span><span class="s">"no-cache"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Expires"</span> <span class="na">content=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-	<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"content"</span><span class="nt">&gt;</span>
-   		<span class="nt">&lt;p&gt;</span>hello world.<span class="nt">&lt;/p&gt;</span>
-	<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My Site - Hello world&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
+    &lt;meta http-equiv="Cache-Control" content="no-store" /&gt;
+    &lt;meta http-equiv="Pragma" content="no-cache" /&gt;
+    &lt;meta http-equiv="Expires" content="0" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div id="content"&gt;
+   		&lt;p&gt;hello world.&lt;/p&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-</div>
 
 <h1 id="section-2">5. 参考文章</h1>
 
@@ -329,7 +318,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

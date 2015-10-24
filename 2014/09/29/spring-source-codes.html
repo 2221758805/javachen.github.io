@@ -119,7 +119,7 @@
 
 <p>Spring 总共有十几个组件，其中核心组件只有三个：Core、Context 和 Beans。以下是 Spring3的总体架构图。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/spring/spring3-modules.png" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/spring/spring3-modules.png" alt="" /></p>
 
 <p>组成 Spring 框架的每个模块（或组件）都可以单独存在，或者与其他一个或多个模块联合实现。每个模块的功能如下：</p>
 
@@ -135,7 +135,7 @@
 
 <p>从下图（该图来自<a href="http://www.javastar.org/?p=847">SPRING 3.2.X 源代码分析之二: SPRING源码的包结构</a>）可以看出 Spring 各个模块之间的依赖关系。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/spring/spring-packages.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/spring/spring-packages.jpg" alt="" /></p>
 
 <p>从图中可以看出，IOC 的实现包 spring-beans 和 AOP 的实现包 spring-aop 也是整个框架的基础，而 spring-core 是整个框架的核心，基础的功能都在这里。</p>
 
@@ -174,7 +174,7 @@
 
 <h2 id="spring4-">Spring4 的系统架构图</h2>
 
-<p><img src="http://javachen-rs.qiniudn.com/spring/spring4-modules.png" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/spring/spring4-modules.png" alt="" /></p>
 
 <p>Spring 4.0.x对比Spring3.2.x的系统架构变化（以下文字摘抄于<a href="http://www.javastar.org/?p=872">SPRING 3.2.X 源代码分析之三: SPRING源码的整体架构分析</a>）:</p>
 
@@ -196,16 +196,16 @@
   <li>Java EE 6和7。使用Spring4.x时Java EE版本至少要6或以上，且需要JPA 2.0和Servlet 3.0 的支持，所以服务器，web容器需要做相应的升级。一个更具前瞻性的注意是，Spring4.0支持J2EE 7的适用级规范，比如JMS 2.0， JTA 1.2， JPA 2.1， Bean Validation 1.1和JSR-236并发工具包，在选择这些jar包时需要注意版本。</li>
   <li>使用Groovy DSL定义外部Bean。</li>
   <li>核心容器提升。</li>
-  <li>1、支持Bean的泛型注入，比如：<code class="highlighter-rouge">@Autowired Repository&lt;Customer&gt; customerRepository</code></li>
+  <li>1、支持Bean的泛型注入，比如：<code>@Autowired Repository&lt;Customer&gt; customerRepository</code></li>
   <li>2、使用元注解开发暴露指定内部属性的自定义注解。</li>
-  <li>3、通过 <code class="highlighter-rouge">@Ordered</code> 注解或<code class="highlighter-rouge">Ordered</code> 接口对注入集合或数组的 Bean 进行排序。</li>
-  <li>4、<code class="highlighter-rouge">@Lazy</code> 注解可以用在注入点或 <code class="highlighter-rouge">@Bean</code> 定义上。</li>
-  <li>5、为开发者引入 <code class="highlighter-rouge">@Description</code> 注解。</li>
-  <li>6、引入 <code class="highlighter-rouge">@Conditional</code> 注解进行有条件的 Bea n过滤。</li>
+  <li>3、通过 <code>@Ordered</code> 注解或<code>Ordered</code> 接口对注入集合或数组的 Bean 进行排序。</li>
+  <li>4、<code>@Lazy</code> 注解可以用在注入点或 <code>@Bean</code> 定义上。</li>
+  <li>5、为开发者引入 <code>@Description</code> 注解。</li>
+  <li>6、引入 <code>@Conditional</code> 注解进行有条件的 Bea n过滤。</li>
   <li>7、基于 CGLIB 的代理类不需要提供默认构造器，因为 Spring 框架将 CGLIB 整合到内部了。</li>
   <li>8、框架支持时区管理，比如 LocalContext。</li>
   <li>Web提升。</li>
-  <li>1、增加新的 <code class="highlighter-rouge">@RestController</code> 注解，这样就不需要在每个 <code class="highlighter-rouge">@RequestMapping</code> 方法中添加 <code class="highlighter-rouge">@ResponseBody</code> 注解。</li>
+  <li>1、增加新的 <code>@RestController</code> 注解，这样就不需要在每个 <code>@RequestMapping</code> 方法中添加 <code>@ResponseBody</code> 注解。</li>
   <li>2、添加 AsyncRestTemplate，在开发 REST 客户端时允许非阻塞异步支持。</li>
   <li>3、为 Spring MVC 应用程序开发提供全面的时区支持。</li>
   <li>WebSocket，SockJS 和 STOMP 消息。</li>
@@ -246,54 +246,51 @@
 
 <p>生成 maven 项目命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn archetype:generate -DgroupId<span class="o">=</span>com.javachen.spring.core -DartifactId<span class="o">=</span>Spring3Example 
-	-DarchetypeArtifactId<span class="o">=</span>maven-archetype-quickstart -DinteractiveMode<span class="o">=</span><span class="nb">false</span>
+<pre><code class="language-bash">$ mvn archetype:generate -DgroupId=com.javachen.spring.core -DartifactId=Spring3Example 
+	-DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 </code></pre>
-</div>
 
 <p>转换成 idea 项目：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mvn idea:idea
+<pre><code class="language-bash">mvn idea:idea
 </code></pre>
-</div>
 
 <p>然后，根据使用情况添加 Spring 的依赖包：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> 
-	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-	<span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0</span> 
-	<span class="err">http://maven.apache.org/maven-v4_0_0.xsd"</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
-	<span class="nt">&lt;groupId&gt;</span>com.javachen.spring.core<span class="nt">&lt;/groupId&gt;</span>
-	<span class="nt">&lt;artifactId&gt;</span>Spring3Example<span class="nt">&lt;/artifactId&gt;</span>
-	<span class="nt">&lt;packaging&gt;</span>jar<span class="nt">&lt;/packaging&gt;</span>
-	<span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
-	<span class="nt">&lt;name&gt;</span>Spring3Example<span class="nt">&lt;/name&gt;</span>
-	<span class="nt">&lt;url&gt;</span>http://maven.apache.org<span class="nt">&lt;/url&gt;</span>
+<pre><code class="language-xml">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+	http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;groupId&gt;com.javachen.spring.core&lt;/groupId&gt;
+	&lt;artifactId&gt;Spring3Example&lt;/artifactId&gt;
+	&lt;packaging&gt;jar&lt;/packaging&gt;
+	&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;Spring3Example&lt;/name&gt;
+	&lt;url&gt;http://maven.apache.org&lt;/url&gt;
  
-	<span class="nt">&lt;properties&gt;</span>
-		<span class="nt">&lt;spring.version&gt;</span>3.2.11.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
-	<span class="nt">&lt;/properties&gt;</span>
+	&lt;properties&gt;
+		&lt;spring.version&gt;3.2.11.RELEASE&lt;/spring.version&gt;
+	&lt;/properties&gt;
  
-	<span class="nt">&lt;dependencies&gt;</span>
+	&lt;dependencies&gt;
  
-		<span class="c">&lt;!-- Spring 3 dependencies --&gt;</span>
-		<span class="nt">&lt;dependency&gt;</span>
-			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-			<span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
-			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-		<span class="nt">&lt;/dependency&gt;</span>
+		&lt;!-- Spring 3 dependencies --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
  
-		<span class="nt">&lt;dependency&gt;</span>
-			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-			<span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
-			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
-		<span class="nt">&lt;/dependency&gt;</span>
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
  
-	<span class="nt">&lt;/dependencies&gt;</span>
-<span class="nt">&lt;/project&gt;</span>
+	&lt;/dependencies&gt;
+&lt;/project&gt;
 </code></pre>
-</div>
 
 <p>记下来就可以编写测试类进行测试并关联 Spring 源代码跟踪调试代码。</p>
 
@@ -364,7 +361,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

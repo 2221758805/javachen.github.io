@@ -3,7 +3,7 @@
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-07-15T16:16:04+08:00</updated>
+  <updated>2015-10-24T11:54:26+08:00</updated>
   <id></id>
   <author>
     <name>Junez</name>
@@ -24,7 +24,6 @@ $ echo $BASH
 /bin/bash
 
 
-
 $BASH_ENV
 
 这个环境变量会指向一个Bash的启动文件，当一个脚本被调用的时候，这个启动文件将会被读取。
@@ -39,7 +38,8 @@ $BASH_SUBSHELL
 echo &quot;Subshell level OUTSIDE subshell = $BASH_SUBSHELL&quot;
 outer_variable=Outer
 
-(...</content>
+(
+...</content>
   </entry>
   
   <entry>
@@ -77,19 +77,17 @@ a=314
 echo &quot;The value of \&quot;a\&quot; is $a.&quot;
 
 
-
 也可以使用let来赋值：
 
 let a=16+5
 echo &quot;The value of \&quot;a\&quot; is now $a.&quot;
 
 
-
 使用read命令进行赋值：
 
 echo -n &quot;Enter \&quot;a\&quot; &quot;
 read a
-echo &quot;The value o...</content>
+echo &quot;The value of ...</content>
   </entry>
   
   <entry>
@@ -106,11 +104,9 @@ echo &quot;The value o...</content>
 # This line is a comment.
 
 
-
 注释也可以放在于本行命令的后边。
 
 echo &quot;A comment will follow.&quot;   # 注释在这里。
-
 
 
 
@@ -119,7 +115,7 @@ echo &quot;A comment will follow.&quot;   # 注释在这里。
 
 在echo中转义的#是不能作为注释的，同样也可以出现在特定的参数替换结构中，或者是出现在数字常量表达式中。
 
-echo &quot;The # here...</content>
+echo &quot;The # here d...</content>
   </entry>
   
   <entry>
@@ -134,10 +130,9 @@ redcarpet:
     extensions: [ &quot;fenced_code_blocks&quot;, &quot;hard_wrap&quot;,&quot;autolink&quot;, &quot;tables&quot;, &quot;strikethrough&quot;, &quot;superscript&quot;, &quot;with_toc_data&quot;, &quot;highlight&quot;, &quot;prettify&quot;,&quot;no_intra_emphasis&quot;]
 
 
-
 这种配置支持使用 ``` 高亮代码块、自动链接、表格等特性。
 
-现在，想尝试使用kar...</content>
+现在，想尝试使用kark...</content>
   </entry>
   
   <entry>
@@ -155,12 +150,11 @@ cat /dev/null &amp;gt; wtmp
 echo &quot;Logs cleaned up.&quot;
 
 
-
 更简单的清除日志方法是：
 
 echo &quot;&quot; &amp;gt;messages 
 #或者
-&amp;gt;messa...</content>
+&amp;gt;messag...</content>
   </entry>
   
   <entry>
@@ -199,8 +193,8 @@ object Timer {
 }
 
 
-
 使用object中的常量或方法，通过object名称直接调用，对象构造器在对象第一次被使用时调用（如果某对象一直未被使用，那么其构造器也不会被调用）。
+
 ...</content>
   </entry>
   
@@ -223,13 +217,12 @@ class Counter {
 
 
 
-
   Scala中的类不能声明为public，一个Scala源文件中可以有多个类。
 
 
 类的初始化和调用：
 
-val myCounter = new Counter // 或new Co...</content>
+val myCounter = new Counter // 或new Cou...</content>
   </entry>
   
   <entry>
@@ -251,8 +244,7 @@ object FileMatcher {
 }
 
 
-
-如果，我们想查找包含某一个字符...</content>
+如果，我们想查找包含某一个字符串...</content>
   </entry>
   
   <entry>
@@ -481,17 +473,15 @@ Apache Sentry为Hadoop使用者提供了以下便利：
 $ git clone https://github.com/javachen/spark
 
 
-
 然后，切换到最新的分支，当前为 cdh5-1.3.0_5.4.0。
 
 $ cd spark
 $ git checkout cdh5-1.3.0_5.4.0
 
 
-
 查看当前分支：
 
-⇒  ...</content>
+⇒  gi...</content>
   </entry>
   
   <entry>
@@ -506,7 +496,6 @@ def foo(l: List[Option[_]]) =
 def f(m: M[_]) 
 
 
-
 高阶类型参数：
 
 case class A[K[_],T](a: K[T])
@@ -514,11 +503,9 @@ case class A[K[_],T](a: K[T])
 def f[M[_]] 
 
 
-
 临时变量：
 
 val _ = 5
-
 
 
 临时参数：
@@ -526,10 +513,9 @@ val _ = 5
 List(1, 2, 3) foreach { _ =&amp;gt; println(&quot;Hi&quot;) }    //List(1, 2, 3) foreach { t =&amp;gt; println(&quot;Hi&quot;) }
 
 
-
 通配模式：
 
-Some(5) match { case Some(_) =&amp;gt; println(&quot;...</content>
+Some(5) match { case Some(_) =&amp;gt; println(&quot;Yes&quot;...</content>
   </entry>
   
   <entry>
@@ -564,11 +550,10 @@ Scala的所有的集合类都可以在包 scala.collection ...</content>
 ⇒  brew install scala
 
 
-
 在终端键入scala查看Scala的版本，并进入Scala的解释器：
 
 ⇒  scala
-Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7....</content>
+Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0...</content>
   </entry>
   
   <entry>
@@ -668,12 +653,11 @@ Spark 教程
 4,5
 
 
-
 准备 Avro 测试数据，可以参考 将Avro数据加载到Spark 一文。
 
 本文测试环境为：CDH 5.2，并且 Avro、Parquet 组件已经通过 YUM 源安装。
 
-将 CSV 转...</content>
+将 CSV 转换...</content>
   </entry>
   
   <entry>
@@ -725,10 +709,9 @@ Avro 是 Hadoop 中的一个子项目，也是 Apache 中一个独立的项目�
 $ wget http://apache.fayea.com/kafka/0.8.2.1/kafka_2.11-0.8.2.1.tgz
 
 
-
 解压并进入目录：
 
-$ tar -xzvf ...</content>
+$ tar -xzvf k...</content>
   </entry>
   
   <entry>
@@ -745,11 +728,10 @@ public static void main(String[] args) {
 }
 
 
-
 运行该类会有如下输出：
 
   .   ____          _            __ _ _
- /\\ / ___&#39;_ __ _ ...</content>
+ /\\ / ___&#39;_ __ _ _...</content>
   </entry>
   
   <entry>
@@ -837,13 +819,12 @@ RESTEasy 是 JBoss 的一个开源项目，提供各种框架帮助你构建 RES
 $ yum install hue hue-server
 
 
-
 配置 Hue
 
 配置hue server
 
 [desktop]
-    http_host...</content>
+    http_host=...</content>
   </entry>
   
   <entry>
@@ -864,8 +845,7 @@ hadoop jar hadoop-streaming.jar \
     -reducer /usr/bin/wc
 
 
-
-Stre...</content>
+Strea...</content>
   </entry>
   
   <entry>
@@ -880,16 +860,14 @@ Stre...</content>
 $ hadoop fs -text /hdfs_path/compressed_file.gz | hadoop fs -put - /tmp/uncompressed-file.txt
 
 
-
 解压本地文件 gz 文件并上传到 hdfs
 
 $ gunzip -c filename.txt.gz | hadoop fs -put - /tmp/filename.txt
 
 
-
 使用 awk 处理 csv 文件，参考 Using awk and friends with Hadoop:
 
-$ hadoop fs -cat people.txt | ...</content>
+$ hadoop fs -cat people.txt | aw...</content>
   </entry>
   
   <entry>
@@ -987,7 +965,6 @@ Manager 类提供下面的一个方法，可以用于执行 sql：
 Manager.raw(raw_query, params=None, translations=None)
 
 
-
 使用方法为：
 
 &amp;gt;&amp;gt;&amp;gt; for p in Person.objects.raw(&#39;SELECT * FROM myapp_person&#39;):
@@ -996,8 +973,7 @@ John Smith
 Jane Jones
 
 
-
-raw() 可以...</content>
+raw() 可以通过...</content>
   </entry>
   
   <entry>
@@ -1062,10 +1038,9 @@ Impala，是基于 Apache Hadoop 的一个开源的分析数据库，使用 Kerb
 $ mvn archetype:generate -DgroupId=com.javachen.spark -DartifactId=spark-examples -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
 
-
 Maven安装本地jar到本地仓库，举例：
 
-$ mvn install:insta...</content>
+$ mvn install:instal...</content>
   </entry>
   
   <entry>
@@ -1165,7 +1140,6 @@ mkdir test &amp;amp;&amp;amp; cd test
 gradle init
 
 
-
 这时候的项目结构如下：
 
 ➜  test  tree
@@ -1179,7 +1153,7 @@ gradle init
 ├── gradlew.bat
 └── settings.gradle
 
-2 directories, 6 fi...</content>
+2 directories, 6 fil...</content>
   </entry>
   
   <entry>
@@ -1268,11 +1242,10 @@ hadoop 集群一共有三个节点，每个节点的 ip、hostname、角色如�
 192.168.56.123 cdh3 DataNode、yarn、hive、impala
 
 
-
 一些注意事项：
 
 
-  ...</content>
+  操...</content>
   </entry>
   
   <entry>
@@ -1508,12 +1481,10 @@ brew 安装 postgresql ：
 $ brew install postgresql
 
 
-
 查看安装的版本：
 
 $ pg_ctl -V
 pg_ctl (PostgreSQL) 9.3.5
-
 
 
 安装成功之后，安装路径为：/usr/local/var/postgres
@@ -1522,7 +1493,7 @@ pg_ctl (PostgreSQL) 9.3.5
 
 $ initdb /usr/local/var/postgres
 The files belonging to this database system will be owned by user &quot;june&quot;.
-This user must also own the serve...</content>
+This user must also own the server ...</content>
   </entry>
   
   <entry>
@@ -1687,12 +1658,11 @@ Mac 上安装：
 $ brew install gradle
 
 
-
 测试是否安装成功：
 
 $ gradle -v
 ------------------------------------------------------------
-Gra...</content>
+Grad...</content>
   </entry>
   
   <entry>
@@ -1711,7 +1681,6 @@ Gra...</content>
 println new File(&quot;tmp.csv&quot;).text  
 
 
-
 上面代码非常简单，没有流的出现，没有资源关闭的出现，也没有异常控制的出现，所有的这些groovy已经搞定了。
 
 读取每一行内容：
@@ -1720,7 +1689,7 @@ File file = new File(&#39;tmp.csv&#39;)
 assert file.name == &#39;tmp.csv&#39;
 assert ! file.isAbsolute()
 assert file.path == &#39;tmp.csv&#39;
-assert ...</content>
+assert f...</content>
   </entry>
   
   <entry>
@@ -1754,13 +1723,12 @@ Llama (Low Latency Application MAster) 是一个 Yarn 的  Application Master，
 $ brew install grails
 
 
-
 2. 创建应用
 
 以 blog 为例，创建一个应用程序，在命令行输入 grails create-app blog ：
 
 $ grails create-app blog
-2014-9-9 10:...</content>
+2014-9-9 10:4...</content>
   </entry>
   
   <entry>
@@ -1816,10 +1784,9 @@ Azkaban 包括三个关键组件：
 $ sudo -u hdfs hdfs dfsadmin -safemode enter
 
 
-
 保存 fsimage：
 
-$ sud...</content>
+$ sudo...</content>
   </entry>
   
   <entry>
@@ -1837,14 +1804,13 @@ yum install sqoop sqoop-metastore -y
 
 
 
-
   安装完之后需要下载 mysql jar 包到 sqoop 的 lib 目录。
 
 
 这里使用 hive 的 metastore 的 mysql 数据库作为关系数据库，以 TBLS 表为例，该表结构和数据如下：
 
 mysql&amp;gt; select * from TBLS limit 3;
-+-...</content>
++--...</content>
   </entry>
   
   <entry>
@@ -2287,8 +2253,8 @@ OK
 Time taken: 2.466 seconds
 
 
-
-去掉limit语句，再执行一次，结果如下：...</content>
+去掉limit语句，再执行一次，结果如下：
+...</content>
   </entry>
   
   <entry>
@@ -2482,13 +2448,12 @@ Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John G
 $ sudo scutil --set HostName june－mac
 
 
-
 设置鼠标滚轮滑动的方向：系统偏好设置－－&amp;gt;鼠标－－&amp;gt;”滚动方向：自然”前面的勾去掉
 
 显示/隐藏Mac隐藏文件：
 
 defaults write com.apple.finder AppleShowAllFiles -bool true  #显示Mac隐藏文件的命令
-defaults write com.apple.finder AppleShowAllFiles -bool false #隐藏Mac...</content>
+defaults write com.apple.finder AppleShowAllFiles -bool false #隐藏Mac隐...</content>
   </entry>
   
   <entry>
@@ -2586,11 +2551,10 @@ number of t...</content>
 postgres=# SELECT count(*) FROM pg_stat_activity WHERE NOT pid=pg_backend_pid();
 
 
-
 2.连接状态
 
 postgres=# SELECT pid,waiting,current_timestamp - least(query_start,xact_start) AS runtime,substr(query,1,25) AS current_query 
-F...</content>
+FR...</content>
   </entry>
   
   <entry>
@@ -2984,8 +2948,7 @@ Solr和Lucene的本质区别有以下三点：搜索服务器、企业级和管�
 $ wget https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box
 
 
-
-添加bo...</content>
+添加box...</content>
   </entry>
   
   <entry>
@@ -3005,10 +2968,9 @@ $ python -V
 Python 2.7.4
 
 
-
 如果你看见向上面所示的那样一些版本信息，那么你已经安装了Python了。
 
-...</content>
+2...</content>
   </entry>
   
   <entry>
@@ -3027,12 +2989,11 @@ $ cd /data/confluence
 $ wget www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.4.2.tar.gz
 
 
-
 2、安装
 
 解压：
 
-$ tar -zx...</content>
+$ tar -zxv...</content>
   </entry>
   
   <entry>
@@ -3069,12 +3030,11 @@ Person = Backbone.Model.extend({
 var person = new Person;
 
 
-
 new一个model的实例后就会触发initialize()函数。
 
 设置属性
 
-现在我们想...</content>
+现在我们想设...</content>
   </entry>
   
   <entry>
@@ -3143,11 +3103,9 @@ RHEL服务器A有个启动脚本（普通用户user01运行），里面使用ifc
 Localhost_ip=$(ifconfig |awk -F &#39;addr:|Bcast&#39; &#39;/Bcast/{print $2}&#39;)
 
 
-
 由于普通用户user01不能直接识别ifconfig命令，只能使用全路径/sbin/ifconfig，目前处理方式为修改~/.bash_profile文件添加环境变量如下：
 
 PATH=$PATH:$HOME/bin
-
 
 
 改成如下：
@@ -3156,8 +3114,7 @@ PATH=$PATH:$HOME/bin:/sbin
 
 
 
-
-经过如上配置后服务器本机user01...</content>
+经过如上配置后服务器本机user01用户登...</content>
   </entry>
   
   <entry>
@@ -3225,7 +3182,6 @@ SiteMesh是由一个基于Web页面布局、装饰以及与现存Web应用整合
 $ django-admin.py startproject mysite
 
 
-
 创建后的项目目录如下：
 
 mysite
@@ -3239,11 +3195,10 @@ mysite
 1 directory, 5 files
 
 
-
 说明：
 
 
-  __init_...</content>
+  __init__....</content>
   </entry>
   
   <entry>
@@ -3258,18 +3213,16 @@ mysite
 sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
 
 
-
 挂载exfat格式磁盘
 
 sudo apt-get install exfat-fuse exfat-utils
-
 
 
 安装ibus
 
 在终端输入命令:
 
-sudo add-apt-reposi...</content>
+sudo add-apt-reposito...</content>
   </entry>
   
   <entry>
@@ -3345,14 +3298,12 @@ SaltStack是开源的管理基础设置的轻量级工具，容易搭建，为�
 $ rpm -ivh http://mirrors.sohu.com/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 
-
 然后通过下面命令查看epel参考是否安装成功：
 
 $ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
 
 
-
-如果没有安装成功，则可以手动下载epel-releas...</content>
+如果没有安装成功，则可以手动下载epel-release-...</content>
   </entry>
   
   <entry>
@@ -3393,7 +3344,6 @@ $ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
 $ git clone git@github.com:cloudera/hbase.git -b cdh4-0.94.6_4.4.0 cdh4-0.94.6_4.4.0
 
 
-
 说明：
 
 
@@ -3405,7 +3355,7 @@ $ git clone git@github.com:cloudera/hbase.git -b cdh4-0.94.6_4.4.0 cdh4-0.94.6_4
 
 编译snappy
 
-$ svn checkout http://snappy.googlec...</content>
+$ svn checkout http://snappy.googleco...</content>
   </entry>
   
   <entry>
@@ -3433,14 +3383,12 @@ $ svn checkout http://snappy.googlec...</content>
 FAILED: ParseException line 1:18 Failed to recognize predicate &#39;a&#39;. Failed rule: &#39;kwInner&#39; in join type specifier
 
 
-
 执行的hql语句如下：
 
 [root@javachen.com ~]# hive -e &#39;select a.* from t a, t b where a.id=b.id&#39;
 
 
-
-从异常信息中很难看出出错原因，hive.log中也没有打印出详细的异常对战信息。改用jdbc连接hive-server2，可以看到hiv...</content>
+从异常信息中很难看出出错原因，hive.log中也没有打印出详细的异常对战信息。改用jdbc连接hive-server2，可以看到hive-...</content>
   </entry>
   
   <entry>
@@ -3488,7 +3436,6 @@ source ~/.bash_profile
 jekyll server
 
 
-
 添加about me 边栏
 
 参考the5fire的技术博客在index.html页面加入如下代码：
@@ -3497,7 +3444,8 @@ jekyll server
 &amp;lt;h4&amp;gt;About me&amp;lt;/h4&amp;gt;
 &amp;lt;div&amp;gt;
  一个Java方案架构师，主要从事hadoop相关工作。&amp;lt;a href=&quot;/about.html&quot;&amp;gt;更多信息&amp;lt;/a&amp;gt; 
-&amp;lt;br/&amp;gt;...</content>
+&amp;lt;br/&amp;gt;
+...</content>
   </entry>
   
   <entry>
@@ -3865,12 +3813,11 @@ Hadoop集群各节点的环境设置及安装过程见 使用yum安装CDH Hadoop
 	jdk1.6.0_38
 
 
-
 hadoop各组件可以在这里下载。
 
 集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：
 
-	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、...</content>
+	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、i...</content>
   </entry>
   
   <entry>
@@ -3886,12 +3833,11 @@ hadoop各组件可以在这里下载。
 	jdk1.6.0_38
 
 
-
 hadoop各组件可以在这里下载。
 
 集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：
 
-	192.168.0.1        desktop1     NameNode、Hive、ResourceManager...</content>
+	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、...</content>
   </entry>
   
   <entry>
@@ -3909,7 +3855,6 @@ hadoop各个组件和jdk版本如下：
 	jdk1.6.0_38
 
 
-
 hadoop各组件可以在这里下载。
 
 安装前说明
@@ -3925,7 +3870,7 @@ hadoop各组件可以在这里下载。
 
 集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：
 
-	192.168.0.1        desktop1     NameNode、H...</content>
+	192.168.0.1        desktop1     NameNode、Hi...</content>
   </entry>
   
   <entry>
@@ -4050,10 +3995,9 @@ vim /etc/udev/rules.d/70-persisten...</content>
 &amp;lt;/listener&amp;gt;
 
 
-
 该监听器会做哪些事情呢？看看Gavin King对SeamListener类的描述。
 
-Drives certain Seam functionality such as initialization and cl...</content>
+Drives certain Seam functionality such as initialization and cle...</content>
   </entry>
   
   <entry>

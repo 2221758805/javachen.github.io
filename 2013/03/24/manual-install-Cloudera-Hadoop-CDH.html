@@ -109,12 +109,11 @@
 
 <p>hadoop各个组件和jdk版本如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	hadoop-2.0.0-cdh4.6.0
+<pre><code>	hadoop-2.0.0-cdh4.6.0
 	hbase-0.94.15-cdh4.6.0
 	hive-0.10.0-cdh4.6.0
 	jdk1.6.0_38
 </code></pre>
-</div>
 
 <p>hadoop各组件可以在<a href="http://archive.cloudera.com/cdh4/cdh/4/">这里</a>下载。</p>
 
@@ -131,7 +130,7 @@
 
 <p>集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、impala
+<pre><code>	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、impala
 	192.168.0.2        desktop2     SSNameNode
 	192.168.0.3        desktop3     DataNode、HBase、NodeManager、impala
 	192.168.0.4        desktop4     DataNode、HBase、NodeManager、impala
@@ -139,7 +138,6 @@
 	192.168.0.6        desktop6     DataNode、HBase、NodeManager、impala
 	192.168.0.7        desktop7     DataNode、HBase、NodeManager、impala
 </code></pre>
-</div>
 
 <h1 id="section-3">部署过程</h1>
 <p>## 系统和网络配置</p>
@@ -152,17 +150,16 @@
   </li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# cat /etc/sysconfig/network
+<pre><code>	[root@desktop1 ~]# cat /etc/sysconfig/network
 	NETWORKING=yes
 	HOSTNAME=desktop1
 </code></pre>
-</div>
 
 <ol>
-  <li>在每个节点上修改<code class="highlighter-rouge">/etc/hosts</code>增加以下内容:</li>
+  <li>在每个节点上修改<code>/etc/hosts</code>增加以下内容:</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# cat /etc/hosts
+<pre><code>	[root@desktop1 ~]# cat /etc/hosts
 	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 	192.168.0.1		desktop1
@@ -173,7 +170,6 @@
 	192.168.0.6		desktop6
 	192.168.0.7		desktop7
 </code></pre>
-</div>
 
 <p>修改一台机器之后，可以使用scp同步到其他机器。</p>
 
@@ -183,7 +179,7 @@
 
 <p>以下是设置desktop1上可以无密码登陆到其他机器上。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# ssh-keygen
+<pre><code>	[root@desktop1 ~]# ssh-keygen
 	[root@desktop1 ~]# ssh-copy-id -i .ssh/id_rsa.pub desktop2
 	[root@desktop1 ~]# ssh-copy-id -i .ssh/id_rsa.pub desktop3
 	[root@desktop1 ~]# ssh-copy-id -i .ssh/id_rsa.pub desktop4
@@ -191,13 +187,12 @@
 	[root@desktop1 ~]# ssh-copy-id -i .ssh/id_rsa.pub desktop6
 	[root@desktop1 ~]# ssh-copy-id -i .ssh/id_rsa.pub desktop7
 </code></pre>
-</div>
 
 <ol>
   <li>每台机器上关闭防火墙：</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# service iptables stop
+<pre><code>	[root@desktop1 ~]# service iptables stop
 	[root@desktop1 ~]# ssh desktop2 'service iptables stop'
 	[root@desktop1 ~]# ssh desktop3 'service iptables stop'
 	[root@desktop1 ~]# ssh desktop4 'service iptables stop'
@@ -205,7 +200,6 @@
 	[root@desktop1 ~]# ssh desktop6 'service iptables stop'
 	[root@desktop1 ~]# ssh desktop7 'service iptables stop'
 </code></pre>
-</div>
 
 <h1 id="hadoop">安装Hadoop</h1>
 <p>## 配置Hadoop</p>
@@ -234,63 +228,61 @@
 
 <p>在该文件中修改fs.defaultFS指向desktop1节点，即配置desktop1为NameNode节点。</p>
 
-<p>修改后的core-site.xml(<code class="highlighter-rouge">/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/core-site.xml</code>)目录如下：</p>
+<p>修改后的core-site.xml(<code>/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/core-site.xml</code>)目录如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="cp">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-<span class="c">&lt;!--fs.default.name for MRV1 ,fs.defaultFS for MRV2(yarn) --&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-     <span class="nt">&lt;name&gt;</span>fs.defaultFS<span class="nt">&lt;/name&gt;</span>
-         <span class="c">&lt;!--这个地方的值要和hdfs-site.xml文件中的dfs.federation.nameservices一致--&gt;</span>
-     <span class="nt">&lt;value&gt;</span>hdfs://desktop1<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-<span class="nt">&lt;name&gt;</span>fs.trash.interval<span class="nt">&lt;/name&gt;</span>
-<span class="nt">&lt;value&gt;</span>10080<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-<span class="nt">&lt;name&gt;</span>fs.trash.checkpoint.interval<span class="nt">&lt;/name&gt;</span>
-<span class="nt">&lt;value&gt;</span>10080<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;
+&lt;configuration&gt;
+&lt;!--fs.default.name for MRV1 ,fs.defaultFS for MRV2(yarn) --&gt;
+&lt;property&gt;
+     &lt;name&gt;fs.defaultFS&lt;/name&gt;
+         &lt;!--这个地方的值要和hdfs-site.xml文件中的dfs.federation.nameservices一致--&gt;
+     &lt;value&gt;hdfs://desktop1&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+&lt;name&gt;fs.trash.interval&lt;/name&gt;
+&lt;value&gt;10080&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+&lt;name&gt;fs.trash.checkpoint.interval&lt;/name&gt;
+&lt;value&gt;10080&lt;/value&gt;
+&lt;/property&gt;
+&lt;/configuration&gt;
 </code></pre>
-</div>
 
 <ol>
   <li>hdfs-site.xml</li>
 </ol>
 
-<p>该文件主要设置数据副本保存份数，以及namenode、datanode数据保存路径(<code class="highlighter-rouge">/opt/data/hadoop-${user.name}</code>)以及http-address。</p>
+<p>该文件主要设置数据副本保存份数，以及namenode、datanode数据保存路径(<code>/opt/data/hadoop-${user.name}</code>)以及http-address。</p>
 
-<p>修改后的hdfs-site.xml(<code class="highlighter-rouge">/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/hdfs-site.xml</code>)文件内容如下：</p>
+<p>修改后的hdfs-site.xml(<code>/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/hdfs-site.xml</code>)文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="cp">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>dfs.replication<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-  <span class="nt">&lt;name&gt;</span>hadoop.tmp.dir<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;value&gt;</span>/opt/data/hadoop-${user.name}<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-<span class="nt">&lt;name&gt;</span>dfs.namenode.http-address<span class="nt">&lt;/name&gt;</span>
-<span class="nt">&lt;value&gt;</span>desktop1:50070<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-<span class="nt">&lt;name&gt;</span>dfs.namenode.secondary.http-address<span class="nt">&lt;/name&gt;</span>
-<span class="nt">&lt;value&gt;</span>desktop2:50090<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-<span class="nt">&lt;name&gt;</span>dfs.webhdfs.enabled<span class="nt">&lt;/name&gt;</span>
-<span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;
+&lt;configuration&gt;
+&lt;property&gt;
+  &lt;name&gt;dfs.replication&lt;/name&gt;
+  &lt;value&gt;1&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
+  &lt;value&gt;/opt/data/hadoop-${user.name}&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+&lt;name&gt;dfs.namenode.http-address&lt;/name&gt;
+&lt;value&gt;desktop1:50070&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+&lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;
+&lt;value&gt;desktop2:50090&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+&lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;
+&lt;value&gt;true&lt;/value&gt;
+&lt;/property&gt;
+&lt;/configuration&gt;
 </code></pre>
-</div>
 
 <ol>
   <li>masters</li>
@@ -298,12 +290,11 @@
 
 <p>设置namenode和secondary namenode节点。</p>
 
-<p>修改后的masters(<code class="highlighter-rouge">/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/masters</code>)文件内容如下：</p>
+<p>修改后的masters(<code>/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/masters</code>)文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>desktop1
+<pre><code>desktop1
 desktop2
 </code></pre>
-</div>
 
 <p>第一行为namenode，第二行为secondary namenode。</p>
 
@@ -312,26 +303,24 @@ desktop2
 </ol>
 
 <p>设置哪些机器上安装datanode节点。<br />
-修改后的slaves(<code class="highlighter-rouge">/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/slaves</code>)文件内容如下：</p>
+修改后的slaves(<code>/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/slaves</code>)文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>desktop3
+<pre><code>desktop3
 desktop4
 desktop5
 desktop6
 desktop7
 </code></pre>
-</div>
 
 <p>接下来将上面几个文件同步到其他各个节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop2:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
+<pre><code>	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop2:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop3:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop4:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop5:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop6:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop7:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 </code></pre>
-</div>
 
 <h2 id="mapreduce">配置MapReduce</h2>
 
@@ -343,111 +332,108 @@ desktop7
 
 <p>配置使用yarn计算框架，以及jobhistory的地址。</p>
 
-<p>修改后的mapred-site.xml(<code class="highlighter-rouge">/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/mapred-site.xml</code>)文件内容如下：</p>
+<p>修改后的mapred-site.xml(<code>/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/mapred-site.xml</code>)文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="cp">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-<span class="nt">&lt;property&gt;</span>
- <span class="nt">&lt;name&gt;</span>mapreduce.framework.name<span class="nt">&lt;/name&gt;</span>
- <span class="nt">&lt;value&gt;</span>yarn<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
- <span class="nt">&lt;name&gt;</span>mapreduce.jobhistory.address<span class="nt">&lt;/name&gt;</span>
- <span class="nt">&lt;value&gt;</span>desktop1:10020<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property&gt;</span>
- <span class="nt">&lt;name&gt;</span>mapreduce.jobhistory.webapp.address<span class="nt">&lt;/name&gt;</span>
- <span class="nt">&lt;value&gt;</span>desktop1:19888<span class="nt">&lt;/value&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
+<pre><code>&lt;?xml version="1.0"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;
+&lt;configuration&gt;
+&lt;property&gt;
+ &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+ &lt;value&gt;yarn&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+ &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;
+ &lt;value&gt;desktop1:10020&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+ &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;
+ &lt;value&gt;desktop1:19888&lt;/value&gt;
+&lt;/property&gt;
+&lt;/configuration&gt;
 </code></pre>
-</div>
 
 <ol>
   <li>yarn-site.xml</li>
 </ol>
 
-<p>主要配置resourcemanager地址以及<code class="highlighter-rouge">yarn.application.classpath</code>（这个路径很重要，要不然集成hive时候会提示找不到class）</p>
+<p>主要配置resourcemanager地址以及<code>yarn.application.classpath</code>（这个路径很重要，要不然集成hive时候会提示找不到class）</p>
 
-<p>修改后的yarn-site.xml(<code class="highlighter-rouge">/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/yarn-site.xml</code>)文件内容如下：</p>
+<p>修改后的yarn-site.xml(<code>/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/yarn-site.xml</code>)文件内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-<span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.resource-tracker.address<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>desktop1:8031<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.address<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>desktop1:8032<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.scheduler.address<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>desktop1:8030<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.admin.address<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>desktop1:8033<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.webapp.address<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>desktop1:8088<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;description&gt;</span>Classpath for typical applications.<span class="nt">&lt;/description&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.application.classpath<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/share/hadoop/common/*,
+<pre><code>&lt;?xml version="1.0"?&gt;
+&lt;configuration&gt;
+&lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;
+    &lt;value&gt;desktop1:8031&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;
+    &lt;value&gt;desktop1:8032&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;
+    &lt;value&gt;desktop1:8030&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;
+    &lt;value&gt;desktop1:8033&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;
+    &lt;value&gt;desktop1:8088&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;description&gt;Classpath for typical applications.&lt;/description&gt;
+    &lt;name&gt;yarn.application.classpath&lt;/name&gt;
+    &lt;value&gt;$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/share/hadoop/common/*,
 	$HADOOP_COMMON_HOME/share/hadoop/common/lib/*,
 	$HADOOP_HDFS_HOME/share/hadoop/hdfs/*,$HADOOP_HDFS_HOME/share/hadoop/hdfs/lib/*,
 	$YARN_HOME/share/hadoop/yarn/*,$YARN_HOME/share/hadoop/yarn/lib/*,
-	$YARN_HOME/share/hadoop/mapreduce/*,$YARN_HOME/share/hadoop/mapreduce/lib/*<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.aux-services<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>mapreduce.shuffle<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.aux-services.mapreduce.shuffle.class<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>org.apache.hadoop.mapred.ShuffleHandler<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.local-dirs<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>/opt/data/yarn/local<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.log-dirs<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>/opt/data/yarn/logs<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;description&gt;</span>Where to aggregate logs<span class="nt">&lt;/description&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.remote-app-log-dir<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>/opt/data/yarn/logs<span class="nt">&lt;/value&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>yarn.app.mapreduce.am.staging-dir<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>/user<span class="nt">&lt;/value&gt;</span>
- <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
+	$YARN_HOME/share/hadoop/mapreduce/*,$YARN_HOME/share/hadoop/mapreduce/lib/*&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+    &lt;value&gt;mapreduce.shuffle&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;
+    &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.nodemanager.local-dirs&lt;/name&gt;
+    &lt;value&gt;/opt/data/yarn/local&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.nodemanager.log-dirs&lt;/name&gt;
+    &lt;value&gt;/opt/data/yarn/logs&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;description&gt;Where to aggregate logs&lt;/description&gt;
+    &lt;name&gt;yarn.nodemanager.remote-app-log-dir&lt;/name&gt;
+    &lt;value&gt;/opt/data/yarn/logs&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.app.mapreduce.am.staging-dir&lt;/name&gt;
+    &lt;value&gt;/user&lt;/value&gt;
+ &lt;/property&gt;
+&lt;/configuration&gt;
 </code></pre>
-</div>
 
 <p>同样地，将上面2个文件同步到其他各个节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop2:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
+<pre><code>	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop2:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop3:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop4:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop5:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop6:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 	[root@desktop1 ~]# scp /opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/ desktop7:/opt/hadoop-2.0.0-cdh4.6.0/etc/hadoop/
 </code></pre>
-</div>
 
 <h2 id="section-4">修改环境变量</h2>
 
-<p>修改<code class="highlighter-rouge">/root/.bashrc</code>环境变量，并将其同步到其他几台机器</p>
+<p>修改<code>/root/.bashrc</code>环境变量，并将其同步到其他几台机器</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 ~] # cat .bashrc 
+<pre><code>[root@desktop1 ~] # cat .bashrc 
 # .bashrc
 alias rm='rm -i'
 alias cp='cp -i'
@@ -474,35 +460,31 @@ export HDFS_CONF_DIR=${HADOOP_HOME}/etc/hadoop
 export YARN_CONF_DIR=${HADOOP_HOME}/etc/hadoop
 export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$HADOOP_HOME/sbin:$HBASE_HOME/bin:$HIVE_HOME/bin
 </code></pre>
-</div>
 
 <p>修改配置文件之后，使其生效。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 ~]# source .bashrc 
+<pre><code>[root@desktop1 ~]# source .bashrc 
 </code></pre>
-</div>
 
 <p>将该文件同步到其他各个节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# scp /root/.bashrc desktop2:/root
+<pre><code>	[root@desktop1 ~]# scp /root/.bashrc desktop2:/root
 	[root@desktop1 ~]# scp /root/.bashrc desktop3:/root
 	[root@desktop1 ~]# scp /root/.bashrc desktop4:/root
 	[root@desktop1 ~]# scp /root/.bashrc desktop5:/root
 	[root@desktop1 ~]# scp /root/.bashrc desktop6:/root
 	[root@desktop1 ~]# scp /root/.bashrc desktop7:/root
 </code></pre>
-</div>
 
 <p>并且使各个节点的环境变量生效：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	[root@desktop1 ~]# ssh desktop2 'source .bashrc'
+<pre><code>	[root@desktop1 ~]# ssh desktop2 'source .bashrc'
 	[root@desktop1 ~]# ssh desktop3 'source .bashrc'
 	[root@desktop1 ~]# ssh desktop4 'source .bashrc'
 	[root@desktop1 ~]# ssh desktop5 'source .bashrc'
 	[root@desktop1 ~]# ssh desktop6 'source .bashrc'
 	[root@desktop1 ~]# ssh desktop7 'source .bashrc'
 </code></pre>
-</div>
 
 <h2 id="section-5">启动脚本</h2>
 
@@ -510,44 +492,38 @@ export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$HADOOP_HOME/sbin:$HBASE_HOME/bin:$HI
 
 <p>在desktop1上格式化：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 hadoop]hadoop namenode -format
+<pre><code>[root@desktop1 hadoop]hadoop namenode -format
 </code></pre>
-</div>
 
 <p>在desktop1上启动hdfs：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 hadoop]#start-dfs.sh
+<pre><code>[root@desktop1 hadoop]#start-dfs.sh
 </code></pre>
-</div>
 
 <p>在desktop1上启动mapreduce：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 hadoop]#start-yarn.sh
+<pre><code>[root@desktop1 hadoop]#start-yarn.sh
 </code></pre>
-</div>
 
 <p>在desktop1上启动historyserver：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 hadoop]#mr-jobhistory-daemon.sh start historyserver
+<pre><code>[root@desktop1 hadoop]#mr-jobhistory-daemon.sh start historyserver
 </code></pre>
-</div>
 
 <p>查看MapReduce：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://desktop1:8088/cluster
+<pre><code>http://desktop1:8088/cluster
 </code></pre>
-</div>
 
 <p>查看节点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://desktop2:8042/
+<pre><code>http://desktop2:8042/
 http://desktop2:8042/node
 </code></pre>
-</div>
 
 <h2 id="section-6">检查集群进程</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@desktop1 ~]# jps
+<pre><code>[root@desktop1 ~]# jps
 5389 NameNode
 5980 Jps
 5710 ResourceManager
@@ -560,7 +536,6 @@ http://desktop2:8042/node
 3124 DataNode
 5711 NodeManager
 </code></pre>
-</div>
 
                     <br/>
                     <div class="well">
@@ -615,7 +590,7 @@ http://desktop2:8042/node
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

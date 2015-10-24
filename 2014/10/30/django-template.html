@@ -111,20 +111,19 @@
 
 <p>在《<a href="/2014/01/11/how-to-create-a-django-site.html">如何创建一个Django网站</a>》中使用模板的方式如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span><span class="p">,</span> <span class="n">loader</span>
+<pre><code class="language-python">from django.http import HttpResponse
+from django.template import RequestContext, loader
 
-<span class="kn">from</span> <span class="nn">polls.models</span> <span class="kn">import</span> <span class="n">Question</span>
+from polls.models import Question
 
-<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">latest_question_list</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-pub_date'</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
-    <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s">'polls/index.html'</span><span class="p">)</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s">'latest_question_list'</span><span class="p">:</span> <span class="n">latest_question_list</span><span class="p">,</span>
-    <span class="p">})</span>
-    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    template = loader.get_template('polls/index.html')
+    context = RequestContext(request, {
+        'latest_question_list': latest_question_list,
+    })
+    return HttpResponse(template.render(context))
 </code></pre>
-</div>
 
 <p>代码说明：</p>
 
@@ -136,72 +135,67 @@
 
 <p>在 settings.py 中有一个 TEMPLATE_LOADERS 属性，并且有一个默认值 django.template.loaders.app_directories.Loader，该值定义了从每一个安装的 app 的 templates 目录下寻找模板。当然，你也可以编辑 settings.py 文件中的 TEMPLATE_DIRS属性手动指定模板路径：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="c"># Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".</span>
-    <span class="c"># Always use forward slashes, even on Windows.</span>
-    <span class="c"># Don't forget to use absolute paths, not relative paths.</span>
-    <span class="s">'/home/django/mysite/templates'</span><span class="p">,</span>
-<span class="p">)</span>
+<pre><code class="language-python">TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    '/home/django/mysite/templates',
+)
 </code></pre>
-</div>
 
 <p>上面配置的是系统绝对路径，最好的方式是使用代码动态构建这个路径，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<pre><code class="language-python">import os
 
-<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-<span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span><span class="s">'templates'</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\\</span><span class="s">'</span><span class="p">,</span><span class="s">'/'</span><span class="p">),</span>
-<span class="p">)</span>
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR,'templates').replace('\\','/'),
+)
 </code></pre>
-</div>
 
 <blockquote>
-  <p>这个例子使用了神奇的 Python 内部变量 <code class="highlighter-rouge">__file__</code> ，该变量被自动设置为代码所在的 Python 模块文件名。 <code class="highlighter-rouge">os.path.dirname(__file__)</code>将会获取自身所在的文件，然后由 <code class="highlighter-rouge">os.path.join</code> 这个方法将这目录与 templates 进行连接。如果在 windows下，它会智能地选择正确的后向斜杠’/’进行连接，而不是前向斜杠’/’。</p>
+  <p>这个例子使用了神奇的 Python 内部变量 <code>__file__</code> ，该变量被自动设置为代码所在的 Python 模块文件名。 <code>os.path.dirname(__file__)</code>将会获取自身所在的文件，然后由 <code>os.path.join</code> 这个方法将这目录与 templates 进行连接。如果在 windows下，它会智能地选择正确的后向斜杠’/’进行连接，而不是前向斜杠’/’。</p>
 </blockquote>
 
-<p>完成 <code class="highlighter-rouge">TEMPLATE_DIRS</code> 设置后，下一步就是修改视图代码，让它使用 Django 模板加载功能而不是对模板路径硬编码。</p>
+<p>完成 <code>TEMPLATE_DIRS</code> 设置后，下一步就是修改视图代码，让它使用 Django 模板加载功能而不是对模板路径硬编码。</p>
 
 <p>举例如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">get_template</span>
-<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">Context</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
+<pre><code class="language-python">from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+import datetime
 
-<span class="k">def</span> <span class="nf">current_datetime</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s">'current_datetime.html'</span><span class="p">)</span>
-    <span class="n">html</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">Context</span><span class="p">({</span><span class="s">'current_date'</span><span class="p">:</span> <span class="n">now</span><span class="p">}))</span>
-    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+def current_datetime(request):
+    now = datetime.datetime.now()
+    t = get_template('current_datetime.html')
+    html = t.render(Context({'current_date': now}))
+    return HttpResponse(html)
 </code></pre>
-</div>
 
-<p>一种更加简洁的编码方式是使用 <code class="highlighter-rouge">render_to_response()</code>：</p>
+<p>一种更加简洁的编码方式是使用 <code>render_to_response()</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
+<pre><code class="language-python">from django.shortcuts import render_to_response
+import datetime
 
-<span class="k">def</span> <span class="nf">current_datetime</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'current_datetime.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'current_date'</span><span class="p">:</span> <span class="n">now</span><span class="p">})</span>
+def current_datetime(request):
+    now = datetime.datetime.now()
+    return render_to_response('current_datetime.html', {'current_date': now})
 </code></pre>
-</div>
 
-<p>上面两个方法都会传入 Context 上下文，将页面需要的变量传到前台去，如果变量很多，需要一一输入。还有一种更加简单的方式，那就是可以利用 Python 的内建函数 <code class="highlighter-rouge">locals()</code> 。它返回的字典对所有局部变量的名称与值进行映射。 因此，前面的视图可以重写成下面这个样子：</p>
+<p>上面两个方法都会传入 Context 上下文，将页面需要的变量传到前台去，如果变量很多，需要一一输入。还有一种更加简单的方式，那就是可以利用 Python 的内建函数 <code>locals()</code> 。它返回的字典对所有局部变量的名称与值进行映射。 因此，前面的视图可以重写成下面这个样子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">current_datetime</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'current_datetime.html'</span><span class="p">,</span> <span class="nb">locals</span><span class="p">())</span>
+<pre><code class="language-python">def current_datetime(request):
+    current_date = datetime.datetime.now()
+    return render_to_response('current_datetime.html', locals())
 </code></pre>
-</div>
 
-<p>使用 <code class="highlighter-rouge">locals()</code> 时要注意是它将包括所有的局部变量，它们可能比你想让模板访问的要多。 在前例中，<code class="highlighter-rouge">locals()</code> 还包含了 request。</p>
+<p>使用 <code>locals()</code> 时要注意是它将包括所有的局部变量，它们可能比你想让模板访问的要多。 在前例中，<code>locals()</code> 还包含了 request。</p>
 
 <h1 id="section-1">模板标签</h1>
 
-<p>上面的例子中提到了模板 <code class="highlighter-rouge">current_datetime.html</code> ，其中的内容如何定义呢？这个就要使用模板标签了。Django 的模板系统带有内置的标签和过滤器。</p>
+<p>上面的例子中提到了模板 <code>current_datetime.html</code> ，其中的内容如何定义呢？这个就要使用模板标签了。Django 的模板系统带有内置的标签和过滤器。</p>
 
 <h2 id="ifelse">if/else</h2>
 
@@ -246,9 +240,9 @@
 
 <h2 id="for">for</h2>
 
-<p>允许我们在一个序列上迭代。 与 Python 的 for 语句的情形类似，循环语法是 <code class="highlighter-rouge">for X in Y </code>，Y 是要迭代的序列而X是在每一个特定的循环中使用的变量名称。 每一次循环中，模板系统会渲染在 for 和 endfor 之间的所有内容。</p>
+<p>允许我们在一个序列上迭代。 与 Python 的 for 语句的情形类似，循环语法是 <code>for X in Y </code>，Y 是要迭代的序列而X是在每一个特定的循环中使用的变量名称。 每一次循环中，模板系统会渲染在 for 和 endfor 之间的所有内容。</p>
 
-<p>给定一个运动员列表 <code class="highlighter-rouge">athlete_list</code> 变量，我们可以使用下面的代码来显示这个列表：</p>
+<p>给定一个运动员列表 <code>athlete_list</code> 变量，我们可以使用下面的代码来显示这个列表：</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul&gt;</span>
 {% for athlete in athlete_list %}
@@ -256,7 +250,7 @@
 {% endfor %}
 <span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-<p>给标签增加一个 <code class="highlighter-rouge">reversed</code> 使得该列表被反向迭代：</p>
+<p>给标签增加一个 <code>reversed</code> 使得该列表被反向迭代：</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html">{% for athlete in athlete_list reversed %}
         <span class="nt">&lt;li&gt;</span>{{ athlete.name }}<span class="nt">&lt;/li&gt;</span>
@@ -272,7 +266,7 @@
     <span class="nt">&lt;p&gt;</span>There are no athletes. Only computer programmers.<span class="nt">&lt;/p&gt;</span>
 {% endif %}</code></pre></div>
 
-<p>因为这种做法十分常见，所以 <code class="highlighter-rouge">for</code> 标签支持一个可选的 empty 分句，通过它我们可以定义当列表为空时的输出内容 下面的例子与之前那个等价：</p>
+<p>因为这种做法十分常见，所以 <code>for</code> 标签支持一个可选的 empty 分句，通过它我们可以定义当列表为空时的输出内容 下面的例子与之前那个等价：</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html">{% for athlete in athlete_list %}
     <span class="nt">&lt;p&gt;</span>{{ athlete.name }}<span class="nt">&lt;/p&gt;</span>
@@ -282,7 +276,7 @@
 
 <p>Django不支持退出循环操作。</p>
 
-<p>在每个 for 循环里有一个称为<code class="highlighter-rouge">forloop</code> 的模板变量。这个变量有一些提示循环进度信息的属性。</p>
+<p>在每个 for 循环里有一个称为<code>forloop</code> 的模板变量。这个变量有一些提示循环进度信息的属性。</p>
 
 <blockquote>
   <p>forloop.counter 总是一个表示当前循环的执行次数的整数计数器。 这个计数器是从1开始的，所以在第一次循环时 forloop.counter 将会被设置为1。</p>
@@ -353,13 +347,12 @@
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">''</span><span class="p">,</span>    
-    <span class="n">url</span><span class="p">(</span><span class="s">r'^hello/$'</span><span class="p">,</span> <span class="n">hello</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">'hello'</span><span class="p">),</span>
-<span class="p">)</span>
+<pre><code class="language-python">urlpatterns = patterns('',    
+    url(r'^hello/$', hello,name='hello'),
+)
 </code></pre>
-</div>
 
-<p>对于上面的定义，可以在模板里通过 hello 名称来应用 <code class="highlighter-rouge">hello/</code> 这个 url。</p>
+<p>对于上面的定义，可以在模板里通过 hello 名称来应用 <code>hello/</code> 这个 url。</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;hello&#39; %}&quot;</span><span class="nt">&gt;</span>Hello World<span class="nt">&lt;/a&gt;</span></code></pre></div>
 
@@ -369,19 +362,17 @@
 
 <p>需要注意的是：name是全局的，你整个 urlpatterns 里只能一个唯一的name。</p>
 
-<p>如果想在试图中使用该名称，可以使用项目代码（关键在于 <code class="highlighter-rouge">reverse</code> 函数）：</p>
+<p>如果想在试图中使用该名称，可以使用项目代码（关键在于 <code>reverse</code> 函数）：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<pre><code class="language-python">from django.core.urlresolvers import reverse
 
-<span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">"news_index"</span><span class="p">))</span>
+HttpResponseRedirect(reverse("news_index"))
 </code></pre>
-</div>
 
 <p>当遇到urlpatterns的地址包含有参数的时候，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="s">r'^(?P&lt;year&gt;</span><span class="err">\</span><span class="s">d{4})/(?P&lt;month&gt;</span><span class="err">\</span><span class="s">d{1,2})/$'</span><span class="p">,</span><span class="s">'news_list'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">'news_archive'</span> <span class="p">),</span>
+<pre><code class="language-python">(r'^(?P&lt;year&gt;\d{4})/(?P&lt;month&gt;\d{1,2})/$','news_list',name='news_archive' ),
 </code></pre>
-</div>
 
 <p>有两个参数，最终的地址如归档的地址 http://blog.javachen.com/2014/10 ，这时候的标签使用如下：</p>
 
@@ -390,20 +381,18 @@
 
 <p>当然，在你后台的 views.py 中的方法上也必须有这两个参数。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">news_list</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">):</span>
-    <span class="k">print</span> <span class="s">'year:'</span><span class="p">,</span><span class="n">year</span>
-    <span class="k">print</span> <span class="s">'monty:'</span><span class="p">,</span><span class="n">month</span>
+<pre><code class="language-python">def news_list(request,year,month):
+    print 'year:',year
+    print 'monty:',month
     
 </code></pre>
-</div>
 
 <p>而在试图里写法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="o">......</span>
-<span class="n">reverse</span><span class="p">(</span><span class="s">"news_archive"</span><span class="p">,</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">"year"</span><span class="p">:</span><span class="mi">2014</span><span class="p">,</span><span class="s">"month"</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<pre><code class="language-python">from django.core.urlresolvers import reverse
+......
+reverse("news_archive",kwargs={"year":2014,"month":10})
 </code></pre>
-</div>
 
 <h2 id="autoescape">autoescape</h2>
 
@@ -510,11 +499,11 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
     {% endblock %}
 <span class="nt">&lt;/body&gt;</span></code></pre></div>
 
-<p>顺便提一下，模板中的 <code class="highlighter-rouge">load staticfiles</code> 表示加载静态资源，这个一般用于加载 CSS、JS 等静态文件时用到</p>
+<p>顺便提一下，模板中的 <code>load staticfiles</code> 表示加载静态资源，这个一般用于加载 CSS、JS 等静态文件时用到</p>
 
 <h2 id="include">include</h2>
 
-<p>该标签允许在（模板中）包含其它的模板的内容。标签的参数是所要包含的模板名称，可以是一个变量，也可以是用单/双引号硬编码的字符串。每当在多个模板中出现相同的代码时，就应该考虑是否要使用 <code class="highlighter-rouge">include</code> 来减少重复，这也是为了提高代码的可重用性。</p>
+<p>该标签允许在（模板中）包含其它的模板的内容。标签的参数是所要包含的模板名称，可以是一个变量，也可以是用单/双引号硬编码的字符串。每当在多个模板中出现相同的代码时，就应该考虑是否要使用 <code>include</code> 来减少重复，这也是为了提高代码的可重用性。</p>
 
 <h2 id="section-2">注释</h2>
 
@@ -620,7 +609,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

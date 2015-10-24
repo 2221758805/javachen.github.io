@@ -120,73 +120,69 @@
 
 <ul>
   <li>操作系统：CentOs 6.6</li>
-  <li>Hadoop版本：<code class="highlighter-rouge">CDH5.4</code></li>
-  <li>JDK版本：<code class="highlighter-rouge">1.7.0_71</code></li>
+  <li>Hadoop版本：<code>CDH5.4</code></li>
+  <li>JDK版本：<code>1.7.0_71</code></li>
   <li>运行用户：root</li>
 </ul>
 
 <p>集群各节点角色规划为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
+<pre><code>192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
 192.168.56.122        cdh2     DataNode、NodeManager、HBase、Hiveserver2、Impala Server
 192.168.56.123        cdh3     DataNode、HBase、NodeManager、Hiveserver2、Impala Server
 </code></pre>
-</div>
 
 <h1 id="impala">2. 修改Impala配置</h1>
 
-<p>修改 /etc/default/impala 文件中的 <code class="highlighter-rouge">IMPALA_SERVER_ARGS</code> 参数，添加：</p>
+<p>修改 /etc/default/impala 文件中的 <code>IMPALA_SERVER_ARGS</code> 参数，添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>-server_name<span class="o">=</span>server1
--sentry_config<span class="o">=</span>/etc/hive/conf/sentry-site.xml
+<pre><code class="language-bash">-server_name=server1
+-sentry_config=/etc/hive/conf/sentry-site.xml
 </code></pre>
-</div>
 
-<p>在 <code class="highlighter-rouge">IMPALA_CATALOG_ARGS</code> 中添加：</p>
+<p>在 <code>IMPALA_CATALOG_ARGS</code> 中添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>-sentry_config<span class="o">=</span>/etc/hive/conf/sentry-site.xml
+<pre><code class="language-bash">-sentry_config=/etc/hive/conf/sentry-site.xml
 </code></pre>
-</div>
 
 <p>/etc/hive/conf/sentry-site.xml 内容如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.service.client.server.rpc-port<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>8038<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.service.client.server.rpc-address<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>cdh1<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.service.client.server.rpc-connection-timeout<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>200000<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.provider<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>org.apache.sentry.provider.file.HadoopGroupResourceAuthorizationProvider<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.hive.provider.backend<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>org.apache.sentry.provider.db.SimpleDBProviderBackend<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.metastore.service.users<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span><span class="c">&lt;!--queries made by hive user (beeline) skip meta store check--&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.hive.server<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>server1<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;property&gt;</span>
-        <span class="nt">&lt;name&gt;</span>sentry.hive.testing.mode<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.service.client.server.rpc-port&lt;/name&gt;
+        &lt;value&gt;8038&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.service.client.server.rpc-address&lt;/name&gt;
+        &lt;value&gt;cdh1&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.service.client.server.rpc-connection-timeout&lt;/name&gt;
+        &lt;value&gt;200000&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.provider&lt;/name&gt;
+        &lt;value&gt;org.apache.sentry.provider.file.HadoopGroupResourceAuthorizationProvider&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.hive.provider.backend&lt;/name&gt;
+        &lt;value&gt;org.apache.sentry.provider.db.SimpleDBProviderBackend&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.metastore.service.users&lt;/name&gt;
+        &lt;value&gt;hive&lt;/value&gt;&lt;!--queries made by hive user (beeline) skip meta store check--&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.hive.server&lt;/name&gt;
+        &lt;value&gt;server1&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;sentry.hive.testing.mode&lt;/name&gt;
+        &lt;value&gt;true&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
 </code></pre>
-</div>
 
 <h1 id="impala-1">3. 重启Impala服务</h1>
 
@@ -196,17 +192,16 @@
 
 <h1 id="section-2">5. 其他说明</h1>
 
-<p>如果要使用基于文件存储的方式配置Sentry store，则需要修改 /etc/default/impala 文件中的 <code class="highlighter-rouge">IMPALA_SERVER_ARGS</code> 参数，添加：</p>
+<p>如果要使用基于文件存储的方式配置Sentry store，则需要修改 /etc/default/impala 文件中的 <code>IMPALA_SERVER_ARGS</code> 参数，添加：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="err">-</span><span class="py">server_name</span><span class="p">=</span><span class="s">server1</span>
-<span class="err">-</span><span class="py">authorization_policy_file</span><span class="p">=</span><span class="s">/user/hive/sentry/sentry-provider.ini</span>
-<span class="err">-</span><span class="py">authorization_policy_provider_class</span><span class="p">=</span><span class="s">org.apache.sentry.provider.file.LocalGroupResourceAuthorizationProvider</span>
+<pre><code class="language-properties">-server_name=server1
+-authorization_policy_file=/user/hive/sentry/sentry-provider.ini
+-authorization_policy_provider_class=org.apache.sentry.provider.file.LocalGroupResourceAuthorizationProvider
 </code></pre>
-</div>
 
 <p>创建 sentry-provider.ini 文件并将其上传到 hdfs 的 /user/hive/sentry/ 目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ cat /tmp/sentry-provider.ini
+<pre><code>$ cat /tmp/sentry-provider.ini
 [databases]
 # Defines the location of the per DB policy file for the customers DB/schema
 #db1 = hdfs://cdh1:8020/user/hive/sentry/db1.ini
@@ -230,7 +225,6 @@ $ hdfs dfs -put /tmp/sentry-provider.ini /user/hive/sentry/
 $ hdfs dfs -chown hive:hive /user/hive/sentry/sentry-provider.ini
 $ hdfs dfs -chmod 640 /user/hive/sentry/sentry-provider.ini
 </code></pre>
-</div>
 
 <p>注意：server1 必须和 sentry-provider.ini 文件中的保持一致。</p>
 
@@ -294,7 +288,7 @@ $ hdfs dfs -chmod 640 /user/hive/sentry/sentry-provider.ini
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

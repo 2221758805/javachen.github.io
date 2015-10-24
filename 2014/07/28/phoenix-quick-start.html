@@ -163,39 +163,36 @@
 
 <p>Java 客户端连接 jdbc 代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:phoenix:server1,server2:2181"</span><span class="o">);</span>
+<pre><code class="language-java">Connection conn = DriverManager.getConnection("jdbc:phoenix:server1,server2:2181");
 </code></pre>
-</div>
 
-<p>jdbc 的 url 类似为 <code class="highlighter-rouge">jdbc:phoenix [ :&lt;zookeeper quorum&gt; [ :&lt;port number&gt; ] [ :&lt;root node&gt; ] ]</code>，需要引用三个参数：<code class="highlighter-rouge">hbase.zookeeper.quorum</code>、<code class="highlighter-rouge">hbase.zookeeper.property.clientPort</code>、<code class="highlighter-rouge">and zookeeper.znode.parent</code>，这些参数可以缺省不填而在 hbase-site.xml 中定义。</p>
+<p>jdbc 的 url 类似为 <code>jdbc:phoenix [ :&lt;zookeeper quorum&gt; [ :&lt;port number&gt; ] [ :&lt;root node&gt; ] ]</code>，需要引用三个参数：<code>hbase.zookeeper.quorum</code>、<code>hbase.zookeeper.property.clientPort</code>、<code>and zookeeper.znode.parent</code>，这些参数可以缺省不填而在 hbase-site.xml 中定义。</p>
 
 <h2 id="sqlline-">3.2 sqlline 命令行</h2>
 
 <p>进入解压后的 bin 目录，执行下面命令可以进入一个命令行模式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sqlline.py localhost
+<pre><code class="language-bash">$ sqlline.py localhost
 </code></pre>
-</div>
 
 <p>进入之后，可以查看表和列：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sqlline</span> <span class="k">version</span> <span class="mi">1</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">2</span>
-<span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span> <span class="o">!</span><span class="n">tables</span>
-<span class="o">+</span><span class="c1">------------+-------------+------------+------------+------------+------------+---------------------------+----------------+--------+
-</span><span class="o">|</span> <span class="n">TABLE_CAT</span>  <span class="o">|</span> <span class="n">TABLE_SCHEM</span> <span class="o">|</span> <span class="k">TABLE_NAME</span> <span class="o">|</span> <span class="n">TABLE_TYPE</span> <span class="o">|</span>  <span class="n">REMARKS</span>   <span class="o">|</span> <span class="n">TYPE_NAME</span>  <span class="o">|</span> <span class="n">SELF_REFERENCING_COL_NAME</span> <span class="o">|</span> <span class="n">REF_GENERATION</span> <span class="o">|</span> <span class="n">INDEX_</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+-------------+------------+------------+------------+------------+---------------------------+----------------+--------+
-</span><span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">SYSTEM</span>      <span class="o">|</span> <span class="k">CATALOG</span>    <span class="o">|</span> <span class="k">SYSTEM</span> <span class="k">TABLE</span> <span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">null</span>                      <span class="o">|</span> <span class="k">null</span>           <span class="o">|</span> <span class="k">null</span> <span class="o">|</span>
-<span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">SYSTEM</span>      <span class="o">|</span> <span class="n">SEQUENCE</span>   <span class="o">|</span> <span class="k">SYSTEM</span> <span class="k">TABLE</span> <span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">null</span>                      <span class="o">|</span> <span class="k">null</span>           <span class="o">|</span> <span class="k">null</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+-------------+------------+------------+------------+------------+---------------------------+----------------+--------+
-</span><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span> <span class="o">!</span><span class="n">columns</span> <span class="n">sequence</span>
-<span class="o">+</span><span class="c1">------------+-------------+------------+-------------+------------+------------+-------------+---------------+----------------+-----+
-</span><span class="o">|</span> <span class="n">TABLE_CAT</span>  <span class="o">|</span> <span class="n">TABLE_SCHEM</span> <span class="o">|</span> <span class="k">TABLE_NAME</span> <span class="o">|</span> <span class="k">COLUMN_NAME</span> <span class="o">|</span> <span class="n">DATA_TYPE</span>  <span class="o">|</span> <span class="n">TYPE_NAME</span>  <span class="o">|</span> <span class="n">COLUMN_SIZE</span> <span class="o">|</span> <span class="n">BUFFER_LENGTH</span> <span class="o">|</span> <span class="n">DECIMAL_DIGITS</span> <span class="o">|</span> <span class="n">NUM</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+-------------+------------+-------------+------------+------------+-------------+---------------+----------------+-----+
-</span><span class="o">|</span> <span class="k">null</span>       <span class="o">|</span> <span class="k">SYSTEM</span>      <span class="o">|</span> <span class="n">SEQUENCE</span>   <span class="o">|</span> <span class="n">TENANT_ID</span>   <span class="o">|</span> <span class="mi">12</span>         <span class="o">|</span> <span class="n">VARCHAR</span>    <span class="o">|</span> <span class="k">null</span>        <span class="o">|</span> <span class="k">null</span>          <span class="o">|</span> <span class="k">null</span>           <span class="o">|</span> <span class="n">nul</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+-------------+------------+-------------+------------+------------+-------------+---------------+----------------+-----+
-</span><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span>
+<pre><code class="language-sql">sqlline version 1.1.2
+0: jdbc:phoenix:localhost&gt; !tables
++------------+-------------+------------+------------+------------+------------+---------------------------+----------------+--------+
+| TABLE_CAT  | TABLE_SCHEM | TABLE_NAME | TABLE_TYPE |  REMARKS   | TYPE_NAME  | SELF_REFERENCING_COL_NAME | REF_GENERATION | INDEX_ |
++------------+-------------+------------+------------+------------+------------+---------------------------+----------------+--------+
+| null       | SYSTEM      | CATALOG    | SYSTEM TABLE | null       | null       | null                      | null           | null |
+| null       | SYSTEM      | SEQUENCE   | SYSTEM TABLE | null       | null       | null                      | null           | null |
++------------+-------------+------------+------------+------------+------------+---------------------------+----------------+--------+
+0: jdbc:phoenix:localhost&gt; !columns sequence
++------------+-------------+------------+-------------+------------+------------+-------------+---------------+----------------+-----+
+| TABLE_CAT  | TABLE_SCHEM | TABLE_NAME | COLUMN_NAME | DATA_TYPE  | TYPE_NAME  | COLUMN_SIZE | BUFFER_LENGTH | DECIMAL_DIGITS | NUM |
++------------+-------------+------------+-------------+------------+------------+-------------+---------------+----------------+-----+
+| null       | SYSTEM      | SEQUENCE   | TENANT_ID   | 12         | VARCHAR    | null        | null          | null           | nul |
++------------+-------------+------------+-------------+------------+------------+-------------+---------------+----------------+-----+
+0: jdbc:phoenix:localhost&gt;
 </code></pre>
-</div>
 
 <p>从上面可以看出来，phoenix 中存在两个系统表：</p>
 
@@ -206,19 +203,17 @@
 
 <p>通过 HBase Master 的 web 页面，可以看到上面两个表的建表语句，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>'SYSTEM.CATALOG', {METHOD =&gt; 'table_att', coprocessor$1 =&gt; '|org.apache.phoenix.coprocessor.ScanRegionObserver|1|', coprocessor$2 =&gt; '|org.apache.phoenix.coprocessor.UngroupedAggregateRegionObserver|1|', coprocessor$3 =&gt; '|org.apache.phoenix.coprocessor.GroupedAggregateRegionObserver|1|', coprocessor$4 =&gt; '|org.apache.phoenix.coprocessor.ServerCachingEndpointImpl|1|', coprocessor$5 =&gt; '|org.apache.phoenix.coprocessor.MetaDataEndpointImpl|1|', coprocessor$6 =&gt; '|org.apache.phoenix.coprocessor.MetaDataRegionObserver|2|', CONFIG =&gt; {'SPLIT_POLICY' =&gt; 'org.apache.phoenix.schema.MetaDataSplitPolicy', 'UpgradeTo30' =&gt; 'true'}}, {NAME =&gt; '0', DATA_BLOCK_ENCODING =&gt; 'FAST_DIFF', VERSIONS =&gt; '1000', KEEP_DELETED_CELLS =&gt; 'true'}
+<pre><code>'SYSTEM.CATALOG', {METHOD =&gt; 'table_att', coprocessor$1 =&gt; '|org.apache.phoenix.coprocessor.ScanRegionObserver|1|', coprocessor$2 =&gt; '|org.apache.phoenix.coprocessor.UngroupedAggregateRegionObserver|1|', coprocessor$3 =&gt; '|org.apache.phoenix.coprocessor.GroupedAggregateRegionObserver|1|', coprocessor$4 =&gt; '|org.apache.phoenix.coprocessor.ServerCachingEndpointImpl|1|', coprocessor$5 =&gt; '|org.apache.phoenix.coprocessor.MetaDataEndpointImpl|1|', coprocessor$6 =&gt; '|org.apache.phoenix.coprocessor.MetaDataRegionObserver|2|', CONFIG =&gt; {'SPLIT_POLICY' =&gt; 'org.apache.phoenix.schema.MetaDataSplitPolicy', 'UpgradeTo30' =&gt; 'true'}}, {NAME =&gt; '0', DATA_BLOCK_ENCODING =&gt; 'FAST_DIFF', VERSIONS =&gt; '1000', KEEP_DELETED_CELLS =&gt; 'true'}
 </code></pre>
-</div>
 
 <p>可以用下面脚本执行一个 sql 语句：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./sqlline.py localhost ../examples/STOCK_SYMBOL.sql
+<pre><code class="language-bash">$ ./sqlline.py localhost ../examples/STOCK_SYMBOL.sql
 </code></pre>
-</div>
 
 <p>执行结果如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">1</span><span class="o">/</span><span class="mi">4</span>          <span class="cm">/*
+<pre><code class="language-sql">1/4          /*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -234,33 +229,31 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-*/</span>
+*/
 
-<span class="c1">-- creates stock table with single row
-</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">STOCK_SYMBOL</span> <span class="p">(</span><span class="n">SYMBOL</span> <span class="n">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">COMPANY</span> <span class="n">VARCHAR</span><span class="p">);</span>
-<span class="k">No</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">714</span> <span class="n">seconds</span><span class="p">)</span>
-<span class="mi">2</span><span class="o">/</span><span class="mi">4</span>          <span class="n">UPSERT</span> <span class="k">INTO</span> <span class="n">STOCK_SYMBOL</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'CRM'</span><span class="p">,</span><span class="s1">'SalesForce.com'</span><span class="p">);</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">035</span> <span class="n">seconds</span><span class="p">)</span>
-<span class="mi">3</span><span class="o">/</span><span class="mi">4</span>          <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">STOCK_SYMBOL</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="o">|</span>   <span class="n">SYMBOL</span>   <span class="o">|</span>  <span class="n">COMPANY</span>   <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="o">|</span> <span class="n">CRM</span>        <span class="o">|</span> <span class="n">SalesForce</span><span class="p">.</span><span class="n">com</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">117</span> <span class="n">seconds</span><span class="p">)</span>
-<span class="mi">4</span><span class="o">/</span><span class="mi">4</span>
-<span class="n">Closing</span><span class="p">:</span> <span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">phoenix</span><span class="p">.</span><span class="n">jdbc</span><span class="p">.</span><span class="n">PhoenixConnection</span>
-<span class="n">sqlline</span> <span class="k">version</span> <span class="mi">1</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">2</span>
+-- creates stock table with single row
+CREATE TABLE IF NOT EXISTS STOCK_SYMBOL (SYMBOL VARCHAR NOT NULL PRIMARY KEY, COMPANY VARCHAR);
+No rows affected (1.714 seconds)
+2/4          UPSERT INTO STOCK_SYMBOL VALUES ('CRM','SalesForce.com');
+1 row affected (0.035 seconds)
+3/4          SELECT * FROM STOCK_SYMBOL;
++------------+------------+
+|   SYMBOL   |  COMPANY   |
++------------+------------+
+| CRM        | SalesForce.com |
++------------+------------+
+1 row selected (0.117 seconds)
+4/4
+Closing: org.apache.phoenix.jdbc.PhoenixConnection
+sqlline version 1.1.2
 </code></pre>
-</div>
 
 <p>../examples/STOCK_SYMBOL.sql 文件主要包括三个 sql 语句：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">STOCK_SYMBOL</span> <span class="p">(</span><span class="n">SYMBOL</span> <span class="n">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">COMPANY</span> <span class="n">VARCHAR</span><span class="p">);</span>
-<span class="n">UPSERT</span> <span class="k">INTO</span> <span class="n">STOCK_SYMBOL</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'CRM'</span><span class="p">,</span><span class="s1">'SalesForce.com'</span><span class="p">);</span>
-<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">STOCK_SYMBOL</span><span class="p">;</span>
+<pre><code class="language-sql">CREATE TABLE IF NOT EXISTS STOCK_SYMBOL (SYMBOL VARCHAR NOT NULL PRIMARY KEY, COMPANY VARCHAR);
+UPSERT INTO STOCK_SYMBOL VALUES ('CRM','SalesForce.com');
+SELECT * FROM STOCK_SYMBOL;
 </code></pre>
-</div>
 
 <ul>
   <li>第一个语句创建表</li>
@@ -270,39 +263,36 @@
 
 <p>在 hbase shell 中查看存在的表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">hbase(main):001:0&gt; </span>list
+<pre><code class="language-bash">hbase(main):001:0&gt; list
 TABLE
 STOCK_SYMBOL
 SYSTEM.CATALOG
 SYSTEM.SEQUENCE
 </code></pre>
-</div>
 
-<p>查看 <code class="highlighter-rouge">STOCK_SYMBOL</code> 表中数据：</p>
+<p>查看 <code>STOCK_SYMBOL</code> 表中数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">hbase(main):004:0&gt; </span>scan <span class="s1">'STOCK_SYMBOL'</span>
+<pre><code class="language-bash">hbase(main):004:0&gt; scan 'STOCK_SYMBOL'
 ROW                                COLUMN+CELL
- CRM                               <span class="nv">column</span><span class="o">=</span>0:COMPANY, <span class="nv">timestamp</span><span class="o">=</span>1406535419510, <span class="nv">value</span><span class="o">=</span>SalesForce.com
- CRM                               <span class="nv">column</span><span class="o">=</span>0:_0, <span class="nv">timestamp</span><span class="o">=</span>1406535419510, <span class="nv">value</span><span class="o">=</span>
-1 row<span class="o">(</span>s<span class="o">)</span> <span class="k">in </span>0.0210 seconds
+ CRM                               column=0:COMPANY, timestamp=1406535419510, value=SalesForce.com
+ CRM                               column=0:_0, timestamp=1406535419510, value=
+1 row(s) in 0.0210 seconds
 </code></pre>
-</div>
 
-<p>可以看到插入了一行记录，rowkey 为 CRM，而列族名称为 0 ，存在两列，一列为指定的COMPANY，另一列为 phoenix 插入的 <code class="highlighter-rouge">_0</code></p>
+<p>可以看到插入了一行记录，rowkey 为 CRM，而列族名称为 0 ，存在两列，一列为指定的COMPANY，另一列为 phoenix 插入的 <code>_0</code></p>
 
 <p>然后，也可以通过 sqlline.py 来查看数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">STOCK_SYMBOL</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="o">|</span>   <span class="n">SYMBOL</span>   <span class="o">|</span>  <span class="n">COMPANY</span>   <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="o">|</span> <span class="n">CRM</span>        <span class="o">|</span> <span class="n">SalesForce</span><span class="p">.</span><span class="n">com</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">144</span> <span class="n">seconds</span><span class="p">)</span>
+<pre><code class="language-sql">0: jdbc:phoenix:localhost&gt; select * from STOCK_SYMBOL;
++------------+------------+
+|   SYMBOL   |  COMPANY   |
++------------+------------+
+| CRM        | SalesForce.com |
++------------+------------+
+1 row selected (0.144 seconds)
 </code></pre>
-</div>
 
-<p>注意到：从上面查询看到的就只有两列，没有看到 <code class="highlighter-rouge">_0</code> 这一列。</p>
+<p>注意到：从上面查询看到的就只有两列，没有看到 <code>_0</code> 这一列。</p>
 
 <p>从上可以知道，Phoenix 是构建在 HBase 之上的 SQL 中间层，向 HBase 发送标准 sql 语句，对 HBase 进行操作。</p>
 
@@ -310,13 +300,12 @@ ROW                                COLUMN+CELL
 
 <p>你可以使用 bin/psql.py 来加载 CSV 数据 或者执行 SQL 脚本，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./psql.py localhost ../examples/WEB_STAT.sql ../examples/WEB_STAT.csv ../examples/WEB_STAT_QUERIES.sql
+<pre><code class="language-bash">$ ./psql.py localhost ../examples/WEB_STAT.sql ../examples/WEB_STAT.csv ../examples/WEB_STAT_QUERIES.sql
 </code></pre>
-</div>
 
 <p>其输出结果为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>no rows upserted
+<pre><code>no rows upserted
 Time: 1.528 sec(s)
 
 csv columns from database.
@@ -356,39 +345,36 @@ EU                     150
 NA                       1
 Time: 0.058 sec(s)
 </code></pre>
-</div>
 
 <p>WEB_STAT.sql 中 sql 语句为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">WEB_STAT</span> <span class="p">(</span>
-     <span class="k">HOST</span> <span class="n">CHAR</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-     <span class="k">DOMAIN</span> <span class="n">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-     <span class="n">FEATURE</span> <span class="n">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-     <span class="n">DATE</span> <span class="n">DATE</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-     <span class="k">USAGE</span><span class="p">.</span><span class="n">CORE</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="c1">-- 指定了列族： USAGE
-</span>     <span class="k">USAGE</span><span class="p">.</span><span class="n">DB</span> <span class="n">BIGINT</span><span class="p">,</span>	<span class="c1">-- 指定了列族： USAGE
-</span>     <span class="n">STATS</span><span class="p">.</span><span class="n">ACTIVE_VISITOR</span> <span class="n">INTEGER</span> <span class="p">,</span>  <span class="c1">--指定了列族： STATS
-</span>     <span class="k">CONSTRAINT</span> <span class="n">PK</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">HOST</span><span class="p">,</span> <span class="k">DOMAIN</span><span class="p">,</span> <span class="n">FEATURE</span><span class="p">,</span> <span class="n">DATE</span><span class="p">)</span>
-<span class="p">);</span>
+<pre><code class="language-sql">CREATE TABLE IF NOT EXISTS WEB_STAT (
+     HOST CHAR(2) NOT NULL,
+     DOMAIN VARCHAR NOT NULL,
+     FEATURE VARCHAR NOT NULL,
+     DATE DATE NOT NULL,
+     USAGE.CORE BIGINT,  -- 指定了列族： USAGE
+     USAGE.DB BIGINT,	-- 指定了列族： USAGE
+     STATS.ACTIVE_VISITOR INTEGER ,  --指定了列族： STATS
+     CONSTRAINT PK PRIMARY KEY (HOST, DOMAIN, FEATURE, DATE)
+);
 </code></pre>
-</div>
 
 <p>从 sql 语句上可以看出来，HOST、DOMAIN、FEATURE、DATE 这四列前面并没有指定列族，并且通过约束设置这四列组成 hbase 的 rowkey，其他三列都指定了列族。</p>
 
 <p>通过 sqlline.py 查询第一条记录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">WEB_STAT</span> <span class="k">limit</span> <span class="mi">1</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------+------------+------------+---------------------+------------+------------+----------------+
-</span><span class="o">|</span> <span class="k">HOST</span> <span class="o">|</span>   <span class="k">DOMAIN</span>   <span class="o">|</span>  <span class="n">FEATURE</span>   <span class="o">|</span>        <span class="n">DATE</span>         <span class="o">|</span>    <span class="n">CORE</span>    <span class="o">|</span>     <span class="n">DB</span>     <span class="o">|</span> <span class="n">ACTIVE_VISITOR</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------+------------+------------+---------------------+------------+------------+----------------+
-</span><span class="o">|</span> <span class="n">EU</span>   <span class="o">|</span> <span class="n">Apple</span><span class="p">.</span><span class="n">com</span>  <span class="o">|</span> <span class="n">Mac</span>        <span class="o">|</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>          <span class="o">|</span> <span class="mi">35</span>         <span class="o">|</span> <span class="mi">22</span>         <span class="o">|</span> <span class="mi">34</span>             <span class="o">|</span>
-<span class="o">+</span><span class="c1">------+------------+------------+---------------------+------------+------------+----------------+
-</span></code></pre>
-</div>
+<pre><code class="language-sql">0: jdbc:phoenix:localhost&gt; select * from WEB_STAT limit 1;
++------+------------+------------+---------------------+------------+------------+----------------+
+| HOST |   DOMAIN   |  FEATURE   |        DATE         |    CORE    |     DB     | ACTIVE_VISITOR |
++------+------------+------------+---------------------+------------+------------+----------------+
+| EU   | Apple.com  | Mac        | 2013-01-01          | 35         | 22         | 34             |
++------+------------+------------+---------------------+------------+------------+----------------+
+</code></pre>
 
-<p>而通过 hbase shell 查询 <code class="highlighter-rouge">WEB_STAT</code> 表第一条记录：</p>
+<p>而通过 hbase shell 查询 <code>WEB_STAT</code> 表第一条记录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> EUApple.com\x00Mac\x00\x80\x00\x0 column=STATS:ACTIVE_VISITOR, timestamp=1406535785946, value=\x80\x00\x00"
+<pre><code> EUApple.com\x00Mac\x00\x80\x00\x0 column=STATS:ACTIVE_VISITOR, timestamp=1406535785946, value=\x80\x00\x00"
  1;\xF3\xA04\xC8
  EUApple.com\x00Mac\x00\x80\x00\x0 column=USAGE:CORE, timestamp=1406535785946, value=\x80\x00\x00\x00\x00\x00\x00#
  1;\xF3\xA04\xC8
@@ -397,13 +383,12 @@ Time: 0.058 sec(s)
  EUApple.com\x00Mac\x00\x80\x00\x0 column=USAGE:_0, timestamp=1406535785946, value=
  1;\xF3\xA04\xC8
 </code></pre>
-</div>
 
 <p>通过上面对比知道：</p>
 
 <ul>
   <li>phoenix 对用户屏蔽了 rowkey 的设计细节</li>
-  <li>USAGE 列族中存在一列为 <code class="highlighter-rouge">_0</code>，而 STATS 列族中却没有，<strong>这是为什么？</strong></li>
+  <li>USAGE 列族中存在一列为 <code>_0</code>，而 STATS 列族中却没有，<strong>这是为什么？</strong></li>
   <li>Phoenix 把 rowkey 内化为 table 的 PRIMARY KEY 处理，由 HOST、DOMAIN、FEATURE、DATE 这四列拼接在一起，组成了 rowkey</li>
 </ul>
 
@@ -419,7 +404,7 @@ Time: 0.058 sec(s)
 
 <p>创建一张hbase表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>create 't1', 'f'
+<pre><code>create 't1', 'f'
 
 put 't1', "row1", 'f:q', 1
 put 't1', "row2", 'f:q', 2
@@ -427,20 +412,18 @@ put 't1', "row3", 'f:q', 3
 put 't1', "row4", 'f:q', 4
 put 't1', "row5", 'f:q', 5
 </code></pre>
-</div>
 
 <p>在phoenix建一张同样的表：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">.</span><span class="o">/</span><span class="n">sqlline</span><span class="p">.</span><span class="n">py</span> <span class="n">localhost</span> 
+<pre><code class="language-sql">./sqlline.py localhost 
 
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nv">"t1"</span> <span class="p">(</span>
-     <span class="k">row</span> <span class="n">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-     <span class="nv">"f"</span><span class="p">.</span><span class="nv">"q"</span> <span class="n">VARCHAR</span>
-     <span class="k">CONSTRAINT</span> <span class="n">PK</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">row</span><span class="p">)</span>
-<span class="p">);</span>
+CREATE TABLE IF NOT EXISTS "t1" (
+     row VARCHAR NOT NULL,
+     "f"."q" VARCHAR
+     CONSTRAINT PK PRIMARY KEY (row)
+);
 
 </code></pre>
-</div>
 
 <p>t1、f、q 需要用双引号括起来，原因主要是大小写的问题，参考 phoenix 的 <a href="https://github.com/forcedotcom/phoenix/wiki">wiki</a>。</p>
 
@@ -452,26 +435,25 @@ put 't1', "row5", 'f:q', 5
 
 <p>接下来就可以查询了：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="nv">"t1"</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="o">|</span>    <span class="k">ROW</span>     <span class="o">|</span>     <span class="n">q</span>      <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="o">|</span> <span class="n">row1</span>       <span class="o">|</span> <span class="mi">1</span>          <span class="o">|</span>
-<span class="o">|</span> <span class="n">row2</span>       <span class="o">|</span> <span class="mi">2</span>          <span class="o">|</span>
-<span class="o">|</span> <span class="n">row3</span>       <span class="o">|</span> <span class="mi">3</span>          <span class="o">|</span>
-<span class="o">|</span> <span class="n">row4</span>       <span class="o">|</span> <span class="mi">4</span>          <span class="o">|</span>
-<span class="o">|</span> <span class="n">row5</span>       <span class="o">|</span> <span class="mi">5</span>          <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+------------+
-</span><span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">101</span> <span class="n">seconds</span><span class="p">)</span>
-<span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">phoenix</span><span class="p">:</span><span class="n">localhost</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">from</span> <span class="nv">"t1"</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+
-</span><span class="o">|</span>  <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+
-</span><span class="o">|</span> <span class="mi">5</span>          <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+
-</span><span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">068</span> <span class="n">seconds</span><span class="p">)</span>
+<pre><code class="language-sql">0: jdbc:phoenix:localhost&gt; select * from "t1";
++------------+------------+
+|    ROW     |     q      |
++------------+------------+
+| row1       | 1          |
+| row2       | 2          |
+| row3       | 3          |
+| row4       | 4          |
+| row5       | 5          |
++------------+------------+
+5 rows selected (0.101 seconds)
+0: jdbc:phoenix:localhost&gt; select count(1) from "t1";
++------------+
+|  COUNT(1)  |
++------------+
+| 5          |
++------------+
+1 row selected (0.068 seconds)
 </code></pre>
-</div>
 
 <h1 id="section-4">4. 总结</h1>
 
@@ -528,7 +510,7 @@ put 't1', "row5", 'f:q', 5
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

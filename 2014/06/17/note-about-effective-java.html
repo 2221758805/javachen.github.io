@@ -120,13 +120,12 @@
 
 <p>例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public static Boolean valueOf(boolean f){
+<pre><code>public static Boolean valueOf(boolean f){
 	return b ? Boolean.TRUE : Booleab.FALSE;
 }
 
 Map&lt;String,List&lt;String&gt;&gt; m=HashMap.newInstance();
 </code></pre>
-</div>
 
 <p>静态工厂方法坏处：</p>
 
@@ -155,12 +154,11 @@ Map&lt;String,List&lt;String&gt;&gt; m=HashMap.newInstance();
 
 <p>如果一个对象是不可变的，那么他总是可以被重用的，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//不推荐，"test"本来就是一个String实例，如果此方法在一个循环中或者被频繁的调用，将会严重影响性能</span>
-<span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"test"</span><span class="o">);</span>
-<span class="c1">//推荐方式</span>
-<span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">"test"</span><span class="o">;</span>
+<pre><code class="language-java">//不推荐，"test"本来就是一个String实例，如果此方法在一个循环中或者被频繁的调用，将会严重影响性能
+String s = new String("test");
+//推荐方式
+String s = "test";
 </code></pre>
-</div>
 
 <p>对于提供静态方法和构造函数的非可变类，推荐使用静态方法，这样可以避免重复创建对象，如：Boolean.vauleOf(String)方法优于构造函数Boolean(String)</p>
 
@@ -173,19 +171,18 @@ Map&lt;String,List&lt;String&gt;&gt; m=HashMap.newInstance();
 <p>内存泄漏问题：如果一个对象的引用被无意识的保留起来，那么垃圾回收机制是不会去处理这个对象，而且也不会去处理被这个对象引用的其它对象。<br />
 比如堆栈的弹出栈元素方法。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="n">Object</span> <span class="nf">pop</span><span class="p">(</span><span class="o">){</span>
+<pre><code class="language-java">public Object pop(){
 
-   <span class="k">if</span><span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
-       <span class="k">throw</span> <span class="k">new</span> <span class="n">EmptyStackException</span><span class="o">();</span>
-   <span class="o">}</span>
+   if(size == 0){
+       throw new EmptyStackException();
+   }
 
-	<span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">elements</span><span class="o">[--</span><span class="n">size</span><span class="o">];</span>
-	<span class="c1">//自减后把原来的引用置为null</span>
-	<span class="n">elements</span><span class="o">[</span><span class="n">size</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-	<span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-<span class="o">}</span>
+	Object result = elements[--size];
+	//自减后把原来的引用置为null
+	elements[size] = null;
+	return result;
+}
 </code></pre>
-</div>
 
 <p>内存泄露常出现在：</p>
 
@@ -324,7 +321,7 @@ Map&lt;String,List&lt;String&gt;&gt; m=HashMap.newInstance();
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

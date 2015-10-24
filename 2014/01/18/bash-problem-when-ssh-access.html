@@ -109,21 +109,18 @@
 
 <p>RHEL服务器A有个启动脚本（普通用户user01运行），里面使用ifconfig获取ip地址如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Localhost_ip=$(ifconfig |awk -F 'addr:|Bcast' '/Bcast/{print $2}')
+<pre><code>Localhost_ip=$(ifconfig |awk -F 'addr:|Bcast' '/Bcast/{print $2}')
 </code></pre>
-</div>
 
-<p>由于普通用户user01不能直接识别ifconfig命令，只能使用全路径<code class="highlighter-rouge">/sbin/ifconfig</code>，目前处理方式为修改<code class="highlighter-rouge">~/.bash_profile</code>文件添加环境变量如下：</p>
+<p>由于普通用户user01不能直接识别ifconfig命令，只能使用全路径<code>/sbin/ifconfig</code>，目前处理方式为修改<code>~/.bash_profile</code>文件添加环境变量如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>PATH=$PATH:$HOME/bin
+<pre><code>PATH=$PATH:$HOME/bin
 </code></pre>
-</div>
 
 <p>改成如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>PATH=$PATH:$HOME/bin:/sbin
+<pre><code>PATH=$PATH:$HOME/bin:/sbin
 </code></pre>
-</div>
 <!-- more -->
 
 <p>经过如上配置后服务器本机user01用户登录执行XX.sh脚本可以识别ifconfig命令。</p>
@@ -132,15 +129,14 @@
 
 <p>远程主机B通过ssh远程执行启动脚本XX.sh，报错如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bash: ifconfg: command not found
+<pre><code>bash: ifconfg: command not found
 </code></pre>
-</div>
 
 <h1 id="section-1">2. 问题分析</h1>
 
 <p>测试前准备，追加调用说明语句，如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/etc/profile
+<pre><code>/etc/profile
 [root@node3 ~]# vim /etc/profile
 echo "/etc/profile begin:"
 echo "$PATH"
@@ -153,9 +149,8 @@ echo "invoke /etc/profile"
 echo "$PATH"
 echo ""
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# vim /etc/bashrc
+<pre><code>[root@node3 ~]# vim /etc/bashrc
 ...
 # vim:ts=4:sw=4
  
@@ -163,9 +158,8 @@ echo "invoke /etc/bashrc"
 echo "$PATH"
 echo ""
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# vim /root/.bash_profile
+<pre><code>[root@node3 ~]# vim /root/.bash_profile
 # User specific environment and startup programs
 PATH=$PATH:$HOME/bin
 export PATH
@@ -174,9 +168,8 @@ echo "invoke ~/.bash_profile"
 echo "$PATH"
 echo ""
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# vim /root/.bashrc
+<pre><code>[root@node3 ~]# vim /root/.bashrc
 ...
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -187,9 +180,8 @@ echo "invoke ~/.bashrc"
 echo "$PATH"
 echo ""
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# vim /home/user01/.bash_profile
+<pre><code>[root@node3 ~]# vim /home/user01/.bash_profile
 ...
 # User specific environment and startup programs
 PATH=$PATH:$HOME/bin
@@ -199,9 +191,8 @@ echo "invoke ~/.bashrc"
 echo "$PATH"
 echo ""
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# vim /home/user01/.bashrc
+<pre><code>[root@node3 ~]# vim /home/user01/.bashrc
 ...
 # User specific aliases and functions
  
@@ -209,7 +200,6 @@ echo "invoke ~/.bashrc"
 echo "$PATH"
 echo ""
 </code></pre>
-</div>
 
 <p>分 user 和 root 用户，3 种场景进行测试，如下：</p>
 
@@ -222,18 +212,17 @@ echo ""
 <p>结论：</p>
 
 <ul>
-  <li>Login 之前，系统 PATH 为：<code class="highlighter-rouge">/usr/local/bin:/bin:/usr/bin</code></li>
-  <li>Login 方式，文件调用顺序为： <code class="highlighter-rouge">/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
-  <li>Login 之后，系统 PATH 为：<code class="highlighter-rouge">/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin</code></li>
+  <li>Login 之前，系统 PATH 为：<code>/usr/local/bin:/bin:/usr/bin</code></li>
+  <li>Login 方式，文件调用顺序为： <code>/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
+  <li>Login 之后，系统 PATH 为：<code>/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>su - user
+<pre><code>su - user
 [root@node3 ~]# hostname -i
 192.168.122.33
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# su - user01
+<pre><code>[root@node3 ~]# su - user01
 /etc/profile begin:
 /usr/local/bin:/bin:/usr/bin
 invoke /etc/profile
@@ -248,7 +237,6 @@ invoke ~/.bashrc
 invoke ~/.bash_profile
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin
 </code></pre>
-</div>
 
 <h3 id="section-3">场景2：</h3>
 
@@ -260,13 +248,12 @@ invoke ~/.bash_profile
   <li>与在本机使用 su 命令切换到普通用户的效果完全一样！</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ssh user@remote_server_ip
+<pre><code>ssh user@remote_server_ip
 [root@node1 ~]# hostname -i
 192.168.122.31
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node1 ~]# ssh user01@192.168.122.33
+<pre><code>[root@node1 ~]# ssh user01@192.168.122.33
 user01@192.168.122.33's password: 
 Last login: Tue Jul  9 16:23:33 2013 from 192.168.122.31
 /etc/profile begin:
@@ -283,7 +270,6 @@ invoke ~/.bashrc
 invoke ~/.bash_profile
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin
 </code></pre>
-</div>
 
 <h2 id="section-4">场景3：</h2>
 
@@ -293,17 +279,16 @@ invoke ~/.bash_profile
 
 <ul>
   <li>NoLogin 方式，命令获取的 PATH 为该远程机的，并未拿到目标主机的 PATH</li>
-  <li>NoLogin 方式，文件调用顺序为：<code class="highlighter-rouge">/etc/bashrc -&gt; ~/.bashrc</code></li>
-  <li>NoLogin 方式，目标主机 User 用户 PATH 为：<code class="highlighter-rouge">/usr/local/bin:/bin:/usr/bin</code></li>
+  <li>NoLogin 方式，文件调用顺序为：<code>/etc/bashrc -&gt; ~/.bashrc</code></li>
+  <li>NoLogin 方式，目标主机 User 用户 PATH 为：<code>/usr/local/bin:/bin:/usr/bin</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ssh user@remote_server_ip command
+<pre><code>ssh user@remote_server_ip command
 [root@node1 ~]# hostname -i
 192.168.122.31
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node1 ~]# echo $PATH
+<pre><code>[root@node1 ~]# echo $PATH
 /usr/local/rabbitmq/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
  
 [root@node1 ~]# ssh user01@192.168.122.33 "echo $PATH"
@@ -317,7 +302,6 @@ invoke ~/.bashrc
  
 /usr/local/rabbitmq/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 </code></pre>
-</div>
 
 <h2 id="root-">对比 root 用户</h2>
 
@@ -328,18 +312,17 @@ invoke ~/.bashrc
 <p>结论：</p>
 
 <ul>
-  <li>Login 之前，系统 PATH 为：<code class="highlighter-rouge">/usr/local/bin:/bin:/usr/bin</code></li>
-  <li>Login 方式，root 用户，文件调用顺序为：<code class="highlighter-rouge">/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
-  <li>Login 之后，系统 PATH 为：<code class="highlighter-rouge">/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</code></li>
+  <li>Login 之前，系统 PATH 为：<code>/usr/local/bin:/bin:/usr/bin</code></li>
+  <li>Login 方式，root 用户，文件调用顺序为：<code>/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
+  <li>Login 之后，系统 PATH 为：<code>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>su - root
+<pre><code>su - root
 [root@node3 ~]# hostname -i
 192.168.122.33
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node3 ~]# su - root
+<pre><code>[root@node3 ~]# su - root
 /etc/profile begin:
 /usr/local/bin:/bin:/usr/bin
 invoke /etc/profile
@@ -354,7 +337,6 @@ invoke ~/.bashrc
 invoke ~/.bash_profile
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 </code></pre>
-</div>
 
 <h3 id="section-6">场景2：</h3>
 
@@ -366,13 +348,12 @@ invoke ~/.bash_profile
   <li>与在本机使用 su 命令切换到 root 用户的效果完全一样！</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ssh root@remote_server_ip
+<pre><code>ssh root@remote_server_ip
 [root@node1 ~]# hostname -i
 192.168.122.31
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node1 ~]# ssh root@192.168.122.33
+<pre><code>[root@node1 ~]# ssh root@192.168.122.33
 root@192.168.122.33's password: 
 Last login: Tue Jul  9 15:54:53 2013 from 192.168.122.1
 /etc/profile begin:
@@ -389,7 +370,6 @@ invoke ~/.bashrc
 invoke ~/.bash_profile
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 </code></pre>
-</div>
 
 <h3 id="section-7">场景3</h3>
 
@@ -399,17 +379,16 @@ invoke ~/.bash_profile
 
 <ul>
   <li>NoLogin 方式，命令获取的 PATH 为该远程机的，并未拿到目标主机的 PATH</li>
-  <li>NoLogin 方式，文件调用顺序为：<code class="highlighter-rouge">/etc/bashrc -&gt; ~/.bashrc</code></li>
-  <li>NoLogin 方式，目标主机 root 用户 PATH 为：<code class="highlighter-rouge">/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</code></li>
+  <li>NoLogin 方式，文件调用顺序为：<code>/etc/bashrc -&gt; ~/.bashrc</code></li>
+  <li>NoLogin 方式，目标主机 root 用户 PATH 为：<code>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ssh root@remote_server_ip command
+<pre><code>ssh root@remote_server_ip command
 [root@node1 ~]# hostname -i
 192.168.122.31
 </code></pre>
-</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@node1 ~]# echo $PATH
+<pre><code>[root@node1 ~]# echo $PATH
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
  
 [root@node1 ~]# ssh root@192.168.122.33 "echo $PATH"
@@ -422,17 +401,16 @@ invoke ~/.bashrc
  
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 </code></pre>
-</div>
 
 <h3 id="etcprofile-">关于/etc/profile 文件部分代码分析</h3>
 
 <p>结论：</p>
 
 <ul>
-  <li>无论 root 还是 user ，只有调用此文件，其 PATH 中才会被追加 sbin 相关路径。而由以上测试场景可知，只有 Login 时，<code class="highlighter-rouge">/etc/profile</code> 文件才会被调用。</li>
+  <li>无论 root 还是 user ，只有调用此文件，其 PATH 中才会被追加 sbin 相关路径。而由以上测试场景可知，只有 Login 时，<code>/etc/profile</code> 文件才会被调用。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pathmunge () {
+<pre><code>pathmunge () {
     case ":${PATH}:" in
         *:"$1":*)
             ;;
@@ -469,7 +447,6 @@ else
 
 fi
 </code></pre>
-</div>
 
 <h1 id="section-8">3. 总结</h1>
 
@@ -526,7 +503,7 @@ fi
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

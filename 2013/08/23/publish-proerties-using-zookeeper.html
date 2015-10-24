@@ -159,11 +159,11 @@
 <p>在网上搜索了一下，很能找到好用的现成的代码实现。有的基于ZooKeeper来扩张jdk的hashmap来存储配置参数，如：<a href="http://melin.iteye.com/blog/899435">使用ZooKeeper实现静态数据中心化配置管理</a>，也有人直接实现了一个基于java并发框架的工具包，如：<a href="https://github.com/openUtility/menagerie">menagerie</a>。</p>
 
 <hr />
-<p><code class="highlighter-rouge">注意</code>:以下部分文字和图来自：<a href="http://www.code365.org/wp-content/uploads/2012/02/%E5%9F%BA%E4%BA%8EZooKeeper%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%96%B9%E6%A1%88%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B01.pdf">基于ZooKeeper的配置信息存储方案的设计与实现1.pdf</a></p>
+<p><code>注意</code>:以下部分文字和图来自：<a href="http://www.code365.org/wp-content/uploads/2012/02/%E5%9F%BA%E4%BA%8EZooKeeper%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%96%B9%E6%A1%88%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B01.pdf">基于ZooKeeper的配置信息存储方案的设计与实现1.pdf</a></p>
 
 <p>基于ZooKeeper的特性,借助ZooKeeper可以实现一个可靠的、简单的、修改配置能够实时生效的配置信息存储方案,整体的设计方案如图：</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2013/zookeeper-01.jpg" alt="基于zookeeper的方案" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/zookeeper-01.jpg" alt="基于zookeeper的方案" /></p>
 
 <p>整个配置信息存储方案由三部分组成:ZooKeeper服务器集群、配置管理程序、分布式应用程序。</p>
 
@@ -171,7 +171,7 @@
 
 <p>当配置信息发生变化时，分布式应用会更新程序中使用配置信息。</p>
 
-<p><img src="http://javachen-rs.qiniudn.com/2013/zookeeper-02.jpg" alt="修改配置的时许图" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/zookeeper-02.jpg" alt="修改配置的时许图" /></p>
 
 <h1 id="section-3">源代码</h1>
 
@@ -248,7 +248,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -121,12 +121,11 @@
 
 <p>继承关系：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Throwable
+<pre><code>Throwable
 |--Error 
 |--Exception 
 |--RuntimeException
 </code></pre>
-</div>
 
 <p>从 RuntimeException 衍生出来的异常包括下面的问题：</p>
 
@@ -153,18 +152,18 @@
 
 <ul>
   <li>
-    <p><code class="highlighter-rouge">抛出异常</code>：当一个方法出现错误引发异常时，方法创建异常对象并交付运行时系统，异常对象中包含了异常类型和异常出现时的程序状态等异常信息。运行时系统负责寻找处置异常的代码并执行。</p>
+    <p><code>抛出异常</code>：当一个方法出现错误引发异常时，方法创建异常对象并交付运行时系统，异常对象中包含了异常类型和异常出现时的程序状态等异常信息。运行时系统负责寻找处置异常的代码并执行。</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">捕获异常</code>：在方法抛出异常之后，运行时系统将转为寻找合适的异常处理器（exception handler）。潜在的异常处理器是异常发生时依次存留在调用栈中的方法的集合。当异常处理器所能处理的异常类型与方法抛出的异常类型相符时，即为合适的异常处理器。运行时系统从发生异常的方法开始，依次回查调用栈中的方法，直至找到含有合适异常处理器的方法并执行。当运行时系统遍历调用栈而未找到合适的异常处理器，则运行时系统终止。同时，意味着Java程序的终止。</p>
+    <p><code>捕获异常</code>：在方法抛出异常之后，运行时系统将转为寻找合适的异常处理器（exception handler）。潜在的异常处理器是异常发生时依次存留在调用栈中的方法的集合。当异常处理器所能处理的异常类型与方法抛出的异常类型相符时，即为合适的异常处理器。运行时系统从发生异常的方法开始，依次回查调用栈中的方法，直至找到含有合适异常处理器的方法并执行。当运行时系统遍历调用栈而未找到合适的异常处理器，则运行时系统终止。同时，意味着Java程序的终止。</p>
   </li>
 </ul>
 
 <p>任何 Java 代码都可以抛出异常，如：自己编写的代码、来自 Java 开发环境包中代码，或者 Java 运行时系统。无论是谁，都可以通过 Java 的 throw 语句抛出异常。</p>
 
-<p>从方法中抛出的任何异常都必须使用 <code class="highlighter-rouge">throws</code> 子句。</p>
+<p>从方法中抛出的任何异常都必须使用 <code>throws</code> 子句。</p>
 
-<p>捕捉异常通过 <code class="highlighter-rouge">try-catch</code> 语句或者 <code class="highlighter-rouge">try-catch-finally</code> 语句实现。</p>
+<p>捕捉异常通过 <code>try-catch</code> 语句或者 <code>try-catch-finally</code> 语句实现。</p>
 
 <h1 id="section-3">原则</h1>
 
@@ -197,7 +196,7 @@
 
 <p>如果 try 语句块中存在 return 语句，那么首先会执行 finally 语句块中的代码，然后才返回。</p>
 
-<p>如果 try 语句块中存在 <code class="highlighter-rouge">System.exit(0)</code> 语句，那么久不会执行 finally 语句块的代码了，因为 <code class="highlighter-rouge">System.exit(0)</code>会终止当前运行的 JVM。程序在 JVM 终止前结束执行。</p>
+<p>如果 try 语句块中存在 <code>System.exit(0)</code> 语句，那么久不会执行 finally 语句块的代码了，因为 <code>System.exit(0)</code>会终止当前运行的 JVM。程序在 JVM 终止前结束执行。</p>
 
 <h1 id="section-5">常见面试题目</h1>
 
@@ -219,7 +218,7 @@
 
 <p>运行时异常（runtimeException）我们一般不处理，当出现这类异常的时候程序会由虚拟机接管。比如，我们从来没有去处理过 NullPointerException，而且这个异常还是最 常见的异常之一。</p>
 
-<p>出现运行时异常的时候，程序会将异常一直向上抛，一直抛到遇到处理代码，如果没有 catch 块进行处理，到了最上层，如果是多线程就有 Thread.run()抛出，如果不是多线程 那么就由 <code class="highlighter-rouge">main.run()</code> 抛出。抛出之后，如果是线程，那么该线程也就终止了，如果是主程序，那么该程序也就终止了。</p>
+<p>出现运行时异常的时候，程序会将异常一直向上抛，一直抛到遇到处理代码，如果没有 catch 块进行处理，到了最上层，如果是多线程就有 Thread.run()抛出，如果不是多线程 那么就由 <code>main.run()</code> 抛出。抛出之后，如果是线程，那么该线程也就终止了，如果是主程序，那么该程序也就终止了。</p>
 
 <p>其实运行时异常的也是继承自 Exception，也可以用 catch 块对其处理，只是我们一般不处理罢了，也就是说，如果不对运行时异常进行 catch 处理，那么结果不是线程退出就是 主程序终止。</p>
 
@@ -232,19 +231,19 @@
 <p>Jav a通过面向对象的方式对异常进行处理，Java 把异常按照不同的类型进行分类，并提供了良好的接口。在 Java 中，每个异常都是一个对象，它都是 Throwable 或其子类的实例。当一个方法出现异常后就会抛出一个异常对象，该对象中包含有异常信息，调用这个对象的方法可以捕获到这个异常并对异常进行处理。Java 的异常处理是通过5个 关键词来实现的：try、catch、throw、throws、finally。</p>
 
 <ul>
-  <li><code class="highlighter-rouge">try</code>：用来指定一块预防所有异常的程序</li>
-  <li><code class="highlighter-rouge">catch</code>：紧跟在try后面，用来捕获异常</li>
-  <li><code class="highlighter-rouge">throw</code>：用来明确的抛出一个异常</li>
-  <li><code class="highlighter-rouge">throws</code>：用来标明一个成员函数可能抛出的各种异常</li>
+  <li><code>try</code>：用来指定一块预防所有异常的程序</li>
+  <li><code>catch</code>：紧跟在try后面，用来捕获异常</li>
+  <li><code>throw</code>：用来明确的抛出一个异常</li>
+  <li><code>throws</code>：用来标明一个成员函数可能抛出的各种异常</li>
   <li>
-    <p><code class="highlighter-rouge">finally</code>：确保一段代码无论发生什么异常都会被执行的一段代码。</p>
+    <p><code>finally</code>：确保一段代码无论发生什么异常都会被执行的一段代码。</p>
   </li>
   <li>4、你平时在项目中是怎样对异常进行处理的。</li>
 </ul>
 
-<p>1）尽量避免出现 runtimeException。例如对于可能出现空指针的代码，带使用对象之前一定要判断一下该对象是否为空，必要的时候对 runtimeException也进行 <code class="highlighter-rouge">try catch</code> 处理。</p>
+<p>1）尽量避免出现 runtimeException。例如对于可能出现空指针的代码，带使用对象之前一定要判断一下该对象是否为空，必要的时候对 runtimeException也进行 <code>try catch</code> 处理。</p>
 
-<p>2）进行 <code class="highlighter-rouge">try catch</code> 处理的时候要在 catch 代码块中对异常信息进行记录，通过调用异常类的相关方法获取到异常的相关信息。</p>
+<p>2）进行 <code>try catch</code> 处理的时候要在 catch 代码块中对异常信息进行记录，通过调用异常类的相关方法获取到异常的相关信息。</p>
 
 <ul>
   <li>5、final、finally、finalize的区别</li>
@@ -252,7 +251,7 @@
 
 <p>（1）、final 用于声明变量、方法和类的，分别表示变量值不可变，方法不可覆盖，类不可以继承</p>
 
-<p>（2）、finally 是异常处理中的一个关键字，表示 <code class="highlighter-rouge">finally{}</code> 里面的代码一定要执行</p>
+<p>（2）、finally 是异常处理中的一个关键字，表示 <code>finally{}</code> 里面的代码一定要执行</p>
 
 <p>（3）、finalize 是 Object 类的一个方法，在垃圾回收的时候会调用被回收对象的此方法。</p>
 
@@ -312,7 +311,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -122,13 +122,13 @@
 <p>在我们深入了解 Spring 框架中 AOP 的实现方式之前，我们需要了解 AOP 中的一些核心概念。</p>
 
 <ul>
-  <li><code class="highlighter-rouge">Aspect</code>：切面，实现企业应用中多个类的共同关注点，例如事务管理。切面可以是使用 Spring XML 配置的一个普通类或者是我们使用 Spring AspectJ 定义的一个标有 @Aspect 注解的类。</li>
-  <li><code class="highlighter-rouge">Join Point</code>：连接点，一个连接点是应用程序中的一个特定的点，例如方法执行、异常处理、改变对象变量的值等等。在 Spring AOP 中，一个连接点永远是指一个方法的执行。</li>
-  <li><code class="highlighter-rouge">Advice</code>：通知，通知是指在一个特别的连接点上发生的动作。在编程中，他们是当一个连接点匹配到一个切入点时执行的方法。你可以把通知想成 Strust2 中的拦截器或者是 Servlet 中的过滤器。</li>
-  <li><code class="highlighter-rouge">Pointcut</code>：切入点，切入点是一些表达式，当匹配到连接点时决定通知是否需要执行。切入点使用不同种类型的表达式来匹配连接点，Spring 框架使用 AspectJ 表达式语法。</li>
-  <li><code class="highlighter-rouge">Target Object</code>：通知执行的目标对象。Spring AOP 是使用运行时的代理来实现的，所以该对象永远是一个代理对象。这意味着一个子类在运行期间会被创建，该类的目标方法会被覆盖并且通知会基于他们的配置被引入。</li>
-  <li><code class="highlighter-rouge">AOP proxy</code>：Spring AOP 实现使用 JDK 的动态代理来创建包含有目标类和通知调用的代理类，这些类被称为 AOP 代理类。我们也可以使用 CGLIB 代理来作为 Spring AOP 项目的依赖实现。</li>
-  <li><code class="highlighter-rouge">Weaving</code>：织入，将切面和其他用于创建被通知的代理对象的类联系起来的过程。这可以是在运行时完成，也可以是在代码加载过程中或者运行时。Spring AOP 是在运行时完成织入的过程。</li>
+  <li><code>Aspect</code>：切面，实现企业应用中多个类的共同关注点，例如事务管理。切面可以是使用 Spring XML 配置的一个普通类或者是我们使用 Spring AspectJ 定义的一个标有 @Aspect 注解的类。</li>
+  <li><code>Join Point</code>：连接点，一个连接点是应用程序中的一个特定的点，例如方法执行、异常处理、改变对象变量的值等等。在 Spring AOP 中，一个连接点永远是指一个方法的执行。</li>
+  <li><code>Advice</code>：通知，通知是指在一个特别的连接点上发生的动作。在编程中，他们是当一个连接点匹配到一个切入点时执行的方法。你可以把通知想成 Strust2 中的拦截器或者是 Servlet 中的过滤器。</li>
+  <li><code>Pointcut</code>：切入点，切入点是一些表达式，当匹配到连接点时决定通知是否需要执行。切入点使用不同种类型的表达式来匹配连接点，Spring 框架使用 AspectJ 表达式语法。</li>
+  <li><code>Target Object</code>：通知执行的目标对象。Spring AOP 是使用运行时的代理来实现的，所以该对象永远是一个代理对象。这意味着一个子类在运行期间会被创建，该类的目标方法会被覆盖并且通知会基于他们的配置被引入。</li>
+  <li><code>AOP proxy</code>：Spring AOP 实现使用 JDK 的动态代理来创建包含有目标类和通知调用的代理类，这些类被称为 AOP 代理类。我们也可以使用 CGLIB 代理来作为 Spring AOP 项目的依赖实现。</li>
+  <li><code>Weaving</code>：织入，将切面和其他用于创建被通知的代理对象的类联系起来的过程。这可以是在运行时完成，也可以是在代码加载过程中或者运行时。Spring AOP 是在运行时完成织入的过程。</li>
 </ul>
 
 <h1 id="aop--2">AOP 通知类型</h1>
@@ -136,11 +136,11 @@
 <p>基于通知的执行策略，这里有以下几种通知类型：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">Before Advice</code>：在连接点方法执行之前运行。我们可以使用 <code class="highlighter-rouge">@Before</code> 注解来标记一个通知类型为 Before Advice。</li>
-  <li><code class="highlighter-rouge">After (finally) Advice</code>：在连接点方法执行完成之后运行。我们可以使用 <code class="highlighter-rouge">@After</code> 来创建一个 After (finally) Advice。</li>
-  <li><code class="highlighter-rouge">After Returning Advice</code>：在方法返回之后运行，通过 <code class="highlighter-rouge">@AfterReturning</code> 注解创建。</li>
-  <li><code class="highlighter-rouge">After Throwing Advice</code>：在方法抛出异常之后运行，通过 <code class="highlighter-rouge">@AfterThrowing</code> 注解创建。</li>
-  <li><code class="highlighter-rouge">Around Advice</code>：这是最重要和最强的通知。这个通知在连接点方法前后运行并且我们可以决定该通知是否运行，通过 <code class="highlighter-rouge">@Around</code> 注解创建。</li>
+  <li><code>Before Advice</code>：在连接点方法执行之前运行。我们可以使用 <code>@Before</code> 注解来标记一个通知类型为 Before Advice。</li>
+  <li><code>After (finally) Advice</code>：在连接点方法执行完成之后运行。我们可以使用 <code>@After</code> 来创建一个 After (finally) Advice。</li>
+  <li><code>After Returning Advice</code>：在方法返回之后运行，通过 <code>@AfterReturning</code> 注解创建。</li>
+  <li><code>After Throwing Advice</code>：在方法抛出异常之后运行，通过 <code>@AfterThrowing</code> 注解创建。</li>
+  <li><code>Around Advice</code>：这是最重要和最强的通知。这个通知在连接点方法前后运行并且我们可以决定该通知是否运行，通过 <code>@Around</code> 注解创建。</li>
 </ul>
 
 <p>上面提到的知识点可能会使我们困惑，但是当我们看到 Spring AOP 的实现之后，就会豁然开朗了。下面我们来创建一个 Spring AOP 的项目。Spring 支持使用 AspectJ 的注解来创建切面，为了简单，我们将直接使用这些注解。上面提到的所有 AOP 的注解都定义在 org.aspectj.lang.annotation 包中。</p>
@@ -155,78 +155,77 @@
 
 <p>Spring 框架默认提供了对 AOP 的支持，既然我们需要使用 AspectJ 的注解，则需要在 pom.xml 中引入相关的依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.springframework.samples<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>SpringAOPExample<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<pre><code class="language-xml">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;org.springframework.samples&lt;/groupId&gt;
+    &lt;artifactId&gt;SpringAOPExample&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
  
-    <span class="nt">&lt;properties&gt;</span>
+    &lt;properties&gt;
  
-        <span class="c">&lt;!-- Generic properties --&gt;</span>
-        <span class="nt">&lt;java.version&gt;</span>1.6<span class="nt">&lt;/java.version&gt;</span>
-        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
-        <span class="nt">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.reporting.outputEncoding&gt;</span>
+        &lt;!-- Generic properties --&gt;
+        &lt;java.version&gt;1.6&lt;/java.version&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
  
-        <span class="c">&lt;!-- Spring --&gt;</span>
-        <span class="nt">&lt;spring-framework.version&gt;</span>4.0.2.RELEASE<span class="nt">&lt;/spring-framework.version&gt;</span>
+        &lt;!-- Spring --&gt;
+        &lt;spring-framework.version&gt;4.0.2.RELEASE&lt;/spring-framework.version&gt;
  
-        <span class="c">&lt;!-- Logging --&gt;</span>
-        <span class="nt">&lt;logback.version&gt;</span>1.0.13<span class="nt">&lt;/logback.version&gt;</span>
-        <span class="nt">&lt;slf4j.version&gt;</span>1.7.5<span class="nt">&lt;/slf4j.version&gt;</span>
+        &lt;!-- Logging --&gt;
+        &lt;logback.version&gt;1.0.13&lt;/logback.version&gt;
+        &lt;slf4j.version&gt;1.7.5&lt;/slf4j.version&gt;
  
-        <span class="c">&lt;!-- Test --&gt;</span>
-        <span class="nt">&lt;junit.version&gt;</span>4.11<span class="nt">&lt;/junit.version&gt;</span>
+        &lt;!-- Test --&gt;
+        &lt;junit.version&gt;4.11&lt;/junit.version&gt;
  
-        <span class="c">&lt;!-- AspectJ --&gt;</span>
-        <span class="nt">&lt;aspectj.version&gt;</span>1.7.4<span class="nt">&lt;/aspectj.version&gt;</span>
+        &lt;!-- AspectJ --&gt;
+        &lt;aspectj.version&gt;1.7.4&lt;/aspectj.version&gt;
  
-    <span class="nt">&lt;/properties&gt;</span>
+    &lt;/properties&gt;
  
-    <span class="nt">&lt;dependencies&gt;</span>
-        <span class="c">&lt;!-- Spring and Transactions --&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${spring-framework.version}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>spring-tx<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${spring-framework.version}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
+    &lt;dependencies&gt;
+        &lt;!-- Spring and Transactions --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;${spring-framework.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+            &lt;version&gt;${spring-framework.version}&lt;/version&gt;
+        &lt;/dependency&gt;
  
-        <span class="c">&lt;!-- Logging with SLF4J &amp; LogBack --&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.slf4j<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>slf4j-api<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${slf4j.version}<span class="nt">&lt;/version&gt;</span>
-            <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>logback-classic<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${logback.version}<span class="nt">&lt;/version&gt;</span>
-            <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
+        &lt;!-- Logging with SLF4J &amp; LogBack --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;version&gt;${slf4j.version}&lt;/version&gt;
+            &lt;scope&gt;compile&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+            &lt;version&gt;${logback.version}&lt;/version&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+        &lt;/dependency&gt;
  
-        <span class="c">&lt;!-- AspectJ dependencies --&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>aspectjrt<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${aspectj.version}<span class="nt">&lt;/version&gt;</span>
-            <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>aspectjtools<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${aspectj.version}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-    <span class="nt">&lt;/dependencies&gt;</span>
-<span class="nt">&lt;/project&gt;</span>
+        &lt;!-- AspectJ dependencies --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
+            &lt;artifactId&gt;aspectjrt&lt;/artifactId&gt;
+            &lt;version&gt;${aspectj.version}&lt;/version&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
+            &lt;artifactId&gt;aspectjtools&lt;/artifactId&gt;
+            &lt;version&gt;${aspectj.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/project&gt;
 </code></pre>
-</div>
 
 <p>需要注意的是，我在项目中添加了对 aspectjrt 和 aspectjtools （版本为 1.7.4）的依赖。并且我也把 Spring 的版本更新到了 4.0.2.RELEASE。</p>
 
@@ -236,32 +235,31 @@
 
 <p>Employee.java</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">model</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.model;
  
-<span class="kn">import</span> <span class="nn">com.journaldev.spring.aspect.Loggable</span><span class="o">;</span>
+import com.journaldev.spring.aspect.Loggable;
  
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span> <span class="o">{</span>
+public class Employee {
  
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    private String name;
      
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
+    public String getName() {
+        return name;
+    }
  
-    <span class="nd">@Loggable</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">nm</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">=</span><span class="n">nm</span><span class="o">;</span>
-    <span class="o">}</span>
+    @Loggable
+    public void setName(String nm) {
+        this.name=nm;
+    }
      
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">throwException</span><span class="o">(){</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">"Dummy Exception"</span><span class="o">);</span>
-    <span class="o">}</span>
+    public void throwException(){
+        throw new RuntimeException("Dummy Exception");
+    }
      
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
-<p>你有注意到 <code class="highlighter-rouge">setName()</code> 方法上定义了一个 <code class="highlighter-rouge">Loggable</code> 注解吗？它是一个我们项目中创建的自定义注解。我们将在后面介绍它的用法。</p>
+<p>你有注意到 <code>setName()</code> 方法上定义了一个 <code>Loggable</code> 注解吗？它是一个我们项目中创建的自定义注解。我们将在后面介绍它的用法。</p>
 
 <h1 id="section-1">服务类</h1>
 
@@ -269,24 +267,23 @@
 
 <p>EmployeeService.java</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">service</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.service;
  
-<span class="kn">import</span> <span class="nn">com.journaldev.spring.model.Employee</span><span class="o">;</span>
+import com.journaldev.spring.model.Employee;
  
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeService</span> <span class="o">{</span>
+public class EmployeeService {
  
-    <span class="kd">private</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">;</span>
+    private Employee employee;
      
-    <span class="kd">public</span> <span class="n">Employee</span> <span class="n">getEmployee</span><span class="o">(){</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">employee</span><span class="o">;</span>
-    <span class="o">}</span>
+    public Employee getEmployee(){
+        return this.employee;
+    }
      
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setEmployee</span><span class="o">(</span><span class="n">Employee</span> <span class="n">e</span><span class="o">){</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">employee</span><span class="o">=</span><span class="n">e</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    public void setEmployee(Employee e){
+        this.employee=e;
+    }
+}
 </code></pre>
-</div>
 
 <p>我本来可以使用 Spring 注解来将其配置为一个 Spring 的组件，但是在该项目中我们将会使用 XML 来配置。EmployeeService 是一个非常标准的类，并提供了一个访问 Employee 的点。</p>
 
@@ -294,43 +291,42 @@
 
 <p>我项目中的配置 spring.xml 如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-    <span class="na">xmlns:aop=</span><span class="s">"http://www.springframework.org/schema/aop"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span> <span class="err">http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</span>
-        <span class="err">http://www.springframework.org/schema/aop</span> <span class="err">http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"</span><span class="nt">&gt;</span>
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"&gt;
  
-<span class="c">&lt;!-- Enable AspectJ style of Spring AOP --&gt;</span>
-<span class="nt">&lt;aop:aspectj-autoproxy</span> <span class="nt">/&gt;</span>
+&lt;!-- Enable AspectJ style of Spring AOP --&gt;
+&lt;aop:aspectj-autoproxy /&gt;
  
-<span class="c">&lt;!-- Configure Employee Bean and initialize it --&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employee"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.model.Employee"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"Dummy Name"</span><span class="nt">&gt;&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span>
+&lt;!-- Configure Employee Bean and initialize it --&gt;
+&lt;bean name="employee" class="com.journaldev.spring.model.Employee"&gt;
+    &lt;property name="name" value="Dummy Name"&gt;&lt;/property&gt;
+&lt;/bean&gt;
  
-<span class="c">&lt;!-- Configure EmployeeService bean --&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeService"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.service.EmployeeService"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"employee"</span> <span class="na">ref=</span><span class="s">"employee"</span><span class="nt">&gt;&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span>
+&lt;!-- Configure EmployeeService bean --&gt;
+&lt;bean name="employeeService" class="com.journaldev.spring.service.EmployeeService"&gt;
+    &lt;property name="employee" ref="employee"&gt;&lt;/property&gt;
+&lt;/bean&gt;
  
-<span class="c">&lt;!-- Configure Aspect Beans, without this Aspects advices wont execute --&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeAspect"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeAspect"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeAspectPointcut"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeAspectPointcut"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeAspectJoinPoint"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeAspectJoinPoint"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeAfterAspect"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeAfterAspect"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeAroundAspect"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeAroundAspect"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeAnnotationAspect"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeAnnotationAspect"</span> <span class="nt">/&gt;</span>
+&lt;!-- Configure Aspect Beans, without this Aspects advices wont execute --&gt;
+&lt;bean name="employeeAspect" class="com.journaldev.spring.aspect.EmployeeAspect" /&gt;
+&lt;bean name="employeeAspectPointcut" class="com.journaldev.spring.aspect.EmployeeAspectPointcut" /&gt;
+&lt;bean name="employeeAspectJoinPoint" class="com.journaldev.spring.aspect.EmployeeAspectJoinPoint" /&gt;
+&lt;bean name="employeeAfterAspect" class="com.journaldev.spring.aspect.EmployeeAfterAspect" /&gt;
+&lt;bean name="employeeAroundAspect" class="com.journaldev.spring.aspect.EmployeeAroundAspect" /&gt;
+&lt;bean name="employeeAnnotationAspect" class="com.journaldev.spring.aspect.EmployeeAnnotationAspect" /&gt;
  
-<span class="nt">&lt;/beans&gt;</span>
+&lt;/beans&gt;
 </code></pre>
-</div>
 
 <p>在 Spring beans 中使用 AOP，我们需要添加：</p>
 
 <ul>
-  <li>申明 AOP 命名空间，如：<code class="highlighter-rouge">xmlns:aop="http://www.springframework.org/schema/aop"</code>。</li>
-  <li>添加 <code class="highlighter-rouge">aop:aspectj-autoproxy</code> 节点开启 Spring AspectJ 在运行时自动代理的支持。</li>
+  <li>申明 AOP 命名空间，如：<code>xmlns:aop="http://www.springframework.org/schema/aop"</code>。</li>
+  <li>添加 <code>aop:aspectj-autoproxy</code> 节点开启 Spring AspectJ 在运行时自动代理的支持。</li>
   <li>配置 Aspect 类。</li>
 </ul>
 
@@ -338,76 +334,74 @@
 
 <p>EmployeeAspect.java：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
  
-<span class="nd">@Aspect</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeAspect</span> <span class="o">{</span>
+@Aspect
+public class EmployeeAspect {
  
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"execution(public String getName())"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">getNameAdvice</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Executing Advice on getName()"</span><span class="o">);</span>
-    <span class="o">}</span>
+    @Before("execution(public String getName())")
+    public void getNameAdvice(){
+        System.out.println("Executing Advice on getName()");
+    }
      
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"execution(* com.journaldev.spring.service.*.get*())"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">getAllAdvice</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Service method getter called"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    @Before("execution(* com.journaldev.spring.service.*.get*())")
+    public void getAllAdvice(){
+        System.out.println("Service method getter called");
+    }
+}
 </code></pre>
-</div>
 
 <p>上面例子中重要的地方说明如下：</p>
 
 <ul>
-  <li>Aspect 类需要添加 <code class="highlighter-rouge">@Aspect</code> 注解。</li>
-  <li><code class="highlighter-rouge">@Before </code>注解用于创建 Before advice。</li>
-  <li><code class="highlighter-rouge">@Before</code> 注解中的字符串参数是 Pointcut 表达式。</li>
-  <li>getNameAdvice() 通知将会在任何带有 <code class="highlighter-rouge">public String getName()</code>` 方法签名的 Spring Bean 方法执行时执行。这点是非常重要的，如果我们使用 new 操作符来创建一个 Employee bean，该通知并不会执行，其只会在 ApplicationContext 获取该 bean 时执行。</li>
+  <li>Aspect 类需要添加 <code>@Aspect</code> 注解。</li>
+  <li><code>@Before </code>注解用于创建 Before advice。</li>
+  <li><code>@Before</code> 注解中的字符串参数是 Pointcut 表达式。</li>
+  <li>getNameAdvice() 通知将会在任何带有 <code>public String getName()</code>` 方法签名的 Spring Bean 方法执行时执行。这点是非常重要的，如果我们使用 new 操作符来创建一个 Employee bean，该通知并不会执行，其只会在 ApplicationContext 获取该 bean 时执行。</li>
 </ul>
 
 <h1 id="section-2">切点方法和重用</h1>
 
-<p>有时候，我们需要在多个地方上使用相同的切点表达式，我们可以使用一个空方法的 <code class="highlighter-rouge">@Pointcut</code> 注解，然后在通知中将它作为表达式来使用。</p>
+<p>有时候，我们需要在多个地方上使用相同的切点表达式，我们可以使用一个空方法的 <code>@Pointcut</code> 注解，然后在通知中将它作为表达式来使用。</p>
 
 <p>EmployeeAspectPointcut.java</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Pointcut</span><span class="o">;</span>
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
  
-<span class="nd">@Aspect</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeAspectPointcut</span> <span class="o">{</span>
+@Aspect
+public class EmployeeAspectPointcut {
  
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"getNamePointcut()"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">loggingAdvice</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Executing loggingAdvice on getName()"</span><span class="o">);</span>
-    <span class="o">}</span>
+    @Before("getNamePointcut()")
+    public void loggingAdvice(){
+        System.out.println("Executing loggingAdvice on getName()");
+    }
      
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"getNamePointcut()"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">secondAdvice</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Executing secondAdvice on getName()"</span><span class="o">);</span>
-    <span class="o">}</span>
+    @Before("getNamePointcut()")
+    public void secondAdvice(){
+        System.out.println("Executing secondAdvice on getName()");
+    }
      
-    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"execution(public String getName())"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">getNamePointcut</span><span class="o">(){}</span>
+    @Pointcut("execution(public String getName())")
+    public void getNamePointcut(){}
      
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"allMethodsPointcut()"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">allServiceMethodsAdvice</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Before executing service method"</span><span class="o">);</span>
-    <span class="o">}</span>
+    @Before("allMethodsPointcut()")
+    public void allServiceMethodsAdvice(){
+        System.out.println("Before executing service method");
+    }
      
-    <span class="c1">//Pointcut to execute on all the methods of classes in a package</span>
-    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"within(com.journaldev.spring.service.*)"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">allMethodsPointcut</span><span class="o">(){}</span>
+    //Pointcut to execute on all the methods of classes in a package
+    @Pointcut("within(com.journaldev.spring.service.*)")
+    public void allMethodsPointcut(){}
      
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>上面的例子非常清晰，相对于表达式，我们在使用方法名称作为注解的参数。</p>
 
@@ -415,74 +409,72 @@
 
 <p>我们可以使用 JoinPoint 作为通知方法的参数并且使用他获取方法签名或者目标对象。</p>
 
-<p>我们可以在连接点中使用 <code class="highlighter-rouge">args()</code> 表达式来匹配任何方法的任何参数。如果我们使用它，则我们需要在通知方法中使用同参数相同的名称。我们也可以在通知参数中使用泛型。</p>
+<p>我们可以在连接点中使用 <code>args()</code> 表达式来匹配任何方法的任何参数。如果我们使用它，则我们需要在通知方法中使用同参数相同的名称。我们也可以在通知参数中使用泛型。</p>
 
 <p>EmployeeAspectJoinPoint.java</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+import java.util.Arrays;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.JoinPoint</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
  
-<span class="nd">@Aspect</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeAspectJoinPoint</span> <span class="o">{</span>
+@Aspect
+public class EmployeeAspectJoinPoint {
  
      
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"execution(public void com.journaldev.spring.model..set*(*))"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">loggingAdvice</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Before running loggingAdvice on method="</span><span class="o">+</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    @Before("execution(public void com.journaldev.spring.model..set*(*))")
+    public void loggingAdvice(JoinPoint joinPoint){
+        System.out.println("Before running loggingAdvice on method="+joinPoint.toString());
          
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Agruments Passed="</span> <span class="o">+</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">getArgs</span><span class="o">()));</span>
+        System.out.println("Agruments Passed=" + Arrays.toString(joinPoint.getArgs()));
  
-    <span class="o">}</span>
+    }
      
-    <span class="c1">//Advice arguments, will be applied to bean methods with single String argument</span>
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"args(name)"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">logStringArguments</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"String argument passed="</span><span class="o">+</span><span class="n">name</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    //Advice arguments, will be applied to bean methods with single String argument
+    @Before("args(name)")
+    public void logStringArguments(String name){
+        System.out.println("String argument passed="+name);
+    }
+}
 </code></pre>
-</div>
 
 <h1 id="after-advice-">After Advice 例子</h1>
 
 <p>EmployeeAfterAspect.java 如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.JoinPoint</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.After</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.AfterReturning</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.AfterThrowing</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
  
-<span class="nd">@Aspect</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeAfterAspect</span> <span class="o">{</span>
+@Aspect
+public class EmployeeAfterAspect {
  
-    <span class="nd">@After</span><span class="o">(</span><span class="s">"args(name)"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">logStringArguments</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Running After Advice. String argument passed="</span><span class="o">+</span><span class="n">name</span><span class="o">);</span>
-    <span class="o">}</span>
+    @After("args(name)")
+    public void logStringArguments(String name){
+        System.out.println("Running After Advice. String argument passed="+name);
+    }
      
-    <span class="nd">@AfterThrowing</span><span class="o">(</span><span class="s">"within(com.journaldev.spring.model.Employee)"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">logExceptions</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Exception thrown in Employee Method="</span><span class="o">+</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
+    @AfterThrowing("within(com.journaldev.spring.model.Employee)")
+    public void logExceptions(JoinPoint joinPoint){
+        System.out.println("Exception thrown in Employee Method="+joinPoint.toString());
+    }
      
-    <span class="nd">@AfterReturning</span><span class="o">(</span><span class="n">pointcut</span><span class="o">=</span><span class="s">"execution(* getName())"</span><span class="o">,</span> <span class="n">returning</span><span class="o">=</span><span class="s">"returnString"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">getNameReturningAdvice</span><span class="o">(</span><span class="n">String</span> <span class="n">returnString</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"getNameReturningAdvice executed. Returned String="</span><span class="o">+</span><span class="n">returnString</span><span class="o">);</span>
-    <span class="o">}</span>
+    @AfterReturning(pointcut="execution(* getName())", returning="returnString")
+    public void getNameReturningAdvice(String returnString){
+        System.out.println("getNameReturningAdvice executed. Returned String="+returnString);
+    }
      
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
-<p>我们可以在切点表达式中使用 <code class="highlighter-rouge">within</code> 来申明该通知会在一个类的所有方法上执行。</p>
+<p>我们可以在切点表达式中使用 <code>within</code> 来申明该通知会在一个类的所有方法上执行。</p>
 
 <h1 id="around-aspect-">Around Aspect 例子</h1>
 
@@ -490,62 +482,59 @@
 
 <p>EmployeeAroundAspect.java</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Around</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
  
-<span class="nd">@Aspect</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeAroundAspect</span> <span class="o">{</span>
+@Aspect
+public class EmployeeAroundAspect {
  
-    <span class="nd">@Around</span><span class="o">(</span><span class="s">"execution(* com.journaldev.spring.model.Employee.getName())"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">employeeAroundAdvice</span><span class="o">(</span><span class="n">ProceedingJoinPoint</span> <span class="n">proceedingJoinPoint</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Before invoking getName() method"</span><span class="o">);</span>
-        <span class="n">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">proceedingJoinPoint</span><span class="o">.</span><span class="na">proceed</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"After invoking getName() method. Return value="</span><span class="o">+</span><span class="n">value</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    @Around("execution(* com.journaldev.spring.model.Employee.getName())")
+    public Object employeeAroundAdvice(ProceedingJoinPoint proceedingJoinPoint){
+        System.out.println("Before invoking getName() method");
+        Object value = null;
+        try {
+            value = proceedingJoinPoint.proceed();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        System.out.println("After invoking getName() method. Return value="+value);
+        return value;
+    }
+}
 </code></pre>
-</div>
 
 <h1 id="section-4">自定义的注解切点</h1>
 
-<p>前面提到了 <code class="highlighter-rouge">@Loggable</code>  注解，其定义如下：</p>
+<p>前面提到了 <code>@Loggable</code>  注解，其定义如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-  <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">Loggable</span> <span class="o">{</span>
+  public @interface Loggable {
  
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>我们可以创建一个切面来使用该切点，EmployeeAnnotationAspect.java 如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
  
-<span class="nd">@Aspect</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeAnnotationAspect</span> <span class="o">{</span>
+@Aspect
+public class EmployeeAnnotationAspect {
  
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"@annotation(com.journaldev.spring.aspect.Loggable)"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">myAdvice</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Executing myAdvice!!"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    @Before("@annotation(com.journaldev.spring.aspect.Loggable)")
+    public void myAdvice(){
+        System.out.println("Executing myAdvice!!");
+    }
+}
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">myAdvice()</code> 方法仅仅会在 <code class="highlighter-rouge">setName()</code> 方法执行前执行。</p>
+<p><code>myAdvice()</code> 方法仅仅会在 <code>setName()</code> 方法执行前执行。</p>
 
 <h1 id="spring-aop-xml-configuration">Spring AOP XML Configuration</h1>
 
@@ -553,70 +542,67 @@
 
 <p>EmployeeXMLConfigAspect.java</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">aspect</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.aspect;
  
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="o">;</span>
+import org.aspectj.lang.ProceedingJoinPoint;
  
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeXMLConfigAspect</span> <span class="o">{</span>
+public class EmployeeXMLConfigAspect {
  
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">employeeAroundAdvice</span><span class="o">(</span><span class="n">ProceedingJoinPoint</span> <span class="n">proceedingJoinPoint</span><span class="o">){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"EmployeeXMLConfigAspect:: Before invoking getName() method"</span><span class="o">);</span>
-        <span class="n">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">proceedingJoinPoint</span><span class="o">.</span><span class="na">proceed</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"EmployeeXMLConfigAspect:: After invoking getName() method. Return value="</span><span class="o">+</span><span class="n">value</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    public Object employeeAroundAdvice(ProceedingJoinPoint proceedingJoinPoint){
+        System.out.println("EmployeeXMLConfigAspect:: Before invoking getName() method");
+        Object value = null;
+        try {
+            value = proceedingJoinPoint.proceed();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        System.out.println("EmployeeXMLConfigAspect:: After invoking getName() method. Return value="+value);
+        return value;
+    }
+}
 </code></pre>
-</div>
 
 <p>在 配置文件中定义如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">"employeeXMLConfigAspect"</span> <span class="na">class=</span><span class="s">"com.journaldev.spring.aspect.EmployeeXMLConfigAspect"</span> <span class="nt">/&gt;</span>
+<pre><code class="language-xml">&lt;bean name="employeeXMLConfigAspect" class="com.journaldev.spring.aspect.EmployeeXMLConfigAspect" /&gt;
  
-<span class="c">&lt;!-- Spring AOP XML Configuration --&gt;</span>
-<span class="nt">&lt;aop:config&gt;</span>
-<span class="nt">&lt;aop:aspect</span> <span class="na">ref=</span><span class="s">"employeeXMLConfigAspect"</span> <span class="na">id=</span><span class="s">"employeeXMLConfigAspectID"</span> <span class="na">order=</span><span class="s">"1"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;aop:pointcut</span> <span class="na">expression=</span><span class="s">"execution(* com.journaldev.spring.model.Employee.getName())"</span> <span class="na">id=</span><span class="s">"getNamePointcut"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;aop:around</span> <span class="na">method=</span><span class="s">"employeeAroundAdvice"</span> <span class="na">pointcut-ref=</span><span class="s">"getNamePointcut"</span> <span class="na">arg-names=</span><span class="s">"proceedingJoinPoint"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/aop:asp&gt;</span>
+&lt;!-- Spring AOP XML Configuration --&gt;
+&lt;aop:config&gt;
+&lt;aop:aspect ref="employeeXMLConfigAspect" id="employeeXMLConfigAspectID" order="1"&gt;
+    &lt;aop:pointcut expression="execution(* com.journaldev.spring.model.Employee.getName())" id="getNamePointcut"/&gt;
+    &lt;aop:around method="employeeAroundAdvice" pointcut-ref="getNamePointcut" arg-names="proceedingJoinPoint"/&gt;
+&lt;/aop:asp&gt;
 </code></pre>
-</div>
 
 <p>最后，来看看一个简单的程序来说明切面如何作用在 bean 的方法上。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">journaldev</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">main</span><span class="o">;</span>
+<pre><code class="language-java">package com.journaldev.spring.main;
  
-<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+import org.springframework.context.support.ClassPathXmlApplicationContext;
  
-<span class="kn">import</span> <span class="nn">com.journaldev.spring.service.EmployeeService</span><span class="o">;</span>
+import com.journaldev.spring.service.EmployeeService;
  
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringMain</span> <span class="o">{</span>
+public class SpringMain {
  
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"spring.xml"</span><span class="o">);</span>
-        <span class="n">EmployeeService</span> <span class="n">employeeService</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"employeeService"</span><span class="o">,</span> <span class="n">EmployeeService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    public static void main(String[] args) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+        EmployeeService employeeService = ctx.getBean("employeeService", EmployeeService.class);
          
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">employeeService</span><span class="o">.</span><span class="na">getEmployee</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        System.out.println(employeeService.getEmployee().getName());
          
-        <span class="n">employeeService</span><span class="o">.</span><span class="na">getEmployee</span><span class="o">().</span><span class="na">setName</span><span class="o">(</span><span class="s">"Pankaj"</span><span class="o">);</span>
+        employeeService.getEmployee().setName("Pankaj");
          
-        <span class="n">employeeService</span><span class="o">.</span><span class="na">getEmployee</span><span class="o">().</span><span class="na">throwException</span><span class="o">();</span>
+        employeeService.getEmployee().throwException();
          
-        <span class="n">ctx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="o">}</span>
+        ctx.close();
+    }
  
-<span class="o">}</span>
+}
 </code></pre>
-</div>
 
 <p>我们将看到如下输出：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Mar 20, 2014 8:50:09 PM org.springframework.context.support.ClassPathXmlApplicationContext prepareRefresh
+<pre><code>Mar 20, 2014 8:50:09 PM org.springframework.context.support.ClassPathXmlApplicationContext prepareRefresh
 INFO: Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4b9af9a9: startup date [Thu Mar 20 20:50:09 PDT 2014]; root of context hierarchy
 Mar 20, 2014 8:50:09 PM org.springframework.beans.factory.xml.XmlBeanDefinitionReader loadBeanDefinitions
 INFO: Loading XML bean definitions from class path resource [spring.xml]
@@ -655,7 +641,6 @@ Exception in thread "main" java.lang.RuntimeException: Dummy Exception
     at com.journaldev.spring.model.Employee$$EnhancerBySpringCGLIB$$3f881964.throwException(&lt;generated&gt;)
     at com.journaldev.spring.main.SpringMain.main(SpringMain.java:17)
 </code></pre>
-</div>
 
 <p>你将会看到通知将会基于切点配置一个个的执行。你应该一个个的配置他们，以免出现混乱。</p>
 
@@ -719,7 +704,7 @@ Exception in thread "main" java.lang.RuntimeException: Dummy Exception
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

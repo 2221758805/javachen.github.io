@@ -111,53 +111,46 @@
 
 <p>下载指定版本Confluence</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ mkdir -p /data/confluence
+<pre><code>$ mkdir -p /data/confluence
 $ cd /data/confluence
 $ wget www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.4.2.tar.gz
 </code></pre>
-</div>
 
 <h1 id="section-1">2、安装</h1>
 
 <p>解压：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ tar -zxvf atlassian-confluence-5.4.2.tar.gz
+<pre><code>$ tar -zxvf atlassian-confluence-5.4.2.tar.gz
 </code></pre>
-</div>
 
 <p>进入目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ cd atlassian-confluence-5.4.2
+<pre><code>$ cd atlassian-confluence-5.4.2
 </code></pre>
-</div>
 
 <p>配置confluence安装目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ vim confluence/WEB-INF/classes/confluence-init.properties
+<pre><code>$ vim confluence/WEB-INF/classes/confluence-init.properties
 </code></pre>
-</div>
 
 <p>在属性文件中添加安装目录路径：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>###########################
+<pre><code>###########################
 # Note for Unix Users     #
 ###########################
 # - For example:
 confluence.home=/data/confluence/confluence-data
 </code></pre>
-</div>
 
 <p>创建目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ mkdir confluence-data
+<pre><code>$ mkdir confluence-data
 </code></pre>
-</div>
 
 <p>创建完成后，运行启动：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/start-confluence.sh
+<pre><code>$ sh bin/start-confluence.sh
 </code></pre>
-</div>
 
 <p>访问ip+portnum，默认端口为8090，如果出现破解界面，以上步骤即为成功</p>
 
@@ -167,25 +160,22 @@ confluence.home=/data/confluence/confluence-data
 
 <p>启动服务：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/start-confluence.sh
+<pre><code>$ sh bin/start-confluence.sh
 </code></pre>
-</div>
 
 <p>停止服务：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/stop-confluence.sh
+<pre><code>$ sh bin/stop-confluence.sh
 </code></pre>
-</div>
 
 <h1 id="section-3">4、修改默认端口</h1>
 
-<p>配置文件位置：<code class="highlighter-rouge">atlassian-confluence-5.4.2/conf/server.xml</code></p>
+<p>配置文件位置：<code>atlassian-confluence-5.4.2/conf/server.xml</code></p>
 
 <p>打开文件，</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;Connector</span> <span class="na">className=</span><span class="s">"org.apache.coyote.tomcat4.CoyoteConnector"</span> <span class="na">port=</span><span class="s">"8090"</span> <span class="na">minProcessors=</span><span class="s">"5"</span>
+<pre><code class="language-xml">&lt;Connector className="org.apache.coyote.tomcat4.CoyoteConnector" port="8090" minProcessors="5"
 </code></pre>
-</div>
 
 <p>修改 port 为需要的端口。</p>
 
@@ -193,7 +183,7 @@ confluence.home=/data/confluence/confluence-data
 
 <p>在完成之前的步骤后，数据库使用的是一个 confluence 默认的 hsql 数据库，此数据库缺陷较多，例如：不支持事务管理。因此需要将数据库迁移为指定的数据库类型。</p>
 
-<p>进入 confluence-data 目录，修改 <code class="highlighter-rouge">confluence-cfg.xml</code> 文件中数据库相关的连接信息。</p>
+<p>进入 confluence-data 目录，修改 <code>confluence-cfg.xml</code> 文件中数据库相关的连接信息。</p>
 
 <h1 id="section-5">6、安装中文字体：</h1>
 
@@ -254,7 +244,7 @@ confluence.home=/data/confluence/confluence-data
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

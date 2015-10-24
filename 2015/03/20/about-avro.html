@@ -235,44 +235,39 @@
 
 <p>举例，一个 linked-list of 64-bit 的值：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"record"</span><span class="p">,</span><span class="w"> 
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LongList"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"aliases"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"LinkedLongs"</span><span class="p">],</span><span class="w">                      </span><span class="err">//</span><span class="w"> </span><span class="err">old</span><span class="w"> </span><span class="err">name</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">this</span><span class="w">
-  </span><span class="nt">"fields"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value"</span><span class="p">,</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"long"</span><span class="p">},</span><span class="w">             </span><span class="err">//</span><span class="w"> </span><span class="err">each</span><span class="w"> </span><span class="err">element</span><span class="w"> </span><span class="err">has</span><span class="w"> </span><span class="err">a</span><span class="w"> </span><span class="err">long</span><span class="w">
-    </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"next"</span><span class="p">,</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"null"</span><span class="p">,</span><span class="w"> </span><span class="s2">"LongList"</span><span class="p">]}</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">optional</span><span class="w"> </span><span class="err">next</span><span class="w"> </span><span class="err">element</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{
+  "type": "record", 
+  "name": "LongList",
+  "aliases": ["LinkedLongs"],                      // old name for this
+  "fields" : [
+    {"name": "value", "type": "long"},             // each element has a long
+    {"name": "next", "type": ["null", "LongList"]} // optional next element
+  ]
+}
+</code></pre>
 
 <p>一个 enum 类型的：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enum"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suit"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"symbols"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SPADES"</span><span class="p">,</span><span class="w"> </span><span class="s2">"HEARTS"</span><span class="p">,</span><span class="w"> </span><span class="s2">"DIAMONDS"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CLUBS"</span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{ "type": "enum",
+  "name": "Suit",
+  "symbols" : ["SPADES", "HEARTS", "DIAMONDS", "CLUBS"]
+}
+</code></pre>
 
 <p>array 类型：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span><span class="w"> </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{"type": "array", "items": "string"}
+</code></pre>
 
 <p>map 类型：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"map"</span><span class="p">,</span><span class="w"> </span><span class="nt">"values"</span><span class="p">:</span><span class="w"> </span><span class="s2">"long"</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{"type": "map", "values": "long"}
+</code></pre>
 
 <p>fixed 类型：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w"> </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"md5"</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<pre><code class="language-json">{"type": "fixed", "size": 16, "name": "md5"}
+</code></pre>
 
 <p>这里需要说明Record类型中field属性的默认值，当Record Schema实例数据中某个field属性没有提供实例数据时，则由默认值提供，具体值见下表。Union的field默认值由Union定义中的第一个Schema决定。</p>
 
@@ -353,7 +348,7 @@
 
 <p>Avro Tools 不加参数时:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar /usr/lib/avro/avro-tools.jar
+<pre><code>$ java -jar /usr/lib/avro/avro-tools.jar
 Version 1.7.6-cdh5.2.0 of Apache Avro
 Copyright 2010 The Apache Software Foundation
 
@@ -390,53 +385,46 @@ Available tools:
 trevni_random  Create a Trevni file filled with random instances of a schema.
 trevni_tojson  Dumps a Trevni file as JSON.
 </code></pre>
-</div>
 
 <p>fromjson 命令语法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson
 Expected 1 arg: input_file
 Option                                  Description
 ------                                  -----------
---codec                                 Compression codec <span class="o">(</span>default: null<span class="o">)</span>
---level &lt;Integer&gt;                       Compression level <span class="o">(</span>only applies to
-                                          deflate and xz<span class="o">)</span> <span class="o">(</span>default: -1<span class="o">)</span>
+--codec                                 Compression codec (default: null)
+--level &lt;Integer&gt;                       Compression level (only applies to
+                                          deflate and xz) (default: -1)
 --schema                                Schema
 --schema-file                           Schema File
 </code></pre>
-</div>
 
 <p>以 <a href="/2015/03/24/how-to-load-some-avro-data-into-spark.html">将Avro数据加载到Spark</a> 为例，将 json 数据转换为 avro 数据：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
 </code></pre>
-</div>
 
 <p>设置压缩格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson --codec snappy --schema-file twitter.avsc twitter.json &gt; twitter.snappy.avro
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson --codec snappy --schema-file twitter.avsc twitter.json &gt; twitter.snappy.avro
 </code></pre>
-</div>
 
 <p>将 avro 转换为 json：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar tojson twitter.avro &gt; twitter.json
-<span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar tojson twitter.snappy.avro &gt; twitter.json
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar tojson twitter.avro &gt; twitter.json
+$ java -jar /usr/lib/avro/avro-tools.jar tojson twitter.snappy.avro &gt; twitter.json
 </code></pre>
-</div>
 
 <p>获取 avro 文件的 schema：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar getschema twitter.avro &gt; twitter.avsc
-<span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar getschema twitter.snappy.avro &gt; twitter.avsc
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar getschema twitter.avro &gt; twitter.avsc
+$ java -jar /usr/lib/avro/avro-tools.jar getschema twitter.snappy.avro &gt; twitter.avsc
 </code></pre>
-</div>
 
 <p>将 Avro 数据编译为 Java：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar /usr/lib/avro/avro-tools.jar compile schema twitter.avsc .
+<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar compile schema twitter.avsc .
 </code></pre>
-</div>
 
 <h1 id="section-2">5. 文件结构</h1>
 
@@ -498,7 +486,7 @@ Option                                  Description
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

@@ -126,9 +126,8 @@
 
 <p>在 rhel 系统上安装：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo yum install llama-master
+<pre><code>$ sudo yum install llama-master
 </code></pre>
-</div>
 
 <h2 id="section-2">3.2 配置</h2>
 
@@ -142,15 +141,13 @@
 
 <p>启动：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo service llama start
+<pre><code>$ sudo service llama start
 </code></pre>
-</div>
 
 <p>停止：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo service llama stop
+<pre><code>$ sudo service llama stop
 </code></pre>
-</div>
 
 <h2 id="ha">3.4 配置 HA</h2>
 
@@ -170,37 +167,37 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.cluster.id</code></td>
+      <td><code>llama.am.cluster.id</code></td>
       <td style="text-align: left">Cluster ID of the Llama pair, used to differentiate between different Llamas</td>
       <td style="text-align: center">llama</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.ha.enabled</code></td>
+      <td><code>llama.am.ha.enabled</code></td>
       <td style="text-align: left">Whether to enable Llama HA</td>
       <td style="text-align: center">false</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.ha.zk-quorum</code></td>
+      <td><code>llama.am.ha.zk-quorum</code></td>
       <td style="text-align: left">ZooKeeper quorum to use for leader election and fencing</td>
       <td style="text-align: center"> </td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.ha.zk-base</code></td>
+      <td><code>llama.am.ha.zk-base</code></td>
       <td style="text-align: left">Base znode for leader election and fencing data</td>
       <td style="text-align: center">/llama</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.ha.zk-timeout-ms</code></td>
+      <td><code>llama.am.ha.zk-timeout-ms</code></td>
       <td style="text-align: left">The session timeout, in milliseconds, for connections to ZooKeeper quorum</td>
       <td style="text-align: center">10000</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.ha.zk-ac</code>l</td>
+      <td><code>llama.am.ha.zk-ac</code>l</td>
       <td style="text-align: left">ACLs to control access to ZooKeeper</td>
       <td style="text-align: center">world:anyone:rwcda</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">llama.am.ha.zk-auth</code></td>
+      <td><code>llama.am.ha.zk-auth</code></td>
       <td style="text-align: left">Authorization information to go with the ACLs</td>
       <td style="text-align: center"> </td>
     </tr>
@@ -210,39 +207,38 @@
 <p>上面必填的两个参数为：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">llama.am.ha.enabled</code> ： true</li>
-  <li><code class="highlighter-rouge">llama.am.ha.zk-quorum</code> ： cdh1:21088,cdh2:21088</li>
+  <li><code>llama.am.ha.enabled</code> ： true</li>
+  <li><code>llama.am.ha.zk-quorum</code> ： cdh1:21088,cdh2:21088</li>
 </ul>
 
 <h2 id="impala-">3.5 修改 Impala 启动参数</h2>
 
-<p>使用 jdbc 方式提交查询到 Impala 时，会出现 <code class="highlighter-rouge">number of running queries 20 is over limit 20</code> 的异常，这时候在 impala的 源代码中搜索关键字 <code class="highlighter-rouge">number of running queries</code>，可以找到<a href="https://github.com/cloudera/Impala/blob/cdh5-1.4_5.1.2/be/src/scheduling/admission-controller.cc">https://github.com/cloudera/Impala/blob/cdh5-1.4_5.1.2/be/src/scheduling/admission-controller.cc</a>，从源代码中可以看到出现该问题和 Llama 有关系，在找不到 llama 的相关配置时，impala 一个队列中能够接受的最大请求数为 20。代码见:<a href="https://github.com/cloudera/Impala/blob/c5c475712f88244e15160befaf4e99d6e165a148/fe/src/main/java/com/cloudera/impala/util/RequestPoolService.java">RequestPoolService.java</a></p>
+<p>使用 jdbc 方式提交查询到 Impala 时，会出现 <code>number of running queries 20 is over limit 20</code> 的异常，这时候在 impala的 源代码中搜索关键字 <code>number of running queries</code>，可以找到<a href="https://github.com/cloudera/Impala/blob/cdh5-1.4_5.1.2/be/src/scheduling/admission-controller.cc">https://github.com/cloudera/Impala/blob/cdh5-1.4_5.1.2/be/src/scheduling/admission-controller.cc</a>，从源代码中可以看到出现该问题和 Llama 有关系，在找不到 llama 的相关配置时，impala 一个队列中能够接受的最大请求数为 20。代码见:<a href="https://github.com/cloudera/Impala/blob/c5c475712f88244e15160befaf4e99d6e165a148/fe/src/main/java/com/cloudera/impala/util/RequestPoolService.java">RequestPoolService.java</a></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@VisibleForTesting</span>
-  <span class="n">TPoolConfigResult</span> <span class="n">getPoolConfig</span><span class="o">(</span><span class="n">String</span> <span class="n">pool</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">TPoolConfigResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TPoolConfigResult</span><span class="o">();</span>
-    <span class="kt">int</span> <span class="n">maxMemoryMb</span> <span class="o">=</span> <span class="n">allocationConf_</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getMaxResources</span><span class="o">(</span><span class="n">pool</span><span class="o">).</span><span class="na">getMemory</span><span class="o">();</span>
-    <span class="n">result</span><span class="o">.</span><span class="na">setMem_limit</span><span class="o">(</span>
-        <span class="n">maxMemoryMb</span> <span class="o">==</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="n">maxMemoryMb</span> <span class="o">*</span> <span class="n">ByteUnits</span><span class="o">.</span><span class="na">MEGABYTE</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">llamaConf_</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>												<span class="c1">//llama配置为空</span>
-      <span class="n">result</span><span class="o">.</span><span class="na">setMax_requests</span><span class="o">(</span><span class="n">LLAMA_MAX_PLACED_RESERVATIONS_DEFAULT</span><span class="o">);</span>
-      <span class="n">result</span><span class="o">.</span><span class="na">setMax_queued</span><span class="o">(</span><span class="n">LLAMA_MAX_QUEUED_RESERVATIONS_DEFAULT</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-      <span class="c1">// Capture the current llamaConf_ in case it changes while we're using it.</span>
-      <span class="n">Configuration</span> <span class="n">currentLlamaConf</span> <span class="o">=</span> <span class="n">llamaConf_</span><span class="o">;</span>
-      <span class="n">result</span><span class="o">.</span><span class="na">setMax_requests</span><span class="o">(</span><span class="n">getLlamaPoolConfigValue</span><span class="o">(</span><span class="n">currentLlamaConf</span><span class="o">,</span> <span class="n">pool</span><span class="o">,</span>
-          <span class="n">LLAMA_MAX_PLACED_RESERVATIONS_KEY</span><span class="o">,</span>
-          <span class="n">LLAMA_MAX_PLACED_RESERVATIONS_DEFAULT</span><span class="o">));</span>  <span class="c1">//20</span>
-      <span class="n">result</span><span class="o">.</span><span class="na">setMax_queued</span><span class="o">(</span><span class="n">getLlamaPoolConfigValue</span><span class="o">(</span><span class="n">currentLlamaConf</span><span class="o">,</span> <span class="n">pool</span><span class="o">,</span>
-          <span class="n">LLAMA_MAX_QUEUED_RESERVATIONS_KEY</span><span class="o">,</span>
-          <span class="n">LLAMA_MAX_QUEUED_RESERVATIONS_DEFAULT</span><span class="o">));</span>
-    <span class="o">}</span>
-    <span class="n">LOG</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"getPoolConfig(pool={}): mem_limit={}, max_requests={}, max_queued={}"</span><span class="o">,</span>
-        <span class="k">new</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">{</span> <span class="n">pool</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">mem_limit</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">max_requests</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">max_queued</span> <span class="o">});</span>
-    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-  <span class="o">}</span>
+<pre><code class="language-java">@VisibleForTesting
+  TPoolConfigResult getPoolConfig(String pool) {
+    TPoolConfigResult result = new TPoolConfigResult();
+    int maxMemoryMb = allocationConf_.get().getMaxResources(pool).getMemory();
+    result.setMem_limit(
+        maxMemoryMb == Integer.MAX_VALUE ? -1 : (long) maxMemoryMb * ByteUnits.MEGABYTE);
+    if (llamaConf_ == null) {												//llama配置为空
+      result.setMax_requests(LLAMA_MAX_PLACED_RESERVATIONS_DEFAULT);
+      result.setMax_queued(LLAMA_MAX_QUEUED_RESERVATIONS_DEFAULT);
+    } else {
+      // Capture the current llamaConf_ in case it changes while we're using it.
+      Configuration currentLlamaConf = llamaConf_;
+      result.setMax_requests(getLlamaPoolConfigValue(currentLlamaConf, pool,
+          LLAMA_MAX_PLACED_RESERVATIONS_KEY,
+          LLAMA_MAX_PLACED_RESERVATIONS_DEFAULT));  //20
+      result.setMax_queued(getLlamaPoolConfigValue(currentLlamaConf, pool,
+          LLAMA_MAX_QUEUED_RESERVATIONS_KEY,
+          LLAMA_MAX_QUEUED_RESERVATIONS_DEFAULT));
+    }
+    LOG.trace("getPoolConfig(pool={}): mem_limit={}, max_requests={}, max_queued={}",
+        new Object[] { pool, result.mem_limit, result.max_requests, result.max_queued });
+    return result;
+  }
 </code></pre>
-</div>
 
 <p>目前，参考 <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/Impala/Installing-and-Using-Impala/ciiu_admission.html">Admission Control and Query Queuing</a>，在不安装和使用 llama 情况下，找到的一种解决办法是：</p>
 
@@ -316,7 +312,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

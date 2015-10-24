@@ -115,312 +115,311 @@
 
 <p>在org.apache.hadoop.hbase.client创建ParallelClientScanner类，代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">hadoop</span><span class="o">.</span><span class="na">hbase</span><span class="o">.</span><span class="na">client</span><span class="o">;</span>
+<pre><code class="language-java">package org.apache.hadoop.hbase.client;
 
-<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Comparator</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Iterator</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.LinkedList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Queue</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.ArrayBlockingQueue</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicBoolean</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.HConstants</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.Stoppable</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.util.Bytes</span><span class="o">;</span>
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.Stoppable;
+import org.apache.hadoop.hbase.util.Bytes;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParallelClientScanner</span> <span class="kd">extends</span> <span class="n">AbstractClientScanner</span> <span class="o">{</span>
-  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">SCANNER_WAIT_TIME</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="kd">final</span> <span class="n">HTableInterface</span> <span class="n">table</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">resultQueueSize</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">threadCount</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;</span> <span class="n">scans</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;</span> <span class="n">iter</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="n">ParallelScannerWorkerThread</span> <span class="n">currThread</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="n">Queue</span><span class="o">&lt;</span><span class="n">ParallelScannerWorkerThread</span><span class="o">&gt;</span> <span class="n">nextThreads</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">closed</span><span class="o">;</span>
+public class ParallelClientScanner extends AbstractClientScanner {
+  private static final int SCANNER_WAIT_TIME = 1000;
+  private final HTableInterface table;
+  private final int resultQueueSize;
+  private final int threadCount;
+  private List&lt;Scan&gt; scans;
+  private Iterator&lt;Scan&gt; iter;
+  private ParallelScannerWorkerThread currThread;
+  private Queue&lt;ParallelScannerWorkerThread&gt; nextThreads;
+  private boolean closed;
 
-  <span class="kd">public</span> <span class="n">ParallelClientScanner</span><span class="o">(</span><span class="n">Configuration</span> <span class="n">conf</span><span class="o">,</span> <span class="n">Scan</span> <span class="n">scan</span><span class="o">,</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">tableName</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">splitKeys</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">(</span><span class="k">new</span> <span class="n">HTable</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="n">tableName</span><span class="o">),</span> <span class="n">scan</span><span class="o">,</span> <span class="n">splitKeys</span><span class="o">);</span>
-  <span class="o">}</span>
+  public ParallelClientScanner(Configuration conf, Scan scan,
+      byte[] tableName, List&lt;byte[]&gt; splitKeys) throws IOException {
+    this(new HTable(conf, tableName), scan, splitKeys);
+  }
 
-  <span class="kd">public</span> <span class="n">ParallelClientScanner</span><span class="o">(</span><span class="n">HTableInterface</span> <span class="n">table</span><span class="o">,</span> <span class="n">Scan</span> <span class="n">scan</span><span class="o">,</span>
-      <span class="n">List</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">splitKeys</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">table</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">resultQueueSize</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span>
-      <span class="s">"hbase.parallel.scanner.queue.size"</span><span class="o">,</span> <span class="mi">1000</span><span class="o">);</span>
+  public ParallelClientScanner(HTableInterface table, Scan scan,
+      List&lt;byte[]&gt; splitKeys) throws IOException {
+    this.table = table;
+    this.resultQueueSize = table.getConfiguration().getInt(
+      "hbase.parallel.scanner.queue.size", 1000);
 
-    <span class="k">this</span><span class="o">.</span><span class="na">threadCount</span> <span class="o">=</span> <span class="o">(</span><span class="n">table</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span>
-      <span class="s">"hbase.parallel.scanner.thread.count"</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+    this.threadCount = (table.getConfiguration().getInt(
+      "hbase.parallel.scanner.thread.count", 10) - 1);
 
-    <span class="k">this</span><span class="o">.</span><span class="na">scans</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;();</span>
-    <span class="kt">byte</span><span class="o">[]</span> <span class="n">stopRow</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getStopRow</span><span class="o">();</span>
-    <span class="kt">byte</span><span class="o">[]</span> <span class="n">lastSplitKey</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">();</span>
-    <span class="n">Scan</span> <span class="n">subScan</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="k">for</span> <span class="o">(</span><span class="n">Iterator</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">splitKeys</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span> <span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">();)</span> <span class="o">{</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">splitKey</span> <span class="o">=</span> <span class="o">(</span><span class="kt">byte</span><span class="o">[])</span> <span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-      <span class="k">if</span> <span class="o">((</span><span class="n">Bytes</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">splitKey</span><span class="o">,</span> <span class="n">lastSplitKey</span><span class="o">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span>
-          <span class="o">||</span> <span class="o">((</span><span class="n">Bytes</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">splitKey</span><span class="o">,</span> <span class="n">stopRow</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(!</span><span class="n">Bytes</span>
-              <span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">stopRow</span><span class="o">,</span> <span class="n">HConstants</span><span class="o">.</span><span class="na">EMPTY_END_ROW</span><span class="o">)))</span>
-          <span class="o">||</span> <span class="o">(</span><span class="n">Bytes</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">splitKey</span><span class="o">,</span> <span class="n">HConstants</span><span class="o">.</span><span class="na">EMPTY_END_ROW</span><span class="o">)))</span> <span class="o">{</span>
-        <span class="k">continue</span><span class="o">;</span>
-      <span class="o">}</span>
+    this.scans = new ArrayList&lt;Scan&gt;();
+    byte[] stopRow = scan.getStopRow();
+    byte[] lastSplitKey = scan.getStartRow();
+    Scan subScan = null;
+    for (Iterator&lt;byte[]&gt; it = splitKeys.iterator(); it.hasNext();) {
+      byte[] splitKey = (byte[]) it.next();
+      if ((Bytes.compareTo(splitKey, lastSplitKey) &lt;= 0)
+          || ((Bytes.compareTo(splitKey, stopRow) &gt;= 0) &amp;&amp; (!Bytes
+              .equals(stopRow, HConstants.EMPTY_END_ROW)))
+          || (Bytes.equals(splitKey, HConstants.EMPTY_END_ROW))) {
+        continue;
+      }
 
-      <span class="n">subScan</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scan</span><span class="o">(</span><span class="n">scan</span><span class="o">);</span>
-      <span class="n">subScan</span><span class="o">.</span><span class="na">setStartRow</span><span class="o">(</span><span class="n">lastSplitKey</span><span class="o">);</span>
-      <span class="n">subScan</span><span class="o">.</span><span class="na">setStopRow</span><span class="o">(</span><span class="n">splitKey</span><span class="o">);</span>
-      <span class="n">subScan</span><span class="o">.</span><span class="na">setParallel</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">scans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">subScan</span><span class="o">);</span>
-      <span class="n">lastSplitKey</span> <span class="o">=</span> <span class="n">splitKey</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="n">subScan</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scan</span><span class="o">(</span><span class="n">scan</span><span class="o">);</span>
-    <span class="n">subScan</span><span class="o">.</span><span class="na">setStartRow</span><span class="o">(</span><span class="n">lastSplitKey</span><span class="o">);</span>
-    <span class="n">subScan</span><span class="o">.</span><span class="na">setParallel</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">scans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">subScan</span><span class="o">);</span>
+      subScan = new Scan(scan);
+      subScan.setStartRow(lastSplitKey);
+      subScan.setStopRow(splitKey);
+      subScan.setParallel(false);
+      this.scans.add(subScan);
+      lastSplitKey = splitKey;
+    }
+    subScan = new Scan(scan);
+    subScan.setStartRow(lastSplitKey);
+    subScan.setParallel(false);
+    this.scans.add(subScan);
 
-    <span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">ParallelScannerWorkerThread</span><span class="o">&gt;();</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">closed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="n">initialize</span><span class="o">();</span>
-  <span class="o">}</span>
+    this.nextThreads = new LinkedList&lt;ParallelScannerWorkerThread&gt;();
+    this.closed = true;
+    initialize();
+  }
 
-  <span class="kd">public</span> <span class="n">ParallelClientScanner</span><span class="o">(</span><span class="n">Configuration</span> <span class="n">conf</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;</span> <span class="n">scans</span><span class="o">,</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">tableName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">(</span><span class="k">new</span> <span class="n">HTable</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="n">tableName</span><span class="o">),</span> <span class="n">scans</span><span class="o">);</span>
-  <span class="o">}</span>
+  public ParallelClientScanner(Configuration conf, List&lt;Scan&gt; scans,
+      byte[] tableName) throws IOException {
+    this(new HTable(conf, tableName), scans);
+  }
 
-  <span class="kd">public</span> <span class="n">ParallelClientScanner</span><span class="o">(</span><span class="n">HTableInterface</span> <span class="n">table</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;</span> <span class="n">scanList</span><span class="o">)</span>
-      <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">scanList</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="n">IOException</span><span class="o">(</span><span class="s">"ScanList cannot be null"</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="n">sort</span><span class="o">(</span><span class="n">scanList</span><span class="o">);</span>
+  public ParallelClientScanner(HTableInterface table, List&lt;Scan&gt; scanList)
+      throws IOException {
+    if (null == scanList) {
+      throw new IOException("ScanList cannot be null");
+    }
+    sort(scanList);
 
-    <span class="k">this</span><span class="o">.</span><span class="na">table</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">resultQueueSize</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span>
-      <span class="s">"hbase.parallel.scanner.queue.size"</span><span class="o">,</span> <span class="mi">1000</span><span class="o">);</span>
+    this.table = table;
+    this.resultQueueSize = table.getConfiguration().getInt(
+      "hbase.parallel.scanner.queue.size", 1000);
 
-    <span class="k">this</span><span class="o">.</span><span class="na">threadCount</span> <span class="o">=</span> <span class="o">(</span><span class="n">table</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span>
-      <span class="s">"hbase.parallel.scanner.thread.count"</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+    this.threadCount = (table.getConfiguration().getInt(
+      "hbase.parallel.scanner.thread.count", 10) - 1);
 
-    <span class="k">this</span><span class="o">.</span><span class="na">scans</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;();</span>
-    <span class="n">Scan</span> <span class="n">subScan</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">scanList</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-      <span class="n">subScan</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scan</span><span class="o">((</span><span class="n">Scan</span><span class="o">)</span> <span class="n">scanList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
-      <span class="n">subScan</span><span class="o">.</span><span class="na">setParallel</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">scans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">subScan</span><span class="o">);</span>
-    <span class="o">}</span>
+    this.scans = new ArrayList&lt;Scan&gt;();
+    Scan subScan = null;
+    for (int i = 0; i &lt; scanList.size(); i++) {
+      subScan = new Scan((Scan) scanList.get(i));
+      subScan.setParallel(false);
+      this.scans.add(subScan);
+    }
 
-    <span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">ParallelScannerWorkerThread</span><span class="o">&gt;();</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">closed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="n">initialize</span><span class="o">();</span>
-  <span class="o">}</span>
+    this.nextThreads = new LinkedList&lt;ParallelScannerWorkerThread&gt;();
+    this.closed = true;
+    initialize();
+  }
 
-  <span class="kd">protected</span> <span class="kt">void</span> <span class="n">initialize</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">try</span> <span class="o">{</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">iter</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">scans</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
-      <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">iter</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">currThread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ParallelScannerWorkerThread</span><span class="o">(</span>
-            <span class="o">(</span><span class="n">Scan</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">iter</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-      <span class="o">}</span>
-      <span class="k">while</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="na">iter</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span>
-          <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="na">threadCount</span><span class="o">))</span> <span class="o">{</span>
-        <span class="n">ParallelScannerWorkerThread</span> <span class="n">worker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ParallelScannerWorkerThread</span><span class="o">(</span>
-            <span class="o">(</span><span class="n">Scan</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">iter</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
+  protected void initialize() throws IOException {
+    try {
+      this.iter = this.scans.iterator();
+      if (this.iter.hasNext()) {
+        this.currThread = new ParallelScannerWorkerThread(
+            (Scan) this.iter.next());
+        this.currThread.start();
+      }
+      while ((this.iter.hasNext())
+          &amp;&amp; (this.nextThreads.size() &lt; this.threadCount)) {
+        ParallelScannerWorkerThread worker = new ParallelScannerWorkerThread(
+            (Scan) this.iter.next());
 
-        <span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">worker</span><span class="o">);</span>
-        <span class="n">worker</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-      <span class="o">}</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">closed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">close</span><span class="o">();</span>
-      <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+        this.nextThreads.offer(worker);
+        worker.start();
+      }
+      this.closed = false;
+    } catch (IOException e) {
+      close();
+      throw e;
+    }
+  }
 
-  <span class="kd">public</span> <span class="kt">void</span> <span class="n">close</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">closed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">currThread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">stop</span><span class="o">(</span><span class="s">"Closed by user."</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="k">for</span> <span class="o">(</span><span class="n">ParallelScannerWorkerThread</span> <span class="n">worker</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span><span class="o">)</span>
-      <span class="n">worker</span><span class="o">.</span><span class="na">stop</span><span class="o">(</span><span class="s">"Closed by user."</span><span class="o">);</span>
-  <span class="o">}</span>
+  public void close() {
+    this.closed = true;
+    if (this.currThread != null) {
+      this.currThread.stop("Closed by user.");
+    }
+    for (ParallelScannerWorkerThread worker : this.nextThreads)
+      worker.stop("Closed by user.");
+  }
 
-  <span class="kd">public</span> <span class="n">Result</span> <span class="n">next</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">try</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="n">nextInternal</span><span class="o">();</span>
-    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">close</span><span class="o">();</span>
-      <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+  public Result next() throws IOException {
+    try {
+      return nextInternal();
+    } catch (IOException e) {
+      close();
+      throw e;
+    }
+  }
 
-  <span class="kd">private</span> <span class="n">Result</span> <span class="n">nextInternal</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="na">closed</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">currThread</span> <span class="o">==</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">}</span>
+  private Result nextInternal() throws IOException {
+    if ((this.closed) || (this.currThread == null)) {
+      return null;
+    }
 
-    <span class="n">Result</span> <span class="n">next</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="n">next</span><span class="o">;</span>
-    <span class="o">}</span>
+    Result next = this.currThread.next();
+    if (next != null) {
+      return next;
+    }
 
-    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">isError</span><span class="o">())</span> <span class="o">{</span>
-      <span class="n">Exception</span> <span class="n">ex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">getException</span><span class="o">();</span>
-      <span class="k">throw</span> <span class="o">((</span><span class="n">ex</span> <span class="k">instanceof</span> <span class="n">IOException</span><span class="o">)</span> <span class="o">?</span> <span class="o">(</span><span class="n">IOException</span><span class="o">)</span> <span class="n">ex</span>
-          <span class="o">:</span> <span class="k">new</span> <span class="n">IOException</span><span class="o">(</span><span class="n">ex</span><span class="o">));</span>
-    <span class="o">}</span>
+    if (this.currThread.isError()) {
+      Exception ex = this.currThread.getException();
+      throw ((ex instanceof IOException) ? (IOException) ex
+          : new IOException(ex));
+    }
 
-    <span class="k">while</span> <span class="o">((</span><span class="n">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">currThread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span>
-      <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">isStopped</span><span class="o">())</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">stop</span><span class="o">(</span><span class="s">"Scanner complete."</span><span class="o">);</span>
-      <span class="o">}</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">currThread</span> <span class="o">=</span> <span class="o">((</span><span class="n">ParallelScannerWorkerThread</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span>
-          <span class="o">.</span><span class="na">poll</span><span class="o">());</span>
-      <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">iter</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-        <span class="n">ParallelScannerWorkerThread</span> <span class="n">worker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ParallelScannerWorkerThread</span><span class="o">(</span>
-            <span class="o">(</span><span class="n">Scan</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">iter</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
+    while ((next == null) &amp;&amp; (this.currThread != null)) {
+      if (!this.currThread.isStopped()) {
+        this.currThread.stop("Scanner complete.");
+      }
+      this.currThread = ((ParallelScannerWorkerThread) this.nextThreads
+          .poll());
+      if (this.iter.hasNext()) {
+        ParallelScannerWorkerThread worker = new ParallelScannerWorkerThread(
+            (Scan) this.iter.next());
 
-        <span class="k">this</span><span class="o">.</span><span class="na">nextThreads</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">worker</span><span class="o">);</span>
-        <span class="n">worker</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-      <span class="o">}</span>
-      <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">currThread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">next</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">currThread</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
+        this.nextThreads.offer(worker);
+        worker.start();
+      }
+      if (this.currThread != null) {
+        next = this.currThread.next();
+      }
+    }
 
-    <span class="k">return</span> <span class="n">next</span><span class="o">;</span>
-  <span class="o">}</span>
+    return next;
+  }
 
-  <span class="kd">public</span> <span class="n">Result</span><span class="o">[]</span> <span class="n">next</span><span class="o">(</span><span class="kt">int</span> <span class="n">nbRows</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Result</span><span class="o">&gt;</span> <span class="n">resultSets</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Result</span><span class="o">&gt;(</span><span class="n">nbRows</span><span class="o">);</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nbRows</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-      <span class="n">Result</span> <span class="n">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">();</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">break</span><span class="o">;</span>
-      <span class="n">resultSets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
-    <span class="o">}</span>
+  public Result[] next(int nbRows) throws IOException {
+    ArrayList&lt;Result&gt; resultSets = new ArrayList&lt;Result&gt;(nbRows);
+    for (int i = 0; i &lt; nbRows; i++) {
+      Result next = next();
+      if (next == null) break;
+      resultSets.add(next);
+    }
 
-    <span class="k">return</span> <span class="o">(</span><span class="n">Result</span><span class="o">[])</span> <span class="n">resultSets</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="n">Result</span><span class="o">[</span><span class="n">resultSets</span><span class="o">.</span><span class="na">size</span><span class="o">()]);</span>
-  <span class="o">}</span>
+    return (Result[]) resultSets.toArray(new Result[resultSets.size()]);
+  }
 
-  <span class="kd">private</span> <span class="kt">void</span> <span class="n">sort</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;</span> <span class="n">scanList</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="n">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">scanList</span><span class="o">,</span> <span class="k">new</span> <span class="n">ScanComparator</span><span class="o">());</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">scanList</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">currentStartRow</span> <span class="o">=</span> <span class="o">((</span><span class="n">Scan</span><span class="o">)</span> <span class="n">scanList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)).</span><span class="na">getStartRow</span><span class="o">();</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">lastStopRow</span> <span class="o">=</span> <span class="o">((</span><span class="n">Scan</span><span class="o">)</span> <span class="n">scanList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)).</span><span class="na">getStopRow</span><span class="o">();</span>
+  private void sort(List&lt;Scan&gt; scanList) throws IOException {
+    Collections.sort(scanList, new ScanComparator());
+    for (int i = 1; i &lt; scanList.size(); i++) {
+      byte[] currentStartRow = ((Scan) scanList.get(i)).getStartRow();
+      byte[] lastStopRow = ((Scan) scanList.get(i - 1)).getStopRow();
 
-      <span class="k">if</span> <span class="o">((</span><span class="n">lastStopRow</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">lastStopRow</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IOException</span><span class="o">(</span>
-          <span class="s">"Scan has overlap, last scan's stopRow is null"</span><span class="o">);</span>
-      <span class="k">if</span> <span class="o">((</span><span class="n">currentStartRow</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">currentStartRow</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="n">IOException</span><span class="o">(</span>
-            <span class="s">"Scan has overlap, current scan's startRow is null"</span><span class="o">);</span>
-      <span class="o">}</span>
-      <span class="k">if</span> <span class="o">(</span><span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">Bytes</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">lastStopRow</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">lastStopRow</span><span class="o">.</span><span class="na">length</span><span class="o">,</span>
-        <span class="n">currentStartRow</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">currentStartRow</span><span class="o">.</span><span class="na">length</span><span class="o">))</span> <span class="k">continue</span><span class="o">;</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="n">IOException</span><span class="o">(</span>
-          <span class="s">"Scan has overlap, current scan's startRow is smaller than last scan's stop row"</span><span class="o">);</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+      if ((lastStopRow == null) || (lastStopRow.length == 0)) throw new IOException(
+          "Scan has overlap, last scan's stopRow is null");
+      if ((currentStartRow == null) || (currentStartRow.length == 0)) {
+        throw new IOException(
+            "Scan has overlap, current scan's startRow is null");
+      }
+      if (0 &gt;= Bytes.compareTo(lastStopRow, 0, lastStopRow.length,
+        currentStartRow, 0, currentStartRow.length)) continue;
+      throw new IOException(
+          "Scan has overlap, current scan's startRow is smaller than last scan's stop row");
+    }
+  }
 
-  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ScanComparator</span> <span class="kd">implements</span> <span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Scan</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="n">compare</span><span class="o">(</span><span class="n">Scan</span> <span class="n">o1</span><span class="o">,</span> <span class="n">Scan</span> <span class="n">o2</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">if</span> <span class="o">((</span><span class="n">o1</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">().</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">))</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-      <span class="k">if</span> <span class="o">((</span><span class="n">o2</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">o2</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">().</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">o1StartRow</span> <span class="o">=</span> <span class="n">o1</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">();</span>
-      <span class="kt">byte</span><span class="o">[]</span> <span class="n">o2StartRow</span> <span class="o">=</span> <span class="n">o2</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">();</span>
-      <span class="k">return</span> <span class="n">Bytes</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">o1StartRow</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">o1StartRow</span><span class="o">.</span><span class="na">length</span><span class="o">,</span>
-        <span class="n">o2StartRow</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">o2StartRow</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+  private static class ScanComparator implements Comparator&lt;Scan&gt; {
+    public int compare(Scan o1, Scan o2) {
+      if ((o1.getStartRow() == null) || (o1.getStartRow().length == 0)) return -1;
+      if ((o2.getStartRow() == null) || (o2.getStartRow().length == 0)) {
+        return 1;
+      }
+      byte[] o1StartRow = o1.getStartRow();
+      byte[] o2StartRow = o2.getStartRow();
+      return Bytes.compareTo(o1StartRow, 0, o1StartRow.length,
+        o2StartRow, 0, o2StartRow.length);
+    }
+  }
 
-  <span class="kd">private</span> <span class="kd">class</span> <span class="nc">ParallelScannerWorkerThread</span> <span class="kd">extends</span> <span class="n">Thread</span> <span class="kd">implements</span>
-      <span class="n">Stoppable</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">ResultScanner</span> <span class="n">scanner</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">Result</span><span class="o">&gt;</span> <span class="n">results</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Object</span> <span class="n">empty</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">AtomicBoolean</span> <span class="n">stopped</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Exception</span> <span class="n">exception</span><span class="o">;</span>
+  private class ParallelScannerWorkerThread extends Thread implements
+      Stoppable {
+    private ResultScanner scanner;
+    private BlockingQueue&lt;Result&gt; results;
+    private Object empty;
+    private AtomicBoolean stopped;
+    private Exception exception;
 
-    <span class="kd">protected</span> <span class="n">ParallelScannerWorkerThread</span><span class="o">(</span><span class="n">Scan</span> <span class="n">scan</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">scanner</span> <span class="o">=</span> <span class="n">ParallelClientScanner</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">table</span><span class="o">.</span><span class="na">getScanner</span><span class="o">(</span><span class="n">scan</span><span class="o">);</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">results</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayBlockingQueue</span><span class="o">&lt;</span><span class="n">Result</span><span class="o">&gt;(</span>
-          <span class="n">ParallelClientScanner</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">resultQueueSize</span><span class="o">);</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">empty</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">();</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">stopped</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicBoolean</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-    <span class="o">}</span>
+    protected ParallelScannerWorkerThread(Scan scan) throws IOException {
+      this.scanner = ParallelClientScanner.this.table.getScanner(scan);
+      this.results = new ArrayBlockingQueue&lt;Result&gt;(
+          ParallelClientScanner.this.resultQueueSize);
+      this.empty = new Object();
+      this.stopped = new AtomicBoolean(false);
+    }
 
-    <span class="kd">public</span> <span class="n">Result</span> <span class="n">next</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-      <span class="n">Result</span> <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="n">Result</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">results</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
-      <span class="k">while</span> <span class="o">((!</span><span class="k">this</span><span class="o">.</span><span class="na">stopped</span><span class="o">.</span><span class="na">get</span><span class="o">())</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">r</span> <span class="o">==</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-          <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">empty</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">empty</span><span class="o">.</span><span class="na">wait</span><span class="o">();</span>
-          <span class="o">}</span>
-          <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="n">Result</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">results</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">throw</span> <span class="o">((</span><span class="n">IOException</span><span class="o">)</span> <span class="o">(</span><span class="n">IOException</span><span class="o">)</span> <span class="k">new</span> <span class="n">IOException</span><span class="o">()</span>
-              <span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">e</span><span class="o">));</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
+    public Result next() throws IOException {
+      Result r = (Result) this.results.poll();
+      while ((!this.stopped.get()) &amp;&amp; (r == null)) {
+        try {
+          synchronized (this.empty) {
+            this.empty.wait();
+          }
+          r = (Result) this.results.poll();
+        } catch (InterruptedException e) {
+          throw ((IOException) (IOException) new IOException()
+              .initCause(e));
+        }
+      }
 
-      <span class="k">return</span> <span class="n">r</span><span class="o">;</span>
-    <span class="o">}</span>
+      return r;
+    }
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">stop</span><span class="o">(</span><span class="n">String</span> <span class="n">why</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">stopped</span><span class="o">.</span><span class="na">compareAndSet</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-    <span class="o">}</span>
+    public void stop(String why) {
+      this.stopped.compareAndSet(false, true);
+    }
 
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">isStopped</span><span class="o">()</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">stopped</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
-    <span class="o">}</span>
+    public boolean isStopped() {
+      return this.stopped.get();
+    }
 
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">isError</span><span class="o">()</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">exception</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">}</span>
+    public boolean isError() {
+      return this.exception != null;
+    }
 
-    <span class="kd">public</span> <span class="n">Exception</span> <span class="n">getException</span><span class="o">()</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">exception</span><span class="o">;</span>
-    <span class="o">}</span>
+    public Exception getException() {
+      return this.exception;
+    }
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
-      <span class="k">try</span> <span class="o">{</span>
-        <span class="n">Result</span> <span class="n">r</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">scanner</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">r</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-          <span class="kt">boolean</span> <span class="n">added</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-          <span class="k">while</span> <span class="o">(!</span><span class="n">added</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">added</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">results</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="n">SCANNER_WAIT_TIME</span><span class="o">,</span>
-              <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
-          <span class="o">}</span>
-          <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">empty</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">empty</span><span class="o">.</span><span class="na">notify</span><span class="o">();</span>
-          <span class="o">}</span>
-          <span class="n">r</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">scanner</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-        <span class="o">}</span>
-      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">ioe</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">exception</span> <span class="o">=</span> <span class="n">ioe</span><span class="o">;</span>
-      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">ite</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">exception</span> <span class="o">=</span> <span class="n">ite</span><span class="o">;</span>
-      <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">scanner</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">stopped</span><span class="o">.</span><span class="na">compareAndSet</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-        <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">empty</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">this</span><span class="o">.</span><span class="na">empty</span><span class="o">.</span><span class="na">notify</span><span class="o">();</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+    public void run() {
+      try {
+        Result r = this.scanner.next();
+        while (r != null) {
+          boolean added = false;
+          while (!added) {
+            added = this.results.offer(r, SCANNER_WAIT_TIME,
+              TimeUnit.MILLISECONDS);
+          }
+          synchronized (this.empty) {
+            this.empty.notify();
+          }
+          r = this.scanner.next();
+        }
+      } catch (IOException ioe) {
+        this.exception = ioe;
+      } catch (InterruptedException ite) {
+        this.exception = ite;
+      } finally {
+        this.scanner.close();
+        this.stopped.compareAndSet(false, true);
+        synchronized (this.empty) {
+          this.empty.notify();
+        }
+      }
+    }
+  }
+}
 </code></pre>
-</div>
 
 <p>然后，需要对Scan做些修改：</p>
 
@@ -428,118 +427,108 @@
   <li>作为一个新特性，你需要修改SCAN_VERSION值</li>
   <li>增加parallel属性，用于判断是否需要并行扫描</li>
   <li>你需要修改序列化和反序列化方法，加上parallel的值</li>
-  <li>修改HTable中原来的<code class="highlighter-rouge">public ResultScanner getScanner(final Scan scan)</code>方法</li>
+  <li>修改HTable中原来的<code>public ResultScanner getScanner(final Scan scan)</code>方法</li>
 </ul>
 
 <p>修改SCAN_VERSION版本值为3，原来值为2：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">byte</span> <span class="n">SCAN_VERSION</span> <span class="o">=</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mi">3</span><span class="o">;</span>
+<pre><code class="language-java">private static final byte SCAN_VERSION = (byte)3;
 </code></pre>
-</div>
 
 <p>在合适地方添加一个parallel属性和get/set方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">this</span><span class="o">.</span><span class="na">parallel</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">isParallel</span><span class="o">();</span>
+<pre><code class="language-java">this.parallel = scan.isParallel();
 
-<span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isParallel</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
-	<span class="k">return</span> <span class="n">parallel</span><span class="o">;</span>
-<span class="o">}</span>
+private boolean isParallel() {
+	return parallel;
+}
 
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setParallel</span><span class="p">(</span><span class="kt">boolean</span> <span class="n">parallel</span><span class="o">)</span> <span class="o">{</span>
-	<span class="k">this</span><span class="o">.</span><span class="na">parallel</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">;</span>
-<span class="o">}</span>
+public void setParallel(boolean parallel) {
+	this.parallel = parallel;
+}
 </code></pre>
-</div>
 
 <p>在public Scan(Scan scan)构造方法中初始化parallel属性：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">Scan</span><span class="p">(</span><span class="n">Scan</span> <span class="n">scan</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="n">startRow</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">();</span>
-    <span class="n">stopRow</span>  <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getStopRow</span><span class="o">();</span>
-    <span class="n">maxVersions</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getMaxVersions</span><span class="o">();</span>
-    <span class="n">batch</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getBatch</span><span class="o">();</span>
-    <span class="n">caching</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getCaching</span><span class="o">();</span>
-    <span class="n">cacheBlocks</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getCacheBlocks</span><span class="o">();</span>
-    <span class="n">filter</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getFilter</span><span class="o">();</span> <span class="c1">// clone?</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">parallel</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">isParallel</span><span class="o">();</span> 		<span class="c1">// 初始化parallel属性</span>
-    <span class="n">TimeRange</span> <span class="n">ctr</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getTimeRange</span><span class="o">();</span>
-    <span class="n">tr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TimeRange</span><span class="o">(</span><span class="n">ctr</span><span class="o">.</span><span class="na">getMin</span><span class="o">(),</span> <span class="n">ctr</span><span class="o">.</span><span class="na">getMax</span><span class="o">());</span>
-    <span class="n">Map</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[],</span> <span class="n">NavigableSet</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;&gt;</span> <span class="n">fams</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="na">getFamilyMap</span><span class="o">();</span>
-    <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[],</span><span class="n">NavigableSet</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">fams</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
-      <span class="kt">byte</span> <span class="o">[]</span> <span class="n">fam</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
-      <span class="n">NavigableSet</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">cols</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">cols</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">col</span> <span class="o">:</span> <span class="n">cols</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">addColumn</span><span class="o">(</span><span class="n">fam</span><span class="o">,</span> <span class="n">col</span><span class="o">);</span>
-        <span class="o">}</span>
-      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-        <span class="n">addFamily</span><span class="o">(</span><span class="n">fam</span><span class="o">);</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">attr</span> <span class="o">:</span> <span class="n">scan</span><span class="o">.</span><span class="na">getAttributesMap</span><span class="o">().</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
-      <span class="n">setAttribute</span><span class="o">(</span><span class="n">attr</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">attr</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+<pre><code class="language-java">public Scan(Scan scan) throws IOException {
+    startRow = scan.getStartRow();
+    stopRow  = scan.getStopRow();
+    maxVersions = scan.getMaxVersions();
+    batch = scan.getBatch();
+    caching = scan.getCaching();
+    cacheBlocks = scan.getCacheBlocks();
+    filter = scan.getFilter(); // clone?
+    this.parallel = scan.isParallel(); 		// 初始化parallel属性
+    TimeRange ctr = scan.getTimeRange();
+    tr = new TimeRange(ctr.getMin(), ctr.getMax());
+    Map&lt;byte[], NavigableSet&lt;byte[]&gt;&gt; fams = scan.getFamilyMap();
+    for (Map.Entry&lt;byte[],NavigableSet&lt;byte[]&gt;&gt; entry : fams.entrySet()) {
+      byte [] fam = entry.getKey();
+      NavigableSet&lt;byte[]&gt; cols = entry.getValue();
+      if (cols != null &amp;&amp; cols.size() &gt; 0) {
+        for (byte[] col : cols) {
+          addColumn(fam, col);
+        }
+      } else {
+        addFamily(fam);
+      }
+    }
+    for (Map.Entry&lt;String, byte[]&gt; attr : scan.getAttributesMap().entrySet()) {
+      setAttribute(attr.getKey(), attr.getValue());
+    }
+  }
 
 </code></pre>
-</div>
 
-<p>在<code class="highlighter-rouge">public Map&lt;String, Object&gt; toMap(int maxCols)</code>中添加上parallel属性：</p>
+<p>在<code>public Map&lt;String, Object&gt; toMap(int maxCols)</code>中添加上parallel属性：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"parallel"</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">parallel</span><span class="o">));</span>
+<pre><code class="language-java">map.put("parallel", Boolean.valueOf(this.parallel));
 </code></pre>
-</div>
 
 <p>修改readFields方法，在最后添加代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">version</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">parallel</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readBoolean</span><span class="o">();</span>
-<span class="o">}</span>
+<pre><code class="language-java">if (version &gt; 2) {
+    this.parallel = in.readBoolean();
+}
 </code></pre>
-</div>
 
 <p>修改write方法，在最后添加代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">out</span><span class="o">.</span><span class="na">writeBoolean</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">parallel</span><span class="o">);</span>
+<pre><code class="language-java">out.writeBoolean(this.parallel);
 </code></pre>
-</div>
 
-<p>修改HTable中原来的<code class="highlighter-rouge">public ResultScanner getScanner(final Scan scan)</code>方法如下：</p>
+<p>修改HTable中原来的<code>public ResultScanner getScanner(final Scan scan)</code>方法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="n">ResultScanner</span> <span class="nf">getScanner</span><span class="p">(</span><span class="kd">final</span> <span class="n">Scan</span> <span class="n">scan</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-	<span class="k">if</span> <span class="o">(</span><span class="n">scan</span><span class="o">.</span><span class="na">getCaching</span><span class="o">()</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-		<span class="n">scan</span><span class="o">.</span><span class="na">setCaching</span><span class="o">(</span><span class="n">getScannerCaching</span><span class="o">());</span>
-	<span class="o">}</span>
-	<span class="k">return</span> <span class="n">scan</span><span class="o">.</span><span class="na">getParallel</span><span class="o">()</span> <span class="o">?</span> <span class="k">new</span> <span class="n">ParallelClientScanner</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">scan</span><span class="o">,</span> <span class="n">getStartKeysInRange</span><span class="o">(</span><span class="n">scan</span><span class="o">.</span><span class="na">getStartRow</span><span class="o">(),</span> <span class="n">scan</span><span class="o">.</span><span class="na">getStopRow</span><span class="o">()))</span> <span class="o">:</span> <span class="k">new</span> <span class="n">ClientScanner</span><span class="o">(</span><span class="n">getConfiguration</span><span class="o">(),</span> <span class="n">scan</span><span class="o">,</span> <span class="n">getTableName</span><span class="o">(),</span> <span class="k">this</span><span class="o">.</span><span class="na">connection</span><span class="o">);</span>
-<span class="o">}</span>
+<pre><code class="language-java">public ResultScanner getScanner(final Scan scan) throws IOException {
+	if (scan.getCaching() &lt;= 0) {
+		scan.setCaching(getScannerCaching());
+	}
+	return scan.getParallel() ? new ParallelClientScanner(this, scan, getStartKeysInRange(scan.getStartRow(), scan.getStopRow())) : new ClientScanner(getConfiguration(), scan, getTableName(), this.connection);
+}
 </code></pre>
-</div>
 
 <p>最后，如果你想再HBase shell中使用该特性，你要做如下修改：</p>
 
-<p>修改src/main/ruby/hbase.rb，在<code class="highlighter-rouge">SELECT = "SELECT"</code>下面添加代码一行代码：</p>
+<p>修改src/main/ruby/hbase.rb，在<code>SELECT = "SELECT"</code>下面添加代码一行代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="no">COLUMN_INTERPRETER</span><span class="o">=</span><span class="s2">"COLUMN_INTERPRETER"</span>
-<span class="no">KEY</span> <span class="o">=</span> <span class="s2">"KEY"</span>
-<span class="no">SELECT</span> <span class="o">=</span> <span class="s2">"SELECT"</span>
-<span class="no">PARALLEL</span> <span class="o">=</span> <span class="s2">"PARALLEL"</span> 
+<pre><code class="language-ruby">COLUMN_INTERPRETER="COLUMN_INTERPRETER"
+KEY = "KEY"
+SELECT = "SELECT"
+PARALLEL = "PARALLEL" 
 </code></pre>
-</div>
 
-<p>修改src/main/ruby/hbase/table.rb，在<code class="highlighter-rouge">raw = args["RAW"] || false</code>下面添加一行代码：</p>
+<p>修改src/main/ruby/hbase/table.rb，在<code>raw = args["RAW"] || false</code>下面添加一行代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">parallel</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s2">"PARALLEL"</span><span class="p">]</span> <span class="o">||</span> <span class="kp">false</span>
+<pre><code class="language-ruby">parallel = args["PARALLEL"] || false
 </code></pre>
-</div>
 
 <p>在scan.setRaw(raw)下面添加一行代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">scan</span><span class="p">.</span><span class="nf">setMaxVersions</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span> <span class="k">if</span> <span class="n">versions</span> <span class="o">&gt;</span> <span class="mi">1</span>
-<span class="nb">scan</span><span class="p">.</span><span class="nf">setTimeRange</span><span class="p">(</span><span class="n">timerange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">timerange</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">timerange</span>
-<span class="nb">scan</span><span class="p">.</span><span class="nf">setRaw</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
-<span class="nb">scan</span><span class="p">.</span><span class="nf">setParallel</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span>
+<pre><code class="language-ruby">scan.setMaxVersions(versions) if versions &gt; 1
+scan.setTimeRange(timerange[0], timerange[1]) if timerange
+scan.setRaw(raw)
+scan.setParallel(parallel)
 </code></pre>
-</div>
 
 <p>修改完之后，编译源代码，就可以进行测试了。</p>
 
@@ -551,15 +540,14 @@
 
 <p>运行hbase shell进行测试：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hbase</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mi">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">scan</span> <span class="s1">'t'</span><span class="p">,</span><span class="err">{</span><span class="n">PARALLEL</span><span class="o">=&gt;</span><span class="k">true</span><span class="err">}</span>
-<span class="k">ROW</span>                                      <span class="k">COLUMN</span><span class="o">+</span><span class="n">CELL</span>                                                                                                        
- <span class="mi">1</span>                                       <span class="k">column</span><span class="o">=</span><span class="n">f</span><span class="p">:</span><span class="n">id</span><span class="p">,</span> <span class="k">timestamp</span><span class="o">=</span><span class="mi">1382528597662</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span>
- <span class="mi">2</span>                                       <span class="k">column</span><span class="o">=</span><span class="n">f</span><span class="p">:</span><span class="n">id</span><span class="p">,</span> <span class="k">timestamp</span><span class="o">=</span><span class="mi">1382528594343</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span>
- <span class="mi">3</span>                                       <span class="k">column</span><span class="o">=</span><span class="n">f</span><span class="p">:</span><span class="n">id</span><span class="p">,</span> <span class="k">timestamp</span><span class="o">=</span><span class="mi">1382528478893</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">3</span>
- <span class="mi">4</span>                                       <span class="k">column</span><span class="o">=</span><span class="n">f</span><span class="p">:</span><span class="n">id</span><span class="p">,</span> <span class="k">timestamp</span><span class="o">=</span><span class="mi">1382528483161</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">4</span>
-<span class="mi">4</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">in</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0240</span> <span class="n">seconds</span>
+<pre><code class="language-sql">hbase(main):003:0&gt; scan 't',{PARALLEL=&gt;true}
+ROW                                      COLUMN+CELL                                                                                                        
+ 1                                       column=f:id, timestamp=1382528597662, value=1
+ 2                                       column=f:id, timestamp=1382528594343, value=2
+ 3                                       column=f:id, timestamp=1382528478893, value=3
+ 4                                       column=f:id, timestamp=1382528483161, value=4
+4 row(s) in 0.0240 seconds
 </code></pre>
-</div>
 
 <ol>
   <li>通过hbase client测试</li>
@@ -567,40 +555,39 @@
 
 <p>创建ParallelScannerTest.java类并添加如下代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.HBaseConfiguration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.client.HTable</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.client.Result</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.client.ResultScanner</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.client.Scan</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.filter.CompareFilter.CompareOp</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.filter.SingleColumnValueFilter</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.hbase.util.Bytes</span><span class="o">;</span>
+<pre><code class="language-java">import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.util.Bytes;
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParallelScannerTest</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-    <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">HBaseConfiguration</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
-    <span class="n">HTable</span> <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HTable</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="s">"t"</span><span class="o">);</span>
-    <span class="n">String</span> <span class="n">startKey</span> <span class="o">=</span> <span class="s">"1"</span><span class="o">;</span>
-    <span class="n">String</span> <span class="n">stopKey</span> <span class="o">=</span> <span class="s">"3"</span><span class="o">;</span>
-    <span class="n">Scan</span> <span class="n">scan</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scan</span><span class="o">(</span><span class="n">Bytes</span><span class="o">.</span><span class="na">toBytes</span><span class="o">(</span><span class="n">startKey</span><span class="o">),</span> <span class="n">Bytes</span><span class="o">.</span><span class="na">toBytes</span><span class="o">(</span><span class="n">stopKey</span><span class="o">));</span>
-    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+public class ParallelScannerTest {
+  public static void main(String[] args) throws Exception {
+    Configuration conf = HBaseConfiguration.create();
+    HTable table = new HTable(conf, "t");
+    String startKey = "1";
+    String stopKey = "3";
+    Scan scan = new Scan(Bytes.toBytes(startKey), Bytes.toBytes(stopKey));
+    int count = 0;
     
-    <span class="n">scan</span><span class="o">.</span><span class="na">setParallel</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    scan.setParallel(true);
 
-    <span class="n">ResultScanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">getScanner</span><span class="o">(</span><span class="n">scan</span><span class="o">);</span>
-    <span class="n">Result</span> <span class="n">r</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">r</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">count</span><span class="o">++;</span>
-      <span class="n">r</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-    <span class="o">}</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"++ Scanning finished with count : "</span> <span class="o">+</span> <span class="n">count</span> <span class="o">+</span> <span class="s">" ++"</span><span class="o">);</span>
-    <span class="n">scanner</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="n">table</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+    ResultScanner scanner = table.getScanner(scan);
+    Result r = scanner.next();
+    while (r != null) {
+      count++;
+      r = scanner.next();
+    }
+    System.out.println("++ Scanning finished with count : " + count + " ++");
+    scanner.close();
+    table.close();
+  }
+}
 </code></pre>
-</div>
 
 <p>运行该类并查看输出结果。</p>
 
@@ -662,7 +649,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

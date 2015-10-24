@@ -123,18 +123,17 @@
 
 <p>在<a href="http://haproxy.1wt.eu/">HAProxy</a>官网下载安装包并编译</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget http://haproxy.1wt.eu/download/1.4/src/haproxy-1.4.24.tar.gz|tar zxvf
+<pre><code>wget http://haproxy.1wt.eu/download/1.4/src/haproxy-1.4.24.tar.gz|tar zxvf
 mv haproxy-1.4.24 /opt/haproxy-1.4.24
 cd /opt/haproxy-1.4.24
 make TARGET=linux26
 </code></pre>
-</div>
 
 <h1 id="section-1">添加配置文件</h1>
 
 <p>在/opt/haproxy-1.4.24目录下创建一个config.cfg文件，添加如下内容：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>global
+<pre><code>global
         daemon
         nbproc 1
         pidfile /var/run/haproxy.pid
@@ -171,25 +170,22 @@ listen hive				#hive后端定义
 	#释义：server 主机代名(你自己能看懂就行)，IP:端口 每180000毫秒检查一次。也就是三分钟。
 	#hive每有10000端口的请求就会创建一个log，设置短了，/tmp下面会有无数个log文件，删不完。
 </code></pre>
-</div>
 
 <h1 id="section-2">如何启动</h1>
 
 <p>在HAProxy目录下执行如下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>haproxy -f conf.cfg
+<pre><code>haproxy -f conf.cfg
 </code></pre>
-</div>
 
 <h1 id="section-3">如何使用</h1>
 
 <p>在hive-server或者hive-server2中jdbc的连接信息修改url和port，如hive-server2:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jdbc:hive2://${haproxy.hostname}:${haproxy.hive.bind.port}/${hive.database}
+<pre><code>jdbc:hive2://${haproxy.hostname}:${haproxy.hive.bind.port}/${hive.database}
 </code></pre>
-</div>
 
-<p>上面<code class="highlighter-rouge">haproxy.hostname</code>为你安装haproxy的机器名；<code class="highlighter-rouge">haproxy.hive.bind.port</code>为<code class="highlighter-rouge">conf.cfg</code>中定义的监听hive的端口（上面中定义的为10001）</p>
+<p>上面<code>haproxy.hostname</code>为你安装haproxy的机器名；<code>haproxy.hive.bind.port</code>为<code>conf.cfg</code>中定义的监听hive的端口（上面中定义的为10001）</p>
 
 <h1 id="section-4">参考资料</h1>
 
@@ -248,7 +244,7 @@ listen hive				#hive后端定义
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

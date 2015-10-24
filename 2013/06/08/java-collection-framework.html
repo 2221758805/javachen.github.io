@@ -109,7 +109,7 @@
   <p>这篇文章是对<a href="http://www.cnblogs.com/skywang12345/category/455711.html">http://www.cnblogs.com/skywang12345/category/455711.html</a>中java集合框架相关文章的一个总结，在此对<a href="http://www.cnblogs.com/skywang12345">原作者</a>的辛勤整理表示感谢。</p>
 </blockquote>
 
-<p>Java集合是java提供的工具包，包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是<code class="highlighter-rouge">java.util.*</code></p>
+<p>Java集合是java提供的工具包，包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是<code>java.util.*</code></p>
 
 <p>Java集合主要可以划分为4个部分：List列表、Set集合、Map映射、工具类(Iterator迭代器、Enumeration枚举类、Arrays和Collections)。</p>
 
@@ -143,40 +143,37 @@
 
 <h3 id="section-1">访问数据</h3>
 
-<p>当添加和删除元素时，需要移动数组中得元素；当获取元素时，只需要通过数组的索引返回元素，故<code class="highlighter-rouge">查询快，增删慢</code>。</p>
+<p>当添加和删除元素时，需要移动数组中得元素；当获取元素时，只需要通过数组的索引返回元素，故<code>查询快，增删慢</code>。</p>
 
-<p>ArrayList中的方法没有加同步锁，故<code class="highlighter-rouge">线程不安全</code>。</p>
+<p>ArrayList中的方法没有加同步锁，故<code>线程不安全</code>。</p>
 
 <h3 id="section-2">遍历方式</h3>
 
 <p>1）通过Iterator去遍历</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Integer</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-<span class="n">Iterator</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
-<span class="k">while</span> <span class="o">(</span><span class="n">iter</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="n">Integer</span><span class="o">)</span><span class="n">iter</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-<span class="o">}</span>
+<pre><code class="language-java">Integer value = null;
+Iterator iter = list.iterator();
+while (iter.hasNext()) {
+    value = (Integer)iter.next();
+}
 </code></pre>
-</div>
 
 <p>2）随机访问，通过索引值去遍历</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Integer</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
-<span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
- <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="n">Integer</span><span class="o">)</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>        
-<span class="o">}</span>
+<pre><code class="language-java">Integer value = null;
+int size = list.size();
+for(int i=0; i&lt;size; i++){
+ value = (Integer)list.get(i);        
+}
 </code></pre>
-</div>
 
 <p>3）for循环遍历</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Integer</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-<span class="k">for</span> <span class="o">(</span><span class="n">Integer</span> <span class="nl">integ:</span><span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="n">integ</span><span class="o">;</span>
-<span class="o">}</span>
+<pre><code class="language-java">Integer value = null;
+for (Integer integ:list) {
+    value = integ;
+}
 </code></pre>
-</div>
 
 <p>性能比较：</p>
 
@@ -192,9 +189,9 @@
 
 <h3 id="section-4">访问数据</h3>
 
-<p>当添加和删除元素时，需要移动数组中得元素；当获取元素时，只需要通过数组的索引返回元素，故<code class="highlighter-rouge">查询快，增删慢</code>。</p>
+<p>当添加和删除元素时，需要移动数组中得元素；当获取元素时，只需要通过数组的索引返回元素，故<code>查询快，增删慢</code>。</p>
 
-<p>方法没有加同步锁，故<code class="highlighter-rouge">线程不安全</code>。</p>
+<p>方法没有加同步锁，故<code>线程不安全</code>。</p>
 
 <h3 id="section-5">遍历方式</h3>
 
@@ -236,9 +233,9 @@
 
 <h3 id="section-8">访问数据</h3>
 
-<p>当添加和删除元素时，只需要将新的元素插入指定位置之前，然后修改链表的指向；当获取元素时（<code class="highlighter-rouge">get(int location)</code>），会比较“location”和“双向链表长度的1/2”；若前者大，则从链表头开始往后查找，直到location位置；否则，从链表末尾开始先前查找，直到location位置。故<code class="highlighter-rouge">查询慢，增删快</code>。</p>
+<p>当添加和删除元素时，只需要将新的元素插入指定位置之前，然后修改链表的指向；当获取元素时（<code>get(int location)</code>），会比较“location”和“双向链表长度的1/2”；若前者大，则从链表头开始往后查找，直到location位置；否则，从链表末尾开始先前查找，直到location位置。故<code>查询慢，增删快</code>。</p>
 
-<p>方法没有加同步锁，故<code class="highlighter-rouge">线程不安全</code>。</p>
+<p>方法没有加同步锁，故<code>线程不安全</code>。</p>
 
 <h3 id="section-9">遍历方式</h3>
 
@@ -326,9 +323,9 @@
 
 <h3 id="section-13">访问数据</h3>
 
-<p>当get（<code class="highlighter-rouge">get(Object key)</code>）数据时，先通过key得到一个hash值，然后调用<code class="highlighter-rouge">indexFor(hash, table.length)</code>方法得到table数组中得索引值，其次再通过索引得到数组中得 Entry 对象，最后遍历 Entry 对象，判断key和hash是否相等，如果相等则返回该Entry的value属性值。</p>
+<p>当get（<code>get(Object key)</code>）数据时，先通过key得到一个hash值，然后调用<code>indexFor(hash, table.length)</code>方法得到table数组中得索引值，其次再通过索引得到数组中得 Entry 对象，最后遍历 Entry 对象，判断key和hash是否相等，如果相等则返回该Entry的value属性值。</p>
 
-<p>当put（<code class="highlighter-rouge">put(K key, V value)</code>）数据时，若“key为null”，则将该键值对添加到table[0]中；若“key不为null”，则计算该key的哈希值，然后将其添加到该哈希值对应的链表中； 若“该key”对应的键值对已经存在，则用新的value取代旧的value。然后退出；若“该key”对应的键值对不存在，则将“key-value”添加到table中</p>
+<p>当put（<code>put(K key, V value)</code>）数据时，若“key为null”，则将该键值对添加到table[0]中；若“key不为null”，则计算该key的哈希值，然后将其添加到该哈希值对应的链表中； 若“该key”对应的键值对已经存在，则用新的value取代旧的value。然后退出；若“该key”对应的键值对不存在，则将“key-value”添加到table中</p>
 
 <h3 id="section-14">遍历方式</h3>
 
@@ -518,7 +515,7 @@ HashSet通过iterator()返回的迭代器是fail-fast的。</p>
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

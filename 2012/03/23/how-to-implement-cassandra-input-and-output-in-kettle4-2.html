@@ -126,7 +126,7 @@
 
 <p>在pdi-ce-big-data-4.3.0-preview/plugins目录下有以下目录或文件:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.
+<pre><code>.
 |-- databases
 |-- hour-partitioner.jar
 |-- jobentries
@@ -139,11 +139,10 @@
 |-- steps
 `-- versioncheck
 </code></pre>
-</div>
 
 <p>pentaho-big-data-plugin目录是kettle对大数据的集成与支持,我们只需要将该目录拷贝到pdi-ce-4.2.1-stable/plugins目录下即可.最后的结构如下</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.
+<pre><code>.
 |-- databases
 |-- hour-partitioner.jar
 |-- jobentries
@@ -189,7 +188,6 @@
 
 13 directories, 29 files
 </code></pre>
-</div>
 
 <p>启动pdi-ce-4.2.1-stable之后,打开一个转换,在核心对象窗口就可以看到Big Data步骤目录了.</p>
 <div class="pic">
@@ -205,7 +203,7 @@
 <p>然后,需要在kettle-steps.xml中注册步骤节点<br />
 例如,下面是MongoDbInput步骤的注册方法,请针对不同插件的不同类路径加以修改.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;step id="MongoDbInput"&gt;
+<pre><code>&lt;step id="MongoDbInput"&gt;
 &lt;description&gt;i18n:org.pentaho.di.trans.step:BaseStep.TypeLongDesc.MongoDbInput
 &lt;classname&gt;org.pentaho.di.trans.steps.mongodbinput.MongoDbInputMeta
 &lt;category&gt;i18n:org.pentaho.di.trans.step:BaseStep.Category.Input
@@ -217,7 +215,6 @@
 &lt;/description&gt;
 &lt;/step&gt;
 </code></pre>
-</div>
 
 <div class="note">
 <h>注意:
@@ -286,7 +283,7 @@
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

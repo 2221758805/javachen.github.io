@@ -125,37 +125,33 @@
 
 <p>拷贝配置文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
+<pre><code>cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
 </code></pre>
-</div>
 
-<p>编辑<code class="highlighter-rouge">/etc/my.cnf</code>：</p>
+<p>编辑<code>/etc/my.cnf</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[mysqld]
+<pre><code>[mysqld]
 explicit_defaults_for_timestamp=true   ##开启查询缓存
 # log_bin
 log_bin = mysql-bin
 server_id = 36
 </code></pre>
-</div>
 
 <p>启动mysql服务：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>service mysql start 
+<pre><code>service mysql start 
 </code></pre>
-</div>
 
 <h2 id="slave">2. 配置slave并启动</h2>
 
 <p>拷贝配置文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
+<pre><code>cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
 </code></pre>
-</div>
 
-<p>编辑<code class="highlighter-rouge">/etc/my.cnf</code>：</p>
+<p>编辑<code>/etc/my.cnf</code>：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[mysqld]
+<pre><code>[mysqld]
 explicit_defaults_for_timestamp=true 
 log_bin = mysql-bin
 server_id = 37
@@ -163,43 +159,38 @@ relay_log=/var/lib/mysql/mysql-relay-bin ##传送过来的日志存放目录
 log_slave_updates=1
 read_only=1 ##这个参数只对普通用户生效，超级用户和复制用户无效
 </code></pre>
-</div>
 
 <p>启动mysql服务：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>service mysql start 
+<pre><code>service mysql start 
 </code></pre>
-</div>
 
 <h2 id="section-3">3. 主从分别授权用户</h2>
 
 <p>在master,slave分别执行以下命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#mysql
+<pre><code>#mysql
 mysql-&gt;grant replication slave,replication client on *.* to repl@'%' identified by  '123456';
 mysql-&gt;flush priviledges;
 </code></pre>
-</div>
 
 <h2 id="section-4">4. 主库数据备份到从库</h2>
 
 <p>master上运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># mysqldump -A &gt;all.sql
+<pre><code># mysqldump -A &gt;all.sql
 </code></pre>
-</div>
 
 <p>slave上运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># mysql &lt;all.sql
+<pre><code># mysql &lt;all.sql
 </code></pre>
-</div>
 
 <h2 id="section-5">5. 根据主状态启动从库</h2>
 
 <p>(1) 查询主库状态</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;show master status \G
+<pre><code>mysql-&gt;show master status \G
  *************************** 1. row ***************************
              File: mysql-bin.000001
          Position: 697
@@ -208,20 +199,18 @@ mysql-&gt;flush priviledges;
 Executed_Gtid_Set: 
 1 row in set (0.00 sec)
 </code></pre>
-</div>
 
 <p>(2) 从库启动复制</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#mysql
+<pre><code>#mysql
 mysql-&gt;change master to
         -&gt;master_host="192.168.0.114",master_port=3306,master_user="repl",master_password="123456",master_log_file="mysql-bin.000001",master_log_pos=697;
 mysql-&gt;start slave;
 </code></pre>
-</div>
 
 <p>(3) 从库状态</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql&gt; show slave status \G
+<pre><code>mysql&gt; show slave status \G
 *************************** 1. row ***************************
                Slave_IO_State: Waiting for master to send event
                   Master_Host: 192.168.0.114
@@ -236,46 +225,40 @@ mysql-&gt;start slave;
          ....Exec_Master_Log_Pos: 697
          ....
 </code></pre>
-</div>
 
 <h2 id="section-6">6. 主从用于复制的进程</h2>
 
 <p>在master上查看进程：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;show processlist
+<pre><code>mysql-&gt;show processlist
 </code></pre>
-</div>
 
 <p>1个如下状态的进程:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Master has sent all binlog to slave; waiting for binlog to be updated
+<pre><code>Master has sent all binlog to slave; waiting for binlog to be updated
 </code></pre>
-</div>
 
 <p>在slave上查看进程：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;show processlist
+<pre><code>mysql-&gt;show processlist
 </code></pre>
-</div>
 
 <p>2个如下状态的进程</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Waiting for master to send event
+<pre><code>Waiting for master to send event
 Slave has read all relay log; waiting for the slave I/O thread to update it
 </code></pre>
-</div>
 
 <h1 id="section-7">7. 主从状态监控</h1>
 
-<p>常规做法是slave上<code class="highlighter-rouge">show slave status\G</code>中的两个变量的差值（<code class="highlighter-rouge">Read_Master_Log_Pos</code>，<code class="highlighter-rouge">Exec_Master_Log_Pos</code>),也可以使用percona提供的工具包<code class="highlighter-rouge">pt-heartbeat</code>。</p>
+<p>常规做法是slave上<code>show slave status\G</code>中的两个变量的差值（<code>Read_Master_Log_Pos</code>，<code>Exec_Master_Log_Pos</code>),也可以使用percona提供的工具包<code>pt-heartbeat</code>。</p>
 
 <h2 id="percona-tookit-pg-heartbeat">8. Percona-tookit 安装及pg-heartbeat使用</h2>
 
-<p>工具集中包含<code class="highlighter-rouge">pt-heartbeat</code>, 安装依赖perl-DBD-MySQL， perl-IO-Socket-SSL:</p>
+<p>工具集中包含<code>pt-heartbeat</code>, 安装依赖perl-DBD-MySQL， perl-IO-Socket-SSL:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>% rpm -ivh percona-toolkit-2.2.6-1.noarch.rpm
+<pre><code>% rpm -ivh percona-toolkit-2.2.6-1.noarch.rpm
 </code></pre>
-</div>
 
 <p><strong>pg-heartbeat功能介绍：</strong></p>
 
@@ -295,51 +278,45 @@ Slave has read all relay log; waiting for the slave I/O thread to update it
 
 <p>1）初始化环境，创建一个后台进程定期更新主上的test库heartbeat表,默认是一秒可以–interval指定，执行后会生成一个heartbeat表，test为需要监控的同步库</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pt-heartbeat -D test --update -u repl -p 123456 -h 192.168.0.108 --create-table --daemonize
+<pre><code>pt-heartbeat -D test --update -u repl -p 123456 -h 192.168.0.108 --create-table --daemonize
 </code></pre>
-</div>
 
 <p>2）监控并输出slave落后时间</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pt-heartbeat -D test --monitor -u repl -p 123456 -h 192.168.0.115
+<pre><code>pt-heartbeat -D test --monitor -u repl -p 123456 -h 192.168.0.115
 0.00s [  0.00s,  0.00s,  0.00s ]           ###瞬时延迟 [一分钟平均延迟，五分钟平均延迟，十五分钟平均延迟]
 0.00s [  0.00s,  0.00s,  0.00s ]
 0.00s [  0.00s,  0.00s,  0.00s ]
 </code></pre>
-</div>
 
 <p>结果如下 会一直输出,断开一下连接得到如下结果，最后同步</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>0.00s [  0.34s,  0.07s,  0.02s ]
+<pre><code>0.00s [  0.34s,  0.07s,  0.02s ]
 0.00s [  0.00s,  0.07s,  0.02s ]
 </code></pre>
-</div>
 
 <p>3）只输出瞬时的差值</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#pt-heartbeat -D test --test -u repl -p 123456 -h 192.168.0.115
+<pre><code>#pt-heartbeat -D test --test -u repl -p 123456 -h 192.168.0.115
 0.00 ###只代表瞬时延迟
 </code></pre>
-</div>
 
 <h2 id="mysql">9. mysql主从互换</h2>
 
 <p>(1) 停止从库复制,从新设置状态</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;stop slave;
+<pre><code>mysql-&gt;stop slave;
 mysql-&gt;reset master;
 mysql-&gt;reset slave;
 </code></pre>
-</div>
 
 <p>(2) 如配置文件相同的情况下，配置文件无需更改。否者主备的配置文件交换。</p>
 
 <p>(3) 原先的主变为备</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;reset master;
+<pre><code>mysql-&gt;reset master;
 mysql-&gt;reset slave;
 </code></pre>
-</div>
 
 <p>从新配置change master to参数</p>
 
@@ -396,7 +373,7 @@ mysql-&gt;reset slave;
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

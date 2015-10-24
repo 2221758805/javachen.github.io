@@ -113,20 +113,19 @@
   <li>JDK 版本：jdk1.8.0_31</li>
 </ul>
 
-<p>为了测试简单，我是将 Presto 的 coordinator 和 worker 都部署在 <code class="highlighter-rouge">cdh1</code> 节点上，并且该节点上部署了 hive-metastore 服务。下面的安装和部署过程参考自 <a href="http://prestodb.io/docs/current/installation.html">http://prestodb.io/docs/current/installation.html</a>。</p>
+<p>为了测试简单，我是将 Presto 的 coordinator 和 worker 都部署在 <code>cdh1</code> 节点上，并且该节点上部署了 hive-metastore 服务。下面的安装和部署过程参考自 <a href="http://prestodb.io/docs/current/installation.html">http://prestodb.io/docs/current/installation.html</a>。</p>
 
 <h1 id="presto">2. 安装 Presto</h1>
 
 <p>下载 Presto 的压缩包，目前最新版本为 <a href="https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.90/presto-server-0.90.tar.gz">presto-server-0.90</a>，然后解压为 presto-server-0.90 。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.90/presto-server-0.90.tar.gz
+<pre><code>wget https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.90/presto-server-0.90.tar.gz
 tar zxvf presto-server-0.90.tar.gz
 </code></pre>
-</div>
 
 <p>解压后的目录结构为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[$ presto-server-0.90]# tree -L 2
+<pre><code>[$ presto-server-0.90]# tree -L 2
 .
 ├── bin
 │   ├── launcher
@@ -150,7 +149,6 @@ tar zxvf presto-server-0.90.tar.gz
 │   └── tpch
 └── README.txt
 </code></pre>
-</div>
 
 <p>从 plugin 目录可以看到所有 Presto 支持的插件有哪些，这里我主要使用 hive-cdh5 插件，也成为连接器。</p>
 
@@ -159,106 +157,98 @@ tar zxvf presto-server-0.90.tar.gz
 <p>在 presto-server-0.90 目录创建 etc 目录，并创建以下文件：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">node.properties</code>：每个节点的环境配置</li>
-  <li><code class="highlighter-rouge">jvm.config</code>：jvm 参数</li>
-  <li><code class="highlighter-rouge">config.properties</code>：配置 Presto Server 参数</li>
-  <li><code class="highlighter-rouge">log.properties</code>：配置日志等级</li>
-  <li><code class="highlighter-rouge">Catalog Properties</code>：Catalog 的配置</li>
+  <li><code>node.properties</code>：每个节点的环境配置</li>
+  <li><code>jvm.config</code>：jvm 参数</li>
+  <li><code>config.properties</code>：配置 Presto Server 参数</li>
+  <li><code>log.properties</code>：配置日志等级</li>
+  <li><code>Catalog Properties</code>：Catalog 的配置</li>
 </ul>
 
-<p><code class="highlighter-rouge">etc/node.properties</code> 示例配置如下：</p>
+<p><code>etc/node.properties</code> 示例配置如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">node.environment</span><span class="p">=</span><span class="s">production</span>
-<span class="py">node.id</span><span class="p">=</span><span class="s">ffffffff-ffff-ffff-ffff-ffffffffffff</span>
-<span class="err">node.data-</span><span class="py">dir</span><span class="p">=</span><span class="s">/var/presto/data</span>
+<pre><code class="language-properties">node.environment=production
+node.id=ffffffff-ffff-ffff-ffff-ffffffffffff
+node.data-dir=/var/presto/data
 </code></pre>
-</div>
 
 <p>参数说明：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">node.environment</code>：环境名称。一个集群节点中的所有节点的名称应该保持一致。</li>
-  <li><code class="highlighter-rouge">node.id</code>：节点唯一标识的名称。</li>
-  <li><code class="highlighter-rouge">node.data-dir</code>：数据和日志存放路径。</li>
+  <li><code>node.environment</code>：环境名称。一个集群节点中的所有节点的名称应该保持一致。</li>
+  <li><code>node.id</code>：节点唯一标识的名称。</li>
+  <li><code>node.data-dir</code>：数据和日志存放路径。</li>
 </ul>
 
-<p><code class="highlighter-rouge">etc/jvm.config</code> 示例配置如下：</p>
+<p><code>etc/jvm.config</code> 示例配置如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">-</span><span class="n">server</span>
-<span class="o">-</span><span class="n">Xmx16G</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseConcMarkSweepGC</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">ExplicitGCInvokesConcurrent</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">CMSClassUnloadingEnabled</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">AggressiveOpts</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">HeapDumpOnOutOfMemoryError</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="n">OnOutOfMemoryError</span><span class="o">=</span><span class="n">kill</span> <span class="o">-</span><span class="mi">9</span> <span class="o">%</span><span class="n">p</span>
-<span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="n">ReservedCodeCacheSize</span><span class="o">=</span><span class="mi">150</span><span class="n">M</span>
+<pre><code class="language-sql">-server
+-Xmx16G
+-XX:+UseConcMarkSweepGC
+-XX:+ExplicitGCInvokesConcurrent
+-XX:+CMSClassUnloadingEnabled
+-XX:+AggressiveOpts
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:OnOutOfMemoryError=kill -9 %p
+-XX:ReservedCodeCacheSize=150M
 </code></pre>
-</div>
 
-<p><code class="highlighter-rouge">etc/config.properties</code> 包含 Presto Server 相关的配置，每一个 Presto Server 可以通时作为 coordinator 和 worker 使用。你可以将他们配置在一个极点上，但是，在一个大的集群上建议分开配置以提高性能。</p>
+<p><code>etc/config.properties</code> 包含 Presto Server 相关的配置，每一个 Presto Server 可以通时作为 coordinator 和 worker 使用。你可以将他们配置在一个极点上，但是，在一个大的集群上建议分开配置以提高性能。</p>
 
 <p>coordinator 的最小配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">coordinator</span><span class="p">=</span><span class="s">true</span>
-<span class="err">node-scheduler.include-</span><span class="py">coordinator</span><span class="p">=</span><span class="s">false</span>
-<span class="err">http-</span><span class="py">server.http.port</span><span class="p">=</span><span class="s">8080</span>
-<span class="err">task.max-</span><span class="py">memory</span><span class="p">=</span><span class="s">1GB</span>
-<span class="err">discovery-</span><span class="py">server.enabled</span><span class="p">=</span><span class="s">true</span>
-<span class="py">discovery.uri</span><span class="p">=</span><span class="s">http://cdh1:8080</span>
+<pre><code class="language-properties">coordinator=true
+node-scheduler.include-coordinator=false
+http-server.http.port=8080
+task.max-memory=1GB
+discovery-server.enabled=true
+discovery.uri=http://cdh1:8080
 </code></pre>
-</div>
 
 <p>worker 的最小配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">coordinator</span><span class="p">=</span><span class="s">false</span>
-<span class="err">http-</span><span class="py">server.http.port</span><span class="p">=</span><span class="s">8080</span>
-<span class="err">task.max-</span><span class="py">memory</span><span class="p">=</span><span class="s">1GB</span>
-<span class="py">discovery.uri</span><span class="p">=</span><span class="s">http://cdh1:8080</span>
+<pre><code class="language-properties">coordinator=false
+http-server.http.port=8080
+task.max-memory=1GB
+discovery.uri=http://cdh1:8080
 </code></pre>
-</div>
 
 <p>可选的，作为测试，你可以在一个节点上同时配置两者：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">coordinator</span><span class="p">=</span><span class="s">true</span>
-<span class="err">node-scheduler.include-</span><span class="py">coordinator</span><span class="p">=</span><span class="s">true</span>
-<span class="err">http-</span><span class="py">server.http.port</span><span class="p">=</span><span class="s">8080</span>
-<span class="err">task.max-</span><span class="py">memory</span><span class="p">=</span><span class="s">1GB</span>
-<span class="err">discovery-</span><span class="py">server.enabled</span><span class="p">=</span><span class="s">true</span>
-<span class="py">discovery.uri</span><span class="p">=</span><span class="s">http://cdh1:8080</span>
+<pre><code class="language-properties">coordinator=true
+node-scheduler.include-coordinator=true
+http-server.http.port=8080
+task.max-memory=1GB
+discovery-server.enabled=true
+discovery.uri=http://cdh1:8080
 </code></pre>
-</div>
 
 <p>参数说明：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">coordinator</code>：Presto 实例是否以 coordinator 对外提供服务</li>
-  <li><code class="highlighter-rouge">node-scheduler.include-coordinator</code>：是否允许在 coordinator 上进行调度任务</li>
-  <li><code class="highlighter-rouge">http-server.http.port</code>：HTTP 服务的端口</li>
-  <li><code class="highlighter-rouge">task.max-memory=1GB</code>：每一个任务（对应一个节点上的一个查询计划）所能使用的最大内存</li>
-  <li><code class="highlighter-rouge">discovery-server.enabled</code>：是否使用 Discovery service 发现集群中的每一个节点。</li>
-  <li><code class="highlighter-rouge">discovery.uri</code>：Discovery server 的 url</li>
+  <li><code>coordinator</code>：Presto 实例是否以 coordinator 对外提供服务</li>
+  <li><code>node-scheduler.include-coordinator</code>：是否允许在 coordinator 上进行调度任务</li>
+  <li><code>http-server.http.port</code>：HTTP 服务的端口</li>
+  <li><code>task.max-memory=1GB</code>：每一个任务（对应一个节点上的一个查询计划）所能使用的最大内存</li>
+  <li><code>discovery-server.enabled</code>：是否使用 Discovery service 发现集群中的每一个节点。</li>
+  <li><code>discovery.uri</code>：Discovery server 的 url</li>
 </ul>
 
-<p><code class="highlighter-rouge">etc/log.properties</code> 可以设置某一个 java 包的日志等级：</p>
+<p><code>etc/log.properties</code> 可以设置某一个 java 包的日志等级：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">com.facebook.presto</span><span class="p">=</span><span class="s">INFO</span>
+<pre><code class="language-properties">com.facebook.presto=INFO
 </code></pre>
-</div>
 
 <p>关于 Catalog 的配置，首先需要创建 etc/catalog 目录，然后根据你想使用的连接器来创建对应的配置文件，比如，你想使用 jmx 连接器，则创建 jmx.properties：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">connector.name</span><span class="p">=</span><span class="s">jmx</span>
+<pre><code class="language-properties">connector.name=jmx
 </code></pre>
-</div>
 
 <p>如果你想使用 hive 的连接器，则创建 hive.properties：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">connector.name</span><span class="p">=</span><span class="s">hive-cdh5</span>
-<span class="py">hive.metastore.uri</span><span class="p">=</span><span class="s">thrift://cdh1:9083  #修改为 hive-metastore 服务所在的主机名称，这里我是安装在 cdh1节点</span>
-<span class="py">hive.config.resources</span><span class="p">=</span><span class="s">/etc/hadoop/conf/core-site.xml,/etc/hadoop/conf/hdfs-site.xml</span>
+<pre><code class="language-properties">connector.name=hive-cdh5
+hive.metastore.uri=thrift://cdh1:9083  #修改为 hive-metastore 服务所在的主机名称，这里我是安装在 cdh1节点
+hive.config.resources=/etc/hadoop/conf/core-site.xml,/etc/hadoop/conf/hdfs-site.xml
 </code></pre>
-</div>
 
 <p>更多关于连接器的说明，请参考 <a href="http://prestodb.io/docs/current/connector.html">Connectors </a>。</p>
 
@@ -266,52 +256,48 @@ tar zxvf presto-server-0.90.tar.gz
 
 <p>你可以使用下面命令后台启动：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bin/launcher start
+<pre><code>bin/launcher start
 </code></pre>
-</div>
 
 <p>也可以前台启动，观察输出日志：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bin/launcher run
+<pre><code>bin/launcher run
 </code></pre>
-</div>
 
 <p>另外，你也可以通过下面命令停止：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bin/launcher stop
+<pre><code>bin/launcher stop
 </code></pre>
-</div>
 
-<p>更多命令，你可以通过 <code class="highlighter-rouge">--help</code> 参数来查看。</p>
+<p>更多命令，你可以通过 <code>--help</code> 参数来查看。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>root@cdh1 presto-server-0.90]# bin/launcher --help
-Usage: launcher <span class="o">[</span>options] <span class="nb">command
+<pre><code class="language-bash">[root@cdh1 presto-server-0.90]# bin/launcher --help
+Usage: launcher [options] command
 
-</span>Commands: run, start, stop, restart, <span class="nb">kill</span>, status
+Commands: run, start, stop, restart, kill, status
 
 Options:
-  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -h, --help            show this help message and exit
   -v, --verbose         Run verbosely
-  --launcher-config<span class="o">=</span>FILE
+  --launcher-config=FILE
                         Defaults to INSTALL_PATH/bin/launcher.properties
-  --node-config<span class="o">=</span>FILE    Defaults to INSTALL_PATH/etc/node.properties
-  --jvm-config<span class="o">=</span>FILE     Defaults to INSTALL_PATH/etc/jvm.config
-  --config<span class="o">=</span>FILE         Defaults to INSTALL_PATH/etc/config.properties
-  --log-levels-file<span class="o">=</span>FILE
+  --node-config=FILE    Defaults to INSTALL_PATH/etc/node.properties
+  --jvm-config=FILE     Defaults to INSTALL_PATH/etc/jvm.config
+  --config=FILE         Defaults to INSTALL_PATH/etc/config.properties
+  --log-levels-file=FILE
                         Defaults to INSTALL_PATH/etc/log.properties
-  --data-dir<span class="o">=</span>DIR        Defaults to INSTALL_PATH
-  --pid-file<span class="o">=</span>FILE       Defaults to DATA_DIR/var/run/launcher.pid
-  --launcher-log-file<span class="o">=</span>FILE
-                        Defaults to DATA_DIR/var/log/launcher.log <span class="o">(</span>only <span class="k">in </span>daemon mode<span class="o">)</span>
-  --server-log-file<span class="o">=</span>FILE
-                        Defaults to DATA_DIR/var/log/server.log <span class="o">(</span>only <span class="k">in </span>daemon mode<span class="o">)</span>
-  -D <span class="nv">NAME</span><span class="o">=</span>VALUE         Set a Java system property
+  --data-dir=DIR        Defaults to INSTALL_PATH
+  --pid-file=FILE       Defaults to DATA_DIR/var/run/launcher.pid
+  --launcher-log-file=FILE
+                        Defaults to DATA_DIR/var/log/launcher.log (only in daemon mode)
+  --server-log-file=FILE
+                        Defaults to DATA_DIR/var/log/server.log (only in daemon mode)
+  -D NAME=VALUE         Set a Java system property
 </code></pre>
-</div>
 
 <p>启动之后，你可以观察 /var/presto/data/ 目录：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@cdh1 /var/presto/data/]# tree
+<pre><code>[root@cdh1 /var/presto/data/]# tree
 .
 ├── etc -&gt; /opt/presto-server-0.90/etc
 ├── plugin -&gt; /opt/presto-server-0.90/plugin
@@ -325,14 +311,13 @@ Options:
 
 5 directories, 4 files
 </code></pre>
-</div>
 
 <p>在 /var/presto/data/var/log 目录可以查看日志：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">launcher.log</code>：启动日志</li>
-  <li><code class="highlighter-rouge">server.log</code>：Presto Server 输出日志</li>
-  <li><code class="highlighter-rouge">http-request.log</code>：HTTP 请求日志</li>
+  <li><code>launcher.log</code>：启动日志</li>
+  <li><code>server.log</code>：Presto Server 输出日志</li>
+  <li><code>http-request.log</code>：HTTP 请求日志</li>
 </ul>
 
 <h1 id="presto-cli">5. 测试 Presto CLI</h1>
@@ -341,17 +326,16 @@ Options:
 
 <p>运行下面命令进行测试：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>root@cdh1 bin]# ./presto-cli --server localhost:8080 --catalog hive --schema default
-<span class="gp">presto:default&gt; </span>show tables;
+<pre><code class="language-bash">[root@cdh1 bin]# ./presto-cli --server localhost:8080 --catalog hive --schema default
+presto:default&gt; show tables;
  Table
 -------
-<span class="o">(</span>0 rows<span class="o">)</span>
+(0 rows)
 
 Query 20150126_062137_00012_qgwvy, FINISHED, 1 node
-Splits: 2 total, 2 <span class="k">done</span> <span class="o">(</span>100.00%<span class="o">)</span>
-0:00 <span class="o">[</span>0 rows, 0B] <span class="o">[</span>0 rows/s, 0B/s]
+Splits: 2 total, 2 done (100.00%)
+0:00 [0 rows, 0B] [0 rows/s, 0B/s]
 </code></pre>
-</div>
 
 <p>在 执行 show tables 命令之前，你可以查看 <a href="http://cdh1:8080/">http://cdh1:8080/</a> 页面：</p>
 
@@ -361,13 +345,12 @@ Splits: 2 total, 2 <span class="k">done</span> <span class="o">(</span>100.00%<s
 
 <p><img src="/static/images/presto/presto-web-02.jpg" alt="" /></p>
 
-<p>可以运行 <code class="highlighter-rouge">--help</code> 命令查看更多参数，例如你可以在命令行直接运行下面命令：</p>
+<p>可以运行 <code>--help</code> 命令查看更多参数，例如你可以在命令行直接运行下面命令：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>./presto-cli --server localhost:8080 --catalog hive --schema default --execute "show tables;"
+<pre><code>./presto-cli --server localhost:8080 --catalog hive --schema default --execute "show tables;"
 </code></pre>
-</div>
 
-<p>默认情况下，Presto 的查询结果是使用 <code class="highlighter-rouge">less</code> 程序分页输出的，你可以通过修改环境变量 <code class="highlighter-rouge">PRESTO_PAGER</code> 的值将其改为其他命令，如 <code class="highlighter-rouge">more</code>，或者将其置为空以禁止分页输出。</p>
+<p>默认情况下，Presto 的查询结果是使用 <code>less</code> 程序分页输出的，你可以通过修改环境变量 <code>PRESTO_PAGER</code> 的值将其改为其他命令，如 <code>more</code>，或者将其置为空以禁止分页输出。</p>
 
 <h1 id="jdbc">6. 测试 jdbc</h1>
 
@@ -375,17 +358,15 @@ Splits: 2 total, 2 <span class="k">done</span> <span class="o">(</span>100.00%<s
 
 <p>支持以下几种 JDBC URL 格式：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jdbc:presto://host:port
+<pre><code>jdbc:presto://host:port
 jdbc:presto://host:port/catalog
 jdbc:presto://host:port/catalog/schema
 </code></pre>
-</div>
 
 <p>连接 hive 数据库中 sales 库，示例如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>jdbc:presto://cdh1:8080/hive/sales
+<pre><code>jdbc:presto://cdh1:8080/hive/sales
 </code></pre>
-</div>
 
 <h1 id="section-1">7. 总结</h1>
 
@@ -442,7 +423,7 @@ jdbc:presto://host:port/catalog/schema
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

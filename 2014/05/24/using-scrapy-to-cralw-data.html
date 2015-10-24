@@ -140,48 +140,42 @@
 
 <p>查看python版本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>python -V
+<pre><code class="language-bash">$ python -V
 Python 2.6.6
 </code></pre>
-</div>
 
 <p>升级版本到2.7：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget http://python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
-<span class="gp">$ </span>tar xf Python-2.7.6.tar.xz
-<span class="gp">$ </span><span class="nb">cd </span>Python-2.7.6
-<span class="gp">$ </span>./configure --prefix<span class="o">=</span>/usr/local --enable-unicode<span class="o">=</span>ucs4 --enable-shared <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-Wl,-rpath /usr/local/lib"</span>
-<span class="gp">$ </span>make <span class="o">&amp;&amp;</span> make altinstall
+<pre><code class="language-bash">$ wget http://python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
+$ tar xf Python-2.7.6.tar.xz
+$ cd Python-2.7.6
+$ ./configure --prefix=/usr/local --enable-unicode=ucs4 --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib"
+$ make &amp;&amp; make altinstall
 </code></pre>
-</div>
 
 <p>建立软连接，使系统默认的 python指向 python2.7</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mv /usr/bin/python /usr/bin/python2.6.6 
-<span class="gp">$ </span>ln -s /usr/local/bin/python2.7 /usr/bin/python 
+<pre><code class="language-bash">$ mv /usr/bin/python /usr/bin/python2.6.6 
+$ ln -s /usr/local/bin/python2.7 /usr/bin/python 
 </code></pre>
-</div>
 
 <p>再次查看python版本：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>python -V
+<pre><code class="language-bash">$ python -V
 Python 2.7.6
 </code></pre>
-</div>
 
 <h2 id="section-1">安装</h2>
 
 <p>这里使用 wget 的方式来安装 <a href="http://pypi.python.org/pypi/setuptools">setuptools</a> :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget https://bootstrap.pypa.io/ez_setup.py -O - | python
+<pre><code class="language-bash">$ wget https://bootstrap.pypa.io/ez_setup.py -O - | python
 </code></pre>
-</div>
 
 <h2 id="zopeinterface">安装 zope.interface</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>easy_install zope.interface
+<pre><code class="language-bash">$ easy_install zope.interface
 </code></pre>
-</div>
 
 <h2 id="twisted">安装 twisted</h2>
 
@@ -189,86 +183,76 @@ Python 2.7.6
 
 <p>安装 twisted 前，需要先安装 gcc：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install gcc -y
+<pre><code class="language-bash">$ yum install gcc -y
 </code></pre>
-</div>
 
 <p>然后，再通过 easy_install 安装 twisted：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>easy_install twisted
+<pre><code class="language-bash">$ easy_install twisted
 </code></pre>
-</div>
 
 <p>如果出现下面错误：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>easy_install twisted
-Searching <span class="k">for </span>twisted
+<pre><code class="language-bash">$ easy_install twisted
+Searching for twisted
 Reading https://pypi.python.org/simple/twisted/
 Best match: Twisted 14.0.0
-Downloading https://pypi.python.org/packages/source/T/Twisted/Twisted-14.0.0.tar.bz2#md5<span class="o">=</span>9625c094e0a18da77faa4627b98c9815
+Downloading https://pypi.python.org/packages/source/T/Twisted/Twisted-14.0.0.tar.bz2#md5=9625c094e0a18da77faa4627b98c9815
 Processing Twisted-14.0.0.tar.bz2
 Writing /tmp/easy_install-kYHKjn/Twisted-14.0.0/setup.cfg
 Running Twisted-14.0.0/setup.py -q bdist_egg --dist-dir /tmp/easy_install-kYHKjn/Twisted-14.0.0/egg-dist-tmp-vu1n6Y
 twisted/runner/portmap.c:10:20: error: Python.h: No such file or directory
-twisted/runner/portmap.c:14: error: expected ‘<span class="o">=</span>’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘<span class="k">*</span>’ token
-twisted/runner/portmap.c:31: error: expected ‘<span class="o">=</span>’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘<span class="k">*</span>’ token
-twisted/runner/portmap.c:45: error: expected ‘<span class="o">=</span>’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘PortmapMethods’
-twisted/runner/portmap.c: In <span class="k">function</span> ‘initportmap’:
-twisted/runner/portmap.c:55: warning: implicit declaration of <span class="k">function</span> ‘Py_InitModule’
-twisted/runner/portmap.c:55: error: ‘PortmapMethods’ undeclared <span class="o">(</span>first use <span class="k">in </span>this <span class="k">function</span><span class="o">)</span>
-twisted/runner/portmap.c:55: error: <span class="o">(</span>Each undeclared identifier is reported only once
-twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class="k">function </span>it appears <span class="k">in</span>.<span class="o">)</span>
+twisted/runner/portmap.c:14: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘*’ token
+twisted/runner/portmap.c:31: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘*’ token
+twisted/runner/portmap.c:45: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘PortmapMethods’
+twisted/runner/portmap.c: In function ‘initportmap’:
+twisted/runner/portmap.c:55: warning: implicit declaration of function ‘Py_InitModule’
+twisted/runner/portmap.c:55: error: ‘PortmapMethods’ undeclared (first use in this function)
+twisted/runner/portmap.c:55: error: (Each undeclared identifier is reported only once
+twisted/runner/portmap.c:55: error: for each function it appears in.)
 </code></pre>
-</div>
 
 <p>请安装 python-devel 然后再次运行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install python-devel -y
-<span class="gp">$ </span>easy_install twisted
+<pre><code class="language-bash">$ yum install python-devel -y
+$ easy_install twisted
 </code></pre>
-</div>
 
 <p>如果出现下面异常：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>error: Not a recognized archive type: /tmp/easy_install-tVwC5O/Twisted-14.0.0.tar.bz2
+<pre><code>error: Not a recognized archive type: /tmp/easy_install-tVwC5O/Twisted-14.0.0.tar.bz2
 </code></pre>
-</div>
 
 <p>请手动下载然后安装，下载地址在<a href="http://pypi.python.org/pypi/Twisted">这里</a></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget https://pypi.python.org/packages/source/T/Twisted/Twisted-14.0.0.tar.bz2#md5<span class="o">=</span>9625c094e0a18da77faa4627b98c9815
-<span class="gp">$ </span>tar -vxjf Twisted-14.0.0.tar.bz2
-<span class="gp">$ </span><span class="nb">cd </span>Twisted-14.0.0
-<span class="gp">$ </span>python setup.py install
+<pre><code class="language-bash">$ wget https://pypi.python.org/packages/source/T/Twisted/Twisted-14.0.0.tar.bz2#md5=9625c094e0a18da77faa4627b98c9815
+$ tar -vxjf Twisted-14.0.0.tar.bz2
+$ cd Twisted-14.0.0
+$ python setup.py install
 </code></pre>
-</div>
 
 <h2 id="pyopenssl">安装 pyOpenSSL</h2>
 
 <p>先安装一些依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install libffi libffi-devel openssl-devel -y
+<pre><code class="language-bash">$ yum install libffi libffi-devel openssl-devel -y
 </code></pre>
-</div>
 <p>然后，再通过 easy_install 安装 pyOpenSSL：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>easy_install pyOpenSSL
+<pre><code class="language-bash">$ easy_install pyOpenSSL
 </code></pre>
-</div>
 
 <h2 id="scrapy">安装 Scrapy</h2>
 
 <p>先安装一些依赖：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install libxml2 libxslt libxslt-devel -y
+<pre><code class="language-bash">$ yum install libxml2 libxslt libxslt-devel -y
 </code></pre>
-</div>
 
 <p>最后再来安装 Scrapy ：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>easy_install scrapy
+<pre><code class="language-bash">$ easy_install scrapy
 </code></pre>
-</div>
 
 <h1 id="scrapy-1">2. 使用 Scrapy</h1>
 
@@ -282,13 +266,12 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 
 <p>在抓取之前，你需要新建一个 Scrapy 工程。进入一个你想用来保存代码的目录，然后执行：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scrapy startproject tutorial
+<pre><code class="language-bash">$ scrapy startproject tutorial
 </code></pre>
-</div>
 
 <p>这个命令会在当前目录下创建一个新目录 tutorial，它的结构如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.
+<pre><code>.
 ├── scrapy.cfg
 └── tutorial
     ├── __init__.py
@@ -298,7 +281,6 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
     └── spiders
         └── __init__.py
 </code></pre>
-</div>
 
 <p>这些文件主要是：</p>
 
@@ -315,16 +297,15 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 
 <p>Items是将要装载抓取的数据的容器，它工作方式像 python 里面的字典，但它提供更多的保护，比如对未定义的字段填充以防止拼写错误。</p>
 
-<p>它通过创建一个 <code class="highlighter-rouge">scrapy.item.Item</code> 类来声明，定义它的属性为 <code class="highlighter-rouge">scrpy.item.Field</code> 对象，就像是一个对象关系映射(ORM). <br />
+<p>它通过创建一个 <code>scrapy.item.Item</code> 类来声明，定义它的属性为 <code>scrpy.item.Field</code> 对象，就像是一个对象关系映射(ORM). <br />
 我们通过将需要的item模型化，来控制从 dmoz.org 获得的站点数据，比如我们要获得站点的名字，url 和网站描述，我们定义这三种属性的域。要做到这点，我们编辑在 tutorial 目录下的 items.py 文件，我们的 Item 类将会是这样</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scrapy.item</span> <span class="kn">import</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Field</span> 
-<span class="k">class</span> <span class="nc">DmozItem</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
-    <span class="n">link</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<pre><code class="language-python">from scrapy.item import Item, Field 
+class DmozItem(Item):
+    title = Field()
+    link = Field()
+    desc = Field()
 </code></pre>
-</div>
 
 <p>刚开始看起来可能会有些困惑，但是定义这些 item 能让你用其他 Scrapy 组件的时候知道你的 items 到底是什么。</p>
 
@@ -332,39 +313,37 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 
 <p>Spider 是用户编写的类，用于从一个域（或域组）中抓取信息。们定义了用于下载的URL的初步列表，如何跟踪链接，以及如何来解析这些网页的内容用于提取items。</p>
 
-<p>要建立一个 Spider，你可以为 <code class="highlighter-rouge">scrapy.spider.BaseSpider</code> 创建一个子类，并确定三个主要的、强制的属性：</p>
+<p>要建立一个 Spider，你可以为 <code>scrapy.spider.BaseSpider</code> 创建一个子类，并确定三个主要的、强制的属性：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">name</code>：爬虫的识别名，它必须是唯一的，在不同的爬虫中你必须定义不同的名字.</li>
-  <li><code class="highlighter-rouge">start_urls</code>：爬虫开始爬的一个 URL 列表。爬虫从这里开始抓取数据，所以，第一次下载的数据将会从这些 URLS 开始。其他子 URL 将会从这些起始 URL 中继承性生成。</li>
-  <li><code class="highlighter-rouge">parse()</code>：爬虫的方法，调用时候传入从每一个 URL 传回的 Response 对象作为参数，response 将会是 parse 方法的唯一的一个参数,</li>
+  <li><code>name</code>：爬虫的识别名，它必须是唯一的，在不同的爬虫中你必须定义不同的名字.</li>
+  <li><code>start_urls</code>：爬虫开始爬的一个 URL 列表。爬虫从这里开始抓取数据，所以，第一次下载的数据将会从这些 URLS 开始。其他子 URL 将会从这些起始 URL 中继承性生成。</li>
+  <li><code>parse()</code>：爬虫的方法，调用时候传入从每一个 URL 传回的 Response 对象作为参数，response 将会是 parse 方法的唯一的一个参数,</li>
 </ul>
 
 <p>这个方法负责解析返回的数据、匹配抓取的数据(解析为 item )并跟踪更多的 URL。</p>
 
 <p>在 tutorial/spiders 目录下创建 DmozSpider.py</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scrapy.spider</span> <span class="kn">import</span> <span class="n">BaseSpider</span>
+<pre><code class="language-python">from scrapy.spider import BaseSpider
 
-<span class="k">class</span> <span class="nc">DmozSpider</span><span class="p">(</span><span class="n">BaseSpider</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">"dmoz"</span>
-    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">"dmoz.org"</span><span class="p">]</span>
-    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s">"http://www.dmoz.org/Computers/Programming/Languages/Python/Books/"</span><span class="p">,</span>
-        <span class="s">"http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/"</span>
-    <span class="p">]</span>
+class DmozSpider(BaseSpider):
+    name = "dmoz"
+    allowed_domains = ["dmoz.org"]
+    start_urls = [
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Books/",
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/"
+    ]
 
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    def parse(self, response):
+        filename = response.url.split("/")[-2]
+        open(filename, 'wb').write(response.body)
 </code></pre>
-</div>
 
 <h2 id="section-3">运行项目</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scrapy crawl dmoz
+<pre><code class="language-bash">$ scrapy crawl dmoz
 </code></pre>
-</div>
 
 <p>该命令从 dmoz.org 域启动爬虫，第三个参数为 DmozSpider.py 中的 name 属性值。</p>
 
@@ -375,10 +354,10 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 <p>这是一些XPath表达式的例子和他们的含义：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">/html/head/title</code>: 选择HTML文档 <code class="highlighter-rouge">&lt;head&gt;</code> 元素下面的 <code class="highlighter-rouge">&lt;title&gt;</code> 标签。</li>
-  <li><code class="highlighter-rouge">/html/head/title/text()</code>: 选择前面提到的<code class="highlighter-rouge"> &lt;title&gt;</code> 元素下面的文本内容</li>
-  <li><code class="highlighter-rouge">//td</code>: 选择所有 <code class="highlighter-rouge">&lt;td&gt;</code> 元素</li>
-  <li><code class="highlighter-rouge">//div[@class="mine"]</code>: 选择所有包含 <code class="highlighter-rouge">class="mine"</code> 属性的div 标签元素</li>
+  <li><code>/html/head/title</code>: 选择HTML文档 <code>&lt;head&gt;</code> 元素下面的 <code>&lt;title&gt;</code> 标签。</li>
+  <li><code>/html/head/title/text()</code>: 选择前面提到的<code> &lt;title&gt;</code> 元素下面的文本内容</li>
+  <li><code>//td</code>: 选择所有 <code>&lt;td&gt;</code> 元素</li>
+  <li><code>//div[@class="mine"]</code>: 选择所有包含 <code>class="mine"</code> 属性的div 标签元素</li>
 </ul>
 
 <p>这只是几个使用 XPath 的简单例子，但是实际上 XPath 非常强大。如果你想了解更多 XPATH 的内容，我们向你推荐这个 <a href="http://www.w3schools.com/XPath/default.asp">XPath 教程</a></p>
@@ -386,112 +365,105 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 <p>为了方便使用 XPaths，Scrapy 提供 Selector 类， 有三种方法</p>
 
 <ul>
-  <li><code class="highlighter-rouge">xpath()</code>：返回selectors列表, 每一个select表示一个xpath参数表达式选择的节点.</li>
-  <li><code class="highlighter-rouge">extract()</code>：返回一个unicode字符串，该字符串为XPath选择器返回的数据</li>
-  <li><code class="highlighter-rouge">re()</code>： 返回unicode字符串列表，字符串作为参数由正则表达式提取出来</li>
-  <li><code class="highlighter-rouge">css()</code></li>
+  <li><code>xpath()</code>：返回selectors列表, 每一个select表示一个xpath参数表达式选择的节点.</li>
+  <li><code>extract()</code>：返回一个unicode字符串，该字符串为XPath选择器返回的数据</li>
+  <li><code>re()</code>： 返回unicode字符串列表，字符串作为参数由正则表达式提取出来</li>
+  <li><code>css()</code></li>
 </ul>
 
 <h2 id="section-4">提取数据</h2>
 
-<p>我们可以通过如下命令选择每个在网站中的 <code class="highlighter-rouge">&lt;li&gt;</code> 元素:</p>
+<p>我们可以通过如下命令选择每个在网站中的 <code>&lt;li&gt;</code> 元素:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//ul/li'</span><span class="p">)</span> 
+<pre><code class="language-python">sel.xpath('//ul/li') 
 </code></pre>
-</div>
 
 <p>然后是网站描述:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//ul/li/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<pre><code class="language-python">sel.xpath('//ul/li/text()').extract()
 </code></pre>
-</div>
 
 <p>网站标题:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//ul/li/a/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<pre><code class="language-python">sel.xpath('//ul/li/a/text()').extract()
 </code></pre>
-</div>
 
 <p>网站链接:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//ul/li/a/@href'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<pre><code class="language-python">sel.xpath('//ul/li/a/@href').extract()
 </code></pre>
-</div>
 
-<p>如前所述，每个 <code class="highlighter-rouge">xpath()</code> 调用返回一个 selectors 列表，所以我们可以结合 <code class="highlighter-rouge">xpath()</code> 去挖掘更深的节点。我们将会用到这些特性，所以:</p>
+<p>如前所述，每个 <code>xpath()</code> 调用返回一个 selectors 列表，所以我们可以结合 <code>xpath()</code> 去挖掘更深的节点。我们将会用到这些特性，所以:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sites</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//ul/li'</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">:</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'a/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-    <span class="n">link</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'a/@href'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-    <span class="k">print</span> <span class="n">title</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">desc</span>
+<pre><code class="language-python">sites = sel.xpath('//ul/li')
+for site in sites:
+    title = site.xpath('a/text()').extract()
+    link = site.xpath('a/@href').extract()
+    desc = site.xpath('text()').extract()
+    print title, link, desc
 </code></pre>
-</div>
 
 <h2 id="item-1">使用Item</h2>
 
-<p><code class="highlighter-rouge">scrapy.item.Item</code> 的调用接口类似于 python 的 dict ，Item 包含多个 <code class="highlighter-rouge">scrapy.item.Field</code>。这跟 django 的 Model 与</p>
+<p><code>scrapy.item.Item</code> 的调用接口类似于 python 的 dict ，Item 包含多个 <code>scrapy.item.Field</code>。这跟 django 的 Model 与</p>
 
 <p>Item 通常是在 Spider 的 parse 方法里使用，它用来保存解析到的数据。</p>
 
 <p>最后修改爬虫类，使用 Item 来保存数据，代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scrapy.spider</span> <span class="kn">import</span> <span class="n">Spider</span>
-<span class="kn">from</span> <span class="nn">scrapy.selector</span> <span class="kn">import</span> <span class="n">Selector</span>
+<pre><code class="language-python">from scrapy.spider import Spider
+from scrapy.selector import Selector
 
-<span class="kn">from</span> <span class="nn">dirbot.items</span> <span class="kn">import</span> <span class="n">Website</span>
+from dirbot.items import Website
 
 
-<span class="k">class</span> <span class="nc">DmozSpider</span><span class="p">(</span><span class="n">Spider</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">"dmoz"</span>
-    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">"dmoz.org"</span><span class="p">]</span>
-    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s">"http://www.dmoz.org/Computers/Programming/Languages/Python/Books/"</span><span class="p">,</span>
-        <span class="s">"http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/"</span><span class="p">,</span>
-    <span class="p">]</span>
+class DmozSpider(Spider):
+    name = "dmoz"
+    allowed_domains = ["dmoz.org"]
+    start_urls = [
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Books/",
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/",
+    ]
 
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-        <span class="s">"""
+    def parse(self, response):
+        """
         The lines below is a spider contract. For more info see:
         http://doc.scrapy.org/en/latest/topics/contracts.html
 
         @url http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/
         @scrapes name
-        """</span>
-        <span class="n">sel</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-        <span class="n">sites</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//ul[@class="directory-url"]/li'</span><span class="p">)</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        """
+        sel = Selector(response)
+        sites = sel.xpath('//ul[@class="directory-url"]/li')
+        items = []
 
-        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">:</span>
-            <span class="n">item</span> <span class="o">=</span> <span class="n">Website</span><span class="p">()</span>
-            <span class="n">item</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'a/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-            <span class="n">item</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'a/@href'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-            <span class="n">item</span><span class="p">[</span><span class="s">'description'</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'text()'</span><span class="p">)</span><span class="o">.</span><span class="n">re</span><span class="p">(</span><span class="s">'-</span><span class="err">\</span><span class="s">s([^</span><span class="se">\n</span><span class="s">]*?)</span><span class="se">\\</span><span class="s">n'</span><span class="p">)</span>
-            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        for site in sites:
+            item = Website()
+            item['name'] = site.xpath('a/text()').extract()
+            item['url'] = site.xpath('a/@href').extract()
+            item['description'] = site.xpath('text()').re('-\s([^\n]*?)\\n')
+            items.append(item)
 
-        <span class="k">return</span> <span class="n">items</span>
+        return items
 </code></pre>
-</div>
 
 <p>现在，可以再次运行该项目查看运行结果：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scrapy crawl dmoz
+<pre><code class="language-bash">$ scrapy crawl dmoz
 </code></pre>
-</div>
 
 <h2 id="item-pipeline">使用Item Pipeline</h2>
 
-<p>在 settings.py 中设置 <code class="highlighter-rouge">ITEM_PIPELINES</code>，其默认为<code class="highlighter-rouge">[]</code>，与 django 的 <code class="highlighter-rouge">MIDDLEWARE_CLASSES</code> 等相似。<br />
-从 Spider 的 parse 返回的 Item 数据将依次被 <code class="highlighter-rouge">ITEM_PIPELINES</code> 列表中的 Pipeline 类处理。</p>
+<p>在 settings.py 中设置 <code>ITEM_PIPELINES</code>，其默认为<code>[]</code>，与 django 的 <code>MIDDLEWARE_CLASSES</code> 等相似。<br />
+从 Spider 的 parse 返回的 Item 数据将依次被 <code>ITEM_PIPELINES</code> 列表中的 Pipeline 类处理。</p>
 
 <p>一个 Item Pipeline 类必须实现以下方法：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">process_item(item, spider)</code> 为每个 item pipeline 组件调用，并且需要返回一个 <code class="highlighter-rouge">scrapy.item.Item</code> 实例对象或者抛出一个 <code class="highlighter-rouge">scrapy.exceptions.DropItem</code> 异常。当抛出异常后该 item 将不会被之后的 pipeline 处理。参数:
+  <li><code>process_item(item, spider)</code> 为每个 item pipeline 组件调用，并且需要返回一个 <code>scrapy.item.Item</code> 实例对象或者抛出一个 <code>scrapy.exceptions.DropItem</code> 异常。当抛出异常后该 item 将不会被之后的 pipeline 处理。参数:
     <ul>
-      <li><code class="highlighter-rouge">item (Item object)</code> – 由 parse 方法返回的 Item 对象</li>
-      <li><code class="highlighter-rouge">spider (BaseSpider object)</code> – 抓取到这个 Item 对象对应的爬虫对象</li>
+      <li><code>item (Item object)</code> – 由 parse 方法返回的 Item 对象</li>
+      <li><code>spider (BaseSpider object)</code> – 抓取到这个 Item 对象对应的爬虫对象</li>
     </ul>
   </li>
 </ul>
@@ -499,17 +471,16 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 <p>也可额外的实现以下两个方法：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">open_spider(spider)</code> 当爬虫打开之后被调用。参数: <code class="highlighter-rouge">spider (BaseSpider object)</code> – 已经运行的爬虫</li>
-  <li><code class="highlighter-rouge">close_spider(spider)</code> 当爬虫关闭之后被调用。参数: <code class="highlighter-rouge">spider (BaseSpider object)</code> – 已经关闭的爬虫</li>
+  <li><code>open_spider(spider)</code> 当爬虫打开之后被调用。参数: <code>spider (BaseSpider object)</code> – 已经运行的爬虫</li>
+  <li><code>close_spider(spider)</code> 当爬虫关闭之后被调用。参数: <code>spider (BaseSpider object)</code> – 已经关闭的爬虫</li>
 </ul>
 
 <h2 id="section-5">保存抓取的数据</h2>
 
 <p>保存信息的最简单的方法是通过 <a href="http://doc.scrapy.org/en/0.22/topics/feed-exports.html#topics-feed-exports">Feed exports</a>，命令如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scrapy crawl dmoz -o items.json -t json
+<pre><code class="language-bash">$ scrapy crawl dmoz -o items.json -t json
 </code></pre>
-</div>
 
 <p>除了 json 格式之外，还支持 JSON lines、CSV、XML格式，你也可以通过接口扩展一些格式。</p>
 
@@ -523,36 +494,35 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
 
 <p>这篇文章中的爬虫类代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scrapy.contrib.spiders</span> <span class="kn">import</span> <span class="n">CrawlSpider</span><span class="p">,</span> <span class="n">Rule</span>
-<span class="kn">from</span> <span class="nn">scrapy.contrib.linkextractors.sgml</span> <span class="kn">import</span> <span class="n">SgmlLinkExtractor</span>
-<span class="kn">from</span> <span class="nn">scrapy.selector</span> <span class="kn">import</span> <span class="n">Selector</span>
+<pre><code class="language-python">from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.selector import Selector
  
-<span class="kn">from</span> <span class="nn">cnbeta.items</span> <span class="kn">import</span> <span class="n">CnbetaItem</span>
+from cnbeta.items import CnbetaItem
  
-<span class="k">class</span> <span class="nc">CBSpider</span><span class="p">(</span><span class="n">CrawlSpider</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">'cnbeta'</span>
-    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">'cnbeta.com'</span><span class="p">]</span>
-    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s">'http://www.cnbeta.com'</span><span class="p">]</span>
+class CBSpider(CrawlSpider):
+    name = 'cnbeta'
+    allowed_domains = ['cnbeta.com']
+    start_urls = ['http://www.cnbeta.com']
  
-    <span class="n">rules</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">Rule</span><span class="p">(</span><span class="n">SgmlLinkExtractor</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="p">(</span><span class="s">'/articles/.*</span><span class="err">\</span><span class="s">.htm'</span><span class="p">,</span> <span class="p">)),</span>
-             <span class="n">callback</span><span class="o">=</span><span class="s">'parse_page'</span><span class="p">,</span> <span class="n">follow</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
-    <span class="p">)</span>
+    rules = (
+        Rule(SgmlLinkExtractor(allow=('/articles/.*\.htm', )),
+             callback='parse_page', follow=True),
+    )
  
-    <span class="k">def</span> <span class="nf">parse_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-        <span class="n">item</span> <span class="o">=</span> <span class="n">CnbetaItem</span><span class="p">()</span>
-        <span class="n">sel</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-        <span class="n">item</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//title/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-        <span class="n">item</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
-        <span class="k">return</span> <span class="n">item</span>
+    def parse_page(self, response):
+        item = CnbetaItem()
+        sel = Selector(response)
+        item['title'] = sel.xpath('//title/text()').extract()
+        item['url'] = response.url
+        return item
 </code></pre>
-</div>
 
 <p>需要说明的是：</p>
 
 <ul>
-  <li>该爬虫类继承的是 <code class="highlighter-rouge">CrawlSpider</code> 类，并且定义规则，rules指定了含有 <code class="highlighter-rouge">/articles/.*\.htm</code> 的链接都会被匹配。</li>
-  <li>该类并没有实现parse方法，并且规则中定义了回调函数 <code class="highlighter-rouge">parse_page</code>，你可以参考更多资料了解 CrawlSpider 的用法</li>
+  <li>该爬虫类继承的是 <code>CrawlSpider</code> 类，并且定义规则，rules指定了含有 <code>/articles/.*\.htm</code> 的链接都会被匹配。</li>
+  <li>该类并没有实现parse方法，并且规则中定义了回调函数 <code>parse_page</code>，你可以参考更多资料了解 CrawlSpider 的用法</li>
 </ul>
 
 <h1 id="section-7">3. 学习资料</h1>
@@ -657,7 +627,7 @@ twisted/runner/portmap.c:55: error: <span class="k">for </span>each <span class=
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>

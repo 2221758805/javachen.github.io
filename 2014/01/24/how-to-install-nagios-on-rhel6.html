@@ -107,40 +107,37 @@
               <div id="post-text">
                     <h1 id="rpm">在管理机上安装rpm包</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+<pre><code>$ rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 $ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 $ yum -y install nagios nagios-plugins-all nagios-plugins-nrpe nrpe php httpd
 $ chkconfig httpd on &amp;&amp; chkconfig nagios on
 $ service httpd start &amp;&amp; service nagios start
 </code></pre>
-</div>
 
 <h1 id="section">设置管理界面密码</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ htpasswd -c /etc/nagios/passwd nagiosadmin
+<pre><code>$ htpasswd -c /etc/nagios/passwd nagiosadmin
 </code></pre>
-</div>
 
 <!-- more -->
 
-<p>密码和用户名保持一致（都设置为nagiosadmin），否则你需要修改<code class="highlighter-rouge">/etc/nagios/cgi.cfg</code></p>
+<p>密码和用户名保持一致（都设置为nagiosadmin），否则你需要修改<code>/etc/nagios/cgi.cfg</code></p>
 
 <h1 id="nagios">访问Nagios</h1>
 
-<p>打开<code class="highlighter-rouge">http://ip/nagios</code>，输入用户名和密码即可访问</p>
+<p>打开<code>http://ip/nagios</code>，输入用户名和密码即可访问</p>
 
 <h1 id="nrpe">在客户端上安装NRPE</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+<pre><code>$ rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 $ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 $ yum -y install nagios nagios-plugins-all nrpe
 $ chkconfig nrpe on
 </code></pre>
-</div>
 
-<p>修改配置<code class="highlighter-rouge">/etc/nagios/nrpe.cfg</code>，例如：</p>
+<p>修改配置<code>/etc/nagios/nrpe.cfg</code>，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>log_facility=daemon
+<pre><code>log_facility=daemon
 pid_file=/var/run/nrpe/nrpe.pid
 server_port=5666
 nrpe_user=nrpe
@@ -158,50 +155,44 @@ command[check_zombie_procs]=/usr/lib64/nagios/plugins/check_procs -w 5 -c 10 -s 
 command[check_total_procs]=/usr/lib64/nagios/plugins/check_procs -w 150 -c 200
 command[check_procs]=/usr/lib64/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -s $ARG3$
 </code></pre>
-</div>
 
-<p>请注意修改<code class="highlighter-rouge">allowed_hosts</code>值为你的nagios监控机ip</p>
+<p>请注意修改<code>allowed_hosts</code>值为你的nagios监控机ip</p>
 
 <p>设置iptables：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ iptables -N NRPE
+<pre><code>$ iptables -N NRPE
 $ iptables -I INPUT -s 0/0 -p tcp --dport 5666 -j NRPE
 $ iptables -I NRPE -s 198.211.117.251 -j ACCEPT
 $ iptables -A NRPE -s 0/0 -j DROP
 $ /etc/init.d/iptables save
 </code></pre>
-</div>
 
 <p>或者，关闭iptables：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ /etc/init.d/iptables stop
+<pre><code>$ /etc/init.d/iptables stop
 </code></pre>
-</div>
 
 <p>启动NRPE：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ service nrpe start
+<pre><code>$ service nrpe start
 </code></pre>
-</div>
 
 <h1 id="section-1">在管理机上添加配置文件</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ echo "cfg_dir=/etc/nagios/servers" &gt;&gt; /etc/nagios/nagios.cfg
+<pre><code>$ echo "cfg_dir=/etc/nagios/servers" &gt;&gt; /etc/nagios/nagios.cfg
 $ cd /etc/nagios/servers
 $ touch hadoop.tk.cfg
 $ touch hbase.tk.cfg
 </code></pre>
-</div>
 
 <p>然后修改每一个配置文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ vim /etc/nagios/servers/hadoop.tk.cfg
+<pre><code>$ vim /etc/nagios/servers/hadoop.tk.cfg
 </code></pre>
-</div>
 
 <p>添加内容如下，你也可以稍作修改：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>define host {
+<pre><code>define host {
         use                     linux-server
         host_name               cloudmail.tk
         alias                   cloudmail.tk
@@ -230,14 +221,12 @@ define service {
         check_command                   check_local_load!5.0,4.0,3.0!10.0,6.0,4.0
         }
 </code></pre>
-</div>
 
 <p>重启nagios：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ chown -R nagios. /etc/nagios
+<pre><code>$ chown -R nagios. /etc/nagios
 $ service nagios restart
 </code></pre>
-</div>
 
 <h1 id="section-2">其他资源</h1>
 
@@ -305,7 +294,7 @@ $ service nagios restart
   	            
             <script type="text/javascript">
                 var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));</script>
+                document.write(unescape("%3Cspan id='cnzz_stat_icon_1256628929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1256628929' type='text/javascript'%3E%3C/script%3E"));</script>
             
             
     </p>
