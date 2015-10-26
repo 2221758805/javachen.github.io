@@ -119,59 +119,58 @@
 
 <p>解决m2e插件maven-dependency-plugin问题：</p>
 
-<p>```xml</p>
-<build>
-    <pluginmanagement>
-        <plugins>
-            <plugin>
-                <groupid>org.eclipse.m2e</groupid>
-                <artifactid>lifecycle-mapping</artifactid>
-                <version>1.0.0</version>
-                <configuration>
-                    <lifecyclemappingmetadata>
-                        <pluginexecutions>
-                            <pluginexecution>
-                                <pluginexecutionfilter>
-                                    <groupid>org.apache.maven.plugins</groupid>
-                                    <artifactid>maven-dependency-plugin</artifactid>
-                                    <versionrange>[2.0,)</versionrange>
-                                    <goals>
-                                        <goal>copy-dependencies</goal>
-                                    </goals>
-                                </pluginexecutionfilter>
-                                <action>
-                                    <ignore />
-                                </action>
-                            </pluginexecution>
-                        </pluginexecutions>
-                    </lifecyclemappingmetadata>
-                </configuration>
-            </plugin>
-        </plugins>
-    </pluginmanagement>
+<pre><code class="language-xml">&lt;build&gt;
+    &lt;pluginManagement&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.eclipse.m2e&lt;/groupId&gt;
+                &lt;artifactId&gt;lifecycle-mapping&lt;/artifactId&gt;
+                &lt;version&gt;1.0.0&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;lifecycleMappingMetadata&gt;
+                        &lt;pluginExecutions&gt;
+                            &lt;pluginExecution&gt;
+                                &lt;pluginExecutionFilter&gt;
+                                    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                                    &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+                                    &lt;versionRange&gt;[2.0,)&lt;/versionRange&gt;
+                                    &lt;goals&gt;
+                                        &lt;goal&gt;copy-dependencies&lt;/goal&gt;
+                                    &lt;/goals&gt;
+                                &lt;/pluginExecutionFilter&gt;
+                                &lt;action&gt;
+                                    &lt;ignore /&gt;
+                                &lt;/action&gt;
+                            &lt;/pluginExecution&gt;
+                        &lt;/pluginExecutions&gt;
+                    &lt;/lifecycleMappingMetadata&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
 
-    <plugins>
-        <plugin>
-            <groupid>org.apache.maven.plugins</groupid>
-            <artifactid>maven-dependency-plugin</artifactid>
-            <executions>
-                <execution>
-                    <id>copy-dependencies</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>copy-dependencies</goal>
-                    </goals>
-                    <configuration>
-                        <outputdirectory>${project.build.directory}/lib</outputdirectory>
-                        <excludetransitive>false</excludetransitive>
-                        <stripversion>true</stripversion>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-</build>
-<p>```</p>
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;copy-dependencies&lt;/id&gt;
+                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;copy-dependencies&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;outputDirectory&gt;${project.build.directory}/lib&lt;/outputDirectory&gt;
+                        &lt;excludeTransitive&gt;false&lt;/excludeTransitive&gt;
+                        &lt;stripVersion&gt;true&lt;/stripVersion&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
 
                     <br/>
                     <div class="well">
