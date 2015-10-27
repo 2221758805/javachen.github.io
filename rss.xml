@@ -4,8 +4,8 @@
     <title>JavaChen Blog</title>
     <description>Ramblings of a coder</description>
     <link>http://blog.javachen.com/rss.xml</link>
-    <lastBuildDate>2015-10-27T21:55:03+08:00</lastBuildDate>
-    <pubDate>2015-10-27T21:55:03+08:00</pubDate>
+    <lastBuildDate>2015-10-27T21:59:21+08:00</lastBuildDate>
+    <pubDate>2015-10-27T21:59:21+08:00</pubDate>
     <ttl>1800</ttl>
     
     <item>
@@ -17737,7 +17737,7 @@ define( [ &quot;require&quot;, &quot;app/app&quot;],
 
 &lt;p&gt;下面这幅图很形象的表明了他们三者之间的协作关系。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://yeoman.io/assets/img/workflow.c3cc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/static/images/2015/yo-bower-grunt.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Yeoman 特性：&lt;/p&gt;
 
@@ -17907,7 +17907,7 @@ angular.module(&#39;webApp&#39;).controller(&#39;MainCtrl&#39;, function ($scope
 
 &lt;p&gt;页面会显示如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://yeoman.io/assets/img/codelab/image_15.cb9d.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/static/images/2015/yeoman-mytodo-list.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;todo--1&quot;&gt;添加一个 todo 项&lt;/h2&gt;
 
@@ -17938,7 +17938,7 @@ angular.module(&#39;webApp&#39;).controller(&#39;MainCtrl&#39;, function ($scope
 
 &lt;p&gt;这时候，页面内容如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://yeoman.io/assets/img/codelab/image_16.c919.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/static/images/2015/yeoman-mytodo-add-remove.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;修改 main.js 添加 addTodo() 事件：&lt;/p&gt;
 
@@ -22431,22 +22431,30 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 └── bootstrap-css-only
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;我们可以将bower_components目录改名为lib，同时修改.bowerrc文件如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &quot;directory&quot;: &quot;src/main/resources/static/libs&quot;,
+  &quot;json&quot;: &quot;bower.json&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;h1 id=&quot;section-7&quot;&gt;9. 创建前端页面&lt;/h1&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;注意：&lt;/p&gt;
 
-  &lt;p&gt;前端页面和 js 存放到 src/main/resources/static/ 目录下，是因为 Spring Boot 会自动在 /static 或者 /public 或者 /resources 或者 /META-INF/resources 加载静态页面。&lt;/p&gt;
+  &lt;p&gt;前端页面和 js 存放到 public 目录下，是因为 Spring Boot 会自动在 /static 或者 /public 或者 /resources 或者 /META-INF/resources 加载静态页面。&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&quot;indexhtml&quot;&gt;创建 index.html&lt;/h2&gt;
 
-&lt;p&gt;创建 src/main/resources/static 目录存放静态页面 index.html：&lt;/p&gt;
+&lt;p&gt;创建 public 目录存放静态页面 index.html：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
 &amp;lt;html lang=&quot;en&quot;&amp;gt;
   &amp;lt;head&amp;gt;
-    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;./bower_components/bootstrap-css-only/css/bootstrap.min.css&quot; /&amp;gt;
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;./lib/bootstrap-css-only/css/bootstrap.min.css&quot; /&amp;gt;
   &amp;lt;/head&amp;gt;
   &amp;lt;body ng-app=&quot;myApp&quot;&amp;gt;
     &amp;lt;div class=&quot;container&quot; ng-controller=&quot;AppController&quot;&amp;gt;
@@ -22481,9 +22489,9 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
         &amp;lt;/div&amp;gt;
       &amp;lt;/form&amp;gt;
     &amp;lt;/div&amp;gt;
-    &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./bower_components/angular/angular.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./bower_components/angular-resource/angular-resource.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./bower_components/lodash/dist/lodash.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./lib/angular/angular.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./lib/angular-resource/angular-resource.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./lib/lodash/dist/lodash.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
     &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./app/app.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
     &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./app/controllers.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
     &amp;lt;script type=&quot;text/javascript&quot; src=&quot;./app/services.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
@@ -22493,7 +22501,7 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 &lt;h2 id=&quot;angularjs&quot;&gt;初始化 AngularJS&lt;/h2&gt;
 
-&lt;p&gt;这里使用闭包的方式来初始化 AngularJS，代码见 src/main/resources/static/app/app.js ：&lt;/p&gt;
+&lt;p&gt;这里使用闭包的方式来初始化 AngularJS，代码见 public/app/app.js ：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;(function(angular) {
   angular.module(&quot;myApp.controllers&quot;, []);
@@ -22504,7 +22512,7 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 &lt;h2 id=&quot;resource-factory&quot;&gt;创建 resource factory&lt;/h2&gt;
 
-&lt;p&gt;代码见 src/main/resources/static/app/services.js ：&lt;/p&gt;
+&lt;p&gt;代码见 public/app/services.js ：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;(function(angular) {
   var ItemFactory = function($resource) {
@@ -22527,7 +22535,7 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 &lt;h2 id=&quot;section-8&quot;&gt;创建控制器&lt;/h2&gt;
 
-&lt;p&gt;代码见 src/main/resources/static/app/controllers.js ：&lt;/p&gt;
+&lt;p&gt;代码见 public/app/controllers.js ：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;(function(angular) {
   var AppController = function($scope, Item) {
@@ -22567,25 +22575,81 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 &lt;p&gt;&lt;img src=&quot;/static/images/2015/checklist-first-run.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h1 id=&quot;section-10&quot;&gt;11. 总结&lt;/h1&gt;
+&lt;h1 id=&quot;section-10&quot;&gt;11. 前后端分离部署&lt;/h1&gt;
 
-&lt;p&gt;本文主要是记录快速使用 Spring Boot 和 Gradle 创建 AngularJS 项目的过程。，希望能对你有所帮助。&lt;/p&gt;
+&lt;p&gt;对于AngularJS应用，我们可以使用nodejs或者其他容器部署应用，例如，这里可以使用groovy服务来启动前端服务，然后通过http请求调用后端服务的接口。&lt;/p&gt;
+
+&lt;p&gt;先创建app.groovy文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-groovy&quot;&gt;@Controller class JsApp { }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改services.js文件中的请求地址为 &lt;code&gt;http://localhost:8080/items/:id&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;(function(angular) {
+  var ItemFactory = function($resource) {
+    return $resource(&#39;http://localhost:8080/items/:id&#39;, {
+      id: &#39;@id&#39;
+    }, {
+      update: {
+        method: &quot;PUT&quot;
+      },
+      remove: {
+        method: &quot;DELETE&quot;
+      }
+    });
+  };
+  
+  ItemFactory.$inject = [&#39;$resource&#39;];
+  angular.module(&quot;myApp.services&quot;).factory(&quot;Item&quot;, ItemFactory);
+}(angular));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后，启动groovy服务来托管静态文件，这里使用9000端口：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;spring run app.groovy -- --server.port=9000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这时候，就可以服务 http://localhost:9000/ 来查看前端页面了。&lt;/p&gt;
+
+&lt;p&gt;这样，前后端就是分别部署属于两个不同的应用了，为了解决跨域的问题，需要添加一个过滤器，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package com.javachen.filter;
+
+import org.springframework.stereotype.Component;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+public class SimpleCORSFilter implements Filter {
+
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) res;
+        response.setHeader(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);
+        response.setHeader(&quot;Access-Control-Allow-Methods&quot;, &quot;POST, GET, PUT, OPTIONS, DELETE&quot;);
+        response.setHeader(&quot;Access-Control-Max-Age&quot;, &quot;3600&quot;);
+        response.setHeader(&quot;Access-Control-Allow-Headers&quot;, &quot;Origin, X-Requested-With, Content-Type, Accept&quot;);
+        chain.doFilter(req, res);
+    }
+
+    public void init(FilterConfig filterConfig) {}
+
+    public void destroy() {}
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后，重启应用就可以了。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-11&quot;&gt;12. 总结&lt;/h1&gt;
+
+&lt;p&gt;本文主要是记录快速使用 Spring Boot 和 Gradle 创建 AngularJS 项目的过程，并介绍了如何将前后端进行分离和解决跨域访问的问题，希望能对你有所帮助。&lt;/p&gt;
 
 &lt;p&gt;文中相关的源码在 &lt;a href=&quot;https://github.com/javachen/spring-examples/tree/master/ng-spring-boot&quot;&gt;ng-spring-boot&lt;/a&gt;，你可以下载该项目，然后编译、运行代码。&lt;/p&gt;
 
-&lt;p&gt;该项目也可以使用 maven 编译、运行：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ mvn clean package
-
-$ java -jar target/ng-spring-boot-0.0.1-SNAPSHOT.jar
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;或者直接运行：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ mvn spring-boot:run
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;section-11&quot;&gt;11. 参考文章&lt;/h1&gt;
+&lt;h1 id=&quot;section-12&quot;&gt;13. 参考文章&lt;/h1&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;http://g00glen00b.be/prototyping-spring-boot-angularjs/&quot;&gt;Rapid prototyping with Spring Boot and AngularJS&lt;/a&gt;&lt;/li&gt;
@@ -40225,12 +40289,13 @@ $ git clone https://github.com/scrooloose/nerdtree.git
 
 &lt;p&gt;先安装依赖：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ brew install libksba autoconf automake libtool gcc46 libyaml readline
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ brew install libksba autoconf automake libtool gcc libyaml readline
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;通过rvm安装ruby：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ curl -L get.rvm.io | bash -s stable $ source ~/.bash_profile
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ curl -L get.rvm.io | bash -s stable 
+$ source ~/.bash_profile
 $ sed -i -e &#39;s/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g&#39; ~/.rvm/config/db
 $ sudo rvm install 1.9.3 --with-gcc=clang
 $ rvm --default 1.9.3

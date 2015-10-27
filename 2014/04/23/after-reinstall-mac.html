@@ -373,12 +373,13 @@ $ git clone https://github.com/scrooloose/nerdtree.git
 
 <p>先安装依赖：</p>
 
-<pre><code class="language-bash">$ brew install libksba autoconf automake libtool gcc46 libyaml readline
+<pre><code class="language-bash">$ brew install libksba autoconf automake libtool gcc libyaml readline
 </code></pre>
 
 <p>通过rvm安装ruby：</p>
 
-<pre><code class="language-bash">$ curl -L get.rvm.io | bash -s stable $ source ~/.bash_profile
+<pre><code class="language-bash">$ curl -L get.rvm.io | bash -s stable 
+$ source ~/.bash_profile
 $ sed -i -e 's/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g' ~/.rvm/config/db
 $ sudo rvm install 1.9.3 --with-gcc=clang
 $ rvm --default 1.9.3

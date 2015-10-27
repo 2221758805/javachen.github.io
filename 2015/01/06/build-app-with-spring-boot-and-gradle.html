@@ -539,22 +539,30 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 └── bootstrap-css-only
 </code></pre>
 
+<p>我们可以将bower_components目录改名为lib，同时修改.bowerrc文件如下：</p>
+
+<pre><code>{
+  "directory": "src/main/resources/static/libs",
+  "json": "bower.json"
+}
+</code></pre>
+
 <h1 id="section-7">9. 创建前端页面</h1>
 
 <blockquote>
   <p>注意：</p>
 
-  <p>前端页面和 js 存放到 src/main/resources/static/ 目录下，是因为 Spring Boot 会自动在 /static 或者 /public 或者 /resources 或者 /META-INF/resources 加载静态页面。</p>
+  <p>前端页面和 js 存放到 public 目录下，是因为 Spring Boot 会自动在 /static 或者 /public 或者 /resources 或者 /META-INF/resources 加载静态页面。</p>
 </blockquote>
 
 <h2 id="indexhtml">创建 index.html</h2>
 
-<p>创建 src/main/resources/static 目录存放静态页面 index.html：</p>
+<p>创建 public 目录存放静态页面 index.html：</p>
 
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
   &lt;head&gt;
-    &lt;link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" /&gt;
+    &lt;link rel="stylesheet" href="./lib/bootstrap-css-only/css/bootstrap.min.css" /&gt;
   &lt;/head&gt;
   &lt;body ng-app="myApp"&gt;
     &lt;div class="container" ng-controller="AppController"&gt;
@@ -589,9 +597,9 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
         &lt;/div&gt;
       &lt;/form&gt;
     &lt;/div&gt;
-    &lt;script type="text/javascript" src="./bower_components/angular/angular.min.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="./lib/angular/angular.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="./lib/angular-resource/angular-resource.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="./lib/lodash/dist/lodash.min.js"&gt;&lt;/script&gt;
     &lt;script type="text/javascript" src="./app/app.js"&gt;&lt;/script&gt;
     &lt;script type="text/javascript" src="./app/controllers.js"&gt;&lt;/script&gt;
     &lt;script type="text/javascript" src="./app/services.js"&gt;&lt;/script&gt;
@@ -601,7 +609,7 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 <h2 id="angularjs">初始化 AngularJS</h2>
 
-<p>这里使用闭包的方式来初始化 AngularJS，代码见 src/main/resources/static/app/app.js ：</p>
+<p>这里使用闭包的方式来初始化 AngularJS，代码见 public/app/app.js ：</p>
 
 <pre><code class="language-javascript">(function(angular) {
   angular.module("myApp.controllers", []);
@@ -612,7 +620,7 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 <h2 id="resource-factory">创建 resource factory</h2>
 
-<p>代码见 src/main/resources/static/app/services.js ：</p>
+<p>代码见 public/app/services.js ：</p>
 
 <pre><code class="language-javascript">(function(angular) {
   var ItemFactory = function($resource) {
@@ -635,7 +643,7 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 <h2 id="section-8">创建控制器</h2>
 
-<p>代码见 src/main/resources/static/app/controllers.js ：</p>
+<p>代码见 public/app/controllers.js ：</p>
 
 <pre><code class="language-javascript">(function(angular) {
   var AppController = function($scope, Item) {
@@ -675,25 +683,81 @@ $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
 
 <p><img src="/static/images/2015/checklist-first-run.png" alt="" /></p>
 
-<h1 id="section-10">11. 总结</h1>
+<h1 id="section-10">11. 前后端分离部署</h1>
 
-<p>本文主要是记录快速使用 Spring Boot 和 Gradle 创建 AngularJS 项目的过程。，希望能对你有所帮助。</p>
+<p>对于AngularJS应用，我们可以使用nodejs或者其他容器部署应用，例如，这里可以使用groovy服务来启动前端服务，然后通过http请求调用后端服务的接口。</p>
+
+<p>先创建app.groovy文件：</p>
+
+<pre><code class="language-groovy">@Controller class JsApp { }
+</code></pre>
+
+<p>修改services.js文件中的请求地址为 <code>http://localhost:8080/items/:id</code>：</p>
+
+<pre><code class="language-javascript">(function(angular) {
+  var ItemFactory = function($resource) {
+    return $resource('http://localhost:8080/items/:id', {
+      id: '@id'
+    }, {
+      update: {
+        method: "PUT"
+      },
+      remove: {
+        method: "DELETE"
+      }
+    });
+  };
+  
+  ItemFactory.$inject = ['$resource'];
+  angular.module("myApp.services").factory("Item", ItemFactory);
+}(angular));
+</code></pre>
+
+<p>然后，启动groovy服务来托管静态文件，这里使用9000端口：</p>
+
+<pre><code>spring run app.groovy -- --server.port=9000
+</code></pre>
+
+<p>这时候，就可以服务 http://localhost:9000/ 来查看前端页面了。</p>
+
+<p>这样，前后端就是分别部署属于两个不同的应用了，为了解决跨域的问题，需要添加一个过滤器，如下：</p>
+
+<pre><code class="language-java">package com.javachen.filter;
+
+import org.springframework.stereotype.Component;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+public class SimpleCORSFilter implements Filter {
+
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) res;
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        chain.doFilter(req, res);
+    }
+
+    public void init(FilterConfig filterConfig) {}
+
+    public void destroy() {}
+
+}
+</code></pre>
+
+<p>然后，重启应用就可以了。</p>
+
+<h1 id="section-11">12. 总结</h1>
+
+<p>本文主要是记录快速使用 Spring Boot 和 Gradle 创建 AngularJS 项目的过程，并介绍了如何将前后端进行分离和解决跨域访问的问题，希望能对你有所帮助。</p>
 
 <p>文中相关的源码在 <a href="https://github.com/javachen/spring-examples/tree/master/ng-spring-boot">ng-spring-boot</a>，你可以下载该项目，然后编译、运行代码。</p>
 
-<p>该项目也可以使用 maven 编译、运行：</p>
-
-<pre><code class="language-bash">$ mvn clean package
-
-$ java -jar target/ng-spring-boot-0.0.1-SNAPSHOT.jar
-</code></pre>
-
-<p>或者直接运行：</p>
-
-<pre><code class="language-bash">$ mvn spring-boot:run
-</code></pre>
-
-<h1 id="section-11">11. 参考文章</h1>
+<h1 id="section-12">13. 参考文章</h1>
 
 <ul>
   <li><a href="http://g00glen00b.be/prototyping-spring-boot-angularjs/">Rapid prototyping with Spring Boot and AngularJS</a></li>
