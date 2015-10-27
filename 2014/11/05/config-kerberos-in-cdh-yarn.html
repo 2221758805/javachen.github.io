@@ -107,219 +107,186 @@
               <div id="post-text">
                     <p>关于 Kerberos 的安装和 HDFS 配置 kerberos 认证，请参考 <a href="/2014/11/04/config-kerberos-in-cdh-hdfs.html">HDFS配置kerberos认证</a>。</p>
 
-<h1 id="section">1. 环境说明</h1>
+<h1 id="1-环境说明">1. 环境说明</h1>
 
 <p>系统环境：</p>
 
 <ul>
-  <li>操作系统：CentOs 6.6</li>
-  <li>Hadoop版本：<code>CDH5.4</code></li>
-  <li>JDK版本：<code>1.7.0_71</code></li>
-  <li>运行用户：root</li>
+<li>操作系统：CentOs 6.6</li>
+<li>Hadoop版本：<code class="prettyprint">CDH5.4</code></li>
+<li>JDK版本：<code class="prettyprint">1.7.0_71</code></li>
+<li>运行用户：root</li>
 </ul>
 
 <p>集群各节点角色规划为：</p>
-
-<pre><code>192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
+<div class="highlight"><pre><code class="language-text" data-lang="text">192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
 192.168.56.122        cdh2     DataNode、SecondaryNameNode、NodeManager、HBase、Hive Server2、Impala Server
 192.168.56.123        cdh3     DataNode、HBase、NodeManager、Hive Server2、Impala Server
-</code></pre>
-
+</code></pre></div>
 <p>cdh1作为master节点，其他节点作为slave节点，hostname 请使用小写，要不然在集成 kerberos 时会出现一些错误。</p>
 
-<h1 id="keytab">2. 生成 keytab</h1>
+<h1 id="2-生成-keytab">2. 生成 keytab</h1>
 
 <p>在 cdh1 节点，即 KDC server 节点上执行下面命令：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /var/kerberos/krb5kdc/
 
-<pre><code class="language-bash">cd /var/kerberos/krb5kdc/
+kadmin.local -q <span class="s2">&quot;addprinc -randkey yarn/cdh1@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;addprinc -randkey yarn/cdh2@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;addprinc -randkey yarn/cdh3@JAVACHEN.COM &quot;</span>
 
-kadmin.local -q "addprinc -randkey yarn/cdh1@JAVACHEN.COM "
-kadmin.local -q "addprinc -randkey yarn/cdh2@JAVACHEN.COM "
-kadmin.local -q "addprinc -randkey yarn/cdh3@JAVACHEN.COM "
+kadmin.local -q <span class="s2">&quot;addprinc -randkey mapred/cdh1@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;addprinc -randkey mapred/cdh2@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;addprinc -randkey mapred/cdh3@JAVACHEN.COM &quot;</span>
 
-kadmin.local -q "addprinc -randkey mapred/cdh1@JAVACHEN.COM "
-kadmin.local -q "addprinc -randkey mapred/cdh2@JAVACHEN.COM "
-kadmin.local -q "addprinc -randkey mapred/cdh3@JAVACHEN.COM "
+kadmin.local -q <span class="s2">&quot;xst  -k yarn.keytab  yarn/cdh1@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;xst  -k yarn.keytab  yarn/cdh2@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;xst  -k yarn.keytab  yarn/cdh3@JAVACHEN.COM &quot;</span>
 
-kadmin.local -q "xst  -k yarn.keytab  yarn/cdh1@JAVACHEN.COM "
-kadmin.local -q "xst  -k yarn.keytab  yarn/cdh2@JAVACHEN.COM "
-kadmin.local -q "xst  -k yarn.keytab  yarn/cdh3@JAVACHEN.COM "
-
-kadmin.local -q "xst  -k mapred.keytab  mapred/cdh1@JAVACHEN.COM "
-kadmin.local -q "xst  -k mapred.keytab  mapred/cdh2@JAVACHEN.COM "
-kadmin.local -q "xst  -k mapred.keytab  mapred/cdh3@JAVACHEN.COM "
-</code></pre>
-
-<p>拷贝 yarn.keytab 和 mapred.keytab 文件到其他节点的 <code>/etc/hadoop/conf</code> 目录</p>
-
-<pre><code class="language-bash">$ scp yarn.keytab mapred.keytab cdh1:/etc/hadoop/conf
-$ scp yarn.keytab mapred.keytab cdh2:/etc/hadoop/conf
-$ scp yarn.keytab mapred.keytab cdh3:/etc/hadoop/conf
-</code></pre>
-
+kadmin.local -q <span class="s2">&quot;xst  -k mapred.keytab  mapred/cdh1@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;xst  -k mapred.keytab  mapred/cdh2@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">&quot;xst  -k mapred.keytab  mapred/cdh3@JAVACHEN.COM &quot;</span>
+</code></pre></div>
+<p>拷贝 yarn.keytab 和 mapred.keytab 文件到其他节点的 <code class="prettyprint">/etc/hadoop/conf</code> 目录</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp yarn.keytab mapred.keytab cdh1:/etc/hadoop/conf
+<span class="nv">$ </span>scp yarn.keytab mapred.keytab cdh2:/etc/hadoop/conf
+<span class="nv">$ </span>scp yarn.keytab mapred.keytab cdh3:/etc/hadoop/conf
+</code></pre></div>
 <p>并设置权限，分别在 cdh1、cdh2、cdh3 上执行：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ssh cdh1 <span class="s2">&quot;cd /etc/hadoop/conf/;chown yarn:hadoop yarn.keytab;chown mapred:hadoop mapred.keytab ;chmod 400 *.keytab&quot;</span>
+<span class="nv">$ </span>ssh cdh2 <span class="s2">&quot;cd /etc/hadoop/conf/;chown yarn:hadoop yarn.keytab;chown mapred:hadoop mapred.keytab ;chmod 400 *.keytab&quot;</span>
+<span class="nv">$ </span>ssh cdh3 <span class="s2">&quot;cd /etc/hadoop/conf/;chown yarn:hadoop yarn.keytab;chown mapred:hadoop mapred.keytab ;chmod 400 *.keytab&quot;</span>
+</code></pre></div>
+<p>由于 keytab 相当于有了永久凭证，不需要提供密码(如果修改 kdc 中的 principal 的密码，则该 keytab 就会失效)，所以其他用户如果对该文件有读权限，就可以冒充 keytab 中指定的用户身份访问 hadoop，所以 keytab 文件需要确保只对 owner 有读权限(<code class="prettyprint">0400</code>)</p>
 
-<pre><code class="language-bash">$ ssh cdh1 "cd /etc/hadoop/conf/;chown yarn:hadoop yarn.keytab;chown mapred:hadoop mapred.keytab ;chmod 400 *.keytab"
-$ ssh cdh2 "cd /etc/hadoop/conf/;chown yarn:hadoop yarn.keytab;chown mapred:hadoop mapred.keytab ;chmod 400 *.keytab"
-$ ssh cdh3 "cd /etc/hadoop/conf/;chown yarn:hadoop yarn.keytab;chown mapred:hadoop mapred.keytab ;chmod 400 *.keytab"
-</code></pre>
-
-<p>由于 keytab 相当于有了永久凭证，不需要提供密码(如果修改 kdc 中的 principal 的密码，则该 keytab 就会失效)，所以其他用户如果对该文件有读权限，就可以冒充 keytab 中指定的用户身份访问 hadoop，所以 keytab 文件需要确保只对 owner 有读权限(<code>0400</code>)</p>
-
-<h1 id="yarn-">3. 修改 YARN 配置文件</h1>
+<h1 id="3-修改-yarn-配置文件">3. 修改 YARN 配置文件</h1>
 
 <p>修改 yarn-site.xml，添加下面配置：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.keytab<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>/etc/hadoop/conf/yarn.keytab<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.principal<span class="nt">&lt;/name&gt;</span> 
+  <span class="nt">&lt;value&gt;</span>yarn/_HOST@JAVACHEN.COM<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
 
-<pre><code class="language-xml">&lt;property&gt;
-  &lt;name&gt;yarn.resourcemanager.keytab&lt;/name&gt;
-  &lt;value&gt;/etc/hadoop/conf/yarn.keytab&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-  &lt;name&gt;yarn.resourcemanager.principal&lt;/name&gt; 
-  &lt;value&gt;yarn/_HOST@JAVACHEN.COM&lt;/value&gt;
-&lt;/property&gt;
-
-&lt;property&gt;
-  &lt;name&gt;yarn.nodemanager.keytab&lt;/name&gt;
-  &lt;value&gt;/etc/hadoop/conf/yarn.keytab&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-  &lt;name&gt;yarn.nodemanager.principal&lt;/name&gt; 
-  &lt;value&gt;yarn/_HOST@JAVACHEN.COM&lt;/value&gt;
-&lt;/property&gt; 
-&lt;property&gt;
-  &lt;name&gt;yarn.nodemanager.container-executor.class&lt;/name&gt;  
-  &lt;value&gt;org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor&lt;/value&gt;
-&lt;/property&gt; 
-&lt;property&gt;
-  &lt;name&gt;yarn.nodemanager.linux-container-executor.group&lt;/name&gt;
-  &lt;value&gt;yarn&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.nodemanager.keytab<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>/etc/hadoop/conf/yarn.keytab<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.nodemanager.principal<span class="nt">&lt;/name&gt;</span> 
+  <span class="nt">&lt;value&gt;</span>yarn/_HOST@JAVACHEN.COM<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span> 
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.nodemanager.container-executor.class<span class="nt">&lt;/name&gt;</span>  
+  <span class="nt">&lt;value&gt;</span>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span> 
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.nodemanager.linux-container-executor.group<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>yarn<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+</code></pre></div>
 <p>如果想要 YARN 开启 SSL，则添加：</p>
-
-<pre><code class="language-xml">&lt;property&gt;
-  &lt;name&gt;yarn.http.policy&lt;/name&gt;
-  &lt;value&gt;HTTPS_ONLY&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>yarn.http.policy<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>HTTPS_ONLY<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+</code></pre></div>
 <p>修改 mapred-site.xml，添加如下配置：</p>
-
-<pre><code class="language-xml">&lt;property&gt;
-  &lt;name&gt;mapreduce.jobhistory.keytab&lt;/name&gt;
-  &lt;value&gt;/etc/hadoop/conf/mapred.keytab&lt;/value&gt;
-&lt;/property&gt; 
-&lt;property&gt;
-  &lt;name&gt;mapreduce.jobhistory.principal&lt;/name&gt; 
-  &lt;value&gt;mapred/_HOST@JAVACHEN.COM&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>mapreduce.jobhistory.keytab<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>/etc/hadoop/conf/mapred.keytab<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span> 
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>mapreduce.jobhistory.principal<span class="nt">&lt;/name&gt;</span> 
+  <span class="nt">&lt;value&gt;</span>mapred/_HOST@JAVACHEN.COM<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+</code></pre></div>
 <p>如果想要 mapreduce jobhistory 开启 SSL，则添加：</p>
-
-<pre><code class="language-xml">&lt;property&gt;
-  &lt;name&gt;mapreduce.jobhistory.http.policy&lt;/name&gt;
-  &lt;value&gt;HTTPS_ONLY&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-
-<p>在 <code>/etc/hadoop/conf</code> 目录下创建 container-executor.cfg 文件，内容如下：</p>
-
-<pre><code class="language-properties">#configured value of yarn.nodemanager.linux-container-executor.group
-yarn.nodemanager.linux-container-executor.group=yarn
-#comma separated list of users who can not run applications
-banned.users=bin
-#Prevent other super-users
-min.user.id=0
-#comma separated list of system users who CAN run applications
-allowed.system.users=root,nobody,impala,hive,hdfs,yarn
-</code></pre>
-
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>mapreduce.jobhistory.http.policy<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>HTTPS_ONLY<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+</code></pre></div>
+<p>在 <code class="prettyprint">/etc/hadoop/conf</code> 目录下创建 container-executor.cfg 文件，内容如下：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="c">#configured value of yarn.nodemanager.linux-container-executor.group</span>
+<span class="na">yarn.nodemanager.linux-container-executor.group</span><span class="o">=</span><span class="s">yarn</span>
+<span class="c">#comma separated list of users who can not run applications</span>
+<span class="na">banned.users</span><span class="o">=</span><span class="s">bin</span>
+<span class="c">#Prevent other super-users</span>
+<span class="na">min.user.id</span><span class="o">=</span><span class="s">0</span>
+<span class="c">#comma separated list of system users who CAN run applications</span>
+<span class="na">allowed.system.users</span><span class="o">=</span><span class="s">root,nobody,impala,hive,hdfs,yarn</span>
+</code></pre></div>
 <p>设置该文件权限：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>chown root:yarn container-executor.cfg
+<span class="nv">$ </span>chmod <span class="m">400</span> container-executor.cfg
 
-<pre><code class="language-bash">$ chown root:yarn container-executor.cfg
-$ chmod 400 container-executor.cfg
-
-$ ll container-executor.cfg
--r-------- 1 root yarn 354 11-05 14:14 container-executor.cfg
-</code></pre>
-
+<span class="nv">$ </span>ll container-executor.cfg
+-r-------- <span class="m">1</span> root yarn <span class="m">354</span> 11-05 14:14 container-executor.cfg
+</code></pre></div>
 <p><strong>注意：</strong></p>
 
 <ul>
-  <li><code>container-executor.cfg</code> 文件读写权限需设置为 <code>400</code>，所有者为 <code>root:yarn</code>。</li>
-  <li><code>yarn.nodemanager.linux-container-executor.group</code> 要同时配置在 yarn-site.xml 和 container-executor.cfg，且其值需要为运行 NodeManager 的用户所在的组，这里为 yarn。</li>
-  <li><code>banned.users</code> 不能为空，默认值为 <code>hfds,yarn,mapred,bin</code></li>
-  <li><code>min.user.id</code> 默认值为 1000，在有些 centos 系统中，用户最小 id 为500，则需要修改该值</li>
-  <li>确保 <code>yarn.nodemanager.local-dirs</code> 和 <code>yarn.nodemanager.log-dirs</code> 对应的目录权限为 <code>755</code> 。</li>
+<li><code class="prettyprint">container-executor.cfg</code> 文件读写权限需设置为 <code class="prettyprint">400</code>，所有者为 <code class="prettyprint">root:yarn</code>。</li>
+<li><code class="prettyprint">yarn.nodemanager.linux-container-executor.group</code> 要同时配置在 yarn-site.xml 和 container-executor.cfg，且其值需要为运行 NodeManager 的用户所在的组，这里为 yarn。</li>
+<li><code class="prettyprint">banned.users</code> 不能为空，默认值为 <code class="prettyprint">hfds,yarn,mapred,bin</code></li>
+<li><code class="prettyprint">min.user.id</code> 默认值为 1000，在有些 centos 系统中，用户最小 id 为500，则需要修改该值</li>
+<li>确保 <code class="prettyprint">yarn.nodemanager.local-dirs</code> 和 <code class="prettyprint">yarn.nodemanager.log-dirs</code> 对应的目录权限为 <code class="prettyprint">755</code> 。</li>
 </ul>
 
-<p>设置 /usr/lib/hadoop-yarn/bin/container-executor 读写权限为 <code>6050</code> 如下：</p>
+<p>设置 /usr/lib/hadoop-yarn/bin/container-executor 读写权限为 <code class="prettyprint">6050</code> 如下：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>chown root:yarn /usr/lib/hadoop-yarn/bin/container-executor
+<span class="nv">$ </span>chmod <span class="m">6050</span> /usr/lib/hadoop-yarn/bin/container-executor
 
-<pre><code class="language-bash">$ chown root:yarn /usr/lib/hadoop-yarn/bin/container-executor
-$ chmod 6050 /usr/lib/hadoop-yarn/bin/container-executor
-
-$ ll /usr/lib/hadoop-yarn/bin/container-executor
----Sr-s--- 1 root yarn 333 11-04 19:11 container-executor
-</code></pre>
-
+<span class="nv">$ </span>ll /usr/lib/hadoop-yarn/bin/container-executor
+---Sr-s--- <span class="m">1</span> root yarn <span class="m">333</span> 11-04 19:11 container-executor
+</code></pre></div>
 <p>测试是否配置正确：</p>
-
-<pre><code class="language-bash">$ /usr/lib/hadoop-yarn/bin/container-executor --checksetup
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>/usr/lib/hadoop-yarn/bin/container-executor --checksetup
+</code></pre></div>
 <p>如果提示错误，则查看 NodeManger 的日志，然后对照 <a href="http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_sg_other_hadoop_security.html?scroll=topic_18_unique_2">YARN ONLY: Container-executor Error Codes</a> 查看错误对应的问题说明。</p>
 
 <p>关于 LinuxContainerExecutor 的详细说明，可以参考 <a href="http://hadoop.apache.org/docs/r2.5.0/hadoop-project-dist/hadoop-common/SecureMode.html#LinuxContainerExecutor">http://hadoop.apache.org/docs/r2.5.0/hadoop-project-dist/hadoop-common/SecureMode.html#LinuxContainerExecutor</a>。</p>
 
 <p>记住将修改的上面文件同步到其他节点：cdh2、cdh3，并再次一一检查权限是否正确。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /etc/hadoop/conf/
 
-<pre><code class="language-bash">$ cd /etc/hadoop/conf/
+<span class="nv">$ </span>scp yarn-site.xml mapred-site.xml container-executor.cfg  cdh2:/etc/hadoop/conf/
+<span class="nv">$ </span>scp yarn-site.xml mapred-site.xml container-executor.cfg  cdh3:/etc/hadoop/conf/
 
-$ scp yarn-site.xml mapred-site.xml container-executor.cfg  cdh2:/etc/hadoop/conf/
-$ scp yarn-site.xml mapred-site.xml container-executor.cfg  cdh3:/etc/hadoop/conf/
+<span class="nv">$ </span>ssh cdh2 <span class="s2">&quot;cd /etc/hadoop/conf/; chown root:yarn container-executor.cfg ; chmod 400 container-executor.cfg&quot;</span>
+<span class="nv">$ </span>ssh cdh3 <span class="s2">&quot;cd /etc/hadoop/conf/; chown root:yarn container-executor.cfg ; chmod 400 container-executor.cfg&quot;</span>
+</code></pre></div>
+<h1 id="4-启动服务">4. 启动服务</h1>
 
-$ ssh cdh2 "cd /etc/hadoop/conf/; chown root:yarn container-executor.cfg ; chmod 400 container-executor.cfg"
-$ ssh cdh3 "cd /etc/hadoop/conf/; chown root:yarn container-executor.cfg ; chmod 400 container-executor.cfg"
-</code></pre>
-
-<h1 id="section-1">4. 启动服务</h1>
-
-<h2 id="resourcemanager">启动 ResourceManager</h2>
+<h2 id="启动-resourcemanager">启动 ResourceManager</h2>
 
 <p>resourcemanager 是通过 yarn 用户启动的，故在 cdh1 上先获取 yarn 用户的 ticket 再启动服务：</p>
-
-<pre><code class="language-bash">$ kinit -k -t /etc/hadoop/conf/yarn.keytab yarn/cdh1@JAVACHEN.COM
-$ service hadoop-yarn-resourcemanager start
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kinit -k -t /etc/hadoop/conf/yarn.keytab yarn/cdh1@JAVACHEN.COM
+<span class="nv">$ </span>service hadoop-yarn-resourcemanager start
+</code></pre></div>
 <p>然后查看日志，确认是否启动成功。</p>
 
-<h2 id="nodemanager">启动 NodeManager</h2>
+<h2 id="启动-nodemanager">启动 NodeManager</h2>
 
 <p>resourcemanager 是通过 yarn 用户启动的，故在 cdh2 和 cdh3 上先获取 yarn 用户的 ticket 再启动服务：</p>
-
-<pre><code class="language-bash">$ ssh cdh2 "kinit -k -t /etc/hadoop/conf/yarn.keytab yarn/cdh2@JAVACHEN.COM ;service hadoop-yarn-nodemanager start"
-$ ssh cdh3 "kinit -k -t /etc/hadoop/conf/yarn.keytab yarn/cdh3@JAVACHEN.COM ;service hadoop-yarn-nodemanager start"
-</code></pre>
-
-<h2 id="mapreduce-job-history-server">启动 MapReduce Job History Server</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ssh cdh2 <span class="s2">&quot;kinit -k -t /etc/hadoop/conf/yarn.keytab yarn/cdh2@JAVACHEN.COM ;service hadoop-yarn-nodemanager start&quot;</span>
+<span class="nv">$ </span>ssh cdh3 <span class="s2">&quot;kinit -k -t /etc/hadoop/conf/yarn.keytab yarn/cdh3@JAVACHEN.COM ;service hadoop-yarn-nodemanager start&quot;</span>
+</code></pre></div>
+<h2 id="启动-mapreduce-job-history-server">启动 MapReduce Job History Server</h2>
 
 <p>resourcemanager 是通过 mapred 用户启动的，故在 cdh1 上先获取 mapred 用户的 ticket 再启动服务：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kinit -k -t /etc/hadoop/conf/mapred.keytab mapred/cdh1@JAVACHEN.COM
+<span class="nv">$ </span>service hadoop-mapreduce-historyserver start
+</code></pre></div>
+<h1 id="5-测试">5. 测试</h1>
 
-<pre><code class="language-bash">$ kinit -k -t /etc/hadoop/conf/mapred.keytab mapred/cdh1@JAVACHEN.COM
-$ service hadoop-mapreduce-historyserver start
-</code></pre>
-
-<h1 id="section-2">5. 测试</h1>
-
-<p>检查 web 页面是否可以访问：http://cdh1:8088/cluster</p>
+<p>检查 web 页面是否可以访问：<a href="http://cdh1:8088/cluster">http://cdh1:8088/cluster</a></p>
 
 <p>运行一个 mapreduce 的例子：</p>
-
-<pre><code>$ klist
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ klist
   Ticket cache: FILE:/tmp/krb5cc_1002
   Default principal: yarn/cdh1@JAVACHEN.COM
 
@@ -332,45 +299,39 @@ $ service hadoop-mapreduce-historyserver start
   klist: You have no tickets cached
 
 $ hadoop jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 10 10000
-</code></pre>
-
+</code></pre></div>
 <p>如果没有报错，则说明配置成功。最后运行的结果为：</p>
-
-<pre><code class="language-bash">Job Finished in 54.56 seconds
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Job Finished in 54.56 seconds
 Estimated value of Pi is 3.14120000000000000000
-</code></pre>
-
-<p>如果出现下面错误，请检查环境变量中 <code>HADOOP_YARN_HOME</code> 是否设置正确，并和 <code>yarn.application.classpath</code> 中的保持一致。</p>
-
-<pre><code class="language-bash">14/11/13 11:41:02 INFO mapreduce.Job: Job job_1415849491982_0003 failed with state FAILED due to: Application application_1415849491982_0003 failed 2 times due to AM Container for appattempt_1415849491982_0003_000002 exited with  exitCode: 1 due to: Exception from container-launch.
+</code></pre></div>
+<p>如果出现下面错误，请检查环境变量中 <code class="prettyprint">HADOOP_YARN_HOME</code> 是否设置正确，并和 <code class="prettyprint">yarn.application.classpath</code> 中的保持一致。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">14/11/13 11:41:02 INFO mapreduce.Job: Job job_1415849491982_0003 failed with state FAILED due to: Application application_1415849491982_0003 failed <span class="m">2</span> <span class="nb">times </span>due to AM Container <span class="k">for</span> appattempt_1415849491982_0003_000002 exited with  exitCode: <span class="m">1</span> due to: Exception from container-launch.
 Container id: container_1415849491982_0003_02_000001
 Exit code: 1
-Stack trace: ExitCodeException exitCode=1:
-  at org.apache.hadoop.util.Shell.runCommand(Shell.java:538)
-  at org.apache.hadoop.util.Shell.run(Shell.java:455)
-  at org.apache.hadoop.util.Shell$ShellCommandExecutor.execute(Shell.java:702)
-  at org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor.launchContainer(LinuxContainerExecutor.java:281)
-  at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call(ContainerLaunch.java:299)
-  at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call(ContainerLaunch.java:81)
-  at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
-  at java.util.concurrent.FutureTask.run(FutureTask.java:138)
-  at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
-  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
-  at java.lang.Thread.run(Thread.java:662)
+Stack trace: ExitCodeException <span class="nv">exitCode</span><span class="o">=</span>1:
+  at org.apache.hadoop.util.Shell.runCommand<span class="o">(</span>Shell.java:538<span class="o">)</span>
+  at org.apache.hadoop.util.Shell.run<span class="o">(</span>Shell.java:455<span class="o">)</span>
+  at org.apache.hadoop.util.Shell<span class="nv">$ShellCommandExecutor</span>.execute<span class="o">(</span>Shell.java:702<span class="o">)</span>
+  at org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor.launchContainer<span class="o">(</span>LinuxContainerExecutor.java:281<span class="o">)</span>
+  at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call<span class="o">(</span>ContainerLaunch.java:299<span class="o">)</span>
+  at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call<span class="o">(</span>ContainerLaunch.java:81<span class="o">)</span>
+  at java.util.concurrent.FutureTask<span class="nv">$Sync</span>.innerRun<span class="o">(</span>FutureTask.java:303<span class="o">)</span>
+  at java.util.concurrent.FutureTask.run<span class="o">(</span>FutureTask.java:138<span class="o">)</span>
+  at java.util.concurrent.ThreadPoolExecutor<span class="nv">$Worker</span>.runTask<span class="o">(</span>ThreadPoolExecutor.java:886<span class="o">)</span>
+  at java.util.concurrent.ThreadPoolExecutor<span class="nv">$Worker</span>.run<span class="o">(</span>ThreadPoolExecutor.java:908<span class="o">)</span>
+  at java.lang.Thread.run<span class="o">(</span>Thread.java:662<span class="o">)</span>
 
-Shell output: main : command provided 1
+Shell output: main : <span class="nb">command </span>provided 1
 main : user is yarn
 main : requested yarn user is yarn
 
 
-Container exited with a non-zero exit code 1
+Container exited with a non-zero <span class="nb">exit </span>code 1
 .Failing this attempt.. Failing the application.
 14/11/13 11:41:02 INFO mapreduce.Job: Counters: 0
 Job Finished in 13.428 seconds
 java.io.FileNotFoundException: File does not exist: hdfs://cdh1:8020/user/yarn/QuasiMonteCarlo_1415850045475_708291630/out/reduce-out
-</code></pre>
-
-
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">yuke</a><br/>

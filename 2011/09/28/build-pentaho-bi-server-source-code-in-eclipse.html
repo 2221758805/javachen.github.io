@@ -116,31 +116,28 @@
 <p><strong>以下操作是在eclipse3.7+tomcat 6.20的环境中进行的。</strong></p>
 
 <p>在eclipse中创建一个web项目，名称为pentaho，然后将<em>biserver-ce/tomcat/webapps</em>下的<code>pentaho-style</code>和<code>sw-style</code>拷贝到你的tomcat 6服务器的webapps目录下，将pentaho文件下的所有文件拷贝到工程下的WebContent目录下。由于biserver需要访问pentaho-solutions下的文件，故还需要修改<code>WEB-INF/web.xml</code>文件你的以下配置，用于指定pentaho-solutions的路径：</p>
-
-<pre><code>&lt; context-param &gt;
-	&lt; param-name &gt;solution-path&lt; /param-name&gt;
-	&lt; param-value &gt;/home/june.chan/opt/biserver-ce/pentaho-solutions&lt; /param-value&gt;
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt; context-param &gt;
+    &lt; param-name &gt;solution-path&lt; /param-name&gt;
+    &lt; param-value &gt;/home/june.chan/opt/biserver-ce/pentaho-solutions&lt; /param-value&gt;
 &lt; /context-param &gt;
-</code></pre>
-
-<p>现在即可部署项目，运行<code>biserver-ce/data/start_hypersonic.bat</code>（用于启动数据库），然后启动tomcat，就可以通过<em>http://localhost:8080/pentaho</em>访问biserver。如果启动报错，需要将hsqldb-1.8.0.7.jar包，拷贝到应用路径下（<em>\tomcat-pci-test\biserver-ce\tomcat\webapps\pentaho\WEB-INF\lib</em>）。<br /><br />
+</code></pre></div>
+<p>现在即可部署项目，运行<code>biserver-ce/data/start_hypersonic.bat</code>（用于启动数据库），然后启动tomcat，就可以通过<em><a href="http://localhost:8080/pentaho">http://localhost:8080/pentaho</a></em>访问biserver。如果启动报错，需要将hsqldb-1.8.0.7.jar包，拷贝到应用路径下（<em>\tomcat-pci-test\biserver-ce\tomcat\webapps\pentaho\WEB-INF\lib</em>）。<br />
 现在可以看到biserver的登录页面，但是还是没有看到biserver的源代码。</p>
 
-<p><strong>接下来，构建源代码。</strong><br />
+<p><strong>接下来，构建源代码。</strong>
 在biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib下面有很多名称为pentaho-bi-platform-########-3.9.0-stable.jar的jar文件，这些即是biserver源码编译之后的class文件。在bi-platform-3.9.0-stable-sources.zip压缩文件你即可以看到这些class文件的源代码。将这些src包解压然后拷贝到之前新建的pentaho工程的src目录下。</p>
 
-<p><strong><font color="red">需要注意的是：</font></strong><br />
-1.这些src jar包你只报告java文件，不包括配置文件：log4j配置文件，hibernate配置和实体映射文件，ehcache配置文件<br /><br />
-2.上面的配置文件需要到biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib目录下的pentaho-bi-platform-########-3.9.0-stable.jar文件中寻找。<br /><br />
-3.<br />
-* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-engine-security-3.9.0-stable.jar文件中有ldap的配置文件，<br />
-* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-engine-services-3.9.0-stable.jar文件中有ehcache的配置文件，<br />
-* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-plugin-actions-3.9.0-stable.jar文件中有log4j的配置文件，<br />
-* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-repository-3.9.0-stable.jar文件中有hibernate配置文件，<br />
+<p><strong><font color="red">需要注意的是：</font></strong>
+1.这些src jar包你只报告java文件，不包括配置文件：log4j配置文件，hibernate配置和实体映射文件，ehcache配置文件<br />
+2.上面的配置文件需要到biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib目录下的pentaho-bi-platform-########-3.9.0-stable.jar文件中寻找。<br />
+3.
+* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-engine-security-3.9.0-stable.jar文件中有ldap的配置文件，
+* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-engine-services-3.9.0-stable.jar文件中有ehcache的配置文件，
+* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-plugin-actions-3.9.0-stable.jar文件中有log4j的配置文件，
+* biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-repository-3.9.0-stable.jar文件中有hibernate配置文件，
 * biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-security-userroledao-3.9.0-stable.jar文件中有hibernated的实体映射文件。</p>
 
-<p>4.biserver-ce-3.9.0-stable.zip的lib（<code>biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib</code>）目录下的servlete jar包的版本为2.3，版本过低需要替换为更高版本知道源码中不在有servlete编译错误</p>
-
+<p>4.biserver-ce-3.9.0-stable.zip的lib（<code class="prettyprint">biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib</code>）目录下的servlete jar包的版本为2.3，版本过低需要替换为更高版本知道源码中不在有servlete编译错误</p>
 
                     <br/>
                     <div class="well">

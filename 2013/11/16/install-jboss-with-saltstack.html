@@ -109,20 +109,17 @@
 
 <p>在开始使用SaltStack之前，首先要对SaltStack的基础进行一系列的学习，这里，强烈推荐官网的<a href="http://docs.saltstack.com/topics/tutorials/walkthrough.html">Tutorial</a>,在完成了整个Tutorial之后，通过Module Index页面，我们能够快速查阅Salt所有模块的功能与用法:<a href="http://docs.saltstack.com/py-modindex.html">http://docs.saltstack.com/py-modindex.html</a></p>
 
-<h1 id="saltstack">安装saltstack</h1>
+<h1 id="安装saltstack">安装saltstack</h1>
 
 <p>安装过程请参考：<a href="/linux/2013/11/11/install-saltstack-and-halite/">安装saltstack和halite</a></p>
 
-<h1 id="pillar">添加pillar</h1>
+<h1 id="添加pillar">添加pillar</h1>
 
 <p>你可以执行下面命令查看minion拥有哪些Pillar数据：</p>
-
-<pre><code>$ salt '*' pillar.data
-</code></pre>
-
-<p>saltstack的默认states目录为<code>/srv/salt</code>，默认为<code>/srv/pillar</code>，如果不存在请先创建。</p>
-
-<pre><code>[root@sk1 /]# tree /srv/ -L 3
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; pillar.data
+</code></pre></div>
+<p>saltstack的默认states目录为<code class="prettyprint">/srv/salt</code>，默认为<code class="prettyprint">/srv/pillar</code>，如果不存在请先创建。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[root@sk1 /]# tree /srv/ -L 3
 /srv/
 ├── pillar
 │   ├── jboss
@@ -132,75 +129,61 @@
 │   ├── jboss
 │   ├── _modules
 │   └── top.sls
-</code></pre>
-
-<p>在<code>/srv/pillar/</code>下创建top.sls，该文件引入jboss下的params.sls：</p>
-
-<pre><code class="language-python"> base:
-  '*':
-    - jboss.params
-</code></pre>
-
+</code></pre></div>
+<p>在<code class="prettyprint">/srv/pillar/</code>下创建top.sls，该文件引入jboss下的params.sls：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"> <span class="n">base</span><span class="p">:</span>
+  <span class="s">&#39;*&#39;</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">jboss</span><span class="o">.</span><span class="n">params</span>
+</code></pre></div>
 <p>创建jboss目录并添加params.sls如下：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"> <span class="n">jboss_home</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jboss</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="n">eap</span><span class="o">-</span><span class="mf">5.1</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="k">as</span>
+ <span class="n">profile_port</span><span class="p">:</span>
+  <span class="n">default1</span><span class="p">:</span> 
+    <span class="n">http_port</span><span class="p">:</span> <span class="n">ports</span><span class="o">-</span><span class="n">default</span>
+    <span class="n">jmx_port</span><span class="p">:</span> <span class="mi">1099</span>
+  <span class="n">default2</span><span class="p">:</span> 
+    <span class="n">http_port</span><span class="p">:</span> <span class="n">ports</span><span class="o">-</span><span class="mo">01</span>
+    <span class="n">jmx_port</span><span class="p">:</span> <span class="mi">1199</span>
+  <span class="n">default3</span><span class="p">:</span> 
+    <span class="n">http_port</span><span class="p">:</span> <span class="n">ports</span><span class="o">-</span><span class="mo">02</span>
+    <span class="n">jmx_port</span><span class="p">:</span> <span class="mi">1299</span>
+  <span class="n">default4</span><span class="p">:</span> 
+    <span class="n">http_port</span><span class="p">:</span> <span class="n">ports</span><span class="o">-</span><span class="mo">03</span>
+    <span class="n">jmx_port</span><span class="p">:</span> <span class="mi">1399</span>
 
-<pre><code class="language-python"> jboss_home: /home/jboss/jboss-eap-5.1/jboss-as
- profile_port:
-  default1: 
-    http_port: ports-default
-    jmx_port: 1099
-  default2: 
-    http_port: ports-01
-    jmx_port: 1199
-  default3: 
-    http_port: ports-02
-    jmx_port: 1299
-  default4: 
-    http_port: ports-03
-    jmx_port: 1399
-
- jmx:
-  username: admin
-  password: admin
-</code></pre>
-
+ <span class="n">jmx</span><span class="p">:</span>
+  <span class="n">username</span><span class="p">:</span> <span class="n">admin</span>
+  <span class="n">password</span><span class="p">:</span> <span class="n">admin</span>
+</code></pre></div>
 <p>该文件定义了如下变量，你可以按需要定义自己的变量：</p>
 
 <ul>
-  <li>jboss_home：mimion机器上jboss的home目录</li>
-  <li>profile_port：定义有多少个profile以及每个profile下的http端口和jmx端口</li>
-  <li>jmx:定义jmx-console用户名和密码</li>
+<li>jboss_home：mimion机器上jboss的home目录</li>
+<li>profile_port：定义有多少个profile以及每个profile下的http端口和jmx端口</li>
+<li>jmx:定义jmx-console用户名和密码</li>
 </ul>
 
 <p>定义变量之后，你可以在sates文件中这样引用：</p>
-
-<pre><code class="language-python">pillar['profile_port']['default1']
-</code></pre>
-
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pillar</span><span class="p">[</span><span class="s">&#39;profile_port&#39;</span><span class="p">][</span><span class="s">&#39;default1&#39;</span><span class="p">]</span>
+</code></pre></div>
 <p>下面是个复杂的例子，使用了python中的模板引擎语言：</p>
-
-<pre><code class="language-python">{% for profile, port in pillar.get('profile_port', {}).items() %}
-    {{profile}}
-{% endfor %}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">profile</span><span class="p">,</span> <span class="n">port</span> <span class="ow">in</span> <span class="n">pillar</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;profile_port&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
+    <span class="p">{{</span><span class="n">profile</span><span class="p">}}</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</code></pre></div>
 <p>你还可以在python脚本中或者是saltstack自定义module中这样引用变量：</p>
-
-<pre><code>__pillar__['jboss_home']
-__pillar__['profile_port']['default1']['jmx_port']
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">__pillar__[&#39;jboss_home&#39;]
+__pillar__[&#39;profile_port&#39;][&#39;default1&#39;][&#39;jmx_port&#39;]
+</code></pre></div>
 <p>在master上修改Pilla文件后，需要用以下命令刷新minion上的数据：</p>
-
-<pre><code>$ salt '*' saltutil.refresh_pillar
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; saltutil.refresh_pillar
+</code></pre></div>
 <p>如果定义好的pillar不生效，建议刷新一下或者重启salt试试。</p>
 
-<h1 id="states">编写states</h1>
+<h1 id="编写states">编写states</h1>
 
 <p>/srv/salt目录如下：</p>
-
-<pre><code>[root@sk1 salt]# tree -L 3
+<div class="highlight"><pre><code class="language-text" data-lang="text">[root@sk1 salt]# tree -L 3
 .
 ├── jboss
 │   ├── files
@@ -210,85 +193,73 @@ __pillar__['profile_port']['default1']['jmx_port']
 ├── _modules
 │   └── jboss.py
 ├── top.sls
-</code></pre>
-
+</code></pre></div>
 <p>top.sls为sates入口，定义如下：</p>
-
-<pre><code> base:
+<div class="highlight"><pre><code class="language-text" data-lang="text"> base:
   *:
     - jboss
-</code></pre>
-
+</code></pre></div>
 <p>创建jboss目录并编写init.sls文件：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"> <span class="n">unzip</span><span class="p">:</span>
+  <span class="n">pkg</span><span class="o">.</span><span class="n">installed</span>
+ <span class="n">jboss</span><span class="p">:</span>
+  <span class="nb">file</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jboss</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="n">eap</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="n">zip</span>
+    <span class="o">-</span> <span class="n">source</span><span class="p">:</span> <span class="n">salt</span><span class="p">:</span><span class="o">//</span><span class="n">jboss</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="n">eap</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="n">zip</span>
+    <span class="o">-</span> <span class="n">include_empty</span><span class="p">:</span> <span class="bp">True</span>
+    <span class="o">-</span> <span class="n">user</span><span class="p">:</span> <span class="n">jboss</span>
+    <span class="o">-</span> <span class="n">group</span><span class="p">:</span> <span class="n">jboss</span>
+    <span class="o">-</span> <span class="n">mode</span><span class="p">:</span> <span class="mi">655</span>
+  <span class="n">cmd</span><span class="o">.</span><span class="n">run</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s">&#39;unzip jboss-eap-5.1.zip&#39;</span>
+    <span class="o">-</span> <span class="n">cwd</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jboss</span>
+    <span class="o">-</span> <span class="n">user</span><span class="p">:</span> <span class="n">jboss</span>
+    <span class="o">-</span> <span class="n">unless</span><span class="p">:</span> <span class="s">&#39;test -e jboss-eap-5.1&#39;</span>
+    <span class="o">-</span> <span class="n">require</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">file</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span> <span class="n">jboss</span>
 
-<pre><code class="language-python"> unzip:
-  pkg.installed
- jboss:
-  file.managed:
-    - name:  /home/jboss/jboss-eap-5.1.zip
-    - source: salt://jboss/files/jboss-eap-5.1.zip
-    - include_empty: True
-    - user: jboss
-    - group: jboss
-    - mode: 655
-  cmd.run:
-    - name: 'unzip jboss-eap-5.1.zip'
-    - cwd: /home/jboss
-    - user: jboss
-    - unless: 'test -e jboss-eap-5.1'
-    - require:
-      - file.managed: jboss
-
-{% for profile, port in pillar.get('profile_port', {}).items() %}
- {{profile}}:
-  cmd.run:
-    - name: '\cp -r default {{profile}}'
-    - cwd:  /home/jboss/jboss-eap-5.1/jboss-as/server
-    - user: jboss
-    - unless: 'test -e {{profile}}'
-    - require:
-      - file.managed: jboss
-{% endfor %}
-</code></pre>
-
+<span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">profile</span><span class="p">,</span> <span class="n">port</span> <span class="ow">in</span> <span class="n">pillar</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;profile_port&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
+ <span class="p">{{</span><span class="n">profile</span><span class="p">}}:</span>
+  <span class="n">cmd</span><span class="o">.</span><span class="n">run</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s">&#39;\cp -r default {{profile}}&#39;</span>
+    <span class="o">-</span> <span class="n">cwd</span><span class="p">:</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jboss</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="n">eap</span><span class="o">-</span><span class="mf">5.1</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="k">as</span><span class="o">/</span><span class="n">server</span>
+    <span class="o">-</span> <span class="n">user</span><span class="p">:</span> <span class="n">jboss</span>
+    <span class="o">-</span> <span class="n">unless</span><span class="p">:</span> <span class="s">&#39;test -e {{profile}}&#39;</span>
+    <span class="o">-</span> <span class="n">require</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">file</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span> <span class="n">jboss</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</code></pre></div>
 <p>说明：</p>
 
 <p>1.上面文件中创建了jboss ID，其包括两部分：拷贝文件和解压缩，分别对应file.managed和cmd.run。</p>
 
-<p>2.然后通过脚本语言读取pillar中定义的变量并以依次遍历生成多个ID，ID名称由变量中值定义。本例中，是读取<code>profile_port</code>的值，然后创建多个profile。<code>profile_port</code>变量在<code>/srv/pillar/jboss/params.sls</code>中定义。</p>
+<p>2.然后通过脚本语言读取pillar中定义的变量并以依次遍历生成多个ID，ID名称由变量中值定义。本例中，是读取<code class="prettyprint">profile_port</code>的值，然后创建多个profile。<code class="prettyprint">profile_port</code>变量在<code class="prettyprint">/srv/pillar/jboss/params.sls</code>中定义。</p>
 
 <p>编写完sates文件之后，你可以通过执行以下命令让所有minion执行sates文件中定义的state：</p>
-
-<pre><code>$ salt '*' state.highstate
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; state.highstate
+</code></pre></div>
 <p>你也可以单独执行jboss这个states：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; state.sls jboss
+</code></pre></div>
+<h1 id="自定义grains_module">自定义grains_module</h1>
 
-<pre><code>$ salt '*' state.sls jboss
-</code></pre>
+<p>自定义的<code class="prettyprint">grains_module</code>存放在<code class="prettyprint">/srv/salt/_grains</code>目录，下面定义一个获取<code class="prettyprint">max_open_file</code>的grains：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">sys</span><span class="o">,</span><span class="nn">commands</span>
 
-<h1 id="grainsmodule">自定义grains_module</h1>
-
-<p>自定义的<code>grains_module</code>存放在<code>/srv/salt/_grains</code>目录，下面定义一个获取<code>max_open_file</code>的grains：</p>
-
-<pre><code class="language-python">import os,sys,commands
- 
-def Grains(): 
-    grains = {}
-    max_open_file=65536 
-    try: 
-        getulimit=commands.getstatusoutput('source /etc/profile;ulimit -n')  
-    except Exception,e: 
-        pass  
-    if getulimit[0]==0: 
-        max_open_file=int(getulimit[1])  
-    grains['max_open_file'] = max_open_file 
-    return grains
-</code></pre>
-
+<span class="k">def</span> <span class="nf">Grains</span><span class="p">():</span> 
+    <span class="n">grains</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">max_open_file</span><span class="o">=</span><span class="mi">65536</span> 
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">getulimit</span><span class="o">=</span><span class="n">commands</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span><span class="s">&#39;source /etc/profile;ulimit -n&#39;</span><span class="p">)</span>  
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span><span class="n">e</span><span class="p">:</span> 
+        <span class="k">pass</span>  
+    <span class="k">if</span> <span class="n">getulimit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> 
+        <span class="n">max_open_file</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">getulimit</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  
+    <span class="n">grains</span><span class="p">[</span><span class="s">&#39;max_open_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_open_file</span> 
+    <span class="k">return</span> <span class="n">grains</span>
+</code></pre></div>
 <p>然后，同步grains模块：</p>
-
-<pre><code class="language-bash">$ salt '*' saltutil.sync_all
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>salt <span class="s1">&#39;*&#39;</span> saltutil.sync_all
 sk2:
     ----------
     grains:
@@ -298,96 +269,87 @@ sk2:
     renderers:
     returners:
     states:
-
-</code></pre>
-
+</code></pre></div>
 <p>刷新模块(让minion编译模块)：</p>
-
-<pre><code>$ salt '*' sys.reload_modules
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; sys.reload_modules
+</code></pre></div>
 <p>然后，验证max open file的value：</p>
-
-<pre><code>$ salt '*' grains.item max_open_file
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; grains.item max_open_file
 sk2:
   max_open_file: 1024
-</code></pre>
-
-<h1 id="module">自定义module</h1>
+</code></pre></div>
+<h1 id="自定义module">自定义module</h1>
 
 <p>你通过执行states可以完成bao的安装、配置和部署，如果你想对他们做管理，你可以自定义module来执行一些远程命令。</p>
 
-<p>自定义的module需要存放在<code>/srv/salt/_modules</code>目录下，为了对jboss实例进行启动、停止、查看运行状态，编写jboss.py模块：</p>
+<p>自定义的module需要存放在<code class="prettyprint">/srv/salt/_modules</code>目录下，为了对jboss实例进行启动、停止、查看运行状态，编写jboss.py模块：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_simple_cmd_retcode</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="n">home</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;jboss_home&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;/bin&#39;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">__salt__</span><span class="p">[</span><span class="s">&#39;cmd.retcode&#39;</span><span class="p">](</span><span class="n">cmd</span><span class="p">,</span><span class="n">cwd</span><span class="o">=</span><span class="n">home</span><span class="p">)</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Cmd&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cmd</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">out</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Result&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+    <span class="k">return</span> <span class="n">ret</span>
 
-<pre><code class="language-python">def _simple_cmd_retcode(cmd):
-    home = __pillar__['jboss_home']+'/bin'
-    out = __salt__['cmd.retcode'](cmd,cwd=home)
-    ret = {}
-    ret['Cmd']=cmd
-    ret['Msg']=out
-    ret['Result']=True
-    return ret
+<span class="k">def</span> <span class="nf">_simple_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="n">home</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;jboss_home&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;/bin&#39;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">__salt__</span><span class="p">[</span><span class="s">&#39;cmd.run&#39;</span><span class="p">](</span><span class="n">cmd</span><span class="p">,</span><span class="n">cwd</span><span class="o">=</span><span class="n">home</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Cmd&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cmd</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">out</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Result&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+    <span class="k">return</span> <span class="n">ret</span>
 
-def _simple_cmd(cmd):
-    home = __pillar__['jboss_home']+'/bin'
-    out = __salt__['cmd.run'](cmd,cwd=home).splitlines()
-    ret = {}
-    ret['Cmd']=cmd
-    ret['Msg']=out
-    ret['Result']=True
-    return ret
+<span class="k">def</span> <span class="nf">running</span><span class="p">(</span><span class="n">profile</span><span class="p">):</span>
+    <span class="n">ret</span> <span class="o">=</span><span class="n">_simple_cmd</span><span class="p">(</span><span class="s">&quot;ps -ef|grep -v grep|grep java|grep &quot;</span><span class="o">+</span><span class="n">profile</span><span class="o">+</span><span class="s">&quot; |grep &quot;</span><span class="o">+</span><span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;profile_port&#39;</span><span class="p">][</span><span class="n">profile</span><span class="p">][</span><span class="s">&#39;http_port&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;&#39;</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">True</span>
 
-def running(profile):
-    ret =_simple_cmd("ps -ef|grep -v grep|grep java|grep "+profile+" |grep "+__pillar__['profile_port'][profile]['http_port'])
-    if ret['Msg']=='' or len(ret['Msg'])==0:
-        return False
-    return True
+<span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">profile</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">__grains__</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;profile_port&#39;</span><span class="p">][</span><span class="n">profile</span><span class="p">][</span><span class="s">&#39;http_port&#39;</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#39;nohup ./run.sh -b &#39;</span><span class="o">+</span><span class="n">ip</span><span class="o">+</span><span class="s">&#39; -c &#39;</span><span class="o">+</span><span class="n">profile</span><span class="o">+</span><span class="s">&#39; -Djboss.service.binding.set=&#39;</span><span class="o">+</span><span class="n">port</span><span class="o">+</span><span class="s">&#39; &amp;&#39;</span>
 
-def start(profile):
-    ip = __grains__['id'][0]
-    port = __pillar__['profile_port'][profile]['http_port']
-    cmd = 'nohup ./run.sh -b '+ip+' -c '+profile+' -Djboss.service.binding.set='+port+' &amp;'
- 
-    ret={}
-    if running(profile):
-        ret['Cmd']=cmd
-	ret['Msg']=profile+' has started'
-        ret['Result']=False
-        return ret
-    
-    return _simple_cmd_retcode(cmd)
+    <span class="n">ret</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">if</span> <span class="n">running</span><span class="p">(</span><span class="n">profile</span><span class="p">):</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Cmd&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cmd</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">profile</span><span class="o">+</span><span class="s">&#39; has started&#39;</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Result&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
-def status(profile):
-    ip = __grains__['id'][0]
-    port = __pillar__['profile_port'][profile]['jmx_port']
-    username = __pillar__['jmx']['username']
-    password = __pillar__['jmx']['password']
-    cmd="./twiddle.sh -s "+ip+":"+str(port)+" -u "+username+" -p "+password+" get jboss.system:type=Server Started"
-    
-    ret=_simple_cmd(cmd)
-    for line in ret['Msg']:
-        if not line:
-            continue
-        if 'ERROR' in line:
- 	    ret['Result']=False
-	    ret['Msg']=ret['Msg'][0:2]
-            break
-    return ret
-    
-def stop(profile):
-    ip = __grains__['id'][0]
-    port = __pillar__['profile_port'][profile]['jmx_port']
-    username = __pillar__['jmx']['username']
-    password = __pillar__['jmx']['password']
-    cmd="./shutdown.sh -S -s "+ip+":"+str(port)+" -u "+username+" -p "+password
-    return _simple_cmd(cmd)
-</code></pre>
+    <span class="k">return</span> <span class="n">_simple_cmd_retcode</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
+<span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">profile</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">__grains__</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;profile_port&#39;</span><span class="p">][</span><span class="n">profile</span><span class="p">][</span><span class="s">&#39;jmx_port&#39;</span><span class="p">]</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;jmx&#39;</span><span class="p">][</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;jmx&#39;</span><span class="p">][</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+    <span class="n">cmd</span><span class="o">=</span><span class="s">&quot;./twiddle.sh -s &quot;</span><span class="o">+</span><span class="n">ip</span><span class="o">+</span><span class="s">&quot;:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; -u &quot;</span><span class="o">+</span><span class="n">username</span><span class="o">+</span><span class="s">&quot; -p &quot;</span><span class="o">+</span><span class="n">password</span><span class="o">+</span><span class="s">&quot; get jboss.system:type=Server Started&quot;</span>
+
+    <span class="n">ret</span><span class="o">=</span><span class="n">_simple_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="s">&#39;ERROR&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Result&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ret</span><span class="p">[</span><span class="s">&#39;Msg&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">ret</span>
+
+<span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="n">profile</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">__grains__</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;profile_port&#39;</span><span class="p">][</span><span class="n">profile</span><span class="p">][</span><span class="s">&#39;jmx_port&#39;</span><span class="p">]</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;jmx&#39;</span><span class="p">][</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">__pillar__</span><span class="p">[</span><span class="s">&#39;jmx&#39;</span><span class="p">][</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+    <span class="n">cmd</span><span class="o">=</span><span class="s">&quot;./shutdown.sh -S -s &quot;</span><span class="o">+</span><span class="n">ip</span><span class="o">+</span><span class="s">&quot;:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; -u &quot;</span><span class="o">+</span><span class="n">username</span><span class="o">+</span><span class="s">&quot; -p &quot;</span><span class="o">+</span><span class="n">password</span>
+    <span class="k">return</span> <span class="n">_simple_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+</code></pre></div>
 <p>以上python脚本定义了对单个profile的启动、停止和查看运行状态的方法，你可以修改或者扩增代码，添加更多的方法。</p>
 
 <p>然后运行下面命令同步所有模块：</p>
-
-<pre><code>$ salt '*' saltutil.sync_all
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; saltutil.sync_all
 sk2:
     ----------
     grains:
@@ -397,49 +359,37 @@ sk2:
     renderers:
     returners:
     states:
-</code></pre>
-
+</code></pre></div>
 <p>刷新自定义模块(让minion编译模块)：</p>
-
-<pre><code>$ salt '*' sys.reload_modules
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; sys.reload_modules
+</code></pre></div>
 <p>如果你想启动jboss的default1实例，只需要执行以下方法：</p>
-
-<pre><code>$ salt '*' jboss.start default1
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; jboss.start default1
+</code></pre></div>
 <p>同样，查看状态：</p>
-
-<pre><code>$ salt '*' jboss.status default1
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ salt &#39;*&#39; jboss.status default1
+</code></pre></div>
 <p>jboss为自定义模块的名称，也是jboss.py的名称，start或者status为jboss.py中定义的方法。</p>
 
-<p>如果运行出错，请查看minion的日志，路径为<code>/var/log/salt/minion</code></p>
+<p>如果运行出错，请查看minion的日志，路径为<code class="prettyprint">/var/log/salt/minion</code></p>
 
-<h1 id="section">同步配置文件</h1>
+<h1 id="同步配置文件">同步配置文件</h1>
 
 <p>现在需要修改jmx-console-users.properties文件中的用户名和密码并将其同步到所有jboss实例中。</p>
 
-<p>将jmx-console-users.properties文件放置在<code>/srv/salt/jboss/files</code>目录下，并修改该文件如下：</p>
-
-<pre><code> #A sample users.properties file for use with the UsersRolesLoginModule
- pillar['jmx']['username']= pillar['jmx']['password']
-</code></pre>
-
-<p>上面文件中使用了pillar获取变量，你还可以使用模板语言如if、for语句来丰富你的文件内容，saltstack支持的模板引擎有<code>jinja</code>等。</p>
+<p>将jmx-console-users.properties文件放置在<code class="prettyprint">/srv/salt/jboss/files</code>目录下，并修改该文件如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> #A sample users.properties file for use with the UsersRolesLoginModule
+ pillar[&#39;jmx&#39;][&#39;username&#39;]= pillar[&#39;jmx&#39;][&#39;password&#39;]
+</code></pre></div>
+<p>上面文件中使用了pillar获取变量，你还可以使用模板语言如if、for语句来丰富你的文件内容，saltstack支持的模板引擎有<code class="prettyprint">jinja</code>等。</p>
 
 <p>然后在init.sls中添加：</p>
-
-<pre><code class="language-python"> jmx-console-users.properties:
-   file.managed:
-     - name: /home/jboss/jboss-eap-5.1/jboss-as/server/default/conf/props/jmx-console-users.properties
-     - source: salt://jboss/files/jmx-console-users.properties
-     - template: jinja
-</code></pre>
-
-
+<div class="highlight"><pre><code class="language-python" data-lang="python"> <span class="n">jmx</span><span class="o">-</span><span class="n">console</span><span class="o">-</span><span class="n">users</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+   <span class="nb">file</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span>
+     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jboss</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="n">eap</span><span class="o">-</span><span class="mf">5.1</span><span class="o">/</span><span class="n">jboss</span><span class="o">-</span><span class="k">as</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">default</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">props</span><span class="o">/</span><span class="n">jmx</span><span class="o">-</span><span class="n">console</span><span class="o">-</span><span class="n">users</span><span class="o">.</span><span class="n">properties</span>
+     <span class="o">-</span> <span class="n">source</span><span class="p">:</span> <span class="n">salt</span><span class="p">:</span><span class="o">//</span><span class="n">jboss</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">jmx</span><span class="o">-</span><span class="n">console</span><span class="o">-</span><span class="n">users</span><span class="o">.</span><span class="n">properties</span>
+     <span class="o">-</span> <span class="n">template</span><span class="p">:</span> <span class="n">jinja</span>
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">yuke</a><br/>

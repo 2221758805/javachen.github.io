@@ -106,141 +106,115 @@
 
               <div id="post-text">
                     <p>存在性类型：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">foo</span><span class="o">(</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="k">_</span><span class="o">]])</span> <span class="k">=</span> 
 
-<pre><code class="language-scala">def foo(l: List[Option[_]]) = 
-
-def f(m: M[_]) 
-</code></pre>
-
+<span class="k">def</span> <span class="n">f</span><span class="o">(</span><span class="n">m</span><span class="k">:</span> <span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">])</span> 
+</code></pre></div>
 <p>高阶类型参数：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">A</span><span class="o">[</span><span class="kt">K</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>,<span class="kt">T</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">K</span><span class="o">[</span><span class="kt">T</span><span class="o">])</span>
 
-<pre><code class="language-scala">case class A[K[_],T](a: K[T])
-
-def f[M[_]] 
-</code></pre>
-
+<span class="k">def</span> <span class="n">f</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> 
+</code></pre></div>
 <p>临时变量：</p>
-
-<pre><code class="language-scala">val _ = 5
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="k">_</span> <span class="k">=</span> <span class="mi">5</span>
+</code></pre></div>
 <p>临时参数：</p>
-
-<pre><code class="language-scala">List(1, 2, 3) foreach { _ =&gt; println("Hi") }    //List(1, 2, 3) foreach { t =&gt; println("Hi") }
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="n">foreach</span> <span class="o">{</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;Hi&quot;</span><span class="o">)</span> <span class="o">}</span>    <span class="c1">//List(1, 2, 3) foreach { t =&gt; println(&quot;Hi&quot;) }</span>
+</code></pre></div>
 <p>通配模式：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;Yes&quot;</span><span class="o">)</span> <span class="o">}</span>
 
-<pre><code class="language-scala">Some(5) match { case Some(_) =&gt; println("Yes") }
+<span class="k">match</span> <span class="o">{</span>
+     <span class="k">case</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">&quot; a list with three element and the first element is 1&quot;</span>
+     <span class="k">case</span> <span class="nc">List</span><span class="o">(</span><span class="k">_</span><span class="o">*)</span>  <span class="k">=&gt;</span> <span class="s">&quot; a list with zero or more elements &quot;</span>
+     <span class="k">case</span> <span class="nc">Map</span><span class="o">[</span><span class="k">_</span>,<span class="k">_</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="s">&quot; matches a map with any key type and any value type &quot;</span>
+     <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span>
+ <span class="o">}</span>
 
-match {
-     case List(1,_,_) =&gt; " a list with three element and the first element is 1"
-     case List(_*)  =&gt; " a list with zero or more elements "
-     case Map[_,_] =&gt; " matches a map with any key type and any value type "
-     case _ =&gt;
- }
-
-val (a, _) = (1, 2)
-for (_ &lt;- 1 to 10)
-</code></pre>
-
+<span class="k">val</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
+<span class="k">for</span> <span class="o">(</span><span class="k">_</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span><span class="o">)</span>
+</code></pre></div>
 <p>通配导入：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// Imports all the classes in the package matching</span>
+<span class="k">import</span> <span class="nn">scala.util.matching._</span>
 
-<pre><code class="language-scala">// Imports all the classes in the package matching
-import scala.util.matching._
-
-// Imports all the members of the object Fun (static import in Java).
-import com.test.Fun._
-</code></pre>
-
+<span class="c1">// Imports all the members of the object Fun (static import in Java).</span>
+<span class="k">import</span> <span class="nn">com.test.Fun._</span>
+</code></pre></div>
 <p>隐藏导入：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// Imports all the members of the object Fun but renames Foo to Bar</span>
+<span class="k">import</span> <span class="nn">com.test.Fun.</span><span class="o">{</span> <span class="nc">Foo</span> <span class="k">=&gt;</span> <span class="nc">Bar</span> <span class="o">,</span> <span class="k">_</span> <span class="o">}</span>
 
-<pre><code class="language-scala">// Imports all the members of the object Fun but renames Foo to Bar
-import com.test.Fun.{ Foo =&gt; Bar , _ }
-
-// Imports all the members except Foo. To exclude a member rename it to _
-import com.test.Fun.{ Foo =&gt; _ , _ }
-</code></pre>
-
+<span class="c1">// Imports all the members except Foo. To exclude a member rename it to _</span>
+<span class="k">import</span> <span class="nn">com.test.Fun.</span><span class="o">{</span> <span class="nc">Foo</span> <span class="k">=&gt;</span> <span class="k">_</span> <span class="o">,</span> <span class="k">_</span> <span class="o">}</span>
+</code></pre></div>
 <p>连接字母和标点符号：</p>
-
-<pre><code class="language-scala">def bang_!(x: Int) = 5
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">bang_!</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="mi">5</span>
+</code></pre></div>
 <p>占位符：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="o">(</span> <span class="o">(</span><span class="k">_:</span> <span class="kt">Int</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="k">_:</span> <span class="kt">Int</span><span class="o">)</span> <span class="o">)(</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)</span>
 
-<pre><code class="language-scala">( (_: Int) + (_: Int) )(2,3)
+<span class="k">val</span> <span class="n">nums</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">7</span><span class="o">,</span><span class="mi">8</span><span class="o">,</span><span class="mi">9</span><span class="o">,</span><span class="mi">10</span><span class="o">)</span>
 
-val nums = List(1,2,3,4,5,6,7,8,9,10)
-
-nums map (_ + 2)
-nums sortWith(_&gt;_)
-nums filter (_ % 2 == 0)
-nums reduceLeft(_+_)
-nums reduce (_ + _)
-nums reduceLeft(_ max _)
-nums.exists(_ &gt; 5)
-nums.takeWhile(_ &lt; 8)
-</code></pre>
-
+<span class="n">nums</span> <span class="n">map</span> <span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">2</span><span class="o">)</span>
+<span class="n">nums</span> <span class="n">sortWith</span><span class="o">(</span><span class="k">_</span><span class="o">&gt;</span><span class="k">_</span><span class="o">)</span>
+<span class="n">nums</span> <span class="n">filter</span> <span class="o">(</span><span class="k">_</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>
+<span class="n">nums</span> <span class="n">reduceLeft</span><span class="o">(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span>
+<span class="n">nums</span> <span class="n">reduce</span> <span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
+<span class="n">nums</span> <span class="n">reduceLeft</span><span class="o">(</span><span class="k">_</span> <span class="n">max</span> <span class="k">_</span><span class="o">)</span>
+<span class="n">nums</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="k">_</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="o">)</span>
+<span class="n">nums</span><span class="o">.</span><span class="n">takeWhile</span><span class="o">(</span><span class="k">_</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="o">)</span>
+</code></pre></div>
 <p>偏函数：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">fun</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="c1">// Some code</span>
+<span class="o">}</span>
+<span class="k">val</span> <span class="n">funLike</span> <span class="k">=</span> <span class="n">fun</span> <span class="k">_</span>
 
-<pre><code class="language-scala">def fun = {
-    // Some code
-}
-val funLike = fun _
+<span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="n">foreach</span> <span class="n">println</span> <span class="k">_</span>
 
-List(1, 2, 3) foreach println _
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span> <span class="n">map</span> <span class="o">(</span><span class="mi">10</span> <span class="o">*</span> <span class="k">_</span><span class="o">)</span>
 
-1 to 5 map (10 * _)
-
-//List("foo", "bar", "baz").map(_.toUpperCase())
-List("foo", "bar", "baz").map(n =&gt; n.toUpperCase())
-</code></pre>
-
+<span class="c1">//List(&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;).map(_.toUpperCase())</span>
+<span class="nc">List</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">,</span> <span class="s">&quot;bar&quot;</span><span class="o">,</span> <span class="s">&quot;baz&quot;</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">n</span> <span class="k">=&gt;</span> <span class="n">n</span><span class="o">.</span><span class="n">toUpperCase</span><span class="o">())</span>
+</code></pre></div>
 <p>初始化默认值:</p>
-
-<pre><code class="language-scala">var d:Double = _ 
-var i:Int = _
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">d</span><span class="k">:</span><span class="kt">Double</span> <span class="o">=</span> <span class="k">_</span> 
+<span class="k">var</span> <span class="n">i</span><span class="k">:</span><span class="kt">Int</span> <span class="o">=</span> <span class="k">_</span>
+</code></pre></div>
 <p>参数序列：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//Range转换为List</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="k">:_</span><span class="kt">*</span><span class="o">)</span>
 
-<pre><code class="language-scala">//Range转换为List
-List(1 to 5:_*)
+<span class="c1">//Range转换为Vector</span>
+<span class="nc">Vector</span><span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
 
-//Range转换为Vector
-Vector(1 to 5: _*)
+<span class="c1">//可变参数中</span>
+<span class="k">def</span> <span class="n">capitalizeAll</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">String*</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="n">args</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">arg</span> <span class="k">=&gt;</span>
+    <span class="n">arg</span><span class="o">.</span><span class="n">capitalize</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-//可变参数中
-def capitalizeAll(args: String*) = {
-  args.map { arg =&gt;
-    arg.capitalize
-  }
-}
-
-val arr = Array("what's", "up", "doc?")
-capitalizeAll(arr: _*)
-</code></pre>
-
+<span class="k">val</span> <span class="n">arr</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="s">&quot;what&#39;s&quot;</span><span class="o">,</span> <span class="s">&quot;up&quot;</span><span class="o">,</span> <span class="s">&quot;doc?&quot;</span><span class="o">)</span>
+<span class="n">capitalizeAll</span><span class="o">(</span><span class="n">arr</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+</code></pre></div>
 <p>作为参数名：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//访问map</span>
+<span class="k">var</span> <span class="n">m3</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">((</span><span class="mi">1</span><span class="o">,</span><span class="mi">100</span><span class="o">),</span> <span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">200</span><span class="o">))</span>
+<span class="k">for</span><span class="o">(</span><span class="n">e</span><span class="k">&lt;-</span><span class="n">m3</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">_1</span> <span class="o">+</span> <span class="s">&quot;: &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">_2</span><span class="o">)</span>
+<span class="n">m3</span> <span class="n">filter</span> <span class="o">(</span><span class="n">e</span><span class="k">=&gt;</span><span class="n">e</span><span class="o">.</span><span class="n">_1</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">)</span>
+<span class="n">m3</span> <span class="n">filterKeys</span> <span class="o">(</span><span class="k">_</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">)</span>
+<span class="n">m3</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">e</span><span class="o">=&gt;(</span><span class="n">e</span><span class="o">.</span><span class="n">_1</span><span class="o">*</span><span class="mi">10</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="n">_2</span><span class="o">))</span>
+<span class="n">m3</span> <span class="n">map</span> <span class="o">(</span><span class="n">e</span><span class="k">=&gt;</span><span class="n">e</span><span class="o">.</span><span class="n">_2</span><span class="o">)</span>
 
-<pre><code class="language-scala">//访问map
-var m3 = Map((1,100), (2,200))
-for(e&lt;-m3) println(e._1 + ": " + e._2)
-m3 filter (e=&gt;e._1&gt;1)
-m3 filterKeys (_&gt;1)
-m3.map(e=&gt;(e._1*10, e._2))
-m3 map (e=&gt;e._2)
-
-//元组
-(1,2)._2
-</code></pre>
-
-<h1 id="section">参考资料</h1>
+<span class="c1">//元组</span>
+<span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">).</span><span class="n">_2</span>
+</code></pre></div>
+<h1 id="参考资料">参考资料</h1>
 
 <ul>
-  <li>[1] <a href="http://stackoverflow.com/questions/8000903/what-are-all-the-uses-of-an-underscore-in-scala">What are all the uses of an underscore in Scala?</a></li>
+<li>[1] <a href="http://stackoverflow.com/questions/8000903/what-are-all-the-uses-of-an-underscore-in-scala">What are all the uses of an underscore in Scala?</a></li>
 </ul>
 
                     <br/>

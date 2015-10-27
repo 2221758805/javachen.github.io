@@ -109,25 +109,25 @@
 
 <p>以下是网络上流传的HBase存储架构图:</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/hbase-structure.jpg" alt="hbase-structure" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/hbase-structure.jpg" alt="hbase-structure"></p>
 
 <p>HBase中的每张表都通过行键按照一定的范围被分割成多个子表（HRegion），默认一个HRegion超过256M就要被分割成两个，这个过程由HRegionServer管理，而HRegion的分配由HMaster管理。</p>
 
-<h1 id="hmaster">HMaster的作用：</h1>
+<h1 id="hmaster的作用：">HMaster的作用：</h1>
 
 <ul>
-  <li>为Region server分配region</li>
-  <li>负责Region server的负载均衡</li>
-  <li>发现失效的Region server并重新分配其上的region</li>
-  <li>HDFS上的垃圾文件回收</li>
-  <li>处理schema更新请求</li>
+<li>为Region server分配region</li>
+<li>负责Region server的负载均衡</li>
+<li>发现失效的Region server并重新分配其上的region</li>
+<li>HDFS上的垃圾文件回收</li>
+<li>处理schema更新请求</li>
 </ul>
 
-<h1 id="hregionserver">HRegionServer作用：</h1>
+<h1 id="hregionserver作用：">HRegionServer作用：</h1>
 
 <ul>
-  <li>维护master分配给他的region，处理对这些region的io请求</li>
-  <li>负责切分正在运行过程中变的过大的region</li>
+<li>维护master分配给他的region，处理对这些region的io请求</li>
+<li>负责切分正在运行过程中变的过大的region</li>
 </ul>
 
 <p>可以看到，client访问hbase上的数据并不需要master参与（寻址访问zookeeper和region server，数据读写访问region server），master仅仅维护table和region的元数据信息（table的元数据信息保存在zookeeper上），负载很低。</p>
@@ -145,8 +145,8 @@
 <p>每个region由以下信息标识：</p>
 
 <ul>
-  <li>&lt;表名,startRowkey,创建时间&gt;</li>
-  <li>由目录表(-ROOT-和.META.)可值该region的endRowkey</li>
+<li>&lt;表名,startRowkey,创建时间&gt;</li>
+<li>由目录表(-ROOT-和.META.)可值该region的endRowkey</li>
 </ul>
 
 <p>HRegion定位：</p>
@@ -156,12 +156,12 @@
 <p>HBase使用三层结构来定位region：</p>
 
 <ul>
-  <li>1、 通过zk里的文件/hbase/rs得到-ROOT-表的位置。-ROOT-表只有一个region。</li>
-  <li>2、通过-ROOT-表查找.META.表的第一个表中相应的region的位置。其实-ROOT-表是.META.表的第一个region；.META.表中的每一个region在-ROOT-表中都是一行记录。</li>
-  <li>3、通过.META.表找到所要的用户表region的位置。用户表中的每个region在.META.表中都是一行记录。</li>
+<li>1、 通过zk里的文件/hbase/rs得到-ROOT-表的位置。-ROOT-表只有一个region。</li>
+<li>2、通过-ROOT-表查找.META.表的第一个表中相应的region的位置。其实-ROOT-表是.META.表的第一个region；.META.表中的每一个region在-ROOT-表中都是一行记录。</li>
+<li>3、通过.META.表找到所要的用户表region的位置。用户表中的每个region在.META.表中都是一行记录。</li>
 </ul>
 
-<p><img src="http://images.cnblogs.com/cnblogs_com/chenli0513/image0030.jpg" alt="" /></p>
+<p><img src="http://images.cnblogs.com/cnblogs_com/chenli0513/image0030.jpg" alt=""></p>
 
 <p>-ROOT-表永远不会被分隔为多个region，保证了最多需要三次跳转，就能定位到任意的region。client会讲查询的位置信息保存缓存起来，缓存不会主动失效，因此如果client上的缓存全部失效，则需要进行6次网络来回，才能定位到正确的region，其中蚕丝用来发现缓存失效，另外三次用来获取位置信息。</p>
 
@@ -187,11 +187,11 @@
 
 <p>Data Block是hbase io的基本单元，为了提高效率，HRegionServer中又基于LRU的block cache机制。每个Data块的大小可以在创建一个Table的时候通过参数指定（默认块大小64KB），大号的Block有利于顺序Scan，小号的Block利于随机查询。每个Data块除了开头的Magic以外就是一个个KeyValue对拼接而成，Magic内容就是一些随机数字，目的是烦着数据损坏，结构如下。</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hfile-keyvalue-structure.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hfile-keyvalue-structure.jpg" alt=""></p>
 
 <p>HFile结构图如下：</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hfile-structure.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hfile-structure.jpg" alt=""></p>
 
 <p>Data Block段用来保存表中的数据，这部分可以被压缩。</p>
 
@@ -205,37 +205,37 @@
 
 <p>HFile的Data Block，Meta Block通常采用压缩方式存储，压缩之后可以大大减少网络IO和磁盘IO，随之而来的开销当然是需要花费cpu进行压缩和解压缩。目标HFile的压缩支持两种方式：gzip、lzo。</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hfile-data-storeage.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hfile-data-storeage.jpg" alt=""></p>
 
 <p>另外，针对目前针对现有HFile的两个主要缺陷：</p>
 
 <ul>
-  <li>a) 暂用过多内存</li>
-  <li>b) 启动加载时间缓慢</li>
+<li>a) 暂用过多内存</li>
+<li>b) 启动加载时间缓慢</li>
 </ul>
 
 <p>提出了HFile Version2设计：<a href="https://issues.apache.org/jira/secure/attachment/12478329/hfile_format_v2_design_draft_0.1.pdf">https://issues.apache.org/jira/secure/attachment/12478329/hfile_format_v2_design_draft_0.1.pdf</a></p>
 
 <h1 id="hlog">HLog</h1>
 
-<p>其实HLog文件就是一个普通的Hadoop Sequence File，<br />
+<p>其实HLog文件就是一个普通的Hadoop Sequence File，
 Sequence File的value是key时HLogKey对象，其中记录了写入数据的归属信息，除了table和region名字外，还同时包括sequence number和timestamp，timestamp是写入时间，equence number的起始值为0，或者是最近一次存入文件系统中的equence number。</p>
 
 <p>Sequence File的value是HBase的KeyValue对象，即对应HFile中的KeyValue。</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hlog-structure.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2014/hlog-structure.jpg" alt=""></p>
 
 <p>HLog(WAL log)：WAL意为write ahead log，用来做灾难恢复使用，HLog记录数据的所有变更，一旦region server 宕机，就可以从log中进行恢复。</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/hbase-write-hlog-process.jpg" alt="" /></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/hbase-write-hlog-process.jpg" alt=""></p>
 
 <p>LogFlusher</p>
 
-<p>前面提到，数据以KeyValue形式到达HRegionServer，将写入WAL，之后，写入一个SequenceFile。看过去没问题，但是因为数据流在写入文件系统时，经常会缓存以提高性能。这样，有些本以为在日志文件中的数据实际在内存中。这里，我们提供了一个LogFlusher的类。它调用HLog.optionalSync(),后者根据 <code>hbase.regionserver.optionallogflushinterval</code> (默认是10秒)，定期调用Hlog.sync()。另外，HLog.doWrite()也会根据 <code>hbase.regionserver.flushlogentries</code> (默认100秒)定期调用Hlog.sync()。Sync() 本身调用HLog.Writer.sync()，它由SequenceFileLogWriter实现。</p>
+<p>前面提到，数据以KeyValue形式到达HRegionServer，将写入WAL，之后，写入一个SequenceFile。看过去没问题，但是因为数据流在写入文件系统时，经常会缓存以提高性能。这样，有些本以为在日志文件中的数据实际在内存中。这里，我们提供了一个LogFlusher的类。它调用HLog.optionalSync(),后者根据 <code class="prettyprint">hbase.regionserver.optionallogflushinterval</code> (默认是10秒)，定期调用Hlog.sync()。另外，HLog.doWrite()也会根据 <code class="prettyprint">hbase.regionserver.flushlogentries</code> (默认100秒)定期调用Hlog.sync()。Sync() 本身调用HLog.Writer.sync()，它由SequenceFileLogWriter实现。</p>
 
 <p>LogRoller</p>
 
-<p>Log的大小通过$HBASE_HOME/conf/hbase-site.xml 的 <code>hbase.regionserver.logroll.period</code> 限制，默认是一个小时。所以每60分钟，会打开一个新的log文件。久而久之，会有一大堆的文件需要维护。首先，LogRoller调用HLog.rollWriter()，定时滚动日志，之后，利用HLog.cleanOldLogs()可以清除旧的日志。它首先取得存储文件中的最大的sequence number，之后检查是否存在一个log所有的条目的“sequence number”均低于这个值，如果存在，将删除这个log。</p>
+<p>Log的大小通过$HBASE_HOME/conf/hbase-site.xml 的 <code class="prettyprint">hbase.regionserver.logroll.period</code> 限制，默认是一个小时。所以每60分钟，会打开一个新的log文件。久而久之，会有一大堆的文件需要维护。首先，LogRoller调用HLog.rollWriter()，定时滚动日志，之后，利用HLog.cleanOldLogs()可以清除旧的日志。它首先取得存储文件中的最大的sequence number，之后检查是否存在一个log所有的条目的“sequence number”均低于这个值，如果存在，将删除这个log。</p>
 
 <p>每个region server维护一个HLog，而不是每一个region一个，这样不同region（来自不同的table）的日志会混在一起，这样做的目的是不断追加单个文件相对于同时写多个文件而言，可以减少磁盘寻址次数，因此可以提高table的写性能。带来麻烦的时，如果一个region server下线，为了恢复其上的region，需要讲region server上的log进行拆分，然后分发到其他region server上进行恢复。</p>
 

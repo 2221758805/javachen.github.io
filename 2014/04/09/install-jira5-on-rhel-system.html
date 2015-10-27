@@ -105,113 +105,97 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <h1 id="section">部署环境</h1>
+                    <h1 id="部署环境">部署环境</h1>
 
 <ul>
-  <li>操作系统：RHEL 6.4 x86_64</li>
-  <li>Jira版本：<code>atlassian-jira-5.2.11-x64.bin</code></li>
-  <li>安装路径:<code>/opt/atlassian/jira/</code></li>
-  <li>数据保存路径：<code>/opt/atlassian/application-data/jira</code></li>
-  <li>安装用户：jira</li>
-  <li>数据库：postgresql</li>
-  <li>JDK：1.6.0_43</li>
+<li>操作系统：RHEL 6.4 x86_64</li>
+<li>Jira版本：<code class="prettyprint">atlassian-jira-5.2.11-x64.bin</code></li>
+<li>安装路径:<code class="prettyprint">/opt/atlassian/jira/</code></li>
+<li>数据保存路径：<code class="prettyprint">/opt/atlassian/application-data/jira</code></li>
+<li>安装用户：jira</li>
+<li>数据库：postgresql</li>
+<li>JDK：1.6.0_43</li>
 </ul>
 
 <p>jira下载页面：<a href="https://www.atlassian.com/software/jira/download">https://www.atlassian.com/software/jira/download</a></p>
 
-<h1 id="section-1">安装步骤</h1>
+<h1 id="安装步骤">安装步骤</h1>
 
-<h2 id="section-2">运行安装文件</h2>
-
-<pre><code>$ . atlassian-jira-5.2.11-x64.bin
-</code></pre>
-
+<h2 id="运行安装文件">运行安装文件</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ . atlassian-jira-5.2.11-x64.bin
+</code></pre></div>
 <p>在安装过程中会出现选项：</p>
 
 <p>确认安装</p>
-
-<pre><code>This will install JIRA 6.2.2 on your computer.
+<div class="highlight"><pre><code class="language-text" data-lang="text">This will install JIRA 6.2.2 on your computer.
 OK [o, Enter], Cancel [c]
 o
-</code></pre>
-
+</code></pre></div>
 <p>选择安装类型－1默认安装 －2自定义安装 －3升级</p>
-
-<pre><code>Choose the appropriate installation or upgrade option.
+<div class="highlight"><pre><code class="language-text" data-lang="text">Choose the appropriate installation or upgrade option.
 Please choose one of the following:
 Express Install (use default settings) [1], Custom Install (recommended for advanced users) [2], Upgrade an existing JIRA installation [3, Enter]
 3
-</code></pre>
+</code></pre></div>
 <p>你可以选择2自定义安装路径、启动端口等等。</p>
 
 <p>接下来选择确认直到安装成功。</p>
 
-<h2 id="section-3">初始化数据库</h2>
+<h2 id="初始化数据库">初始化数据库</h2>
 
 <p>这里我选择PostgreSql数据库，先安装数据库，然后创建用户(jira)和数据库(jira)。</p>
-
-<pre><code>$ su - postgres
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ su - postgres
 -bash-4.1$ cd
 -bash-4.1$ cd bin
 -bash-4.1$ ./psql -U postgres
 psql (9.0.3)
-Type "help" for help.
+Type &quot;help&quot; for help.
 
 Cannot read termcap database;
 using dumb terminal settings.
-postgres=# CREATE USER jira WITH PASSWORD 'redhat';
+postgres=# CREATE USER jira WITH PASSWORD &#39;redhat&#39;;
 postgres=# CREATE DATABASE jira owner=jira;
 postgres=# GRANT ALL privileges ON DATABASE jira TO jira;
-</code></pre>
+</code></pre></div>
+<p>然后打开浏览器范围jira页面：<code class="prettyprint">http://ip:8080/</code>，在该页面选择数据库类型，并填写数据库连接信息，测试是否可以ping通，接着运行下一步,在jira官网上注册一个帐号。</p>
 
-<p>然后打开浏览器范围jira页面：<code>http://ip:8080/</code>，在该页面选择数据库类型，并填写数据库连接信息，测试是否可以ping通，接着运行下一步,在jira官网上注册一个帐号。</p>
-
-<h2 id="section-4">破解</h2>
+<h2 id="破解">破解</h2>
 
 <p>破解文件：</p>
 
 <ul>
-  <li><a href="http://download.csdn.net/detail/royalapex/6710573">atlassian-extras-2.2.2.jar</a></li>
-  <li><a href="http://download.csdn.net/detail/royalapex/6710589">atlassian-extras-2.2.2.crack</a></li>
+<li><a href="http://download.csdn.net/detail/royalapex/6710573">atlassian-extras-2.2.2.jar</a></li>
+<li><a href="http://download.csdn.net/detail/royalapex/6710589">atlassian-extras-2.2.2.crack</a></li>
 </ul>
 
 <p>执行以下命令覆盖原来文件：</p>
-
-<pre><code>$ cp atlassian-extras-2.2.2.crack /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cp atlassian-extras-2.2.2.crack /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/
 $ \cp atlassian-extras-2.2.2.jar /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/
-</code></pre>
-
+</code></pre></div>
 <p>检查是否可以创建issue，并查看jira版本和过期时间。</p>
 
-<h2 id="section-5">汉化</h2>
+<h2 id="汉化">汉化</h2>
 
 <p>下载JIRA汉化包：<a href="http://download.csdn.net/detail/royalapex/6711881">JIRA-5.0-language-pack-zh_CN.jar</a>,并在jira管理页面将其上传，然后在个人设置页面，可以设置语言为中文。</p>
 
-<h2 id="jira">JIRA使用</h2>
+<h2 id="jira使用">JIRA使用</h2>
 
 <p>启动：</p>
-
-<pre><code>$ cd /opt/atlassian/jira/bin
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd /opt/atlassian/jira/bin
 $ sh start-jira.sh
-</code></pre>
-
+</code></pre></div>
 <p>停止：</p>
-
-<pre><code>$ cd /opt/atlassian/jira/bin
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd /opt/atlassian/jira/bin
 $ sh stop-jira.sh
-</code></pre>
-
+</code></pre></div>
 <p>查看日志：</p>
-
-<pre><code>$ cd /opt/atlassian/jira/bin
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd /opt/atlassian/jira/bin
 $ tailf catalina.out
-</code></pre>
-<p>## 修改JVM参数</p>
-
-<pre><code class="language-bash">$ vi /opt/atlassian/jira/bin/setenv.sh
-JAVA_OPTS="-Xms1024m -Xmx2048m -XX:MaxPermSize=256m $JAVA_OPTS -Djava.awt.headless=true "
-</code></pre>
-
+</code></pre></div>
+<h2 id="修改jvm参数">修改JVM参数</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>vi /opt/atlassian/jira/bin/setenv.sh
+<span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xms1024m -Xmx2048m -XX:MaxPermSize=256m $JAVA_OPTS -Djava.awt.headless=true &quot;</span>
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">yuke</a><br/>

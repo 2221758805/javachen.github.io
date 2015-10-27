@@ -105,22 +105,17 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <h1 id="section">1. 问题</h1>
+                    <h1 id="1-问题">1. 问题</h1>
 
 <p>RHEL服务器A有个启动脚本（普通用户user01运行），里面使用ifconfig获取ip地址如下：</p>
-
-<pre><code>Localhost_ip=$(ifconfig |awk -F 'addr:|Bcast' '/Bcast/{print $2}')
-</code></pre>
-
-<p>由于普通用户user01不能直接识别ifconfig命令，只能使用全路径<code>/sbin/ifconfig</code>，目前处理方式为修改<code>~/.bash_profile</code>文件添加环境变量如下：</p>
-
-<pre><code>PATH=$PATH:$HOME/bin
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">Localhost_ip=$(ifconfig |awk -F &#39;addr:|Bcast&#39; &#39;/Bcast/{print $2}&#39;)
+</code></pre></div>
+<p>由于普通用户user01不能直接识别ifconfig命令，只能使用全路径<code class="prettyprint">/sbin/ifconfig</code>，目前处理方式为修改<code class="prettyprint">~/.bash_profile</code>文件添加环境变量如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">PATH=$PATH:$HOME/bin
+</code></pre></div>
 <p>改成如下：</p>
-
-<pre><code>PATH=$PATH:$HOME/bin:/sbin
-</code></pre>
+<div class="highlight"><pre><code class="language-text" data-lang="text">PATH=$PATH:$HOME/bin:/sbin
+</code></pre></div>
 <!-- more -->
 
 <p>经过如上配置后服务器本机user01用户登录执行XX.sh脚本可以识别ifconfig命令。</p>
@@ -128,294 +123,255 @@
 <p>出现如下问题：</p>
 
 <p>远程主机B通过ssh远程执行启动脚本XX.sh，报错如下：</p>
-
-<pre><code>bash: ifconfg: command not found
-</code></pre>
-
-<h1 id="section-1">2. 问题分析</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">bash: ifconfg: command not found
+</code></pre></div>
+<h1 id="2-问题分析">2. 问题分析</h1>
 
 <p>测试前准备，追加调用说明语句，如下：</p>
-
-<pre><code>/etc/profile
+<div class="highlight"><pre><code class="language-text" data-lang="text">/etc/profile
 [root@node3 ~]# vim /etc/profile
-echo "/etc/profile begin:"
-echo "$PATH"
+echo &quot;/etc/profile begin:&quot;
+echo &quot;$PATH&quot;
 ...
- 
+
 unset i
 unset pathmunge
- 
-echo "invoke /etc/profile"
-echo "$PATH"
-echo ""
-</code></pre>
 
-<pre><code>[root@node3 ~]# vim /etc/bashrc
+echo &quot;invoke /etc/profile&quot;
+echo &quot;$PATH&quot;
+echo &quot;&quot;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# vim /etc/bashrc
 ...
 # vim:ts=4:sw=4
- 
-echo "invoke /etc/bashrc"
-echo "$PATH"
-echo ""
-</code></pre>
 
-<pre><code>[root@node3 ~]# vim /root/.bash_profile
+echo &quot;invoke /etc/bashrc&quot;
+echo &quot;$PATH&quot;
+echo &quot;&quot;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# vim /root/.bash_profile
 # User specific environment and startup programs
 PATH=$PATH:$HOME/bin
 export PATH
- 
-echo "invoke ~/.bash_profile"
-echo "$PATH"
-echo ""
-</code></pre>
 
-<pre><code>[root@node3 ~]# vim /root/.bashrc
+echo &quot;invoke ~/.bash_profile&quot;
+echo &quot;$PATH&quot;
+echo &quot;&quot;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# vim /root/.bashrc
 ...
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
 fi
- 
-echo "invoke ~/.bashrc"
-echo "$PATH"
-echo ""
-</code></pre>
 
-<pre><code>[root@node3 ~]# vim /home/user01/.bash_profile
+echo &quot;invoke ~/.bashrc&quot;
+echo &quot;$PATH&quot;
+echo &quot;&quot;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# vim /home/user01/.bash_profile
 ...
 # User specific environment and startup programs
 PATH=$PATH:$HOME/bin
 export PATH
- 
-echo "invoke ~/.bashrc"
-echo "$PATH"
-echo ""
-</code></pre>
 
-<pre><code>[root@node3 ~]# vim /home/user01/.bashrc
+echo &quot;invoke ~/.bashrc&quot;
+echo &quot;$PATH&quot;
+echo &quot;&quot;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# vim /home/user01/.bashrc
 ...
 # User specific aliases and functions
- 
-echo "invoke ~/.bashrc"
-echo "$PATH"
-echo ""
-</code></pre>
 
+echo &quot;invoke ~/.bashrc&quot;
+echo &quot;$PATH&quot;
+echo &quot;&quot;
+</code></pre></div>
 <p>分 user 和 root 用户，3 种场景进行测试，如下：</p>
 
-<h2 id="user">普通用户 User</h2>
+<h2 id="普通用户-user">普通用户 User</h2>
 
-<h3 id="section-2">场景1：</h3>
+<h3 id="场景1：">场景1：</h3>
 
 <p>本机使用 su 命令切换到普通用户 （属于 Login 方式）</p>
 
 <p>结论：</p>
 
 <ul>
-  <li>Login 之前，系统 PATH 为：<code>/usr/local/bin:/bin:/usr/bin</code></li>
-  <li>Login 方式，文件调用顺序为： <code>/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
-  <li>Login 之后，系统 PATH 为：<code>/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin</code></li>
+<li>Login 之前，系统 PATH 为：<code class="prettyprint">/usr/local/bin:/bin:/usr/bin</code></li>
+<li>Login 方式，文件调用顺序为： <code class="prettyprint">/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
+<li>Login 之后，系统 PATH 为：<code class="prettyprint">/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin</code></li>
 </ul>
-
-<pre><code>su - user
+<div class="highlight"><pre><code class="language-text" data-lang="text">su - user
 [root@node3 ~]# hostname -i
 192.168.122.33
-</code></pre>
-
-<pre><code>[root@node3 ~]# su - user01
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# su - user01
 /etc/profile begin:
 /usr/local/bin:/bin:/usr/bin
 invoke /etc/profile
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
- 
+
 invoke /etc/bashrc
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
- 
+
 invoke ~/.bashrc
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
- 
+
 invoke ~/.bash_profile
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin
-</code></pre>
-
-<h3 id="section-3">场景2：</h3>
+</code></pre></div>
+<h3 id="场景2：">场景2：</h3>
 
 <p>远程机使用 ssh 命令以普通用户身份登陆到主机 （属于 Login 方式）</p>
 
 <p>结论：</p>
 
 <ul>
-  <li>与在本机使用 su 命令切换到普通用户的效果完全一样！</li>
+<li>与在本机使用 su 命令切换到普通用户的效果完全一样！</li>
 </ul>
-
-<pre><code>ssh user@remote_server_ip
+<div class="highlight"><pre><code class="language-text" data-lang="text">ssh user@remote_server_ip
 [root@node1 ~]# hostname -i
 192.168.122.31
-</code></pre>
-
-<pre><code>[root@node1 ~]# ssh user01@192.168.122.33
-user01@192.168.122.33's password: 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node1 ~]# ssh user01@192.168.122.33
+user01@192.168.122.33&#39;s password: 
 Last login: Tue Jul  9 16:23:33 2013 from 192.168.122.31
 /etc/profile begin:
 /usr/local/bin:/bin:/usr/bin
 invoke /etc/profile
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
- 
+
 invoke /etc/bashrc
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
- 
+
 invoke ~/.bashrc
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
- 
+
 invoke ~/.bash_profile
 /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/user01/bin
-</code></pre>
-
-<h2 id="section-4">场景3：</h2>
+</code></pre></div>
+<h2 id="场景3：">场景3：</h2>
 
 <p>远程机使用 ssh 命令以普通用户身份连接到主机执行获取 PATH 的命令 （属于 NoLogin 方式）</p>
 
 <p>结论：</p>
 
 <ul>
-  <li>NoLogin 方式，命令获取的 PATH 为该远程机的，并未拿到目标主机的 PATH</li>
-  <li>NoLogin 方式，文件调用顺序为：<code>/etc/bashrc -&gt; ~/.bashrc</code></li>
-  <li>NoLogin 方式，目标主机 User 用户 PATH 为：<code>/usr/local/bin:/bin:/usr/bin</code></li>
+<li>NoLogin 方式，命令获取的 PATH 为该远程机的，并未拿到目标主机的 PATH</li>
+<li>NoLogin 方式，文件调用顺序为：<code class="prettyprint">/etc/bashrc -&gt; ~/.bashrc</code></li>
+<li>NoLogin 方式，目标主机 User 用户 PATH 为：<code class="prettyprint">/usr/local/bin:/bin:/usr/bin</code></li>
 </ul>
-
-<pre><code>ssh user@remote_server_ip command
+<div class="highlight"><pre><code class="language-text" data-lang="text">ssh user@remote_server_ip command
 [root@node1 ~]# hostname -i
 192.168.122.31
-</code></pre>
-
-<pre><code>[root@node1 ~]# echo $PATH
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node1 ~]# echo $PATH
 /usr/local/rabbitmq/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
- 
-[root@node1 ~]# ssh user01@192.168.122.33 "echo $PATH"
-user01@192.168.122.33's password: 
- 
+
+[root@node1 ~]# ssh user01@192.168.122.33 &quot;echo $PATH&quot;
+user01@192.168.122.33&#39;s password: 
+
 invoke /etc/bashrc
 /usr/local/bin:/bin:/usr/bin
- 
+
 invoke ~/.bashrc
 /usr/local/bin:/bin:/usr/bin
- 
+
 /usr/local/rabbitmq/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-</code></pre>
+</code></pre></div>
+<h2 id="对比-root-用户">对比 root 用户</h2>
 
-<h2 id="root-">对比 root 用户</h2>
-
-<h3 id="section-5">场景1：</h3>
+<h3 id="场景1：">场景1：</h3>
 
 <p>本机使用 su 命令切换到 root （属于 Login 方式）</p>
 
 <p>结论：</p>
 
 <ul>
-  <li>Login 之前，系统 PATH 为：<code>/usr/local/bin:/bin:/usr/bin</code></li>
-  <li>Login 方式，root 用户，文件调用顺序为：<code>/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
-  <li>Login 之后，系统 PATH 为：<code>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</code></li>
+<li>Login 之前，系统 PATH 为：<code class="prettyprint">/usr/local/bin:/bin:/usr/bin</code></li>
+<li>Login 方式，root 用户，文件调用顺序为：<code class="prettyprint">/etc/profile -&gt; /etc/bashrc -&gt; ~/.bashrc -&gt; ~/.bash_profile</code></li>
+<li>Login 之后，系统 PATH 为：<code class="prettyprint">/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</code></li>
 </ul>
-
-<pre><code>su - root
+<div class="highlight"><pre><code class="language-text" data-lang="text">su - root
 [root@node3 ~]# hostname -i
 192.168.122.33
-</code></pre>
-
-<pre><code>[root@node3 ~]# su - root
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node3 ~]# su - root
 /etc/profile begin:
 /usr/local/bin:/bin:/usr/bin
 invoke /etc/profile
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke /etc/bashrc
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke ~/.bashrc
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke ~/.bash_profile
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-</code></pre>
-
-<h3 id="section-6">场景2：</h3>
+</code></pre></div>
+<h3 id="场景2：">场景2：</h3>
 
 <p>远程机使用 ssh 命令以 root 用户身份登陆到主机 （属于 Login 方式）</p>
 
 <p>结论：</p>
 
 <ul>
-  <li>与在本机使用 su 命令切换到 root 用户的效果完全一样！</li>
+<li>与在本机使用 su 命令切换到 root 用户的效果完全一样！</li>
 </ul>
-
-<pre><code>ssh root@remote_server_ip
+<div class="highlight"><pre><code class="language-text" data-lang="text">ssh root@remote_server_ip
 [root@node1 ~]# hostname -i
 192.168.122.31
-</code></pre>
-
-<pre><code>[root@node1 ~]# ssh root@192.168.122.33
-root@192.168.122.33's password: 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node1 ~]# ssh root@192.168.122.33
+root@192.168.122.33&#39;s password: 
 Last login: Tue Jul  9 15:54:53 2013 from 192.168.122.1
 /etc/profile begin:
 /usr/local/bin:/bin:/usr/bin
 invoke /etc/profile
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke /etc/bashrc
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke ~/.bashrc
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke ~/.bash_profile
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-</code></pre>
-
-<h3 id="section-7">场景3</h3>
+</code></pre></div>
+<h3 id="场景3">场景3</h3>
 
 <p>远程机使用 ssh 命令以 root 用户身份连接到主机执行获取 PATH 的命令 （属于 NoLogin 方式）</p>
 
 <p>结论：</p>
 
 <ul>
-  <li>NoLogin 方式，命令获取的 PATH 为该远程机的，并未拿到目标主机的 PATH</li>
-  <li>NoLogin 方式，文件调用顺序为：<code>/etc/bashrc -&gt; ~/.bashrc</code></li>
-  <li>NoLogin 方式，目标主机 root 用户 PATH 为：<code>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</code></li>
+<li>NoLogin 方式，命令获取的 PATH 为该远程机的，并未拿到目标主机的 PATH</li>
+<li>NoLogin 方式，文件调用顺序为：<code class="prettyprint">/etc/bashrc -&gt; ~/.bashrc</code></li>
+<li>NoLogin 方式，目标主机 root 用户 PATH 为：<code class="prettyprint">/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</code></li>
 </ul>
-
-<pre><code>ssh root@remote_server_ip command
+<div class="highlight"><pre><code class="language-text" data-lang="text">ssh root@remote_server_ip command
 [root@node1 ~]# hostname -i
 192.168.122.31
-</code></pre>
-
-<pre><code>[root@node1 ~]# echo $PATH
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">[root@node1 ~]# echo $PATH
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
- 
-[root@node1 ~]# ssh root@192.168.122.33 "echo $PATH"
-root@192.168.122.33's password: 
+
+[root@node1 ~]# ssh root@192.168.122.33 &quot;echo $PATH&quot;
+root@192.168.122.33&#39;s password: 
 invoke /etc/bashrc
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
+
 invoke ~/.bashrc
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- 
-/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-</code></pre>
 
-<h3 id="etcprofile-">关于/etc/profile 文件部分代码分析</h3>
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+</code></pre></div>
+<h3 id="关于-etc-profile-文件部分代码分析">关于/etc/profile 文件部分代码分析</h3>
 
 <p>结论：</p>
 
 <ul>
-  <li>无论 root 还是 user ，只有调用此文件，其 PATH 中才会被追加 sbin 相关路径。而由以上测试场景可知，只有 Login 时，<code>/etc/profile</code> 文件才会被调用。</li>
+<li>无论 root 还是 user ，只有调用此文件，其 PATH 中才会被追加 sbin 相关路径。而由以上测试场景可知，只有 Login 时，<code class="prettyprint">/etc/profile</code> 文件才会被调用。</li>
 </ul>
-
-<pre><code>pathmunge () {
-    case ":${PATH}:" in
-        *:"$1":*)
+<div class="highlight"><pre><code class="language-text" data-lang="text">pathmunge () {
+    case &quot;:${PATH}:&quot; in
+        *:&quot;$1&quot;:*)
             ;;
         *)
-            if [ "$2" = "after" ] ; then
+            if [ &quot;$2&quot; = &quot;after&quot; ] ; then
                 PATH=$PATH:$1
             else
                 PATH=$1:$PATH
@@ -424,19 +380,19 @@ invoke ~/.bashrc
 }
 
 if [ -x /usr/bin/id ]; then
-    if [ -z "$EUID" ]; then
+    if [ -z &quot;$EUID&quot; ]; then
         # ksh workaround
         EUID=`id -u`
         UID=`id -ru`
     fi
-    USER="`id -un`"
+    USER=&quot;`id -un`&quot;
     LOGNAME=$USER
-    MAIL="/var/spool/mail/$USER"
+    MAIL=&quot;/var/spool/mail/$USER&quot;
 fi
 
 
 # Path manipulation
-if [ "$EUID" = "0" ]; then
+if [ &quot;$EUID&quot; = &quot;0&quot; ]; then
     pathmunge /sbin
     pathmunge /usr/sbin
     pathmunge /usr/local/sbin
@@ -446,9 +402,8 @@ else
     pathmunge /sbin after
 
 fi
-</code></pre>
-
-<h1 id="section-8">3. 总结</h1>
+</code></pre></div>
+<h1 id="3-总结">3. 总结</h1>
 
 <p>综上，如需修改 PATH，建议修改 bashrc 文件，从而保证任何方式访问时 PATH 的正确性。</p>
 

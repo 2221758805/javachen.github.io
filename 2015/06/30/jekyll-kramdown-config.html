@@ -106,86 +106,70 @@
 
               <div id="post-text">
                     <p>之前博客是使用的redcarpet的markdown语法，其在_config.yml中的配置方式为：</p>
-
-<pre><code class="language-yaml">markdown: redcarpet
-redcarpet:
-    extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
-</code></pre>
-
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redcarpet</span>
+<span class="l-Scalar-Plain">redcarpet</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">extensions</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span> <span class="s">&quot;fenced_code_blocks&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;hard_wrap&quot;</span><span class="p-Indicator">,</span><span class="s">&quot;autolink&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;tables&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;strikethrough&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;superscript&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;with_toc_data&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;highlight&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;prettify&quot;</span><span class="p-Indicator">,</span><span class="s">&quot;no_intra_emphasis&quot;</span><span class="p-Indicator">]</span>
+</code></pre></div>
 <p>这种配置支持使用 ``` 高亮代码块、自动链接、表格等特性。</p>
 
-<p>现在，想尝试使用karkdown的语法。kramdown是一个Markdown解析器，它能够正确解释公式内部的符号，不会与Markdown语法冲突，比如不会将^符号变成<sup></sup>标签。</p>
+<p>现在，想尝试使用karkdown的语法。kramdown是一个Markdown解析器，它能够正确解释公式内部的符号，不会与Markdown语法冲突，比如不会将<sup>符号变成<sup></sup>标签。</sup></p>
 
 <p>kramdown支持MathJax，见<a href="http://www.pkuwwt.tk/linux/2013-12-03-jekyll-using-mathjax/">Jekyll中使用MathJax</a>。</p>
 
 <p>kramdown默认是支持TOC，你可以进一步设置TOC相关的参数，见 <a href="http://loudou.info/blog/2014/08/01/wei-octopress-tian-jia-toc/">为 Octopress 添加 TOC</a>。</p>
 
 <p>安装kramdown：</p>
-
-<pre><code class="language-bash">$ gem install kramdown
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gem install kramdown
+</code></pre></div>
 <p>在_config.yml中的配置方式为：</p>
-
-<pre><code class="language-yaml">markdown: kramdown
-kramdown:
-  input:  GFM
-  use_coderay: true
-</code></pre>
-
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kramdown</span>
+<span class="l-Scalar-Plain">kramdown</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">input</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GFM</span>
+  <span class="l-Scalar-Plain">use_coderay</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</code></pre></div>
 <p>在编写文章时，插入下面代码，渲染之后就可以生成TOC了：</p>
-
-<pre><code>* TOC
+<div class="highlight"><pre><code class="language-text" data-lang="text">* TOC
 {:toc}
-</code></pre>
-
+</code></pre></div>
 <p>krmadown支持和github一样的语法高亮，用三个 ```，但是需要安装coderay，而github pages上不支持coderay，所以该方式无法搞定，可行的解决方法是上传本地编译好的html。如果是本地或者自己的空间，可以安装coderay。</p>
-
-<pre><code class="language-bash">$ gem install coderay
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gem install coderay
+</code></pre></div>
 <p>使用 ``` 引用代码块：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AdView</span> <span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-<pre><code class="language-python">class AdView (object):
-    def __init__ (self, name = None):
-        self.name = name
-
-    def test (self):
-        if self.name == 'admin':
-            return False
-        else
-            return True
-</code></pre>
-
+    <span class="k">def</span> <span class="nf">test</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;admin&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div>
 <p>更多语法，见<a href="http://blog.will6run.com/tool/2014/11/22/kramdown/">kramdown语法小记</a>。</p>
 
 <p>最后的配置为：</p>
-
-<pre><code class="language-yaml">kramdown:
-  input: GFM
-  extensions:
-    - autolink
-    - footnotes
-    - smart
-  use_coderay: true
-  syntax_highlighter: rouge
-  coderay:
-    coderay_line_numbers:  nil
-</code></pre>
-
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">kramdown</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">input</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">GFM</span>
+  <span class="l-Scalar-Plain">extensions</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">autolink</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">footnotes</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">smart</span>
+  <span class="l-Scalar-Plain">use_coderay</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+  <span class="l-Scalar-Plain">syntax_highlighter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">rouge</span>
+  <span class="l-Scalar-Plain">coderay</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">coderay_line_numbers</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">nil</span>
+</code></pre></div>
 <p>coderay支持的语言有限，并且rouge兼容Pygments，故这里使用rouge：</p>
-
-<pre><code class="language-bash">$ gem install rouge
-</code></pre>
-
-<h1 id="section">参考文章</h1>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gem install rouge
+</code></pre></div>
+<h1 id="参考文章">参考文章</h1>
 
 <ul>
-  <li><a href="http://noyobo.com/2014/10/19/jekyll-kramdown-highlight.html">jekyll kramdown 语法高亮配置</a></li>
-  <li><a href="http://www.quts.me/2015/03/05/kramdown-highlight.html">jekyll kramdown 语法高亮</a></li>
-  <li><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-4.html/">Octopress 精益修改 (4)</a></li>
-  <li><a href="http://pikipity.github.io/blog/kramdown-syntax-chinese-1.html">Kramdown 语法文档翻译（一）</a></li>
-  <li><a href="http://www.pchou.info/open-source/2014/07/07/something-about-markdown.html">Markdown的各种扩展</a></li>
+<li><a href="http://noyobo.com/2014/10/19/jekyll-kramdown-highlight.html">jekyll kramdown 语法高亮配置</a></li>
+<li><a href="http://www.quts.me/2015/03/05/kramdown-highlight.html">jekyll kramdown 语法高亮</a></li>
+<li><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-4.html/">Octopress 精益修改 (4)</a></li>
+<li><a href="http://pikipity.github.io/blog/kramdown-syntax-chinese-1.html">Kramdown 语法文档翻译（一）</a></li>
+<li><a href="http://www.pchou.info/open-source/2014/07/07/something-about-markdown.html">Markdown的各种扩展</a></li>
 </ul>
 
                     <br/>

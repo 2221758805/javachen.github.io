@@ -105,24 +105,24 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <h1 id="section">1. 介绍</h1>
+                    <h1 id="1-介绍">1. 介绍</h1>
 
 <p><a href="http://avro.apache.org/">Avro</a> 是 Hadoop 中的一个子项目，也是 Apache 中一个独立的项目，Avro 是一个基于二进制数据传输高性能的中间件。在 Hadoop 的其他项目中，例如 HBase 和 Hive 的 Client 端与服务端的数据传输也采用了这个工具。Avro 是一个数据序列化的系统，它可以提供：</p>
 
 <ul>
-  <li>1、丰富的数据结构类型</li>
-  <li>2、快速可压缩的二进制数据形式</li>
-  <li>3、存储持久数据的文件容器</li>
-  <li>4、远程过程调用 RPC</li>
-  <li>5、简单的动态语言结合功能，Avro 和动态语言结合后，读写数据文件和使用 RPC 协议都不需要生成代码，而代码生成作为一种可选的优化只值得在静态类型语言中实现。</li>
+<li>1、丰富的数据结构类型</li>
+<li>2、快速可压缩的二进制数据形式</li>
+<li>3、存储持久数据的文件容器</li>
+<li>4、远程过程调用 RPC</li>
+<li>5、简单的动态语言结合功能，Avro 和动态语言结合后，读写数据文件和使用 RPC 协议都不需要生成代码，而代码生成作为一种可选的优化只值得在静态类型语言中实现。</li>
 </ul>
 
 <p>Avro 支持跨编程语言实现（C, C++, C#，Java, Python, Ruby, PHP），Avro 提供着与诸如 Thrift 和 Protocol Buffers 等系统相似的功能，但是在一些基础方面还是有区别的，主要是：</p>
 
 <ul>
-  <li>1、动态类型：Avro 并不需要生成代码，模式和数据存放在一起，而模式使得整个数据的处理过程并不生成代码、静态数据类型等等。这方便了数据处理系统和语言的构造。</li>
-  <li>2、未标记的数据：由于读取数据的时候模式是已知的，那么需要和数据一起编码的类型信息就很少了，这样序列化的规模也就小了。</li>
-  <li>3、不需要用户指定字段号：即使模式改变，处理数据时新旧模式都是已知的，所以通过使用字段名称可以解决差异问题。</li>
+<li>1、动态类型：Avro 并不需要生成代码，模式和数据存放在一起，而模式使得整个数据的处理过程并不生成代码、静态数据类型等等。这方便了数据处理系统和语言的构造。</li>
+<li>2、未标记的数据：由于读取数据的时候模式是已知的，那么需要和数据一起编码的类型信息就很少了，这样序列化的规模也就小了。</li>
+<li>3、不需要用户指定字段号：即使模式改变，处理数据时新旧模式都是已知的，所以通过使用字段名称可以解决差异问题。</li>
 </ul>
 
 <p>Avro 和动态语言结合后，读/写数据文件和使用 RPC 协议都不需要生成代码，而代码生成作为一种可选的优化只需要在静态类型语言中实现。</p>
@@ -131,224 +131,207 @@
 
 <p>还有，Avro 模式是用 JSON（一种轻量级的数据交换模式）定义的，这样对于已经拥有 JSON 库的语言可以容易实现。</p>
 
-<h1 id="schema">2. Schema</h1>
+<h1 id="2-schema">2. Schema</h1>
 
 <p>Schema 通过 JSON 对象表示。Schema 定义了简单数据类型和复杂数据类型，其中复杂数据类型包含不同属性。通过各种数据类型用户可以自定义丰富的数据结构。</p>
 
 <p>基本类型有：</p>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">类型</th>
-      <th style="text-align: left">说明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">null</td>
-      <td style="text-align: left">no value</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">boolean</td>
-      <td style="text-align: left">a binary value</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">int</td>
-      <td style="text-align: left">32-bit signed integer</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">long</td>
-      <td style="text-align: left">64-bit signed integer</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">float</td>
-      <td style="text-align: left">single precision (32-bit) IEEE 754 floating-point number</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">double</td>
-      <td style="text-align: left">double precision (64-bit) IEEE 754 floating-point number</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">bytes</td>
-      <td style="text-align: left">sequence of 8-bit unsigned bytes</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">string</td>
-      <td style="text-align: left">unicode character sequence</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead>
+<tr>
+<th style="text-align: left">类型</th>
+<th style="text-align: left">说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">null</td>
+<td style="text-align: left">no value</td>
+</tr>
+<tr>
+<td style="text-align: left">boolean</td>
+<td style="text-align: left">a binary value</td>
+</tr>
+<tr>
+<td style="text-align: left">int</td>
+<td style="text-align: left">32-bit signed integer</td>
+</tr>
+<tr>
+<td style="text-align: left">long</td>
+<td style="text-align: left">64-bit signed integer</td>
+</tr>
+<tr>
+<td style="text-align: left">float</td>
+<td style="text-align: left">single precision (32-bit) IEEE 754 floating-point number</td>
+</tr>
+<tr>
+<td style="text-align: left">double</td>
+<td style="text-align: left">double precision (64-bit) IEEE 754 floating-point number</td>
+</tr>
+<tr>
+<td style="text-align: left">bytes</td>
+<td style="text-align: left">sequence of 8-bit unsigned bytes</td>
+</tr>
+<tr>
+<td style="text-align: left">string</td>
+<td style="text-align: left">unicode character sequence</td>
+</tr>
+</tbody></table>
 
 <p>Avro定义了六种复杂数据类型：</p>
 
 <ul>
-  <li>Record：record 类型，任意类型的一个命名字段集合，JSON对象表示。支持以下属性：
-    <ul>
-      <li>name：名称，必须</li>
-      <li>namespace</li>
-      <li>doc</li>
-      <li>aliases</li>
-      <li>fields：一个 JSON 数组，必须
-        <ul>
-          <li>name</li>
-          <li>doc</li>
-          <li>type</li>
-          <li>default</li>
-          <li>order</li>
-          <li>aliases</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>Enum：enum 类型，支持以下属性：
-    <ul>
-      <li>name：名称，必须</li>
-      <li>namespace</li>
-      <li>doc</li>
-      <li>aliases</li>
-      <li>symbols：枚举值，必须</li>
-    </ul>
-  </li>
-  <li>Array：array 类型，未排序的对象集合，对象的模式必须相同。支持以下属性：
-    <ul>
-      <li>items</li>
-    </ul>
-  </li>
-  <li>Map：map 类型，未排序的对象键/值对。键必须是字符串，值可以是任何类型，但必须模式相同。支持以下属性：
-    <ul>
-      <li>values</li>
-    </ul>
-  </li>
-  <li>Fixed：fixed 类型，一组固定数量的8位无符号字节。支持以下属性：
-    <ul>
-      <li>name：名称，必须</li>
-      <li>namespace</li>
-      <li>size：每个值的 byte 长度</li>
-      <li>aliases</li>
-    </ul>
-  </li>
-  <li>Union：union 类型，模式的并集，可以用JSON数组表示，每个元素为一个模式。</li>
+<li>Record：record 类型，任意类型的一个命名字段集合，JSON对象表示。支持以下属性：
+
+<ul>
+<li>name：名称，必须</li>
+<li>namespace</li>
+<li>doc</li>
+<li>aliases</li>
+<li>fields：一个 JSON 数组，必须
+
+<ul>
+<li>name</li>
+<li>doc</li>
+<li>type</li>
+<li>default</li>
+<li>order</li>
+<li>aliases</li>
+</ul></li>
+</ul></li>
+<li>Enum：enum 类型，支持以下属性：
+
+<ul>
+<li>name：名称，必须</li>
+<li>namespace</li>
+<li>doc</li>
+<li>aliases</li>
+<li>symbols：枚举值，必须</li>
+</ul></li>
+<li>Array：array 类型，未排序的对象集合，对象的模式必须相同。支持以下属性：
+
+<ul>
+<li>items</li>
+</ul></li>
+<li>Map：map 类型，未排序的对象键/值对。键必须是字符串，值可以是任何类型，但必须模式相同。支持以下属性：
+
+<ul>
+<li>values </li>
+</ul></li>
+<li>Fixed：fixed 类型，一组固定数量的8位无符号字节。支持以下属性：
+
+<ul>
+<li>name：名称，必须</li>
+<li>namespace</li>
+<li>size：每个值的 byte 长度</li>
+<li>aliases </li>
+</ul></li>
+<li>Union：union 类型，模式的并集，可以用JSON数组表示，每个元素为一个模式。</li>
 </ul>
 
 <p>每一种复杂数据类型都含有各自的一些属性，其中部分属性是必需的，部分是可选的。</p>
 
 <p>举例，一个 linked-list of 64-bit 的值：</p>
-
-<pre><code class="language-json">{
-  "type": "record", 
-  "name": "LongList",
-  "aliases": ["LinkedLongs"],                      // old name for this
-  "fields" : [
-    {"name": "value", "type": "long"},             // each element has a long
-    {"name": "next", "type": ["null", "LongList"]} // optional next element
-  ]
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span> 
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;LongList&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;aliases&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;LinkedLongs&quot;</span><span class="p">],</span>                      <span class="err">//</span> <span class="err">old</span> <span class="err">name</span> <span class="err">for</span> <span class="err">this</span>
+  <span class="nt">&quot;fields&quot;</span> <span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;long&quot;</span><span class="p">},</span>             <span class="err">//</span> <span class="err">each</span> <span class="err">element</span> <span class="err">has</span> <span class="err">a</span> <span class="err">long</span>
+    <span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;null&quot;</span><span class="p">,</span> <span class="s2">&quot;LongList&quot;</span><span class="p">]}</span> <span class="err">//</span> <span class="err">optional</span> <span class="err">next</span> <span class="err">element</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>一个 enum 类型的：</p>
-
-<pre><code class="language-json">{ "type": "enum",
-  "name": "Suit",
-  "symbols" : ["SPADES", "HEARTS", "DIAMONDS", "CLUBS"]
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span> <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Suit&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;symbols&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SPADES&quot;</span><span class="p">,</span> <span class="s2">&quot;HEARTS&quot;</span><span class="p">,</span> <span class="s2">&quot;DIAMONDS&quot;</span><span class="p">,</span> <span class="s2">&quot;CLUBS&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>array 类型：</p>
-
-<pre><code class="language-json">{"type": "array", "items": "string"}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="nt">&quot;items&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">}</span>
+</code></pre></div>
 <p>map 类型：</p>
-
-<pre><code class="language-json">{"type": "map", "values": "long"}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;map&quot;</span><span class="p">,</span> <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="s2">&quot;long&quot;</span><span class="p">}</span>
+</code></pre></div>
 <p>fixed 类型：</p>
-
-<pre><code class="language-json">{"type": "fixed", "size": 16, "name": "md5"}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;fixed&quot;</span><span class="p">,</span> <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;md5&quot;</span><span class="p">}</span>
+</code></pre></div>
 <p>这里需要说明Record类型中field属性的默认值，当Record Schema实例数据中某个field属性没有提供实例数据时，则由默认值提供，具体值见下表。Union的field默认值由Union定义中的第一个Schema决定。</p>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">avro type</th>
-      <th style="text-align: left">json type</th>
-      <th style="text-align: left">example</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">null</td>
-      <td style="text-align: left">null</td>
-      <td style="text-align: left">null</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">boolean</td>
-      <td style="text-align: left">boolean</td>
-      <td style="text-align: left">true</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">int,long</td>
-      <td style="text-align: left">integer</td>
-      <td style="text-align: left">1</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">float,double</td>
-      <td style="text-align: left">number</td>
-      <td style="text-align: left">1.1</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">bytes</td>
-      <td style="text-align: left">string</td>
-      <td style="text-align: left">“\u00FF”</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">string</td>
-      <td style="text-align: left">string</td>
-      <td style="text-align: left">“foo”</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">record</td>
-      <td style="text-align: left">object</td>
-      <td style="text-align: left">{“a”: 1}</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">enum</td>
-      <td style="text-align: left">string</td>
-      <td style="text-align: left">“FOO”</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">array</td>
-      <td style="text-align: left">array</td>
-      <td style="text-align: left">[1]</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">map</td>
-      <td style="text-align: left">object</td>
-      <td style="text-align: left">{“a”: 1}</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">fixed</td>
-      <td style="text-align: left">string</td>
-      <td style="text-align: left">“\u00ff”</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead>
+<tr>
+<th style="text-align: left">avro type</th>
+<th style="text-align: left">json type</th>
+<th style="text-align: left">example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">null</td>
+<td style="text-align: left">null</td>
+<td style="text-align: left">null</td>
+</tr>
+<tr>
+<td style="text-align: left">boolean</td>
+<td style="text-align: left">boolean</td>
+<td style="text-align: left">true</td>
+</tr>
+<tr>
+<td style="text-align: left">int,long</td>
+<td style="text-align: left">integer</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">float,double</td>
+<td style="text-align: left">number</td>
+<td style="text-align: left">1.1</td>
+</tr>
+<tr>
+<td style="text-align: left">bytes</td>
+<td style="text-align: left">string</td>
+<td style="text-align: left">&quot;\u00FF&quot;</td>
+</tr>
+<tr>
+<td style="text-align: left">string</td>
+<td style="text-align: left">string</td>
+<td style="text-align: left">&quot;foo&quot;</td>
+</tr>
+<tr>
+<td style="text-align: left">record</td>
+<td style="text-align: left">object</td>
+<td style="text-align: left">{&quot;a&quot;: 1}</td>
+</tr>
+<tr>
+<td style="text-align: left">enum</td>
+<td style="text-align: left">string</td>
+<td style="text-align: left">&quot;FOO&quot;</td>
+</tr>
+<tr>
+<td style="text-align: left">array</td>
+<td style="text-align: left">array</td>
+<td style="text-align: left">[1]</td>
+</tr>
+<tr>
+<td style="text-align: left">map</td>
+<td style="text-align: left">object</td>
+<td style="text-align: left">{&quot;a&quot;: 1}</td>
+</tr>
+<tr>
+<td style="text-align: left">fixed</td>
+<td style="text-align: left">string</td>
+<td style="text-align: left">&quot;\u00ff&quot;</td>
+</tr>
+</tbody></table>
 
-<h1 id="section-1">3.  序列化/反序列化</h1>
+<h1 id="3-序列化-反序列化">3.  序列化/反序列化</h1>
 
 <p>Avro 指定两种数据序列化编码方式：binary encoding 和 Json encoding。使用二进制编码会高效序列化，并且序列化后得到的结果会比较小；而 JSON 一般用于调试系统或是基于 WEB 的应用。</p>
 
 <p>TODO</p>
 
-<h1 id="avro-tools">4. Avro Tools</h1>
+<h1 id="4-avro-tools">4. Avro Tools</h1>
 
 <p>Avro Tools 不加参数时:</p>
-
-<pre><code>$ java -jar /usr/lib/avro/avro-tools.jar
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ java -jar /usr/lib/avro/avro-tools.jar
 Version 1.7.6-cdh5.2.0 of Apache Avro
 Copyright 2010 The Apache Software Foundation
 
@@ -381,60 +364,47 @@ Available tools:
        tojson  Dumps an Avro data file as JSON, record per line or pretty.
        totext  Converts an Avro data file to a text file.
      totrevni  Converts an Avro data file to a Trevni file.
-  trevni_meta  Dumps a Trevni file's metadata as JSON.
+  trevni_meta  Dumps a Trevni file&#39;s metadata as JSON.
 trevni_random  Create a Trevni file filled with random instances of a schema.
 trevni_tojson  Dumps a Trevni file as JSON.
-</code></pre>
-
+</code></pre></div>
 <p>fromjson 命令语法如下：</p>
-
-<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson
-Expected 1 arg: input_file
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson
+Expected <span class="m">1</span> arg: input_file
 Option                                  Description
 ------                                  -----------
---codec                                 Compression codec (default: null)
---level &lt;Integer&gt;                       Compression level (only applies to
-                                          deflate and xz) (default: -1)
+--codec                                 Compression codec <span class="o">(</span>default: null<span class="o">)</span>
+--level &lt;Integer&gt;                       Compression level <span class="o">(</span>only applies to
+                                          deflate and xz<span class="o">)</span> <span class="o">(</span>default: -1<span class="o">)</span>
 --schema                                Schema
 --schema-file                           Schema File
-</code></pre>
-
+</code></pre></div>
 <p>以 <a href="/2015/03/24/how-to-load-some-avro-data-into-spark.html">将Avro数据加载到Spark</a> 为例，将 json 数据转换为 avro 数据：</p>
-
-<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson --schema-file twitter.avsc twitter.json &gt; twitter.avro
+</code></pre></div>
 <p>设置压缩格式：</p>
-
-<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar fromjson --codec snappy --schema-file twitter.avsc twitter.json &gt; twitter.snappy.avro
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar fromjson --codec snappy --schema-file twitter.avsc twitter.json &gt; twitter.snappy.avro
+</code></pre></div>
 <p>将 avro 转换为 json：</p>
-
-<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar tojson twitter.avro &gt; twitter.json
-$ java -jar /usr/lib/avro/avro-tools.jar tojson twitter.snappy.avro &gt; twitter.json
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar tojson twitter.avro &gt; twitter.json
+<span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar tojson twitter.snappy.avro &gt; twitter.json
+</code></pre></div>
 <p>获取 avro 文件的 schema：</p>
-
-<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar getschema twitter.avro &gt; twitter.avsc
-$ java -jar /usr/lib/avro/avro-tools.jar getschema twitter.snappy.avro &gt; twitter.avsc
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar getschema twitter.avro &gt; twitter.avsc
+<span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar getschema twitter.snappy.avro &gt; twitter.avsc
+</code></pre></div>
 <p>将 Avro 数据编译为 Java：</p>
-
-<pre><code class="language-bash">$ java -jar /usr/lib/avro/avro-tools.jar compile schema twitter.avsc .
-</code></pre>
-
-<h1 id="section-2">5. 文件结构</h1>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar /usr/lib/avro/avro-tools.jar compile schema twitter.avsc .
+</code></pre></div>
+<h1 id="5-文件结构">5. 文件结构</h1>
 
 <p>TODO</p>
 
-<h1 id="section-3">6. 参考文章</h1>
+<h1 id="6-参考文章">6. 参考文章</h1>
 
 <ul>
-  <li><a href="http://blog.csdn.net/xyw_blog/article/details/8967362">Avro简介</a></li>
-  <li><a href="http://www.michael-noll.com/blog/2013/03/17/reading-and-writing-avro-files-from-the-command-line/">Reading and Writing Avro Files From the Command Line</a></li>
+<li><a href="http://blog.csdn.net/xyw_blog/article/details/8967362">Avro简介</a></li>
+<li><a href="http://www.michael-noll.com/blog/2013/03/17/reading-and-writing-avro-files-from-the-command-line/">Reading and Writing Avro Files From the Command Line</a></li>
 </ul>
 
                     <br/>

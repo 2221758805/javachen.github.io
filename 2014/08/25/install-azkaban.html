@@ -107,174 +107,152 @@
               <div id="post-text">
                     <p>Azkaban 是由 Linkedin 开源的一个批量工作流任务调度器。用于在一个工作流内以一个特定的顺序运行一组工作和流程。Azkaban 定义了一种 KV 文件格式来建立任务之间的依赖关系，并提供一个易于使用的 web 用户界面维护和跟踪你的工作流。</p>
 
-<p>Azkaban 官网地址：<a href="http://azkaban.github.io/">http://azkaban.github.io/</a><br />
+<p>Azkaban 官网地址：<a href="http://azkaban.github.io/">http://azkaban.github.io/</a>
 Azkaban 的下载地址：<a href="http://azkaban.github.io/downloads.html">http://azkaban.github.io/downloads.html</a></p>
 
 <p>Azkaban 包括三个关键组件：</p>
 
 <ul>
-  <li><code>关系数据库</code>：使用 Mysql数据库，主要用于保存流程、权限、任务状态、任务计划等信息。</li>
-  <li><code>AzkabanWebServer</code>：为用户提供管理留存、任务计划、权限等功能。</li>
-  <li><code>AzkabanExecutorServer</code>：执行任务，并把任务执行的输出日志保存到 Mysql；可以同时启动多个 AzkabanExecutorServer ，他们通过 mysql 获取流程状态来协调工作。</li>
+<li><code class="prettyprint">关系数据库</code>：使用 Mysql数据库，主要用于保存流程、权限、任务状态、任务计划等信息。</li>
+<li><code class="prettyprint">AzkabanWebServer</code>：为用户提供管理留存、任务计划、权限等功能。</li>
+<li><code class="prettyprint">AzkabanExecutorServer</code>：执行任务，并把任务执行的输出日志保存到 Mysql；可以同时启动多个 AzkabanExecutorServer ，他们通过 mysql 获取流程状态来协调工作。</li>
 </ul>
 
-<p><img src="http://azkaban.github.io/azkaban/docs/2.5/images/azkaban2overviewdesign.png" alt="" /></p>
+<p><img src="http://azkaban.github.io/azkaban/docs/2.5/images/azkaban2overviewdesign.png" alt=""></p>
 
 <p>在 2.5 版本之后，Azkaban 提供了两种模式来安装：</p>
 
 <ul>
-  <li>一种是 standalone 的 “solo-server” 模式；</li>
-  <li>另一种是两个 server 的模式，分别为 AzkabanWebServer 和 AzkabanExecutorServer。</li>
+<li>一种是 standalone 的 “solo-server” 模式；</li>
+<li>另一种是两个 server 的模式，分别为 AzkabanWebServer 和 AzkabanExecutorServer。</li>
 </ul>
 
 <p>这里主要介绍第二种模式的安装方法。</p>
 
-<h1 id="section">1. 安装过程</h1>
+<h1 id="1-安装过程">1. 安装过程</h1>
 
-<h2 id="mysql">1.1 安装 MySql</h2>
+<h2 id="1-1-安装-mysql">1.1 安装 MySql</h2>
 
 <p>目前 Azkaban 只支持 MySql ，故需安装 MySql 服务器，安装 MySql 的过程这里不作介绍。</p>
 
 <p>安装之后，创建 azkaban 数据库，并创建 azkaban 用户，密码为 azkaban，并设置权限。</p>
-
-<pre><code class="language-sql"># Example database creation command, although the db name doesn't need to be 'azkaban'
-mysql&gt; CREATE DATABASE azkaban;
-# Example database creation command. The user name doesn't need to be 'azkaban'
-mysql&gt; CREATE USER 'azkaban'@'%' IDENTIFIED BY 'azkaban';
-# Replace db, username with the ones created by the previous steps.
-mysql&gt; GRANT SELECT,INSERT,UPDATE,DELETE ON azkaban.* to 'azkaban'@'%' WITH GRANT OPTION;
-</code></pre>
-
-<p>修改 <code>/etc/my.cnf</code> 文件，设置 <code>max_allowed_packet</code> 值：</p>
-
-<pre><code>[mysqld]
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="o">#</span> <span class="n">Example</span> <span class="k">database</span> <span class="n">creation</span> <span class="n">command</span><span class="p">,</span> <span class="n">although</span> <span class="n">the</span> <span class="n">db</span> <span class="n">name</span> <span class="n">doesn</span><span class="s1">&#39;t need to be &#39;</span><span class="n">azkaban</span><span class="s1">&#39;</span>
+<span class="s1">mysql&gt; CREATE DATABASE azkaban;</span>
+<span class="s1"># Example database creation command. The user name doesn&#39;</span><span class="n">t</span> <span class="n">need</span> <span class="k">to</span> <span class="n">be</span> <span class="s1">&#39;azkaban&#39;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">USER</span> <span class="s1">&#39;azkaban&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;azkaban&#39;</span><span class="p">;</span>
+<span class="o">#</span> <span class="k">Replace</span> <span class="n">db</span><span class="p">,</span> <span class="n">username</span> <span class="k">with</span> <span class="n">the</span> <span class="n">ones</span> <span class="n">created</span> <span class="k">by</span> <span class="n">the</span> <span class="n">previous</span> <span class="n">steps</span><span class="p">.</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">SELECT</span><span class="p">,</span><span class="k">INSERT</span><span class="p">,</span><span class="k">UPDATE</span><span class="p">,</span><span class="k">DELETE</span> <span class="k">ON</span> <span class="n">azkaban</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="s1">&#39;azkaban&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+</code></pre></div>
+<p>修改 <code class="prettyprint">/etc/my.cnf</code> 文件，设置 <code class="prettyprint">max_allowed_packet</code> 值：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[mysqld]
 ...
 max_allowed_packet=1024M
-</code></pre>
-
+</code></pre></div>
 <p>然后重启 MySql。</p>
 
 <p>解压缩 azkaban-sql-2.5.0.tar.gz文件，并进入到 azkaban-sql-script目录，然后进入 mysql 命令行模式：</p>
-
-<pre><code class="language-bash">$ mysql -uazkaban -pazkaban
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mysql -uazkaban -pazkaban
 mysql&gt; use azkaban
-mysql&gt; source create-all-sql-2.5.0.sql
-</code></pre>
+mysql&gt; <span class="nb">source </span>create-all-sql-2.5.0.sql
+</code></pre></div>
+<h2 id="1-2-安装-azkaban-web-server">1.2 安装 azkaban-web-server</h2>
 
-<h2 id="azkaban-web-server">1.2 安装 azkaban-web-server</h2>
-
-<p>解压缩 azkaban-web-server-2.5.0.tar.gz，创建 SSL 配置，命令：<code>keytool -keystore keystore -alias jetty -genkey -keyalg RSA</code></p>
+<p>解压缩 azkaban-web-server-2.5.0.tar.gz，创建 SSL 配置，命令：<code class="prettyprint">keytool -keystore keystore -alias jetty -genkey -keyalg RSA</code></p>
 
 <p>完成上述工作后，将在当前目录生成 keystore 证书文件，将 keystore 考贝到 azkaban web 目录中。</p>
 
 <p>修改 azkaban web 服务器配置，主要包括：</p>
 
 <p>a. 修改时区和首页名称:</p>
-
-<pre><code class="language-properties"># Azkaban Personalization Settings
-azkaban.name=ETL Task
-azkaban.label=By BI
-azkaban.color=#FF3601
-azkaban.default.servlet.path=/index
-web.resource.dir=web/
-default.timezone.id=Asia/Shanghai
-</code></pre>
-
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="c"># Azkaban Personalization Settings</span>
+<span class="na">azkaban.name</span><span class="o">=</span><span class="s">ETL Task</span>
+<span class="na">azkaban.label</span><span class="o">=</span><span class="s">By BI</span>
+<span class="na">azkaban.color</span><span class="o">=</span><span class="s">#FF3601</span>
+<span class="na">azkaban.default.servlet.path</span><span class="o">=</span><span class="s">/index</span>
+<span class="na">web.resource.dir</span><span class="o">=</span><span class="s">web/</span>
+<span class="na">default.timezone.id</span><span class="o">=</span><span class="s">Asia/Shanghai</span>
+</code></pre></div>
 <p>b. 修改 MySql 数据库配置</p>
-
-<pre><code class="language-properties">database.type=mysql
-mysql.port=3306
-mysql.host=localhost
-mysql.database=azkaban
-mysql.user=azkaban
-mysql.password=azkaban
-mysql.numconnections=100
-</code></pre>
-
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">database.type</span><span class="o">=</span><span class="s">mysql</span>
+<span class="na">mysql.port</span><span class="o">=</span><span class="s">3306</span>
+<span class="na">mysql.host</span><span class="o">=</span><span class="s">localhost</span>
+<span class="na">mysql.database</span><span class="o">=</span><span class="s">azkaban</span>
+<span class="na">mysql.user</span><span class="o">=</span><span class="s">azkaban</span>
+<span class="na">mysql.password</span><span class="o">=</span><span class="s">azkaban</span>
+<span class="na">mysql.numconnections</span><span class="o">=</span><span class="s">100</span>
+</code></pre></div>
 <p>c. 修改 Jetty 服务器属性，包括 keystore 的相关配置</p>
-
-<pre><code class="language-properties"># Azkaban Jetty server properties.
-jetty.hostname=0.0.0.0
-jetty.maxThreads=25
-jetty.ssl.port=8443
-jetty.port=8081
-jetty.keystore=keystore
-jetty.password=redhat
-jetty.keypassword=redhat
-jetty.truststore=keystore
-jetty.trustpassword=redhat
-</code></pre>
-
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="c"># Azkaban Jetty server properties.</span>
+<span class="na">jetty.hostname</span><span class="o">=</span><span class="s">0.0.0.0</span>
+<span class="na">jetty.maxThreads</span><span class="o">=</span><span class="s">25</span>
+<span class="na">jetty.ssl.port</span><span class="o">=</span><span class="s">8443</span>
+<span class="na">jetty.port</span><span class="o">=</span><span class="s">8081</span>
+<span class="na">jetty.keystore</span><span class="o">=</span><span class="s">keystore</span>
+<span class="na">jetty.password</span><span class="o">=</span><span class="s">redhat</span>
+<span class="na">jetty.keypassword</span><span class="o">=</span><span class="s">redhat</span>
+<span class="na">jetty.truststore</span><span class="o">=</span><span class="s">keystore</span>
+<span class="na">jetty.trustpassword</span><span class="o">=</span><span class="s">redhat</span>
+</code></pre></div>
 <p>d. 修改邮件设置（可选）</p>
-
-<pre><code class="language-properties"># mail settings
-mail.sender=admin@javachen.com
-mail.host=javachen.com
-mail.user=admin
-mail.password=admin
-</code></pre>
-
-<h2 id="azkaban-executor-server">1.3 安装 azkaban-executor-server</h2>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="c"># mail settings</span>
+<span class="na">mail.sender</span><span class="o">=</span><span class="s">admin@javachen.com</span>
+<span class="na">mail.host</span><span class="o">=</span><span class="s">javachen.com</span>
+<span class="na">mail.user</span><span class="o">=</span><span class="s">admin</span>
+<span class="na">mail.password</span><span class="o">=</span><span class="s">admin</span>
+</code></pre></div>
+<h2 id="1-3-安装-azkaban-executor-server">1.3 安装 azkaban-executor-server</h2>
 
 <p>解压缩 azkaban-executor-server-2.5.0.tar.gz，然后修改配置文件，包括：</p>
 
-<p>a. 修改时区为：<code>default.timezone.id=Asia/Shanghai</code></p>
+<p>a. 修改时区为：<code class="prettyprint">default.timezone.id=Asia/Shanghai</code></p>
 
 <p>b. 修改 MySql 数据库配置</p>
-
-<pre><code class="language-properties">database.type=mysql
-mysql.port=3306
-mysql.host=localhost
-mysql.database=azkaban
-mysql.user=azkaban
-mysql.password=azkaban
-mysql.numconnections=100
-</code></pre>
-
-<h2 id="section-1">1.4 用户设置</h2>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">database.type</span><span class="o">=</span><span class="s">mysql</span>
+<span class="na">mysql.port</span><span class="o">=</span><span class="s">3306</span>
+<span class="na">mysql.host</span><span class="o">=</span><span class="s">localhost</span>
+<span class="na">mysql.database</span><span class="o">=</span><span class="s">azkaban</span>
+<span class="na">mysql.user</span><span class="o">=</span><span class="s">azkaban</span>
+<span class="na">mysql.password</span><span class="o">=</span><span class="s">azkaban</span>
+<span class="na">mysql.numconnections</span><span class="o">=</span><span class="s">100</span>
+</code></pre></div>
+<h2 id="1-4-用户设置">1.4 用户设置</h2>
 
 <p>进入 azkaban web 服务器 conf 目录，修改 azkaban-users.xml ，增加管理员用户：</p>
-
-<pre><code class="language-xml">&lt;azkaban-users&gt;
-        &lt;user username="azkaban" password="azkaban" roles="admin" groups="azkaban" /&gt;
-        &lt;user username="metrics" password="metrics" roles="metrics"/&gt;
-        &lt;user username="admin" password="admin" roles="admin,metrics" /&gt;
-        &lt;role name="admin" permissions="ADMIN" /&gt;
-        &lt;role name="metrics" permissions="METRICS"/&gt;
-&lt;/azkaban-users&gt;
-</code></pre>
-
-<h2 id="section-2">1.5 启动服务</h2>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;azkaban-users&gt;</span>
+        <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&quot;azkaban&quot;</span> <span class="na">password=</span><span class="s">&quot;azkaban&quot;</span> <span class="na">roles=</span><span class="s">&quot;admin&quot;</span> <span class="na">groups=</span><span class="s">&quot;azkaban&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&quot;metrics&quot;</span> <span class="na">password=</span><span class="s">&quot;metrics&quot;</span> <span class="na">roles=</span><span class="s">&quot;metrics&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&quot;admin&quot;</span> <span class="na">password=</span><span class="s">&quot;admin&quot;</span> <span class="na">roles=</span><span class="s">&quot;admin,metrics&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">&quot;admin&quot;</span> <span class="na">permissions=</span><span class="s">&quot;ADMIN&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">&quot;metrics&quot;</span> <span class="na">permissions=</span><span class="s">&quot;METRICS&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/azkaban-users&gt;</span>
+</code></pre></div>
+<h2 id="1-5-启动服务">1.5 启动服务</h2>
 
 <p>azkaban-web-server，需要在 azkaban-web-server 目录下执行下面命令：</p>
-
-<pre><code class="language-bash">sh bin/azkaban-web-start.sh
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sh bin/azkaban-web-start.sh
+</code></pre></div>
 <p>azkaban-executor-server，需要在 azkaban-executor-server 目录下执行下面命令：</p>
-
-<pre><code class="language-bash">sh bin/azkaban-executor-start.sh
-</code></pre>
-
-<h2 id="section-3">1.6 配置插件</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sh bin/azkaban-executor-start.sh
+</code></pre></div>
+<h2 id="1-6-配置插件">1.6 配置插件</h2>
 
 <p>下载 <a href="https://s3.amazonaws.com/azkaban2/azkaban-plugins/2.5.0/azkaban-hdfs-viewer-2.5.0.tar.gz">HDFS Browser</a> 插件，解压然后重命名为 hdfs，然后将其拷贝到 azkaban-web-server/plugins/viewer 目录下。</p>
 
-<p>下载 <a href="https://s3.amazonaws.com/azkaban2/azkaban-plugins/2.5.0/azkaban-jobtype-2.5.0.tar.gz">Job Types Plugins</a> 插件，解压然后重命名为 jobtype，然后将其拷贝到 azkaban-executor-server/plugins/ 目录下，然后修改以下文件，设置 <code>hive.home</code>：</p>
+<p>下载 <a href="https://s3.amazonaws.com/azkaban2/azkaban-plugins/2.5.0/azkaban-jobtype-2.5.0.tar.gz">Job Types Plugins</a> 插件，解压然后重命名为 jobtype，然后将其拷贝到 azkaban-executor-server/plugins/ 目录下，然后修改以下文件，设置 <code class="prettyprint">hive.home</code>：</p>
 
 <ul>
-  <li>plugins/jobtypes/commonprivate.properties</li>
-  <li>plugins/jobtypes/common.properties</li>
-  <li>plugins/jobtypes/hive/plugin.properties</li>
+<li>plugins/jobtypes/commonprivate.properties</li>
+<li>plugins/jobtypes/common.properties</li>
+<li>plugins/jobtypes/hive/plugin.properties</li>
 </ul>
 
 <blockquote>
-  <p>说明：</p>
+<p>说明：</p>
 
-  <p>在实际使用中，这些插件都没有配置成功，故最后的生产环境没有使用这些插件，而是基于最基本的 command 或 script 方式来编写作业。</p>
+<p>在实际使用中，这些插件都没有配置成功，故最后的生产环境没有使用这些插件，而是基于最基本的 command 或 script 方式来编写作业。</p>
 </blockquote>
 
-<h2 id="section-4">1.7 生产环境使用</h2>
+<h2 id="1-7-生产环境使用">1.7 生产环境使用</h2>
 
 <p>这部分内容详细说明见 <a href="/2014/10/23/hive-warehouse-in-2014.html">当前数据仓库建设过程</a> 一文中的任务调度这一章节内容。</p>
 

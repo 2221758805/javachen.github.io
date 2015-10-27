@@ -107,645 +107,522 @@
               <div id="post-text">
                     <p>Bash中，用在脚本和其他地方的字符叫做特殊字符。下面依次举例介绍每个字符的用途。</p>
 
-<h2 id="section"><code>#</code></h2>
+<h2 id="><code class="prettyprint">#</code></h2>
 
-<p>行首以<code>#</code>(<code>#!</code>是个例外)开头是注释。</p>
-
-<pre><code class="language-bash"># This line is a comment.
-</code></pre>
-
+<p>行首以<code class="prettyprint">#</code>(<code class="prettyprint">#!</code>是个例外)开头是注释。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># This line is a comment.</span>
+</code></pre></div>
 <p>注释也可以放在于本行命令的后边。</p>
-
-<pre><code class="language-bash">echo "A comment will follow."   # 注释在这里。
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">&quot;A comment will follow.&quot;</span>   <span class="c"># 注释在这里。</span>
+</code></pre></div>
 <blockquote>
-  <p>命令是不能放在同一行上注释的后边的。因为没有办法把注释结束掉，好让同一行上后边的”代码生效”，只能够另起一行来使用下一个命令。</p>
+<p>命令是不能放在同一行上注释的后边的。因为没有办法把注释结束掉，好让同一行上后边的&quot;代码生效&quot;，只能够另起一行来使用下一个命令。</p>
 </blockquote>
 
-<p>在echo中转义的<code>#</code>是不能作为注释的，同样也可以出现在特定的参数替换结构中，或者是出现在数字常量表达式中。</p>
+<p>在echo中转义的<code class="prettyprint">#</code>是不能作为注释的，同样也可以出现在特定的参数替换结构中，或者是出现在数字常量表达式中。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">&quot;The # here does not begin a comment.&quot;</span> 
+<span class="nb">echo</span> <span class="s1">&#39;The # here does not begin a comment.&#39;</span> 
+<span class="nb">echo </span>The <span class="se">\#</span> here does not begin a comment.    <span class="c">#转义字符\</span>
+<span class="nb">echo </span>The <span class="c"># 这里开始一个注释.</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">PATH</span><span class="p">#*:</span><span class="k">}</span>   <span class="c"># 参数替换, 不是一个注释</span>
+<span class="nb">echo</span> <span class="k">$((</span> <span class="m">2#101011</span> <span class="k">))</span>   <span class="c"># 数制转换, 不是一个注释</span>
+</code></pre></div>
+<p>标准的引用和转义字符<code class="prettyprint">&quot; &#39; \</code>可以用来转义<code class="prettyprint">#</code>，某些特定的模式匹配操作也可以使用<code class="prettyprint">#</code>。</p>
 
-<pre><code class="language-bash">echo "The # here does not begin a comment." 
-echo 'The # here does not begin a comment.' 
-echo The \# here does not begin a comment.    #转义字符\
-echo The # 这里开始一个注释.
-echo ${PATH#*:}   # 参数替换, 不是一个注释
-echo $(( 2#101011 ))   # 数制转换, 不是一个注释
-</code></pre>
+<h2 id="><code class="prettyprint">;</code></h2>
 
-<p>标准的引用和转义字符<code>" ' \</code>可以用来转义<code>#</code>，某些特定的模式匹配操作也可以使用<code>#</code>。</p>
+<p>分号作为命令行分隔符，可以在同一行上写两个或两个以上的命令。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo </span>hello<span class="p">;</span> <span class="nb">echo </span>there
 
-<h2 id="section-1"><code>;</code></h2>
+<span class="k">if</span> <span class="o">[</span> -x <span class="s2">&quot;$filename&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">&quot;File $filename exists.&quot;</span><span class="p">;</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> <span class="s2">&quot;File $filename not found.&quot;</span><span class="p">;</span> touch <span class="nv">$filename</span> 
+<span class="k">fi</span><span class="p">;</span> <span class="nb">echo</span> <span class="s2">&quot;File test complete.&quot;</span>    
+</code></pre></div>
+<p>在某些情况下，<code class="prettyprint">;</code>也可以被转义。</p>
 
-<pre><code class="language-bash">分号作为命令行分隔符，可以在同一行上写两个或两个以上的命令。
-
-echo hello; echo there
-
-if [ -x "$filename" ]; then
-    echo "File $filename exists.";
-else
-    echo "File $filename not found."; touch $filename 
-fi; echo "File test complete."    
-</code></pre>
-
-<p>在某些情况下，<code>; </code>也可以被转义。</p>
-
-<h2 id="section-2"><code>;;</code></h2>
+<h2 id="><code class="prettyprint">;;</code></h2>
 
 <p>终止case选项。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">case</span> <span class="s2">&quot;$variable&quot;</span> in
+    abc<span class="o">)</span> <span class="nb">echo</span> <span class="s2">&quot;\$variable = abc&quot;</span> <span class="p">;;</span> 
+    xyz<span class="o">)</span> <span class="nb">echo</span> <span class="s2">&quot;\$variable = xyz&quot;</span> <span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div>
+<h2 id="><code class="prettyprint">.</code></h2>
 
-<pre><code class="language-bash">case "$variable" in
-    abc) echo "\$variable = abc" ;; 
-    xyz) echo "\$variable = xyz" ;;
-esac
-</code></pre>
+<p>点命令等价于<code class="prettyprint">source</code>命令，这是一个bash的内建命令。</p>
 
-<h2 id="section-3"><code>.</code></h2>
-
-<p>点命令等价于<code>source</code>命令，这是一个bash的内建命令。</p>
-
-<p>如果点放在文件名的开头的话，那么这个文件将会成为”隐藏”文件，并且<code>ls</code>命令将不会正常的显示出这个文件。</p>
+<p>如果点放在文件名的开头的话，那么这个文件将会成为&quot;隐藏&quot;文件，并且<code class="prettyprint">ls</code>命令将不会正常的显示出这个文件。</p>
 
 <p>如果作为目录名的话，一个单独的点代表当前的工作目录，而两个点表示上一级目录。</p>
 
 <p>点也可以表示当前目录。</p>
-
-<pre><code class="language-bash">cp /home/javachen/current_work/* .
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cp /home/javachen/current_work/* .
+</code></pre></div>
 <p>当用作匹配字符的作用时，通常都是作为正则表达式的一部分来使用，点用来匹配任何的单个字符。</p>
 
-<h2 id="section-4"><code>"</code>,<code>'</code></h2>
+<h2 id="quot-39"><code class="prettyprint">&quot;</code>,<code class="prettyprint">&#39;</code></h2>
 
 <p>双引号为部分引用，单引号为全引用。</p>
-
-<pre><code class="language-bash">echo "The # here does not begin a comment." 
-echo 'The # here does not begin a comment.' 
-</code></pre>
-
-<h2 id="section-5"><code>,</code></h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">&quot;The # here does not begin a comment.&quot;</span> 
+<span class="nb">echo</span> <span class="s1">&#39;The # here does not begin a comment.&#39;</span> 
+</code></pre></div>
+<h2 id="><code class="prettyprint">,</code></h2>
 
 <p>逗号操作费，链接了一系列的算术操作。 虽然里边所有的内容都被运行了，但只有最后一项被返回。</p>
-
-<pre><code class="language-bash">let "t2 = ((a = 9, 15 / 3))" # a = 9   t2 = 15 / 3
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">let</span> <span class="s2">&quot;t2 = ((a = 9, 15 / 3))&quot;</span> <span class="c"># a = 9   t2 = 15 / 3</span>
+</code></pre></div>
 <p>也可以这样使用：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir -p <span class="o">{</span>a,b,c<span class="o">}</span>  <span class="c">#创建三个目录a、b、c</span>
+</code></pre></div>
+<h2 id="><code class="prettyprint">\</code></h2>
 
-<pre><code class="language-bash">mkdir -p {a,b,c}  #创建三个目录a、b、c
-</code></pre>
+<p>转义符，一种对单字符的引用机制，通常是用于对单字符进行转义。<code class="prettyprint">\</code>通常用来转义<code class="prettyprint">&quot;</code>和<code class="prettyprint">&#39;</code>，这样双引号和但引号就不会被解释成特殊含义了。</p>
 
-<h2 id="section-6"><code>\</code></h2>
-
-<p>转义符，一种对单字符的引用机制，通常是用于对单字符进行转义。<code>\</code>通常用来转义<code>"</code>和<code>'</code>，这样双引号和但引号就不会被解释成特殊含义了。</p>
-
-<h2 id="section-7"><code>/</code></h2>
+<h2 id="><code class="prettyprint">/</code></h2>
 
 <p>文件名路径分隔符，分隔文件名不同的部分，也可以用来作为除法算术操作符。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">/home/bozo/projects/Makefile
+<span class="nb">let</span> <span class="s2">&quot;t2 = ((a = 9, 15 / 3))&quot;</span> <span class="c"># a = 9   t2 = 15 / 3</span>
+</code></pre></div>
+<h2 id=">`</h2>
 
-<pre><code class="language-bash">/home/bozo/projects/Makefile
-let "t2 = ((a = 9, 15 / 3))" # a = 9   t2 = 15 / 3
-</code></pre>
+<p>命令替换，<code class="prettyprint">command</code>结构可以将命令的输出赋值到一个变量中去。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">date</span><span class="o">=</span><span class="sb">`</span>date<span class="sb">`</span>
+</code></pre></div>
+<h2 id="><code class="prettyprint">:</code></h2>
 
-<h2 id="section-8">`</h2>
-
-<p>命令替换，<code>command</code>结构可以将命令的输出赋值到一个变量中去。</p>
-
-<pre><code class="language-bash">date=`date`
-</code></pre>
-
-<h2 id="section-9"><code>:</code></h2>
-
-<p>空命令，等价于”NOP”，什么都不做，也可以被认为与shell的内建命令true作用相同。”:”命令是一个bash的内建命令，它的退出码是”true”，即为0。</p>
-
-<pre><code class="language-bash">:
-echo $? # 0
-</code></pre>
-
+<p>空命令，等价于&quot;NOP&quot;，什么都不做，也可以被认为与shell的内建命令true作用相同。&quot;:&quot;命令是一个bash的内建命令，它的退出码是&quot;true&quot;，即为0。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">:
+<span class="nb">echo</span> <span class="nv">$?</span> <span class="c"># 0</span>
+</code></pre></div>
 <p>死循环：</p>
-
-<pre><code class="language-bash">while :   # while true
-do
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">while</span> :   <span class="c"># while true</span>
+<span class="k">do</span>
     date
-done
-</code></pre>
-
+<span class="k">done</span>
+</code></pre></div>
 <p>在 if/then 中的占位符，什么都不做，引出分支。</p>
-
-<pre><code class="language-bash">if condition
-then :          # 什么都不做,引出分支. 
-else
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">if</span> condition
+<span class="k">then</span> :          <span class="c"># 什么都不做，引出分支</span>
+<span class="k">else</span>
     take-some-action
-fi
-</code></pre>
-
+<span class="k">fi</span>
+</code></pre></div>
 <p>在一个二元命令中提供一个占位符。</p>
-
-<pre><code class="language-bash">n=1
-: $((n = $n + 1))  # 如果没有":"的话，Bash 将会尝试把 $((n = $n + 1)) 解释为一个命令，运行时会报错
-echo -n "$n "
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">n</span><span class="o">=</span>1
+: <span class="k">$((</span><span class="nv">n</span> <span class="o">=</span> <span class="nv">$n</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>  <span class="c"># 如果没有&quot;:&quot;的话，Bash 将会尝试把 $((n = $n + 1)) 解释为一个命令，运行时会报错</span>
+<span class="nb">echo</span> -n <span class="s2">&quot;$n &quot;</span>
+</code></pre></div>
 <p>在here document中提供一个命令所需的占位符或者用于注释代码。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">: <span class="s">&lt;&lt;TESTVARIABLES</span>
+<span class="s">${HOSTNAME?}${USER?}${MAIL?} # 如果其中某个变量没被设置, 那么就打印错误信息. </span>
+<span class="s">TESTVARIABLES</span>
 
-<pre><code class="language-bash">: &lt;&lt;TESTVARIABLES
-${HOSTNAME?}${USER?}${MAIL?} # 如果其中某个变量没被设置, 那么就打印错误信息. 
-TESTVARIABLES
 
-
-: &lt;&lt;COMMENTBLOCK
-echo "This line will not echo."
-This is a comment line missing the "#" prefix.
-This is another comment line missing the "#" prefix.
-&amp;*@!!++=
-The above line will cause no error message,
-because the Bash interpreter will ignore it.
-COMMENTBLOCK
-</code></pre>
-
+: <span class="s">&lt;&lt;COMMENTBLOCK</span>
+<span class="s">echo &quot;This line will not echo.&quot;</span>
+<span class="s">This is a comment line missing the &quot;#&quot; prefix.</span>
+<span class="s">This is another comment line missing the &quot;#&quot; prefix.</span>
+<span class="s">&amp;*@!!++=</span>
+<span class="s">The above line will cause no error message,</span>
+<span class="s">because the Bash interpreter will ignore it.</span>
+<span class="s">COMMENTBLOCK</span>
+</code></pre></div>
 <p>使用参数替换来评估字符串变量。</p>
-
-<pre><code class="language-bash">: ${HOSTNAME ?} ${USER?} ${MAIL?}  #如果一个或多个必要的环境变量没被设置的话，就打印错误信息.
-</code></pre>
-
-<p>在与<code>&gt;</code>重定向操作符结合使用时，将会把一个文件清空，但是并不会修改这个文件的权限。如果之前这个文件并不存在，那么就创建这个文件。</p>
-
-<pre><code class="language-bash">: &gt; data.xxx  # 文件"data.xxx" 现在被清空了
-# 与 cat /dev/null &gt;data.xxx 的作用相同
-# 然而，这并不会产生一个新的进程，因为":"是一个内建命令
-</code></pre>
-
-<p>在与<code>&gt;&gt;</code>重定向操作符结合使用时，将不会对预先存在的目标文件产生任何影响。如果这个文件之前并不存在，那么就创建它。<code>这只适用于正规文件,，而不适用于管道、符号连接和某些特殊文件</code>。</p>
-
-<pre><code class="language-bash">: &gt;&gt; target_file
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">: <span class="k">${</span><span class="nv">HOSTNAME</span><span class="p"> ?</span><span class="k">}</span> <span class="k">${</span><span class="nv">USER</span><span class="p">?</span><span class="k">}</span> <span class="k">${</span><span class="nv">MAIL</span><span class="p">?</span><span class="k">}</span>  <span class="c">#如果一个或多个必要的环境变量没被设置的话，就打印错误信息.</span>
+</code></pre></div>
+<p>在与<code class="prettyprint">&gt;</code>重定向操作符结合使用时，将会把一个文件清空，但是并不会修改这个文件的权限。如果之前这个文件并不存在，那么就创建这个文件。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">: &gt; data.xxx  <span class="c"># 文件&quot;data.xxx&quot; 现在被清空了</span>
+<span class="c"># 与 cat /dev/null &gt;data.xxx 的作用相同</span>
+<span class="c"># 然而，这并不会产生一个新的进程，因为&quot;:&quot;是一个内建命令</span>
+</code></pre></div>
+<p>在与<code class="prettyprint">&gt;&gt;</code>重定向操作符结合使用时，将不会对预先存在的目标文件产生任何影响。如果这个文件之前并不存在，那么就创建它。<code class="prettyprint">这只适用于正规文件,，而不适用于管道、符号连接和某些特殊文件</code>。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">: &gt;&gt; target_file
+</code></pre></div>
 <p>也可能用来作为注释行，虽然我们不推荐这么做。使用#来注释的话，将关闭剩余行的错误检查，所以可以在注释行中写任何东西。然而，使用:的话将不会这样。</p>
-
-<pre><code class="language-bash">: This is a comment that generates an error, ( if [ $x -eq 3] fi ).
-</code></pre>
-
-<p>”:”还用来在/etc/passwd和<code>$PATH</code>变量中做分隔符。</p>
-
-<pre><code class="language-bash">echo $PATH
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">: This is a comment that generates an error, <span class="o">(</span> <span class="k">if</span> <span class="o">[</span> <span class="nv">$x</span> -eq 3<span class="o">]</span> <span class="k">fi</span> <span class="o">)</span>.
+</code></pre></div>
+<p>&quot;:&quot;还用来在/etc/passwd和<code class="prettyprint">$PATH</code>变量中做分隔符。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="nv">$PATH</span>
 /usr/java/default/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-</code></pre>
+</code></pre></div>
+<h2 id="><code class="prettyprint">!</code></h2>
 
-<h2 id="section-10"><code>!</code></h2>
+<p>取反操作符。<code class="prettyprint">!</code>操作符将会反转命令的退出码的结果：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">true</span>        <span class="c"># &quot;true&quot; 是内建命令</span>
+<span class="nb">echo</span> <span class="s2">&quot;exit status of \&quot;true\&quot; = $?&quot;</span>         <span class="c"># 0</span>
 
-<p>取反操作符。<code>! </code>操作符将会反转命令的退出码的结果：</p>
-
-<pre><code class="language-bash">true        # "true" 是内建命令
-echo "exit status of \"true\" = $?"         # 0
-
-! true
-echo "exit status of \"! true\" = $?"       # 1
-</code></pre>
-
-<p>如果一个命令以<code>!</code>开头，那么会启用Bash的历史机制。</p>
-
-<pre><code class="language-bash">true
+! <span class="nb">true</span>
+<span class="nb">echo</span> <span class="s2">&quot;exit status of \&quot;! true\&quot; = $?&quot;</span>       <span class="c"># 1</span>
+</code></pre></div>
+<p>如果一个命令以<code class="prettyprint">!</code>开头，那么会启用Bash的历史机制。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">true</span>
 !true
-# 这次就没有错误了, 也没有反转结果.它只是重复了之前的命令(true).
-</code></pre>
+<span class="c"># 这次就没有错误了, 也没有反转结果.它只是重复了之前的命令(true).</span>
+</code></pre></div>
+<p>在另一种上下文中，如命令行模式下，<code class="prettyprint">!</code>还能反转bash的历史机制。需要注意 的是，在一个脚本中，历史机制是被禁用的。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">history</span> <span class="p">|</span>head -n 10
+   <span class="m">18</span>  date
+   <span class="m">19</span>  ls
+   <span class="m">20</span>  <span class="nb">cd</span>
+<span class="nb">   </span><span class="m">21</span>  <span class="nb">pwd</span>
+<span class="nb">   </span><span class="m">22</span>  jps
+   <span class="m">23</span>  java
+   <span class="m">24</span>  ll
+   <span class="m">25</span>  ps
+   <span class="m">26</span>  <span class="nb">history</span>
 
-<p>在另一种上下文中，如命令行模式下，<code>!</code>还能反转bash的历史机制。需要注意 的是，在一个脚本中，历史机制是􏰌􏱆被􏱆禁用的。</p>
+<span class="c">#执行bash历史中的一条命令</span>
+<span class="nv">$ </span>!25
+</code></pre></div>
+<p><code class="prettyprint">!</code>操作符还是Bash的关键字。</p>
 
-<pre><code class="language-bash">$ history |head -n 10
-   18  date
-   19  ls
-   20  cd
-   21  pwd
-   22  jps
-   23  java
-   24  ll
-   25  ps
-   26  history
+<p>在一个不同的上下文中，<code class="prettyprint">!</code>也会出现在变量的<code class="prettyprint">间接引用</code>中。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">a</span><span class="o">=</span>letter_of_alphabet
+<span class="nv">letter_of_alphabet</span><span class="o">=</span>z
 
-#执行bash历史中的一条命令
-$ !25
+<span class="c"># 直接引用.</span>
+<span class="nb">echo</span> <span class="s2">&quot;a = $a&quot;</span>   <span class="c"># a = letter_of_alphabet</span>
 
-</code></pre>
+<span class="c"># 间接引用.</span>
+<span class="nb">eval </span><span class="nv">a</span><span class="o">=</span><span class="se">\$</span><span class="nv">$a</span> 
+<span class="nb">echo</span> <span class="s2">&quot;Now a=$a&quot;</span>    <span class="c">#Now a = z</span>
 
-<p><code>! </code>操作符还是Bash的关键字。</p>
-
-<p>在一个不同的上下文中，<code>! </code>也会出现在变量的<code>间接引用</code>中。</p>
-
-<pre><code class="language-bash">a=letter_of_alphabet
-letter_of_alphabet=z
-
-# 直接引用.
-echo "a = $a"   # a = letter_of_alphabet
-
-# 间接引用.
-eval a=\$$a 
-echo "Now a=$a"    #Now a = z
-
-# 间接引用.
-echo ${!a}  # a = z
-</code></pre>
-
-<h2 id="section-11"><code>*</code></h2>
+<span class="c"># 间接引用.</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="p">!a</span><span class="k">}</span>  <span class="c"># a = z</span>
+</code></pre></div>
+<h2 id="><code class="prettyprint">*</code></h2>
 
 <p>用来做文件名匹配：</p>
-
-<pre><code class="language-bash">$ echo *
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">echo</span> *
 abs-book.sgml add-drive.sh agram.sh alias.sh
-</code></pre>
-
+</code></pre></div>
 <p>也可以用在正则表达式中，用来匹配任意个数(包含0个)的字符。</p>
 
-<p>在算术操作符的上下文中， <code>*</code>号表示􏱉乘法运算。如果要做􏱊􏱋幂运算，使用<code>**</code>，这是􏱊􏱋求幂操作符。</p>
+<p>在算术操作符的上下文中， <code class="prettyprint">*</code>号表示乘法运算。如果要做幂运算，使用<code class="prettyprint">**</code>，这是求幂操作符。</p>
 
-<h2 id="section-12"><code>？</code></h2>
+<h2 id="？"><code class="prettyprint">？</code></h2>
 
-<p>测试操作符。在一个特定的表达式中，<code>?</code>用来测试一个条件的结果。</p>
+<p>测试操作符。在一个特定的表达式中，<code class="prettyprint">?</code>用来测试一个条件的结果。</p>
 
-<p>在一个双括号结构中，<code>?</code>就是C语言的三元操作符。</p>
+<p>在一个双括号结构中，<code class="prettyprint">?</code>就是C语言的三元操作符。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">((</span> <span class="nv">t</span> <span class="o">=</span> a&lt;45?7:11 <span class="o">))</span> <span class="c"># C语言风格的三元操作</span>
+</code></pre></div>
+<p>在参数替换表达式中，<code class="prettyprint">?</code>用来测试一个变量是否set。</p>
 
-<pre><code class="language-bash">(( t = a&lt;45?7:11 )) # C语言风格的三元操作
-</code></pre>
+<p>在通配中，用来做匹配单个字符的&quot;通配符&quot;，在正则表达式中，也是用来表示一个字符。</p>
 
-<p>在参数替换表达式中，<code>?</code>用来测试一个变量是否􏰌set􏰝。</p>
+<h2 id="><code class="prettyprint">$</code></h2>
 
-<pre><code class="language-bash">$􏱯parameter?err􏱸msg􏱰   #如果parameter􏱶􏰫􏰌􏱴􏱵􏱶􏰫􏰌􏱴􏱵已经被声明，那么就使用声明的值，否则打印err􏱸msg 错误消息.
-$􏱯parameter:?err􏱸msg􏱰  #如果parameter􏱶􏰫􏰌已经被设置，那么就使用设置的值，否则打印 err􏱸msg错误消息.
-</code></pre>
-
-<p>在通配中，用来做匹配单个字符的”通配符”，在正则表达式中，也是用来表示一个字符。</p>
-
-<h2 id="section-13"><code>$</code></h2>
-
-<p>在<code>变量替换</code>中，用于引用变量的内容。</p>
-
-<pre><code class="language-bash">var1=5
-echo $var1
-</code></pre>
-
-<p>在一个变量前面加上<code>$</code>用来引用这个变量的值。</p>
+<p>在<code class="prettyprint">变量替换</code>中，用于引用变量的内容。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">var1</span><span class="o">=</span>5
+<span class="nb">echo</span> <span class="nv">$var1</span>
+</code></pre></div>
+<p>在一个变量前面加上<code class="prettyprint">$</code>用来引用这个变量的值。</p>
 
 <p>在正则表达式中，表示行结束符。</p>
 
-<p><code>${}</code> 是参数替换，<code>$*</code>, <code>$@</code>是位置参数，<code>$?</code> 是退出状态码变量，<code>$$</code>是进程id变量，保存􏰝􏰈所在脚本的进程 ID。</p>
+<p><code class="prettyprint">${}</code> 是参数替换，<code class="prettyprint">$*</code>, <code class="prettyprint">$@</code>是位置参数，<code class="prettyprint">$?</code> 是退出状态码变量，<code class="prettyprint">$$</code>是进程id变量，保存所在脚本的进程 ID。</p>
 
-<h2 id="section-14"><code>()</code></h2>
+<h2 id="><code class="prettyprint">()</code></h2>
 
 <p>命令组：</p>
-
-<pre><code class="language-bash">(a=hello; echo $a)
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">(</span><span class="nv">a</span><span class="o">=</span>hello<span class="p">;</span> <span class="nb">echo</span> <span class="nv">$a</span><span class="o">)</span>
+</code></pre></div>
 <blockquote>
-  <p>在括号中的命令列表，将会作为一个子shell来运行。</p>
+<p>在括号中的命令列表，将会作为一个子shell来运行。</p>
 </blockquote>
 
 <p>例外: 在pipe中的一个大括号中的代码段可能运行在一个 子shell中。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">ls <span class="p">|</span> <span class="o">{</span> <span class="nb">read </span>firstline<span class="p">;</span> <span class="nb">read </span>secondline<span class="p">;</span> <span class="o">}</span>
 
-<pre><code class="language-bash">ls | { read firstline; read secondline; }
-
-#错误. 在大括号中的代码段, 将运行到子shell中, 所以"ls"的输出将不能传递到代码块中
-echo "First line is $firstline; second line is $secondline"  # 不能工作
-</code></pre>
-
+<span class="c">#错误. 在大括号中的代码段, 将运行到子shell中, 所以&quot;ls&quot;的输出将不能传递到代码块中</span>
+<span class="nb">echo</span> <span class="s2">&quot;First line is $firstline; second line is $secondline&quot;</span>  <span class="c"># 不能工作</span>
+</code></pre></div>
 <p>初始化数组：</p>
-
-<pre><code class="language-bash">Array=(element1 element2 element3)
-</code></pre>
-
-<h2 id="xxxyyyzzz"><code>􏱯{xxx,yyy,zzz,...􏱰}</code></h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">Array</span><span class="o">=(</span>element1 element2 element3<span class="o">)</span>
+</code></pre></div>
+<h2 id="xxx-yyy-zzz"><code class="prettyprint">{xxx,yyy,zzz,...}</code></h2>
 
 <p>大括号扩展：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat <span class="o">{</span>file1,file2,file3<span class="o">}</span> &gt; combined_file
 
-<pre><code class="language-bash">cat {file1,file2,file3} &gt; combined_file
+cp file22.<span class="o">{</span>txt,backup<span class="o">}</span> <span class="c"># 拷贝&quot;file22.txt&quot;到&quot;file22.backup&quot;中</span>
+</code></pre></div>
+<p>一个命令可能会对大括号中的以逗号分的文件列表起作用。在通配符中，将对大括号中的文件名做扩展。</p>
 
-cp file22.{txt,backup} # 拷贝"file22.txt"到"file22.backup"中
-</code></pre>
-
-<p>一个命令可能会对大括号中的以􏰮号分􏱱的文件列表起作用。在通配符中，将对大括号中的文件名做扩展。</p>
-
-<p>在大括号中，不允许有空白，除非这个空白􏰌引用或转义。</p>
-
-<pre><code class="language-bash">$ echo {file1,file2}\ :{\ A," B",' C'}
+<p>在大括号中，不允许有空白，除非这个空白引用或转义。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="o">{</span>file1,file2<span class="o">}</span><span class="se">\ </span>:<span class="o">{</span><span class="se">\ </span>A,<span class="s2">&quot; B&quot;</span>,<span class="s1">&#39; C&#39;</span><span class="o">}</span>
 file1 : A file1 : B file1 : C file2 : A file2 : B file2 : C
-</code></pre>
+</code></pre></div>
+<h2 id="><code class="prettyprint">{}</code></h2>
 
-<h2 id="section-15"><code>{}</code></h2>
+<p>代码块，又被称为内部组，这个结构事实上创建一个匿名函数。与&quot;标准&quot;函数不同的是，在其中的变量，对于脚本其他部分的代码来还是可见的。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">{</span> <span class="nb">local </span>a<span class="p">;</span> <span class="nv">a</span><span class="o">=</span>1<span class="p">;</span> <span class="o">}</span>
+-bash: <span class="nb">local</span>: can only be used in a <span class="k">function</span>
+</code></pre></div><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">a</span><span class="o">=</span>123
+<span class="o">{</span> <span class="nv">a</span><span class="o">=</span>321<span class="p">;</span> <span class="o">}</span>
+<span class="nb">echo</span> <span class="s2">&quot;a = $a&quot;</span>  <span class="c"># a = 321 (说明在代码块中对变量a所作的修改影响了外边的变量)</span>
+</code></pre></div>
+<p>下边的代码展示在大括号结构中代码的I/O 重定向。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># 从/etc/fstab中读行. 3</span>
+<span class="nv">File</span><span class="o">=</span>/etc/fstab
 
-<p>代码块，又被称为内部组，这个结构事实上创建􏰝一个匿名函数。与”标准”函数不同的是，在其中􏱴􏱵的变量，对于脚本其他部分的代码来􏱟还是可见的。</p>
+<span class="o">{</span>
+ <span class="nb">read </span>line1
+ <span class="nb">read </span>line2
+<span class="o">}</span> &lt; <span class="nv">$File</span>
 
-<pre><code class="language-bash">{ local a; a=1; }
--bash: local: can only be used in a function
-</code></pre>
+<span class="nb">echo</span> <span class="s2">&quot;First line in $File is:&quot;</span> <span class="s2">&quot;$line1&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Second line in $File is:&quot;</span> <span class="s2">&quot;$line2&quot;</span>
+<span class="nb">exit</span>
+</code></pre></div>
+<p>与上面所讲到的<code class="prettyprint">()</code>中的命令组不同的是，大括号中的代码块将不会开一个新的子shell。</p>
 
-<pre><code class="language-bash">a=123
-{ a=321; }
-echo "a = $a"  # a = 321 (说明在代码块中对变量a所作的修改影响了外边的变量)
-</code></pre>
+<h2 id="39-39"><code class="prettyprint">&#39;{}&#39; \;</code></h2>
 
-<p>下边的代码展示􏰝在大括号结构中代码的I/O 重定向。</p>
-
-<pre><code class="language-bash">#!/bin/bash
-# 从/etc/fstab中读行. 3
-File=/etc/fstab
-
-{
- read line1
- read line2
-} &lt; $File
-
-echo "First line in $File is:" "$line1"
-echo "Second line in $File is:" "$line2"
-exit
-</code></pre>
-
-<p>与上面所讲到的<code>()</code>中的命令组不同的是，大括号􏱰中的代码块将不会开􏲇一个新的子shell。</p>
-
-<h2 id="section-16">􏱯<code>'{}' \;</code></h2>
-
-<p>􏰯􏰰路径名。一般都在<code>find</code>命令中使用，这不是一个shell内建命令。<code>;</code>用来结束find命令序列的<code>-exec</code>选项，它需要􏰌􏰌被保护以􏲈􏰧􏰌防止被shell所解释。</p>
-
-<pre><code class="language-bash">find . -mtime -1 -type f -exec tar rvf archive.tar '{}' \;
-</code></pre>
-
-<h2 id="section-17"><code>[]</code></h2>
+<p>路径名。一般都在<code class="prettyprint">find</code>命令中使用，这不是一个shell内建命令。<code class="prettyprint">;</code>用来结束find命令序列的<code class="prettyprint">-exec</code>选项，它需要被保护以防止被shell所解释。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">find . -mtime -1 -type f -exec tar rvf archive.tar <span class="s1">&#39;{}&#39;</span> <span class="se">\;</span>
+</code></pre></div>
+<h2 id="><code class="prettyprint">[]</code></h2>
 
 <p>条件测试。</p>
 
 <p>在一个array结构的上下文中，中括号用来引用数组中每个元素的编号。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Array<span class="o">[</span>1<span class="o">]=</span>a 
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">Array</span><span class="p">[1]</span><span class="k">}</span>
+</code></pre></div>
+<p>用作正则表达式的一部分，方括号描一个匹配的字符范围。例如，正则表达式中，&quot;[xyz]&quot; 将会匹配字符x, y, 或z。</p>
 
-<pre><code class="language-bash">Array[1]=a 
-echo ${Array[1]}
-</code></pre>
+<h2 id="><code class="prettyprint">[[ ]]</code></h2>
 
-<p>用作正则表达式的一部分，方括号描􏲁一个匹配的字符范围。例如，正则表达式中，”[xyz]” 将会匹配字符x, y, 或z。</p>
+<p>测试表达式在<code class="prettyprint">[[ ]]</code>中。</p>
 
-<h2 id="section-18"><code>[[ ]] </code></h2>
+<h2 id="><code class="prettyprint">(( ))</code></h2>
 
-<p>测试表达式􏰞在<code>[[ ]]</code>中。</p>
+<p>双圆括号结构，扩展并计算在<code class="prettyprint">(( ))</code>中的整数表达式。</p>
 
-<h2 id="section-19"><code>(( ))</code></h2>
+<p>与let命令很相似，(<code class="prettyprint">(...))</code>结构允许算术扩展和赋值。举个简单的例子，<code class="prettyprint">a=$(( 5 + 3 ))</code>，将把变量&quot;a&quot;设为&quot;5 + 3&quot;或者8。 </p>
 
-<p>双圆括号结构，扩展并计算在<code>(( ))</code>中的整数表达式。</p>
-
-<p>与let命令很相􏱠，(<code>(...))</code>结构允许算术扩展和赋值。举个简单的例子，<code>a=$(( 5 + 3 ))</code>，将把变量”a”设为”5 + 3”或者8。</p>
-
-<h2 id="section-20"><code>&gt;</code> <code>&amp;&gt;</code> <code>&gt;&amp;</code> <code>&gt;&gt;</code> <code>&lt;</code> <code>&lt;&gt;</code></h2>
+<h2 id="gt-amp-gt-gt-amp-gt-gt-lt-lt-gt"><code class="prettyprint">&gt;</code> <code class="prettyprint">&amp;&gt;</code> <code class="prettyprint">&gt;&amp;</code> <code class="prettyprint">&gt;&gt;</code> <code class="prettyprint">&lt;</code> <code class="prettyprint">&lt;&gt;</code></h2>
 
 <p>重定向。</p>
 
-<p>重定向scriptname的输出到文件filename中。如果filename存在的􏰩，那么将会􏰌􏲋􏲌被覆盖：</p>
-
-<pre><code class="language-bash">scriptname &gt;filename 
-</code></pre>
-
+<p>重定向scriptname的输出到文件filename中。如果filename存在的，那么将会被覆盖：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">scriptname &gt;filename 
+</code></pre></div>
 <p>也可以清空文件内容：</p>
-
-<pre><code class="language-bash">&gt; a.log 
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; a.log 
+</code></pre></div>
 <p>重定向command的stdout和stderr到filename中:</p>
-
-<pre><code class="language-bash">command &amp;&gt;filename
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">command</span> <span class="p">&amp;</span>&gt;filename
+</code></pre></div>
 <p>重定向command的stdout到stderr中:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">command</span> &gt;<span class="p">&amp;</span><span class="m">2</span> 
+</code></pre></div>
+<p>把scriptname的输出加到文件filename中。如果filename不存在的话，将被创建。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">scriptname &gt;&gt; filename 
+</code></pre></div>
+<p>打开文件filename用来读写，并且分配文件描述符i给这个文件。如果filename不存在，这个文件将会创建：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>i<span class="o">]</span>&lt;&gt;filename 
+</code></pre></div>
+<p>&quot;&lt;&quot;或&quot;&gt;&quot;还可以用于<code class="prettyprint">进程替换</code>。</p>
 
-<pre><code class="language-bash">command &gt;&amp;2 
-</code></pre>
+<p>在一种不同的上下文中，&quot;&lt;&quot;和&quot;&gt;&quot;可用来做字符串比较操作或者整数比较。</p>
 
-<p>把scriptname的输出􏱜加到文件filename中。如果filename不存在的􏰩话，将被创建。</p>
-
-<pre><code class="language-bash">scriptname &gt;&gt; filename 
-</code></pre>
-
-<p>打开文件filename用来读写，并􏰄分配文件描􏲁符i给这个文件。如果filename不存在，这个文件将会􏰌创建：</p>
-
-<pre><code class="language-bash">[i]&lt;&gt;filename 
-</code></pre>
-
-<p>”&lt;”或”&gt;”还可以用于<code>进程替换</code>。</p>
-
-<p>在一种不同的上下文中，”&lt;”和”&gt;”可用来做字符串比较操作或者整数比较。</p>
-
-<h2 id="section-21"><code>&lt;&lt;</code></h2>
+<h2 id="lt-lt"><code class="prettyprint">&lt;&lt;</code></h2>
 
 <p>用在here document中的重定向。</p>
 
-<h2 id="section-22"><code>&lt;&lt;&lt;</code></h2>
+<h2 id="lt-lt-lt"><code class="prettyprint">&lt;&lt;&lt;</code></h2>
 
 <p>用在here string中的重定向。</p>
 
-<h2 id="section-23">􏰢􏲄<code>\&lt;</code>,<code>\&gt;</code></h2>
+<h2 id="lt-gt"><code class="prettyprint">\&lt;</code>,<code class="prettyprint">\&gt;</code></h2>
 
-<p>正则表达式中的单词边􏲃：</p>
-
-<pre><code class="language-bash">grep '\&lt;the\&gt;' textfile
-</code></pre>
-
-<h2 id="section-24"><code>|</code></h2>
+<p>正则表达式中的单词边：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">grep <span class="s1">&#39;\&lt;the\&gt;&#39;</span> textfile
+</code></pre></div>
+<h2 id="><code class="prettyprint">|</code></h2>
 
 <p>管道。分析前边命令的输出，并将输出作为后边命令的输入。这是一种产生命令链的好方法。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 与一个简单的&quot;ls -l&quot;结果相同</span>
+<span class="nb">echo </span>ls -l <span class="p">|</span> sh
 
-<pre><code class="language-bash"># 与一个简单的"ls -l"结果相同
-echo ls -l | sh
-
-# 合并和排序所有的".lst"文件, 然后删除所有重复的行.
-cat *.lst | sort | uniq
-</code></pre>
-
+<span class="c"># 合并和排序所有的&quot;.lst&quot;文件, 然后删除所有重复的行.</span>
+cat *.lst <span class="p">|</span> sort <span class="p">|</span> uniq
+</code></pre></div>
 <p>输出的命令也可以传递到脚本中：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># uppercase.sh : 修改输入, 全部转换为大写</span>
 
-<pre><code class="language-bash">#!/bin/bash
-# uppercase.sh : 修改输入, 全部转换为大写
+tr <span class="s1">&#39;a-z&#39;</span> <span class="s1">&#39;A-Z&#39;</span>
 
-tr 'a-z' 'A-Z'
-
-exit 0
-</code></pre>
-
-<p>现在􏰠我􏰋输送<code>ls -l</code>的输出到该脚本中：</p>
-
-<pre><code class="language-bash">$ ls -l | ./uppercase.sh
-DRWXR-X--- 2 ROOT ROOT      4096 05-28 10:06 ML-1M
--RW-R--R-- 1 ROOT ROOT         0 2014-11-21 MONITOR_DISK.TXT
-DRWXR-XR-X 2 ROOT ROOT      4096 2014-11-21 SCRIPT
--RW-R--R-- 1 ROOT ROOT        16 07-06 16:09 UPPERCASE.SH
-</code></pre>
-
-<p>管道中的每个进程的stdout比􏰗􏰌下一个进程作为stdin来读入，否则，数据流会􏰬􏲠阻塞，并且管道将产生一些非预期的行为：</p>
-
-<pre><code class="language-bash"># 从"cat file1 file2"中的输出并没出现
-cat file1 file2 | ls -l | sort
-</code></pre>
-
+<span class="nb">exit </span>0
+</code></pre></div>
+<p>现在我们输送<code class="prettyprint">ls -l</code>的输出到该脚本中：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ls -l <span class="p">|</span> ./uppercase.sh
+DRWXR-X--- <span class="m">2</span> ROOT ROOT      <span class="m">4096</span> 05-28 10:06 ML-1M
+-RW-R--R-- <span class="m">1</span> ROOT ROOT         <span class="m">0</span> 2014-11-21 MONITOR_DISK.TXT
+DRWXR-XR-X <span class="m">2</span> ROOT ROOT      <span class="m">4096</span> 2014-11-21 SCRIPT
+-RW-R--R-- <span class="m">1</span> ROOT ROOT        <span class="m">16</span> 07-06 16:09 UPPERCASE.SH
+</code></pre></div>
+<p>管道中的每个进程的stdout比下一个进程作为stdin来读入，否则，数据流会阻塞，并且管道将产生一些非预期的行为：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 从&quot;cat file1 file2&quot;中的输出并没出现</span>
+cat file1 file2 <span class="p">|</span> ls -l <span class="p">|</span> sort
+</code></pre></div>
 <p>作为子进程的运行的管道，不能够改变脚本的变量：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">variable</span><span class="o">=</span><span class="s2">&quot;initial_value&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;new_value&quot;</span> <span class="p">|</span> <span class="nb">read </span>variable
+<span class="nb">echo</span> <span class="s2">&quot;variable = $variable&quot;</span> <span class="c"># variable =initial_value</span>
+</code></pre></div>
+<p>如果管道中的这个命令产生一个异常，并中途失败，那么这个管道将过早的终止，这种行为叫做broken pipe，并且这种状态下将发送一个<code class="prettyprint">SIGPIPE</code>信号。</p>
 
-<pre><code class="language-bash">variable="initial_value"
-echo "new_value" | read variable
-echo "variable = $variable" # variable =initial_value
-</code></pre>
+<h2 id="gt"><code class="prettyprint">&gt;|</code></h2>
 
-<p>如果管道中的􏰣个命令产生􏰝一个异常，并中途失败，那么这个管道将过早的终止，这种行为􏰌􏱈叫做broken pipe，并􏰄这种状态下将发送一个<code>SIGPIPE</code>信号。</p>
+<p>强制重定向(使设置<code class="prettyprint">noclobber</code>选项，就是<code class="prettyprint">-C</code>选项)，这将强制的覆盖一个现存文件。</p>
 
-<h2 id="section-25"><code>&gt;|</code></h2>
+<h2 id="><code class="prettyprint">||</code></h2>
 
-<p>强制重定向(􏰥使设置􏰝<code>noclobber</code>选项，就是<code>-C</code>选项)，这将强制的􏲋􏲌覆盖一个现存文件。</p>
+<p>或操作，在一个条件测试结构中，如果条件测试结构两边中的任意一边结果为true的话，<code class="prettyprint">||</code>操作就会返回0(代表执行成功)。</p>
 
-<h2 id="section-26"><code>||</code></h2>
+<h2 id="amp"><code class="prettyprint">&amp;</code></h2>
 
-<p>或操作，在一个条件测试结构中，如果条件测试结构两边中的任意一边结果为true的􏰩，<code>||</code>操作就会返回0(代表􏰔行成功)。</p>
-
-<h2 id="section-27"><code>&amp;</code></h2>
-
-<p>后台运行命令，一个命令后边跟一个<code>&amp;</code>表示在后台运行。</p>
-
-<pre><code class="language-bash">sleep 10 &amp;
-</code></pre>
-
+<p>后台运行命令，一个命令后边跟一个<code class="prettyprint">&amp;</code>表示在后台运行。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sleep <span class="m">10</span> <span class="p">&amp;</span>
+</code></pre></div>
 <p>在一个脚本中，命令和循环都可能运行在后台：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">for</span> i in1 <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> 10
+<span class="k">do</span>
+    <span class="nb">echo</span> -n <span class="s2">&quot;$i &quot;</span>
+<span class="k">done</span> <span class="p">&amp;</span> 
+</code></pre></div>
+<p>在一个脚本中，使用后台运行命令可能会使这个脚本挂起，直到敲<code class="prettyprint">ENTER</code> 键，挂起的脚本才会恢复。看起来只有在这个命令的结果需要输出到stdout的时候，这种现象才会出现。</p>
 
-<pre><code class="language-bash">for i in1 2 3 4 5 6 7 8 9 10
-do
-    echo -n "$i "
-done &amp; 
-</code></pre>
+<p>只要在后台运行命令的后边加上一个<code class="prettyprint">wait</code>命令就会解决这个问题。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash </span>
+<span class="c"># test.sh</span>
 
-<p>在一个脚本中，使用后台运行命令可能会使这个脚本挂起，直到敲<code>ENTER</code>键，挂起的脚本才会恢复。看起来只有在这个命令的结果需要输出到stdout的时􏰀，这种现象􏱒才会出现。</p>
+ls -l <span class="p">&amp;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Done.&quot;</span>
+<span class="nb">wait</span>
+</code></pre></div>
+<p>如果将后台运行命令的输出重定向到文件中或<code class="prettyprint">/dev/null</code>中，也能解决这个问题。</p>
 
-<p>只要在后台运行命令的后边加上一个<code>wait</code>命令就会解􏰕这个问题。</p>
+<h2 id="amp-amp"><code class="prettyprint">&amp;&amp;</code></h2>
 
-<pre><code class="language-bash">#!/bin/bash 
-# test.sh
+<p>与逻辑操作。在一个条件测试结构中，只有在条件测试结构的两边结果都为true的时，<code class="prettyprint">&amp;&amp;</code>操作才会返回0(代表sucess)。</p>
 
-ls -l &amp;
-echo "Done."
-wait
-</code></pre>
+<h2 id="><code class="prettyprint">-</code></h2>
 
-<p>如果将后台运行命令的输出重定向到文件中或<code>/dev/null</code>中，也能解􏰕这个 问题。</p>
+<p>选项，前缀。在所有的命令内如果使用选项参数的话，前边都要加上<code class="prettyprint">-</code>。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">ls -al
 
-<h2 id="section-28"><code>&amp;&amp;</code></h2>
+sort -dfu <span class="nv">$filename</span>
 
-<p>与逻辑操作。在一个条件测试结构中，只有在条件测试结构的两边结果都为true的时􏰀，<code>&amp;&amp;</code>操作才会返回0(代表sucess)。</p>
+<span class="nb">set</span> -- <span class="nv">$variable</span>
 
-<h2 id="section-29"><code>-</code></h2>
-
-<p>选项，前缀。在所有的命令内如果􏱩使用选项参数的􏰩话，前边都要加上<code>-</code>。</p>
-
-<pre><code class="language-bash">ls -al
-
-sort -dfu $filename
-
-set -- $variable
-
-if [ $file1 -ot $file2 ]
-then
-    echo "File $file1 is older than $file2." 
-fi
-</code></pre>
-
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$file1</span> -ot <span class="nv">$file2</span> <span class="o">]</span>
+<span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">&quot;File $file1 is older than $file2.&quot;</span> 
+<span class="k">fi</span>
+</code></pre></div>
 <p>用于重定向stdin或stdout：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 从一个目录移动整个目录树到另一个目录</span>
+<span class="o">(</span><span class="nb">cd</span> /source/directory <span class="o">&amp;&amp;</span> tar cf - . <span class="o">)</span> <span class="p">|</span> <span class="o">(</span><span class="nb">cd</span> /dest/directory <span class="o">&amp;&amp;</span> tar xpvf -<span class="o">)</span>
 
-<pre><code class="language-bash"># 从一个目录移动整个目录树到另一个目录
-(cd /source/directory &amp;&amp; tar cf - . ) | (cd /dest/directory &amp;&amp; tar xpvf -)
-
-# 当然也可以这样写：
+<span class="c"># 当然也可以这样写：</span>
 cp -a /source/directory/* /dest/directory
-cp -a /source/directory/* /source/directory/.[^.]* /dest/directory  # 如果在/source/directory中有隐藏文件的话
+cp -a /source/directory/* /source/directory/.<span class="o">[</span>^.<span class="o">]</span>* /dest/directory  <span class="c"># 如果在/source/directory中有隐藏文件的话</span>
 
-bunzip2 -c linux-2.6.16.tar.bz2 | tar xvf -
-</code></pre>
-
-<p>注意，在这个上下文中，<code>-</code>本身并不是一个Bash操作，而是一个可以􏰌被特定的UNIX工具识别的选项，这些特定的UNIX工具特指那些可以写输出到stdout的工具，比如tar、cat等等。</p>
-
-<pre><code class="language-bash">$ echo "whatever" | cat -
+bunzip2 -c linux-2.6.16.tar.bz2 <span class="p">|</span> tar xvf -
+</code></pre></div>
+<p>注意，在这个上下文中，<code class="prettyprint">-</code>本身并不是一个Bash操作，而是一个可以被特定的UNIX工具识别的选项，这些特定的UNIX工具特指那些可以写输出到stdout的工具，比如tar、cat等等。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;whatever&quot;</span> <span class="p">|</span> cat -
 whatever
-</code></pre>
-
-<p>使用diff命令来和另一个文件的􏰣一段进行比较：</p>
-
-<pre><code class="language-bash">grep Linux file1 | diff file2 -
-</code></pre>
-
+</code></pre></div>
+<p>使用diff命令来和另一个文件的一段进行比较：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">grep Linux file1 <span class="p">|</span> diff file2 -
+</code></pre></div>
 <p>一个更真实的例子是备份最后一天所有修改的文件：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
 
-<pre><code class="language-bash">#!/bin/bash
+<span class="nv">BACKUPFILE</span><span class="o">=</span>backup-<span class="k">$(</span>date +%m-%d-%Y<span class="k">)</span>
 
-BACKUPFILE=backup-$(date +%m-%d-%Y)
+<span class="c"># 如果在命令行中没有指定备份文件的文件名，那么将默认使用&quot;backup-MM-DD-YYYY.tar.gz&quot;</span>
+<span class="nv">archive</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">$BACKUPFILE</span><span class="k">}</span>
 
-# 如果在命令行中没有指定备份文件的文件名，那么将默认使用"backup-MM-DD-YYYY.tar.gz"
-archive=${1:-$BACKUPFILE}
+tar cvf - <span class="sb">`</span>find . -mtime -1 -type f -print<span class="sb">`</span> &gt; <span class="nv">$archive</span>.tar
 
-tar cvf - `find . -mtime -1 -type f -print` &gt; $archive.tar
+<span class="c"># 还有两种简单写法：</span>
+<span class="c"># find . -mtime -1 -type f -print0 | xargs -0 tar rvf  &quot;$archive.tar&quot;</span>
+<span class="c"># find . -mtime -1 -type f -exec tar rvf &quot;$archive.tar&quot; &#39;{}&#39; \;</span>
 
-# 还有两种简单写法：
-# find . -mtime -1 -type f -print0 | xargs -0 tar rvf  "$archive.tar"
-# find . -mtime -1 -type f -exec tar rvf "$archive.tar" '{}' \;
+gzip <span class="nv">$archive</span>.tar
 
-gzip $archive.tar
+<span class="nb">echo</span> <span class="s2">&quot;Directory $PWD backed up in archive file \&quot;$archive.tar.gz\&quot;.&quot;</span>
 
-echo "Directory $PWD backed up in archive file \"$archive.tar.gz\"."
-
-exit 0
-</code></pre>
-
-<p><code>-</code>还可以用来指􏰼先前的工作目录，<code>cd -</code>将会回到􏰼前的工作目录，它使用􏰝了 <code>$OLDPWD</code> 环境变量。</p>
+<span class="nb">exit </span>0
+</code></pre></div>
+<p><code class="prettyprint">-</code>还可以用来指先前的工作目录，<code class="prettyprint">cd -</code>将会回到当前的工作目录，它使用了 <code class="prettyprint">$OLDPWD</code> 环境变量。</p>
 
 <p>另外，还可以当做减号来使用。</p>
 
-<h2 id="section-30"><code>=</code></h2>
+<h2 id="><code class="prettyprint">=</code></h2>
 
 <p>等号，赋值操作。</p>
 
-<h2 id="section-31"><code>+</code></h2>
+<h2 id="><code class="prettyprint">+</code></h2>
 
-<p>加号，也可以用在正则表达式中。􏰣某些内建命令使用<code>+</code>来打开特定的选项，用<code>-</code>来􏱆用这些特定的选项。</p>
+<p>加号，也可以用在正则表达式中。某些内建命令使用<code class="prettyprint">+</code>来打开特定的选项，用<code class="prettyprint">-</code>来用这些特定的选项。</p>
 
-<h2 id="section-32"><code>%</code></h2>
+<h2 id="><code class="prettyprint">%</code></h2>
 
 <p>取模操作，也可以用于正则表达式。</p>
 
-<h2 id="section-33"><code>~</code></h2>
+<h2 id="><code class="prettyprint">~</code></h2>
 
 <p>home目录。</p>
 
-<h2 id="section-34"><code>~+</code></h2>
+<h2 id="><code class="prettyprint">~+</code></h2>
 
-<p>当前工作目录，相当于<code>$PWD</code>内部变量。</p>
+<p>当前工作目录，相当于<code class="prettyprint">$PWD</code>内部变量。</p>
 
-<h2 id="section-35">􏲱<code>~-</code></h2>
+<h2 id="><code class="prettyprint">~-</code></h2>
 
-<p>􏰼前的工作目录，相当于<code>$OLDPWD</code>内部变量。</p>
+<p>当前的工作目录，相当于<code class="prettyprint">$OLDPWD</code>内部变量。</p>
 
-<h2 id="section-36"><code>^</code></h2>
+<h2 id="><code class="prettyprint">^</code></h2>
 
-<p>行首，在正则表达式中，<code>^</code>表示定位到文本行的行首。</p>
+<p>行首，在正则表达式中，<code class="prettyprint">^</code>表示定位到文本行的行首。</p>
 
-<h2 id="section-37">控制字符</h2>
+<h2 id="控制字符">控制字符</h2>
 
-<p>修改终端或文本显示的行为。控制字符以<code>CONTROL + key</code>这种方式进行组合(同时按下)。控制字符也可以使用8进制或16进制表示法来进行表示，但是前边必须要加上转义符。</p>
+<p>修改终端或文本显示的行为。控制字符以<code class="prettyprint">CONTROL + key</code>这种方式进行组合(同时按下)。控制字符也可以使用8进制或16进制表示法来进行表示，但是前边必须要加上转义符。</p>
 
 <p>控制字符比较多，这里不一一列出了。</p>
 
-<h2 id="section-38">空白</h2>
+<h2 id="空白">空白</h2>
 
 <p>用来分隔函数，命令或变量。空白包含空格、tab、空行，或者是它们之间任意的组合体。在某些上下文中，比如变量赋值，空白是不被允许的，会产生语法错误。</p>
 
 <p>空行不会影响脚本的行为，因此使用空行可以很好的划分独立的函数段以增加可读性。</p>
 
-<p>特殊变量<code>$IFS</code>用来做一些输入命令的分隔符，默认情况下是空白。</p>
+<p>特殊变量<code class="prettyprint">$IFS</code>用来做一些输入命令的分隔符，默认情况下是空白。</p>
 
 <p>如果想在字符串或变量中使用空白，那么应该使用引用。例如下面例子：</p>
-
-<pre><code class="language-bash">hello="A B  C   D"
-echo $hello                  # A B C D
-echo "$hello"               # A B  C   D
-</code></pre>
-
-<h1 id="section-39">参考文章</h1>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">hello</span><span class="o">=</span><span class="s2">&quot;A B  C   D&quot;</span>
+<span class="nb">echo</span> <span class="nv">$hello</span>                  <span class="c"># A B C D</span>
+<span class="nb">echo</span> <span class="s2">&quot;$hello&quot;</span>               <span class="c"># A B  C   D</span>
+</code></pre></div>
+<h1 id="参考文章">参考文章</h1>
 
 <ul>
-  <li><a href="http://blog.javachen.com/static/doc/abs-guide/html/index.html">高级Bash脚本编程指南-中文版</a></li>
+<li><a href="http://blog.javachen.com/static/doc/abs-guide/html/index.html">高级Bash脚本编程指南-中文版</a></li>
 </ul>
 
                     <br/>

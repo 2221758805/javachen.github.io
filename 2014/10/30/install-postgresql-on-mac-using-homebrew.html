@@ -105,31 +105,26 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <h1 id="section">安装</h1>
+                    <h1 id="安装">安装</h1>
 
 <p>brew 安装 postgresql ：</p>
-
-<pre><code class="language-bash">$ brew install postgresql
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew install postgresql
+</code></pre></div>
 <p>查看安装的版本：</p>
-
-<pre><code class="language-bash">$ pg_ctl -V
-pg_ctl (PostgreSQL) 9.3.5
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pg_ctl -V
+pg_ctl <span class="o">(</span>PostgreSQL<span class="o">)</span> 9.3.5
+</code></pre></div>
 <p>安装成功之后，安装路径为：/usr/local/var/postgres</p>
 
 <p>接下来，初始化数据库：</p>
-
-<pre><code class="language-bash">$ initdb /usr/local/var/postgres
-The files belonging to this database system will be owned by user "june".
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>initdb /usr/local/var/postgres
+The files belonging to this database system will be owned by user <span class="s2">&quot;june&quot;</span>.
 This user must also own the server process.
 
-The database cluster will be initialized with locale "zh_CN.UTF-8".
-The default database encoding has accordingly been set to "UTF8".
-initdb: could not find suitable text search configuration for locale "zh_CN.UTF-8"
-The default text search configuration will be set to "simple".
+The database cluster will be initialized with locale <span class="s2">&quot;zh_CN.UTF-8&quot;</span>.
+The default database encoding has accordingly been <span class="nb">set </span>to <span class="s2">&quot;UTF8&quot;</span>.
+initdb: could not find suitable text search configuration <span class="k">for</span> locale <span class="s2">&quot;zh_CN.UTF-8&quot;</span>
+The default text search configuration will be <span class="nb">set </span>to <span class="s2">&quot;simple&quot;</span>.
 
 Data page checksums are disabled.
 
@@ -142,7 +137,7 @@ creating template1 database in /usr/local/var/postgres/base/1 ... ok
 initializing pg_authid ... ok
 initializing dependencies ... ok
 creating system views ... ok
-loading system objects' descriptions ... ok
+loading system objects<span class="err">&#39;</span> descriptions ... ok
 creating collations ... ok
 creating conversions ... ok
 creating dictionaries ... ok
@@ -154,93 +149,72 @@ copying template1 to template0 ... ok
 copying template1 to postgres ... ok
 syncing data to disk ... ok
 
-WARNING: enabling "trust" authentication for local connections
+WARNING: enabling <span class="s2">&quot;trust&quot;</span> authentication <span class="k">for</span> <span class="nb">local </span>connections
 You can change this by editing pg_hba.conf or using the option -A, or
---auth-local and --auth-host, the next time you run initdb.
+--auth-local and --auth-host, the next <span class="nb">time </span>you run initdb.
 
 Success. You can now start the database server using:
 
     postgres -D /usr/local/var/postgres
 or
     pg_ctl -D /usr/local/var/postgres -l logfile start
-</code></pre>
-
+</code></pre></div>
 <p>配置开机登陆（可选）：</p>
-
-<pre><code class="language-bash">$ mkdir -p ~/Library/LaunchAgents
-$ cp /usr/local/Cellar/postgresql/9.3.5_1/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
-$ launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir -p ~/Library/LaunchAgents
+<span class="nv">$ </span>cp /usr/local/Cellar/postgresql/9.3.5_1/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+<span class="nv">$ </span>launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+</code></pre></div>
 <p>手动启动 postgresql</p>
-
-<pre><code class="language-bash">$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+</code></pre></div>
 <p>查看状态：</p>
-
-<pre><code class="language-bash">pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log status
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log status
+</code></pre></div>
 <p>停止：</p>
-
-<pre><code class="language-bash">$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log stop -s -m fast
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log stop -s -m fast
+</code></pre></div>
 <p>查看进程：</p>
-
-<pre><code class="language-bash">$ ps auxwww | grep postgres
-june            56126   0.0  0.0  2432772    644 s000  S+    5:01下午   0:00.00 grep postgres
-june            56058   0.0  0.0  2467360    584   ??  Ss    5:00下午   0:00.00 postgres: stats collector process
-june            56057   0.0  0.0  2611808   1744   ??  Ss    5:00下午   0:00.00 postgres: autovacuum launcher process
-june            56056   0.0  0.0  2611676    696   ??  Ss    5:00下午   0:00.00 postgres: wal writer process
-june            56055   0.0  0.0  2611676    944   ??  Ss    5:00下午   0:00.01 postgres: writer process
-june            56054   0.0  0.0  2611676    756   ??  Ss    5:00下午   0:00.00 postgres: checkpointer process
-june            56044   0.0  0.2  2611676  14096 s000  S     5:00下午   0:00.02 /usr/local/Cellar/postgresql/9.3.5_1/bin/postgres -D /usr/local/var/postgres
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ps auxwww <span class="p">|</span> grep postgres
+june            <span class="m">56126</span>   0.0  0.0  <span class="m">2432772</span>    <span class="m">644</span> s000  S+    5:01下午   0:00.00 grep postgres
+june            <span class="m">56058</span>   0.0  0.0  <span class="m">2467360</span>    <span class="m">584</span>   ??  Ss    5:00下午   0:00.00 postgres: stats collector process
+june            <span class="m">56057</span>   0.0  0.0  <span class="m">2611808</span>   <span class="m">1744</span>   ??  Ss    5:00下午   0:00.00 postgres: autovacuum launcher process
+june            <span class="m">56056</span>   0.0  0.0  <span class="m">2611676</span>    <span class="m">696</span>   ??  Ss    5:00下午   0:00.00 postgres: wal writer process
+june            <span class="m">56055</span>   0.0  0.0  <span class="m">2611676</span>    <span class="m">944</span>   ??  Ss    5:00下午   0:00.01 postgres: writer process
+june            <span class="m">56054</span>   0.0  0.0  <span class="m">2611676</span>    <span class="m">756</span>   ??  Ss    5:00下午   0:00.00 postgres: checkpointer process
+june            <span class="m">56044</span>   0.0  0.2  <span class="m">2611676</span>  <span class="m">14096</span> s000  S     5:00下午   0:00.02 /usr/local/Cellar/postgresql/9.3.5_1/bin/postgres -D /usr/local/var/postgres
+</code></pre></div>
 <p>创建用户和数据库：</p>
-
-<pre><code class="language-bash">#createuser will prompt you for a password, enter it twice.
-$ createuser  -P test
-$ createdb -Otest -Eutf8 test_db
-$ psql
-postgres=# GRANT ALL PRIVILEGES ON test TO test;
-postgres=# \q
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#createuser will prompt you for a password, enter it twice.</span>
+<span class="nv">$ </span>createuser  -P <span class="nb">test</span>
+<span class="nv">$ </span>createdb -Otest -Eutf8 test_db
+<span class="nv">$ </span>psql
+<span class="nv">postgres</span><span class="o">=</span><span class="c"># GRANT ALL PRIVILEGES ON test TO test;</span>
+<span class="nv">postgres</span><span class="o">=</span><span class="c"># \q</span>
+</code></pre></div>
 <p>进入命令行模式：</p>
-
-<pre><code class="language-bash">$ psql -U test test_db -h localhost -W
-</code></pre>
-
-<p>如果出现 <code>FATAL: Ident authentication failed for user</code>，是因为：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>psql -U <span class="nb">test </span>test_db -h localhost -W
+</code></pre></div>
+<p>如果出现 <code class="prettyprint">FATAL: Ident authentication failed for user</code>，是因为：</p>
 
 <blockquote>
-  <p>This is because by default PostgreSQL uses ‘ident’ authentication i.e it checks if the username exists on the system. You need to change authentication mode to ‘trust’ as we do not want to add a system user.<br />
-Modify the settings in “pg_hba.conf” to use ‘trust’ authentication.</p>
+<p>This is because by default PostgreSQL uses ‘ident’ authentication i.e it checks if the username exists on the system. You need to change authentication mode to ‘trust’ as we do not want to add a system user.
+Modify the settings in &quot;pg_hba.conf&quot; to use &#39;trust&#39; authentication.</p>
 </blockquote>
 
 <p>请修改 /usr/local/var/postgres/pg_hba.conf 为：</p>
-
-<pre><code>host    all             all             127.0.0.1/32            trust
+<div class="highlight"><pre><code class="language-text" data-lang="text">host    all             all             127.0.0.1/32            trust
 # IPv6 local connections:
 host    all             all             ::1/128                 trust
-</code></pre>
-
+</code></pre></div>
 <p>安装 pgadmin，下载地址：<a href="http://www.pgadmin.org/download/macosx.php">http://www.pgadmin.org/download/macosx.php</a></p>
 
-<h1 id="section-1">卸载</h1>
-
-<pre><code class="language-bash">$ brew uninstall postgres
-</code></pre>
-
+<h1 id="卸载">卸载</h1>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew uninstall postgres
+</code></pre></div>
 <p>如果配置了开机登陆：</p>
-
-<pre><code class="language-bash">$ launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-$ rm -rf ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+<span class="nv">$ </span>rm -rf ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">yuke</a><br/>

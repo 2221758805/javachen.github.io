@@ -107,179 +107,129 @@
               <div id="post-text">
                     <p>本文主要记录重装Linux-Mint系统之后的一些软件安装和环境变量配置。</p>
 
-<h1 id="section">安装常用工具</h1>
-
-<pre><code>sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
-</code></pre>
-
-<h1 id="exfat">挂载exfat格式磁盘</h1>
-
-<pre><code>sudo apt-get install exfat-fuse exfat-utils
-</code></pre>
-
-<h1 id="ibus">安装ibus</h1>
+<h1 id="安装常用工具">安装常用工具</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
+</code></pre></div>
+<h1 id="挂载exfat格式磁盘">挂载exfat格式磁盘</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install exfat-fuse exfat-utils
+</code></pre></div>
+<h1 id="安装ibus">安装ibus</h1>
 
 <p>在终端输入命令:</p>
-
-<pre><code>sudo add-apt-repository ppa:shawn-p-huang/ppa
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo add-apt-repository ppa:shawn-p-huang/ppa
 sudo apt-get update
 sudo apt-get install ibus-gtk ibus-pinyin
-</code></pre>
-
+</code></pre></div>
 <p>启用IBus框架:</p>
-
-<pre><code>im-switch -s ibus
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">im-switch -s ibus
+</code></pre></div>
 <p>启动ibus：</p>
-
-<pre><code>ibus-daemon
-</code></pre>
-
-<h1 id="gedit-markdown">安装gedit-markdown</h1>
-
-<pre><code>wget https://gitorious.org/projets-divers/gedit-markdown/archive/master.zip
+<div class="highlight"><pre><code class="language-text" data-lang="text">ibus-daemon
+</code></pre></div>
+<h1 id="安装gedit-markdown">安装gedit-markdown</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget https://gitorious.org/projets-divers/gedit-markdown/archive/master.zip
 unzip master.zip
 cd projets-divers-gedit-markdown
 ./gedit-markdown.sh install
-</code></pre>
-
-<h1 id="wiz">安装wiz</h1>
-
-<pre><code>sudo add-apt-repository ppa:wiznote-team
+</code></pre></div>
+<h1 id="安装wiz">安装wiz</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo add-apt-repository ppa:wiznote-team
 sudo apt-get update
 sudo apt-get install wiznote
-</code></pre>
-
-<h1 id="oh-my-zsh">安装 oh-my-zsh</h1>
-
-<pre><code>sudo apt-get install zsh
-</code></pre>
-
+</code></pre></div>
+<h1 id="安装-oh-my-zsh">安装 oh-my-zsh</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install zsh
+</code></pre></div>
 <p>把默认 Shell 换为 zsh。</p>
-
-<pre><code>chsh -s /bin/zsh
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">chsh -s /bin/zsh
+</code></pre></div>
 <p>然后用下面的两句（任选其一）可以自动安装 oh-my-zsh：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+</code></pre></div>
+<p>编辑<code class="prettyprint">~/.zshrc</code>：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">echo &#39;source ~/.bashrc&#39; &gt;&gt;~/.zshrc
+echo &#39;source ~/.bash_profile&#39; &gt;&gt;~/.zshrc
+</code></pre></div>
+<h1 id="博客相关">博客相关</h1>
 
-<pre><code>curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
-</code></pre>
-
-<pre><code>wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
-</code></pre>
-
-<p>编辑<code>~/.zshrc</code>：</p>
-
-<pre><code>echo 'source ~/.bashrc' &gt;&gt;~/.zshrc
-echo 'source ~/.bash_profile' &gt;&gt;~/.zshrc
-</code></pre>
-
-<h1 id="section-1">博客相关</h1>
-<p>## 安装Ruby</p>
+<h2 id="安装ruby">安装Ruby</h2>
 
 <p>通过rvm安装ruby：</p>
-
-<pre><code>curl -L get.rvm.io | bash -s stable
+<div class="highlight"><pre><code class="language-text" data-lang="text">curl -L get.rvm.io | bash -s stable
 source ~/.bash_profile
-sed -i -e 's/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g' ~/.rvm/config/db
-</code></pre>
-
+sed -i -e &#39;s/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g&#39; ~/.rvm/config/db
+</code></pre></div>
 <p>安装rvm:</p>
-
-<pre><code>sudo apt-get install clang -y
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install clang -y
 rvm install 1.9.3 --with-gcc=clang
 rvm --default 1.9.3
-</code></pre>
-
-<h2 id="jekyll">安装jekyll</h2>
-
-<pre><code>gem update --system
+</code></pre></div>
+<h2 id="安装jekyll">安装jekyll</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">gem update --system
 gem install rdoc jekyll redcarpet
-</code></pre>
-
-<h2 id="section-2">安装七牛同步脚本</h2>
-
-<pre><code>wget http://devtools.qiniudn.com/linux_amd64/qiniu-devtools.zip
+</code></pre></div>
+<h2 id="安装七牛同步脚本">安装七牛同步脚本</h2>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget http://devtools.qiniudn.com/linux_amd64/qiniu-devtools.zip
 unzip qiniu-devtools.zip
 mv _package_linux_amd64/* /usr/bin/
 source ~/.bashrc
-</code></pre>
-
-<h2 id="ssh-key">更新ssh-key</h2>
+</code></pre></div>
+<h2 id="更新ssh-key">更新ssh-key</h2>
 
 <p>更新github和gitcafe的ssh-key</p>
 
-<h1 id="virtualbox">安装 virtualbox</h1>
-
-<pre><code>wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+<h1 id="安装-virtualbox">安装 virtualbox</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install virtualbox-4.3
-</code></pre>
-
-<h1 id="fortune-zh">安装fortune-zh</h1>
-
-<pre><code>sudo apt-get install fortune-zh
-</code></pre>
-
-<p><code>/usr/bin/mint-fortune</code> 中调用语句改为:</p>
-
-<pre><code class="language-bash">/usr/games/fortune 70% tang300 30% song100 | $command -f $cow -n
-</code></pre>
-
+</code></pre></div>
+<h1 id="安装fortune-zh">安装fortune-zh</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install fortune-zh
+</code></pre></div>
+<p><code class="prettyprint">/usr/bin/mint-fortune</code> 中调用语句改为:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/games/fortune 70% tang300 30% song100 <span class="p">|</span> <span class="nv">$command</span> -f <span class="nv">$cow</span> -n
+</code></pre></div>
 <p>这里的70%与30%是显示唐诗与宋词的概率。</p>
-
-<pre><code>gsettings set com.linuxmint.terminal show-fortunes true
-</code></pre>
-
-<h1 id="section-3">修改分区权限</h1>
-
-<pre><code>sudo chown -R june:june /chan
-</code></pre>
-
-<h1 id="home">重命名home下目录</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">gsettings set com.linuxmint.terminal show-fortunes true
+</code></pre></div>
+<h1 id="修改分区权限">修改分区权限</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo chown -R june:june /chan
+</code></pre></div>
+<h1 id="重命名home下目录">重命名home下目录</h1>
 
 <p>先手动重命名:</p>
-
-<pre><code>文档   ---&gt;  projects
+<div class="highlight"><pre><code class="language-text" data-lang="text">文档   ---&gt;  projects
 音乐   ---&gt;  app
 图片   ---&gt;  codes
 视频   ---&gt;  workspace
 下载   ---&gt;  downloads
-</code></pre>
-
+</code></pre></div>
 <p>然后,删除这些目录,建立软连接:</p>
-
-<pre><code>rm -rf projects app codes workspace downloads
+<div class="highlight"><pre><code class="language-text" data-lang="text">rm -rf projects app codes workspace downloads
 ln -s /chan/app  ~/app
 ln -s /chan/codes   ~/codes
 ln -s /chan/projects  ~/projects
 ln -s /chan/workspace  ~/workspace
 ln -s /chan/downloads    ~/downloads
-</code></pre>
-
-<h1 id="section-4">安装开发环境</h1>
+</code></pre></div>
+<h1 id="安装开发环境">安装开发环境</h1>
 
 <p>配置ant、maven和ivy仓库</p>
-
-<pre><code>chmod +x /chan/app/apache/apache-maven-3.0.5/bin/mvn
+<div class="highlight"><pre><code class="language-text" data-lang="text">chmod +x /chan/app/apache/apache-maven-3.0.5/bin/mvn
 chmod +x /chan/app/apache/apache-ant-1.9.4/bin/ant
 
 rm -rf /home/june/.ivy2/cache /home/june/.m2/repository
 mkdir -p /home/june/.ivy2 /home/june/.m2
 ln -s /chan/app/repository/cache/  /home/june/.ivy2/cache
 ln -s /chan/app/repository/m2/  /home/june/.m2/repository
-</code></pre>
-
+</code></pre></div>
 <p>安装jdk1.6</p>
-
-<pre><code>wget http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/pool/contrib/o/oracle-j2sdk1.6/oracle-j2sdk1.6_1.6.0+update31_amd64.deb
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/pool/contrib/o/oracle-j2sdk1.6/oracle-j2sdk1.6_1.6.0+update31_amd64.deb
 dpkg -i oracle-j2sdk1.6_1.6.0+update31_amd64.deb
-</code></pre>
-
+</code></pre></div>
 <p>配置环境变量：</p>
-
-<pre><code>sudo mkdir -p /usr/java/
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo mkdir -p /usr/java/
 sudo ln -s /usr/lib/jvm/j2sdk1.6-oracle /usr/java/latest
 sudo update-alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5
 sudo update-alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 5
@@ -287,19 +237,18 @@ sudo update-alternatives --set java /usr/java/latest/bin/java
 
 
 if [ -f ~/.bashrc ] ; then
-    sed -i '/^export[[:space:]]\{1,\}JAVA_HOME[[:space:]]\{0,\}=/d' ~/.bashrc
-    sed -i '/^export[[:space:]]\{1,\}CLASSPATH[[:space:]]\{0,\}=/d' ~/.bashrc
-    sed -i '/^export[[:space:]]\{1,\}PATH[[:space:]]\{0,\}=/d' ~/.bashrc
+    sed -i &#39;/^export[[:space:]]\{1,\}JAVA_HOME[[:space:]]\{0,\}=/d&#39; ~/.bashrc
+    sed -i &#39;/^export[[:space:]]\{1,\}CLASSPATH[[:space:]]\{0,\}=/d&#39; ~/.bashrc
+    sed -i &#39;/^export[[:space:]]\{1,\}PATH[[:space:]]\{0,\}=/d&#39; ~/.bashrc
 fi
-echo "export JAVA_HOME=/usr/java/latest" &gt;&gt; ~/.bashrc
-echo "export CLASSPATH=.:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar"&gt;&gt;~/.bashrc
-echo "export MVN_HOME=/chan/app/apache/apache-maven-3.0.5" &gt;&gt; ~/.bashrc
+echo &quot;export JAVA_HOME=/usr/java/latest&quot; &gt;&gt; ~/.bashrc
+echo &quot;export CLASSPATH=.:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar&quot;&gt;&gt;~/.bashrc
+echo &quot;export MVN_HOME=/chan/app/apache/apache-maven-3.0.5&quot; &gt;&gt; ~/.bashrc
 
-echo "export ANT_HOME=/chan/app/apache/apache-ant-1.9.4" &gt;&gt; ~/.bashrc
-echo "export PATH=\$JAVA_HOME/bin:\$MVN_HOME/bin:\$ANT_HOME/bin:\$PATH" &gt;&gt; ~/.bashrc
+echo &quot;export ANT_HOME=/chan/app/apache/apache-ant-1.9.4&quot; &gt;&gt; ~/.bashrc
+echo &quot;export PATH=\$JAVA_HOME/bin:\$MVN_HOME/bin:\$ANT_HOME/bin:\$PATH&quot; &gt;&gt; ~/.bashrc
 source ~/.bashrc
-</code></pre>
-
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">yuke</a><br/>

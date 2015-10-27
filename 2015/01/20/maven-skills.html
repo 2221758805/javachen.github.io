@@ -108,70 +108,64 @@
                     <p>本文主要收集一些 Maven 的使用技巧，包括 Maven 常见命令、创建多模块项目、上传本地 jar 到插件以及常用的插件等等，本篇文章会保持不停的更新。</p>
 
 <p>命令行创建 maven 项目：</p>
-
-<pre><code class="language-bash">$ mvn archetype:generate -DgroupId=com.javachen.spark -DartifactId=spark-examples -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn archetype:generate -DgroupId<span class="o">=</span>com.javachen.spark -DartifactId<span class="o">=</span>spark-examples -DarchetypeArtifactId<span class="o">=</span>maven-archetype-quickstart -DinteractiveMode<span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
 <p>Maven安装本地jar到本地仓库，举例：</p>
-
-<pre><code class="language-bash">$ mvn install:install-file -DgroupId=com.gemstone.gemfire -DartifactId=gfsh -Dversion=6.6 -Dpackaging=jar -Dfile=/backup/gfsh-6.6.jar
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn install:install-file -DgroupId<span class="o">=</span>com.gemstone.gemfire -DartifactId<span class="o">=</span>gfsh -Dversion<span class="o">=</span>6.6 -Dpackaging<span class="o">=</span>jar -Dfile<span class="o">=</span>/backup/gfsh-6.6.jar
+</code></pre></div>
 <p>解决m2e插件maven-dependency-plugin问题：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;build&gt;</span>
+    <span class="nt">&lt;pluginManagement&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.eclipse.m2e<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>lifecycle-mapping<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;lifecycleMappingMetadata&gt;</span>
+                        <span class="nt">&lt;pluginExecutions&gt;</span>
+                            <span class="nt">&lt;pluginExecution&gt;</span>
+                                <span class="nt">&lt;pluginExecutionFilter&gt;</span>
+                                    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                                    <span class="nt">&lt;artifactId&gt;</span>maven-dependency-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                                    <span class="nt">&lt;versionRange&gt;</span>[2.0,)<span class="nt">&lt;/versionRange&gt;</span>
+                                    <span class="nt">&lt;goals&gt;</span>
+                                        <span class="nt">&lt;goal&gt;</span>copy-dependencies<span class="nt">&lt;/goal&gt;</span>
+                                    <span class="nt">&lt;/goals&gt;</span>
+                                <span class="nt">&lt;/pluginExecutionFilter&gt;</span>
+                                <span class="nt">&lt;action&gt;</span>
+                                    <span class="nt">&lt;ignore</span> <span class="nt">/&gt;</span>
+                                <span class="nt">&lt;/action&gt;</span>
+                            <span class="nt">&lt;/pluginExecution&gt;</span>
+                        <span class="nt">&lt;/pluginExecutions&gt;</span>
+                    <span class="nt">&lt;/lifecycleMappingMetadata&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/pluginManagement&gt;</span>
 
-<pre><code class="language-xml">&lt;build&gt;
-    &lt;pluginManagement&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.eclipse.m2e&lt;/groupId&gt;
-                &lt;artifactId&gt;lifecycle-mapping&lt;/artifactId&gt;
-                &lt;version&gt;1.0.0&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;lifecycleMappingMetadata&gt;
-                        &lt;pluginExecutions&gt;
-                            &lt;pluginExecution&gt;
-                                &lt;pluginExecutionFilter&gt;
-                                    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                                    &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
-                                    &lt;versionRange&gt;[2.0,)&lt;/versionRange&gt;
-                                    &lt;goals&gt;
-                                        &lt;goal&gt;copy-dependencies&lt;/goal&gt;
-                                    &lt;/goals&gt;
-                                &lt;/pluginExecutionFilter&gt;
-                                &lt;action&gt;
-                                    &lt;ignore /&gt;
-                                &lt;/action&gt;
-                            &lt;/pluginExecution&gt;
-                        &lt;/pluginExecutions&gt;
-                    &lt;/lifecycleMappingMetadata&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/pluginManagement&gt;
-
-    &lt;plugins&gt;
-        &lt;plugin&gt;
-            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-            &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
-            &lt;executions&gt;
-                &lt;execution&gt;
-                    &lt;id&gt;copy-dependencies&lt;/id&gt;
-                    &lt;phase&gt;package&lt;/phase&gt;
-                    &lt;goals&gt;
-                        &lt;goal&gt;copy-dependencies&lt;/goal&gt;
-                    &lt;/goals&gt;
-                    &lt;configuration&gt;
-                        &lt;outputDirectory&gt;${project.build.directory}/lib&lt;/outputDirectory&gt;
-                        &lt;excludeTransitive&gt;false&lt;/excludeTransitive&gt;
-                        &lt;stripVersion&gt;true&lt;/stripVersion&gt;
-                    &lt;/configuration&gt;
-                &lt;/execution&gt;
-            &lt;/executions&gt;
-        &lt;/plugin&gt;
-    &lt;/plugins&gt;
-&lt;/build&gt;
-</code></pre>
-
+    <span class="nt">&lt;plugins&gt;</span>
+        <span class="nt">&lt;plugin&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>maven-dependency-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;executions&gt;</span>
+                <span class="nt">&lt;execution&gt;</span>
+                    <span class="nt">&lt;id&gt;</span>copy-dependencies<span class="nt">&lt;/id&gt;</span>
+                    <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+                    <span class="nt">&lt;goals&gt;</span>
+                        <span class="nt">&lt;goal&gt;</span>copy-dependencies<span class="nt">&lt;/goal&gt;</span>
+                    <span class="nt">&lt;/goals&gt;</span>
+                    <span class="nt">&lt;configuration&gt;</span>
+                        <span class="nt">&lt;outputDirectory&gt;</span>${project.build.directory}/lib<span class="nt">&lt;/outputDirectory&gt;</span>
+                        <span class="nt">&lt;excludeTransitive&gt;</span>false<span class="nt">&lt;/excludeTransitive&gt;</span>
+                        <span class="nt">&lt;stripVersion&gt;</span>true<span class="nt">&lt;/stripVersion&gt;</span>
+                    <span class="nt">&lt;/configuration&gt;</span>
+                <span class="nt">&lt;/execution&gt;</span>
+            <span class="nt">&lt;/executions&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+    <span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/build&gt;</span>
+</code></pre></div>
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">yuke</a><br/>

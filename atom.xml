@@ -3,7 +3,7 @@
   <title>JavaChen Blog</title>
   <link href="//atom.xml" rel="self"/>
   <link href=""/>
-  <updated>2015-10-27T21:59:21+08:00</updated>
+  <updated>2015-10-27T23:11:58+08:00</updated>
   <id></id>
   <author>
     <name>yuke</name>
@@ -19,10 +19,8 @@
 $BASH
 
 Bash的二进制程序文件的路径。
-
 $ echo $BASH
 /bin/bash
-
 
 $BASH_ENV
 
@@ -31,15 +29,11 @@ $BASH_ENV
 $BASH_SUBSHELL
 
 这个变量用来提示子shell的层次。这是一个Bash的新特性，直到版本3的Bash才被引入近来。
-
 #!/bin/bash
 # subshell.sh
 
-echo &quot;Subshell level OUTSIDE subshell = $BASH_SUBSHELL&quot;
-outer_variable=Outer
-
-(
-...</content>
+echo &amp;quot;Subshell level OUTSIDE subshell = $BASH_SUBSHELL&amp;quot;
+outer_variable=Ou...</content>
   </entry>
   
   <entry>
@@ -53,13 +47,12 @@ outer_variable=Outer
 
 if/then结构用来判断命令列表的退出状态码是否为0。
 
-有一个专有命令[ (左中括号，特殊字符)。这个命令与test命令等价，并且出于效率上的考虑，这是一个内建命令。这个命令把它的参数作为比较表达式或者作为文件测试，并且根据比较的结果来返回一个退出状态码(0 表示真，1表示假)。
-
+有一个专有命令[(左中括号，特殊字符)。这个命令与test命令等价，并且出于效率上的考虑，这是一个内建命令。这个命令把它的参数作为比较表达式或者作为文件测试，并且根据比较的结果来返回一个退出状态码(0 表示真，1表示假)。
 if  [ 0 ]      
 then
-    echo &quot;0 is true.&quot;
+    echo &amp;quot;0 is true.&amp;quot;
 else
-    echo &quot;0 is fa...</content>
+    echo ...</content>
   </entry>
   
   <entry>
@@ -72,22 +65,15 @@ else
 变量赋值
 
 变量使用=来实现赋值操作，前后都不能有空白。例如：
-
 a=314
-echo &quot;The value of \&quot;a\&quot; is $a.&quot;
-
+echo &amp;quot;The value of \&amp;quot;a\&amp;quot; is $a.&amp;quot;
 
 也可以使用let来赋值：
-
 let a=16+5
-echo &quot;The value of \&quot;a\&quot; is now $a.&quot;
-
+echo &amp;quot;The value of \&amp;quot;a\&amp;quot; is now $a.&amp;quot;
 
 使用read命令进行赋值：
-
-echo -n &quot;Enter \&quot;a\&quot; &quot;
-read a
-echo &quot;The value of ...</content>
+echo -n &amp;quot;...</content>
   </entry>
   
   <entry>
@@ -100,22 +86,17 @@ echo &quot;The value of ...</content>
 #
 
 行首以#(#!是个例外)开头是注释。
-
 # This line is a comment.
 
-
 注释也可以放在于本行命令的后边。
-
-echo &quot;A comment will follow.&quot;   # 注释在这里。
-
+echo &amp;quot;A comment will follow.&amp;quot;   # 注释在这里。
 
 
-  命令是不能放在同一行上注释的后边的。因为没有办法把注释结束掉，好让同一行上后边的”代码生效”，只能够另起一行来使用下一个命令。
+命令是不能放在同一行上注释的后边的。因为没有办法把注释结束掉，好让同一行上后边的&amp;quot;代码生效&amp;quot;，只能够另起一行来使用下一个命令。
 
 
 在echo中转义的#是不能作为注释的，同样也可以出现在特定的参数替换结构中，或者是出现在数字常量表达式中。
-
-echo &quot;The # here d...</content>
+echo ...</content>
   </entry>
   
   <entry>
@@ -124,15 +105,9 @@ echo &quot;The # here d...</content>
     <updated>2015-06-30T00:00:00+08:00</updated>
     <id>/2015/06/30/jekyll-kramdown-config.html</id>
     <content type="html">之前博客是使用的redcarpet的markdown语法，其在_config.yml中的配置方式为：
-
 markdown: redcarpet
 redcarpet:
-    extensions: [ &quot;fenced_code_blocks&quot;, &quot;hard_wrap&quot;,&quot;autolink&quot;, &quot;tables&quot;, &quot;strikethrough&quot;, &quot;superscript&quot;, &quot;with_toc_data&quot;, &quot;highlight&quot;, &quot;prettify&quot;,&quot;no_intra_emphasis&quot;]
-
-
-这种配置支持使用 ``` 高亮代码块、自动链接、表格等特性。
-
-现在，想尝试使用kark...</content>
+    extensions: [ &amp;quot;fenced_code_blocks&amp;quot;, &amp;quot;hard_wrap&amp;quot;,&amp;quot;autolink&amp;quot;, &amp;quot;tables&amp;quot;, &amp;quot;strikethrough&amp;quot;, &amp;quot;superscript&amp;quot;, &amp;quot;with_toc_data&amp;quot;, &amp;quot;highlight&amp;quot;,...</content>
   </entry>
   
   <entry>
@@ -143,18 +118,13 @@ redcarpet:
     <content type="html">最近在看《Advanced Bash Scripting Guide》这本书，第二章举了一个清除日志的例子，来讲述如何使用Bash进行编程并聊到了一些编程规范。本文主要是基于这部分内容记录我的读书笔记并整理一些相关知识点。
 
 说到清除日志，你可以使用下面命令来完成清除/var/log下的log文件这件事情：
-
 cd /var/log
 cat /dev/null &amp;gt; messages 
 cat /dev/null &amp;gt; wtmp
-echo &quot;Logs cleaned up.&quot;
-
+echo &amp;quot;Logs cleaned up.&amp;quot;
 
 更简单的清除日志方法是：
-
-echo &quot;&quot; &amp;gt;messages 
-#或者
-&amp;gt;messag...</content>
+echo &amp;quot;&amp;quot; &amp;gt;message...</content>
   </entry>
   
   <entry>
@@ -169,9 +139,8 @@ spark-shell
 使用yum安装spark之后，你可以直接在终端运行spark-shell命令，或者在spark的home目录/usr/lib/spark下运行bin/spark-shell命令，这样就可以进入到spark命令行交互模式。
 
 spark-shell 脚本是如何运行的呢？该脚本代码如下：
-
 #
-# Shell script for starting the Spark...</content>
+# Shell script for starting the Spark ...</content>
   </entry>
   
   <entry>
@@ -182,7 +151,6 @@ spark-shell 脚本是如何运行的呢？该脚本代码如下：
     <content type="html">Scala中没有静态方法或静态字段，但可以使用object这个语法结构来实现相同的功能。对象与类在语法层面上很相似，除了不能提供构造器参数外，对象可以拥有类的所有特性。
 
 Scala的object定义了单个实例，其可以用来存放工具函数或常量等：
-
 object Timer {
   var count = 0
 
@@ -192,10 +160,8 @@ object Timer {
   }
 }
 
-
 使用object中的常量或方法，通过object名称直接调用，对象构造器在对象第一次被使用时调用（如果某对象一直未被使用，那么其构造器也不会被调用）。
-
-...</content>
+sca...</content>
   </entry>
   
   <entry>
@@ -208,7 +174,6 @@ object Timer {
 类
 
 Scala使用class来定义类。
-
 class Counter {
   private var value = 0 // 必须初始化字段
   def increment() { value += 1 } // 方法默认公有
@@ -216,13 +181,11 @@ class Counter {
 }
 
 
-
-  Scala中的类不能声明为public，一个Scala源文件中可以有多个类。
+Scala中的类不能声明为public，一个Scala源文件中可以有多个类。
 
 
 类的初始化和调用：
-
-val myCounter = new Counter // 或new Cou...</content>
+val myCounter = new Counter // 或new Counter(...</content>
   </entry>
   
   <entry>
@@ -235,16 +198,14 @@ val myCounter = new Counter // 或new Cou...</content>
 减少重复代码
 
 有这样一段代码，查找当前目录样以某一个字符串结尾的文件：
-
 object FileMatcher {
-  private def filesHere = (new java.io.File(&quot;.&quot;)).listFiles
+  private def filesHere = (new java.io.File(&amp;quot;.&amp;quot;)).listFiles
   def filesEnding(query: String) =
     for (file &amp;lt;- filesHere; if file.getName.endsWith(query))
       yield file
 }
 
-
-如果，我们想查找包含某一个字符串...</content>
+如果，我们想查找...</content>
   </entry>
   
   <entry>
@@ -259,9 +220,8 @@ object FileMatcher {
 网上查找了一些资料，找到一篇文章点击锚点让定位偏移顶部，这篇文章提到几种解决办法：
 
 第一种，使用css将锚点偏移：
-
-&amp;lt;a class=&quot;target-fix&quot; &amp;gt;&amp;lt;/a&amp;gt;
-&amp;lt;artivle&amp;gt;主体内容...&amp;lt;/article&amp;g...</content>
+&amp;lt;a class=&amp;quot;target-fix&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;artivle&amp;gt;主体内容...&amp;lt;/...</content>
   </entry>
   
   <entry>
@@ -272,8 +232,8 @@ object FileMatcher {
     <content type="html">1、产生原因
 
 
-  信息过载
-  无明确需求
+信息过载
+无明确需求
 
 
 2、什么是推荐？
@@ -285,11 +245,11 @@ object FileMatcher {
 3、推荐和搜索区别：
 
 
-  相同点：快速发现有用信息的工具
-  不同点：搜索引擎是用户找信息；推荐系统是信息找用户
+相同点：快速发现有用信息的工具
+不同点：搜索引擎是用户找信息；推荐系统是信息找用户
 
 
-为了解决信息过载的问题，代表性的解决方案是分类目录和搜索引擎。和搜索引擎一样，推荐系统也是一种帮助用户快速发现有用信息的工具。和搜索引擎不同的是，推荐系统不需要用户提供明确的需求，而是通过分析用户的历史行为给用户的兴趣建模，从...</content>
+为了解决信息过载的问题，代表性的解决方案是分类目录和搜索引擎。和搜索引擎一样，推荐系统也是一种帮助用户快速发现有用信息的工具。和搜索引擎不同的是，推荐系统不需要用户提供明确的需求，而是通过分析用户的历史行为给用户的兴趣建模，从而主动给用户推荐...</content>
   </entry>
   
   <entry>
@@ -300,11 +260,12 @@ object FileMatcher {
     <content type="html">Mahout算法框架自带的推荐器有下面这些：
 
 
-  GenericUserBasedRecommender：基于用户的推荐器，用户数量少时速度快；
-  GenericItemBasedRecommender：基于商品推荐器，商品数量少时速度快，尤其当外部提供了商品相似度数据后效率更好；
-  SlopeOneRecommender：基于slope-one算法的推荐器，在线推荐或更新较快，需要事先大量预处理运算，物品数量少时较好；
-  SVDRecommender：奇异值分解，推荐效果较好，但之前需要大量预处理运算；
-  KnnRecommender：基于k近邻算法(KNN)，适合于物品数...</content>
+GenericUserBasedRecommender：基于用户的推荐器，用户数量少时速度快；
+GenericItemBasedRecommender：基于商品推荐器，商品数量少时速度快，尤其当外部提供了商品相似度数据后效率更好；
+SlopeOneRecommender：基于slope-one算法的推荐器，在线推荐或更新较快，需要事先大量预处理运算，物品数量少时较好；
+SVDRecommender：奇异值分解，推荐效果较好，但之前需要大量预处理运算；
+KnnRecommender：基于k近邻算法(KNN)，适合于物品数量较小时；
+Tree...</content>
   </entry>
   
   <entry>
@@ -337,14 +298,15 @@ object FileMatcher {
 Spark提供三个位置用来配置系统：
 
 
-  Spark属性：控制大部分的应用程序参数，可以用SparkConf对象或者Java系统属性设置
-  环境变量：可以通过每个节点的 conf/spark-env.sh脚本设置。例如IP地址、端口等信息
-  日志配置：可以通过log4j.properties配置
+Spark属性：控制大部分的应用程序参数，可以用SparkConf对象或者Java系统属性设置
+环境变量：可以通过每个节点的conf/spark-env.sh脚本设置。例如IP地址、端口等信息
+日志配置：可以通过log4j.properties配置
 
 
 Spark属性
 
-Spark属性控制大部分的应用程序设置，并且为每个应用程序分别配置它。这些属性可以直接在SparkConf上配置，然后传递给SparkContext。SparkConf...</content>
+Spark属性控制大部分的应用程序设置，并且为每个应用程序分别配置它。这些属性可以直接在SparkConf上配置，然后传递给SparkContext。SparkConf
+允许你配置一...</content>
   </entry>
   
   <entry>
@@ -371,18 +333,18 @@ YARN作为一个资源调度器，应该考虑到集群里面每一台机子的�
     <content type="html">本文主要记录最近一段时间学习和实现Spark MLlib中的协同过滤的一些总结，希望对大家熟悉Spark ALS算法有所帮助。
 
 
-  更新：
+更新：
 
-  
-    【2016.06.12】Spark1.4.0中MatrixFactorizationModel提供了recommendForAll方法实现离线批量推荐，见SPARK-3066。
-  
+
+【2016.06.12】Spark1.4.0中MatrixFactorizationModel提供了recommendForAll方法实现离线批量推荐，见SPARK-3066。
+
 
 
 测试环境
 
 为了测试简单，在本地以local方式运行Spark，你需要做的是下载编译好的压缩包解压即可，可以参考Spark本地模式运行。
 
-测试数据使用MovieLens的MovieLens 10M数据集，下载之后解压到data目录。数据的格式请...</content>
+测试数据使用MovieLens的MovieLens 10M数据集，下载之后解压到data目录。数据的格式请参考README中的...</content>
   </entry>
   
   <entry>
@@ -403,9 +365,8 @@ YARN作为一个资源调度器，应该考虑到集群里面每一台机子的�
 Hive Metastore集成Sentry
 
 需要在 /etc/hive/conf/hive-site.xml中添加：
-
     &amp;lt;property&amp;gt;
-      &amp;lt;name&amp;gt;hive.metastore.pre.event.listeners&amp;lt;/n...</content>
+      &amp;lt;name&amp;gt;hive.metastore.pre.event.listeners&amp;lt;/na...</content>
   </entry>
   
   <entry>
@@ -420,9 +381,9 @@ Hive Metastore集成Sentry
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+运行用户：root
 
 
 这里，我参考使用yum安装CDH Hadoop集群一文搭建了一个测试集群，并选择cdh1节点来安装sentry服务。
@@ -430,10 +391,9 @@ Hive Metastore集成Sentry
 2. 安装
 
 在cdh1节点上运行下面命令查看Sentry的相关组件有哪些:
-
 $ yum list sentry*
 
-sentry.noarch                        1.4.0+cdh5.4.0+15...</content>
+sentry.noarch                        1.4.0+cdh5.4.0+155-1.cdh...</content>
   </entry>
   
   <entry>
@@ -450,11 +410,11 @@ Apache Sentry是Cloudera公司发布的一个Hadoop开源组件，截止目前�
 Apache Sentry为Hadoop使用者提供了以下便利：
 
 
-  能够在Hadoop中存储更敏感的数据
-  使更多的终端用户拥有Hadoop数据访问权
-  创建更多的Hadoop使用案例
-  构建多用户应用程序
-  符合规范...</content>
+能够在Hadoop中存储更敏感的数据
+使更多的终端用户拥有Hadoop数据访问权
+创建更多的Hadoop使用案例
+构建多用户应用程序
+符合规范（例如SOX，PCI...</content>
   </entry>
   
   <entry>
@@ -469,19 +429,14 @@ Apache Sentry为Hadoop使用者提供了以下便利：
 在Github上fork Cloudera维护的Spark项目到自己的github账号里，对应的地址为https://github.com/javachen/spark。
 
 下载代码：
-
 $ git clone https://github.com/javachen/spark
 
-
 然后，切换到最新的分支，当前为 cdh5-1.3.0_5.4.0。
-
 $ cd spark
 $ git checkout cdh5-1.3.0_5.4.0
 
-
 查看当前分支：
-
-⇒  gi...</content>
+⇒  git bra...</content>
   </entry>
   
   <entry>
@@ -490,32 +445,23 @@ $ git checkout cdh5-1.3.0_5.4.0
     <updated>2015-04-23T00:00:00+08:00</updated>
     <id>/2015/04/23/all-the-uses-of-an-underscore-in-scala.html</id>
     <content type="html">存在性类型：
-
 def foo(l: List[Option[_]]) = 
 
 def f(m: M[_]) 
 
-
 高阶类型参数：
-
 case class A[K[_],T](a: K[T])
 
 def f[M[_]] 
 
-
 临时变量：
-
 val _ = 5
 
-
 临时参数：
-
-List(1, 2, 3) foreach { _ =&amp;gt; println(&quot;Hi&quot;) }    //List(1, 2, 3) foreach { t =&amp;gt; println(&quot;Hi&quot;) }
-
+List(1, 2, 3) foreach { _ =&amp;gt; println(&amp;quot;Hi&amp;quot;) }    //List(1, 2, 3) foreach { t =&amp;gt; println(&amp;quot;Hi&amp;quot;) }
 
 通配模式：
-
-Some(5) match { case Some(_) =&amp;gt; println(&quot;Yes&quot;...</content>
+Some(5) match { case Some(_) =&amp;gt; pr...</content>
   </entry>
   
   <entry>
@@ -546,14 +492,11 @@ Scala的所有的集合类都可以在包 scala.collection ...</content>
 从All Versions Scala下载所需版本Scala安装包，解压到指定目录之后，配置环境变量并使其生效。
 
 如果你使用Mac，则可以使用brew安装：
-
 ⇒  brew install scala
 
-
 在终端键入scala查看Scala的版本，并进入Scala的解释器：
-
 ⇒  scala
-Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0...</content>
+Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0_60...</content>
   </entry>
   
   <entry>
@@ -570,7 +513,7 @@ Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0..
 在 MLlib 中的实现类为org.apache.spark.mllib.recommendation.ALS.scala，其有如下的参数:
 
 
-  numUserBlocks：是用于并行化...</content>
+numUserBlocks：是用于并行化计算...</content>
   </entry>
   
   <entry>
@@ -585,9 +528,8 @@ Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0..
 加载和保存文件
 
 最简单的方式是调用 load 方法加载文件，默认的格式为 parquet，你可以修改 spark.sql.sources.default 指定默认的格式：
-
-scala&amp;gt; val df = sqlContext.load(&quot;people.parquet&quot;)
-scala&amp;gt; df.select(&quot;name&quot;, &quot;age&quot;)....</content>
+scala&amp;gt; val df = sqlContext.load(&amp;quot;people.parquet&amp;quot;)
+scala&amp;gt; df.select(&amp;quot;...</content>
   </entry>
   
   <entry>
@@ -600,9 +542,8 @@ scala&amp;gt; df.select(&quot;name&quot;, &quot;age&quot;)....</content>
 下载 Spark
 
 下载地址为http://spark.apache.org/downloads.html，根据页面提示选择一个合适的版本下载，这里我下载的是 spark-1.3.0-bin-cdh4.tgz。下载之后解压：
-
  cd ~
- wget http://mirror.bit.edu.cn/apache/spark/spark-1.3.0/s...</content>
+ wget http://mirror.bit.edu.cn/apache/spark/spark-1.3.0/sp...</content>
   </entry>
   
   <entry>
@@ -615,16 +556,16 @@ scala&amp;gt; df.select(&quot;name&quot;, &quot;age&quot;)....</content>
 Spark
 
 
-  LeanCloud 离线数据分析功能介绍
-  Spark在腾讯数据仓库TDW的应用 http://www.biaodianfu.com/spark-tdw.html
-  Spark on Yarn：小火花照亮大数据 http://rdc.taobao.org/?p=512
-  Spark on Yarn：性能调优 http://rdc.taobao.org/?p=533
+LeanCloud 离线数据分析功能介绍
+Spark在腾讯数据仓库TDW的应用 http://www.biaodianfu.com/spark-tdw.html
+Spark on Yarn：小火花照亮大数据 http://rdc.taobao.org/?p=512
+Spark on Yarn：性能调优 http://rdc.taobao.org/?p=533
 
 
 Spark 教程
 
 
-  Spark Shell Examples h...</content>
+Spark Shell Examples https://alt...</content>
   </entry>
   
   <entry>
@@ -647,17 +588,15 @@ Spark 教程
 将文本数据转换为 Parquet 格式并读取内容，可以参考 Cloudera 的 MapReduce 例子：https://github.com/cloudera/parquet-examples。
 
 准备文本数据 a.txt 为 CSV 格式：
-
 1,2
 3,4
 4,5
-
 
 准备 Avro 测试数据，可以参考 将Avro数据加载到Spark 一文。
 
 本文测试环境为：CDH 5.2，并且 Avro、Parquet 组件已经通过 YUM 源安装。
 
-将 CSV 转换...</content>
+将 CSV 转换为 ...</content>
   </entry>
   
   <entry>
@@ -688,11 +627,13 @@ Spark 教程
 Avro 是 Hadoop 中的一个子项目，也是 Apache 中一个独立的项目，Avro 是一个基于二进制数据传输高性能的中间件。在 Hadoop 的其他项目中，例如 HBase 和 Hive 的 Client 端与服务端的数据传输也采用了这个工具。Avro 是一个数据序列化的系统，它可以提供：
 
 
-  1、丰富的数据结构类型
-  2、快速可压缩的二进制数据形式
-  3、存储持久数据的文件容器
-  4、远程过程调用 RPC
-  5、简单的动态语言结合功能，Avro 和动态语言结合后，读写数据文件和使用 RPC 协议都不需要生成代码，而代码生成作为一种可选的优化只值得在静态...</content>
+1、丰富的数据结构类型
+2、快速可压缩的二进制数据形式
+3、存储持久数据的文件容器
+4、远程过程调用 RPC
+5、简单的动态语言结合功能，Avro 和动态语言结合后，读写数据文件和使用 RPC 协议都不需要生成代码，而代码生成作为一种可选的优化只值得在静态类型语言中实现。
+
+...</content>
   </entry>
   
   <entry>
@@ -705,13 +646,10 @@ Avro 是 Hadoop 中的一个子项目，也是 Apache 中一个独立的项目�
 下载
 
 进入下载页面：http://kafka.apache.org/downloads.html ，选择 Binary downloads下载 （Source download需要编译才能使用），这里我下载 kafka_2.11-0.8.2.1，其对应的 Scala 版本为 2.11：
-
 $ wget http://apache.fayea.com/kafka/0.8.2.1/kafka_2.11-0.8.2.1.tgz
 
-
 解压并进入目录：
-
-$ tar -xzvf k...</content>
+$ tar -xzvf kafk...</content>
   </entry>
   
   <entry>
@@ -722,16 +660,13 @@ $ tar -xzvf k...</content>
     <content type="html">SpringApplication
 
 SpringApplication 类是启动 Spring Boot 应用的入口类，你可以创建一个包含 main() 方法的类，来运行 SpringApplication.run 这个静态方法：
-
 public static void main(String[] args) {
     SpringApplication.run(MySpringConfiguration.class, args);
 }
 
-
 运行该类会有如下输出：
-
   .   ____          _            __ _ _
- /\\ / ___&#39;_ __ _ _...</content>
+ /\\ / ___&amp;#39;_ __ _ ...</content>
   </entry>
   
   <entry>
@@ -748,9 +683,9 @@ Spring Boot 是 Spring 产品中一个新的子项目，致力于简便快捷地
 Spring Boot 的目标是：
 
 
-  快速开发基于 Spring 的应用
-  开箱即用的微服务
-  提供一些大型项目常用的非功能性特性，例如：嵌入式服务、安全、监控...</content>
+快速开发基于 Spring 的应用
+开箱即用的微服务
+提供一些大型项目常用的非功能性特性，例如：嵌入式服务、安全、监控、健康检查、...</content>
   </entry>
   
   <entry>
@@ -759,14 +694,14 @@ Spring Boot 的目标是：
     <updated>2015-03-11T00:00:00+08:00</updated>
     <id>/2015/03/11/spring-aop-example-tutorial-aspect-advice-pointcut-joinpoint-annotations-xml-configuration.html</id>
     <content type="html">
-  这是一篇翻译，原文：Spring AOP Example Tutorial – Aspect, Advice, Pointcut, JoinPoint, Annotations, XML Configuration
+这是一篇翻译，原文：Spring AOP Example Tutorial – Aspect, Advice, Pointcut, JoinPoint, Annotations, XML Configuration
 
 
 Spring 框架发展出了两个核心概念：依赖注入 和面向切面编程（AOP）。我们已经了解了 Spring 的依赖注入 是如何实现的，今天我们来看看面向切面编程的核心概念以及 Spring 框架是如何实现它的。
 
 AOP 概要
 
-大多数的企业应用都会有一些共同的对横切的关注，横切是否适用于不同的对象或者模型。一些共同关注的横切有日志、事务管理以及数据校验等等。在面向对...</content>
+大多数的企业应用都会有一些共同的对横切的关注，横切是否适用于不同的对象或者模型。一些共同关注的横切有日志、事务管理以及数据校验等等。在面向对象的...</content>
   </entry>
   
   <entry>
@@ -793,8 +728,8 @@ RESTEasy 是 JBoss 的一个开源项目，提供各种框架帮助你构建 RES
 异常分为3种：
 
 
-  Error - 描述了Java运行系统中的内部错误以及资源耗尽的情况。应用程序不应该抛出这种类型的对象。如果这种内部错误出现，除了通知用户错误发生以及尽力安全的退出程序外，在其他方面是无能为力的。
-  编译时异常 Exception - 它指出了合理的应用程序想要捕获的条件。Exception又分为两类：IOException和RuntimeException。由编程导致的错误...</content>
+Error - 描述了Java运行系统中的内部错误以及资源耗尽的情况。应用程序不应该抛出这种类型的对象。如果这种内部错误出现，除了通知用户错误发生以及尽力安全的退出程序外，在其他方面是无能为力的。
+编译时异常 Exception - 它指出了合理的应用程序想要捕获的条件。Exception又分为两类：IOException和RuntimeException。由编程导致的错误，会导致...</content>
   </entry>
   
   <entry>
@@ -807,24 +742,22 @@ RESTEasy 是 JBoss 的一个开源项目，提供各种框架帮助你构建 RES
 安装环境：
 
 
-  操作系统：CentOs6.5
-  Hadoop：cdh5.2.0
-  Hue：3.6.0+cdh5.2.0
+操作系统：CentOs6.5
+Hadoop：cdh5.2.0
+Hue：3.6.0+cdh5.2.0
 
 
 安装 Hue
 
 在 Hadoop 集群的一个节点上安装 Hue server，这里我是在我的测试集群中的 cdh1 节点上安装：
-
 $ yum install hue hue-server
-
 
 配置 Hue
 
 配置hue server
-
 [desktop]
-    http_host=...</content>
+    http_host=cdh1
+    ...</content>
   </entry>
   
   <entry>
@@ -837,15 +770,13 @@ $ yum install hue hue-server
 Hadoop Streaming 是 Hadoop 提供的一个 MapReduce 编程工具，它允许用户使用任何可执行文件、脚本语言或其他编程语言来实现 Mapper 和 Reducer，从而充分利用 Hadoop 并行计算框架的优势和能力，来处理大数据。
 
 一个简单的示例，以 shell 脚本为例：
-
 hadoop jar hadoop-streaming.jar \
     -input myInputDirs \
     -output myOutputDir \
     -mapper /bin/cat \
     -reducer /usr/bin/wc
 
-
-Strea...</content>
+Streami...</content>
   </entry>
   
   <entry>
@@ -856,18 +787,13 @@ Strea...</content>
     <content type="html">hadoop
 
 解压 gz 文件到文本文件
-
 $ hadoop fs -text /hdfs_path/compressed_file.gz | hadoop fs -put - /tmp/uncompressed-file.txt
 
-
 解压本地文件 gz 文件并上传到 hdfs
-
 $ gunzip -c filename.txt.gz | hadoop fs -put - /tmp/filename.txt
 
-
 使用 awk 处理 csv 文件，参考 Using awk and friends with Hadoop:
-
-$ hadoop fs -cat people.txt | aw...</content>
+$ hadoop fs -cat people.txt | awk -F&amp;...</content>
   </entry>
   
   <entry>
@@ -880,10 +806,11 @@ $ hadoop fs -cat people.txt | aw...</content>
 前端
 
 
-  http://githunt.io/
-    
-      http://ohmycss.com/：简化版的bootstrap
-      https://octicons.github...</content>
+http://githunt.io/
+
+
+http://ohmycss.com/：简化版的bootstrap
+https://octicons.github.com/ ：css 图标，类似的...</content>
   </entry>
   
   <entry>
@@ -892,14 +819,13 @@ $ hadoop fs -cat people.txt | aw...</content>
     <updated>2015-02-04T00:00:00+08:00</updated>
     <id>/2015/02/04/how-to-run-a-simple-apache-spark-app-in-cdh-5.html</id>
     <content type="html">
-  这篇文章参考 How-to: Run a Simple Apache Spark App in CDH 5 编写而成，没有完全参照原文翻译，而是重新进行了整理，例如：spark 版本改为 1.3.0，添加了 Python 版的程序。
+这篇文章参考 How-to: Run a Simple Apache Spark App in CDH 5 编写而成，没有完全参照原文翻译，而是重新进行了整理，例如：spark 版本改为 1.3.0，添加了 Python 版的程序。
 
 
 创建 maven 工程
 
 使用下面命令创建一个普通的 maven 工程：
-
-$ mvn archetype:generate -DgroupId=com.cloudera.sparkwordcount -DartifactId=sparkwordcount -DarchetypeArtifactId=maven-archetype-quicksta...</content>
+$ mvn archetype:generate -DgroupId=com.cloudera.sparkwordcount -DartifactId=sparkwordcount -DarchetypeArtifactId=maven-archetype-quickstart ...</content>
   </entry>
   
   <entry>
@@ -934,7 +860,7 @@ AMD 是 Asynchronous Module Definition 的缩写，意思就是 异步模块定�
 Require.JS 的诞生主要为了解决两个问题：　　
 
 
-  1）实现 JavaScript 文件的异步加载，避免网...</content>
+1）实现 JavaScript 文件的异步加载，避免网页失...</content>
   </entry>
   
   <entry>
@@ -961,19 +887,15 @@ Yeoman 主要有三部分组成：yo（脚手架工具）、grunt（构建工具
     <content type="html">当 Django 中模型提供的查询 API 不能满足要求时，你可能需要使用原始的 sql 查询，这时候就需要用到  Manager.raw() 方法。
 
 Manager 类提供下面的一个方法，可以用于执行 sql：
-
 Manager.raw(raw_query, params=None, translations=None)
 
-
 使用方法为：
-
-&amp;gt;&amp;gt;&amp;gt; for p in Person.objects.raw(&#39;SELECT * FROM myapp_person&#39;):
+&amp;gt;&amp;gt;&amp;gt; for p in Person.objects.raw(&amp;#39;SELECT * FROM myapp_person&amp;#39;):
 ...     print(p)
 John Smith
 Jane Jones
 
-
-raw() 可以通过...</content>
+raw() ...</content>
   </entry>
   
   <entry>
@@ -984,16 +906,17 @@ raw() 可以通过...</content>
     <content type="html">1. 安装环境
 
 
-  操作系统：CentOs6.5
-  Hadoop 集群：CDH5.3
-  JDK 版本：jdk1.8.0_31
+操作系统：CentOs6.5
+Hadoop 集群：CDH5.3
+JDK 版本：jdk1.8.0_31
 
 
 为了测试简单，我是将 Presto 的 coordinator 和 worker 都部署在 cdh1 节点上，并且该节点上部署了 hive-metastore 服务。下面的安装和部署过程参考自 http://prestodb.io/docs/current/installation.html。
 
 2. 安装 Presto
 
-下载 Presto 的压缩包，目前最新版本为 presto-server-0.90，然后解压为 presto-server-0.9...</content>
+下载 Presto 的压缩包，目前最新版本为 presto-server-0.90，然后解压为 presto-server-0.90 。
+wg...</content>
   </entry>
   
   <entry>
@@ -1034,13 +957,10 @@ Impala，是基于 Apache Hadoop 的一个开源的分析数据库，使用 Kerb
     <content type="html">本文主要收集一些 Maven 的使用技巧，包括 Maven 常见命令、创建多模块项目、上传本地 jar 到插件以及常用的插件等等，本篇文章会保持不停的更新。
 
 命令行创建 maven 项目：
-
 $ mvn archetype:generate -DgroupId=com.javachen.spark -DartifactId=spark-examples -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
-
 Maven安装本地jar到本地仓库，举例：
-
-$ mvn install:instal...</content>
+$ mvn install:install-f...</content>
   </entry>
   
   <entry>
@@ -1051,14 +971,13 @@ $ mvn install:instal...</content>
     <content type="html">通过《如何创建一个Django网站》大概清楚了如何创建一个简单的 Django 网站，并了解了Django 中模板和模型使用方法。本篇文章主要在此基础上，了解 Django 中 ORM 相关的用法。
 
 一个 blog 的应用中 mysite/blog/models.py 有以下实体：
-
 from django.db import models
 
 class Blog(models.Model):
     name = models.CharField(max_length=100)
     tagline = models.TextField()
 
-    def __str__(sel...</content>
+    def __str__(self...</content>
   </entry>
   
   <entry>
@@ -1071,16 +990,17 @@ class Blog(models.Model):
 简单的概念：
 
 
-  Django 中每一个 Model 都继承自 django.db.models.Model。
-  在 Model 当中每一个属性 attribute 都代表一个数据库字段。
-  通过 Django Model API 可以执行数据库的增删改查, 而不需要写一些数据库的查询语句。
+Django 中每一个 Model 都继承自 django.db.models.Model。
+在 Model 当中每一个属性 attribute 都代表一个数据库字段。
+通过 Django Model API 可以执行数据库的增删改查, 而不需要写一些数据库的查询语句。
 
 
 1. 模型
 
 1.1 一个示例
 
-下面在 myapp 应用种定义了一个 Person 模型，包括两个字段：first_name 和 last_name...</content>
+下面在 myapp 应用种定义了一个 Person 模型，包括两个字段：first_name 和 last_name。
+from...</content>
   </entry>
   
   <entry>
@@ -1093,16 +1013,16 @@ class Blog(models.Model):
 本文主要分析 AngularJS 官方网站提供的一个用于学习的示例项目 PhoneCat 的构建、测试过程以及代码的运行原理。希望能够对 PhoneCat 项目有一个更加深入全面的认识。这其中包括以下内容：
 
 
-  该项目如何运行起来的
-  该项目如何进行前端单元测试
-  AngularJS 相关代码分析
+该项目如何运行起来的
+该项目如何进行前端单元测试
+AngularJS 相关代码分析
 
 
 以下内容如有理解不正确，欢迎指正！
 
 1. 环境搭建
 
-对于 PhoneCat 项目的开发环境和测试环境...</content>
+对于 PhoneCat 项目的开发环境和测试环境的搭建，官方...</content>
   </entry>
   
   <entry>
@@ -1115,14 +1035,13 @@ class Blog(models.Model):
 1. 一个简单示例
 
 通过下面的示例代码，可以运行一个简单的 AngularJS 应用：
-
 &amp;lt;!DOCTYPE html&amp;gt;
 &amp;lt;html&amp;gt;
 &amp;lt;body&amp;gt;
 
-&amp;lt;div ng-app=&quot;&quot;&amp;gt;
+&amp;lt;div ng-app=&amp;quot;&amp;quot;&amp;gt;
   &amp;lt;p&amp;gt;在输入框中尝试输入：&amp;lt;/p&amp;gt;
-  &amp;lt;p&amp;gt;姓名：&amp;lt;input...</content>
+  &amp;lt;p&amp;gt;姓名：...</content>
   </entry>
   
   <entry>
@@ -1135,13 +1054,10 @@ class Blog(models.Model):
 1. 创建项目
 
 首先创建项目，名称为 test：
-
 mkdir test &amp;amp;&amp;amp; cd test
 gradle init
 
-
 这时候的项目结构如下：
-
 ➜  test  tree
 .
 ├── build.gradle
@@ -1153,7 +1069,8 @@ gradle init
 ├── gradlew.bat
 └── settings.gradle
 
-2 directories, 6 fil...</content>
+2 directories, 6 files
+...</content>
   </entry>
   
   <entry>
@@ -1168,15 +1085,15 @@ gradle init
 1. 开发环境
 
 
-  操作系统: mac
-  JDK：1.7.0_60
-  Gradle：2.2.1
-  IDE：Idea
+操作系统: mac
+JDK：1.7.0_60
+Gradle：2.2.1
+IDE：Idea
 
 
 2. 创建项目
 
-你可以通过 Spring Initializr 来创建一个空的...</content>
+你可以通过 Spring Initializr 来创建一个空的项目，也可以手动...</content>
   </entry>
   
   <entry>
@@ -1191,9 +1108,9 @@ Python 通过两个标准库 thread 和 threading 提供对线程的支持。Pyt
 thread 模块提供的其他方法：
 
 
-  start_new_thread(function,args,kwargs=None)：生一个新线程，在新线程中用指定参数和可选的 kwargs 调用 function 函数
-  allocate_lock()：分配一个 LockType 类型的锁对象（注意，此时还没有获得锁）
-  inter...</content>
+start_new_thread(function,args,kwargs=None)：生一个新线程，在新线程中用指定参数和可选的 kwargs 调用 function 函数
+allocate_lock()：分配一个 LockType 类型的锁对象（注意，此时还没有获得锁）
+interrupt_m...</content>
   </entry>
   
   <entry>
@@ -1206,14 +1123,13 @@ thread 模块提供的其他方法：
 相对于原文做了一些修改：
 
 
-  基于 django1.7，修复了不兼容的配置
-  前端使用 bootstrap3，并修改了页面的一些内容
-  【TODO】代码中关键的地方添加注释，帮助理解
+基于 django1.7，修复了不兼容的配置
+前端使用 bootstrap3，并修改了页面的一些内容
+【TODO】代码中关键的地方添加注释，帮助理解
 
 
 1. 安装依赖
-
-pip install markdown p...</content>
+pip install markdown pygments...</content>
   </entry>
   
   <entry>
@@ -1236,16 +1152,14 @@ JPA 是 sun 提出的一个对象持久化规范，各 JavaEE 应用服务器自
 1. 开始之前
 
 hadoop 集群一共有三个节点，每个节点的 ip、hostname、角色如下：
-
 192.168.56.121 cdh1 NameNode、kerberos-server、ldap-server、sentry-store
 192.168.56.122 cdh2 DataNode、yarn、hive、impala
 192.168.56.123 cdh3 DataNode、yarn、hive、impala
 
-
 一些注意事项：
 
 
-  操...</content>
+操作系统为...</content>
   </entry>
   
   <entry>
@@ -1260,14 +1174,8 @@ hadoop 集群一共有三个节点，每个节点的 ip、hostname、角色如�
 Spring提供三种方法集成JPA：
 
 
-  
-    
-      LocalEntityManagerFactoryBean：适用于那些仅使用JPA进行数据访问的项目。
-    
-  
-  
-    
-      从JNDI中获取：用...</content>
+1. LocalEntityManagerFactoryBean：适用于那些仅使用JPA进行数据访问的项目。
+2. 从JNDI中获取：用于从Java EE服务器中获取指定的EntityManage...</content>
   </entry>
   
   <entry>
@@ -1278,16 +1186,15 @@ Spring提供三种方法集成JPA：
     <content type="html">关于 Hadoop 集群上配置 kerberos 以及 ldap 的过程请参考本博客以下文章：
 
 
-  HDFS配置Kerberos认证
-  YARN配置Kerberos认证
-  Hive配置Kerberos认证
-  Impala配置Kerberos认证
-  Hadoop配置LDAP集成Kerberos
+HDFS配置Kerberos认证
+YARN配置Kerberos认证
+Hive配置Kerberos认证
+Impala配置Kerberos认证
+Hadoop配置LDAP集成Kerberos
 
 
 参考 使用yum安装CDH Hadoop集群 安装 hadoop 集群，集群包括三个节点，每个节点的ip、主机名和部署的组件分配如下：
-
-192.168.56.121        cdh1     NameNode、Hive、ResourceManager、HBase、impala...</content>
+192.168.56.121        cdh1     NameNode、Hive、ResourceManager、HBase、impala-state-stor...</content>
   </entry>
   
   <entry>
@@ -1298,10 +1205,10 @@ Spring提供三种方法集成JPA：
     <content type="html">本文主要记录配置安全的Impala集群集成Sentry的过程。Impala集群上配置了Kerberos认证，并且需要提前配置好Hive与Kerberos和Sentry的集成：
 
 
-  使用yum安装CDH Hadoop集群
-  Hive配置kerberos认证
-  Impala配置kerberos认证
-  配置安全的Hive集群集成Sentry
+使用yum安装CDH Hadoop集群
+Hive配置kerberos认证
+Impala配置kerberos认证
+配置安全的Hive集群集成Sentry
 
 
 1. 环境说明
@@ -1309,15 +1216,14 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
-192.168.56.121        cd...</content>
+192.168.56.121        cdh1     NameNode、R...</content>
   </entry>
   
   <entry>
@@ -1328,8 +1234,8 @@ Spring提供三种方法集成JPA：
     <content type="html">本文主要记录配置安全的Hive集群集成Sentry的过程。Hive上配置了Kerberos认证，配置的过程请参考：
 
 
-  使用yum安装CDH Hadoop集群
-  Hive配置kerberos认证
+使用yum安装CDH Hadoop集群
+Hive配置kerberos认证
 
 
 1. 环境说明
@@ -1337,15 +1243,14 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
-192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impal...</content>
+192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、...</content>
   </entry>
   
   <entry>
@@ -1362,11 +1267,12 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  OpenLDAP 版本：2.4.39
-  Kerberos 版本：...</content>
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+OpenLDAP 版本：2.4.39
+Kerberos 版本：1.10.3
+运行用...</content>
   </entry>
   
   <entry>
@@ -1385,15 +1291,14 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
-192.168.56.121      ...</content>
+192.168.56.121        cdh1   ...</content>
   </entry>
   
   <entry>
@@ -1410,15 +1315,14 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
-192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Imp...</content>
+192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catal...</content>
   </entry>
   
   <entry>
@@ -1433,16 +1337,15 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
 192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
-192.168.56.122        ...</content>
+192.168.56.122        cdh2     ...</content>
   </entry>
   
   <entry>
@@ -1457,16 +1360,15 @@ Spring提供三种方法集成JPA：
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
 192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
-19...</content>
+192.168.56....</content>
   </entry>
   
   <entry>
@@ -1477,23 +1379,18 @@ Spring提供三种方法集成JPA：
     <content type="html">安装
 
 brew 安装 postgresql ：
-
 $ brew install postgresql
 
-
 查看安装的版本：
-
 $ pg_ctl -V
 pg_ctl (PostgreSQL) 9.3.5
-
 
 安装成功之后，安装路径为：/usr/local/var/postgres
 
 接下来，初始化数据库：
-
 $ initdb /usr/local/var/postgres
-The files belonging to this database system will be owned by user &quot;june&quot;.
-This user must also own the server ...</content>
+The files belonging to this database system will be owned by user &amp;quot;june&amp;quot;.
+This user must also own the se...</content>
   </entry>
   
   <entry>
@@ -1506,14 +1403,13 @@ This user must also own the server ...</content>
 视图中使用模板
 
 在《如何创建一个Django网站》中使用模板的方式如下：
-
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 
 from polls.models import Question
 
 def index(request):
-    latest_question_list = Question.ob...</content>
+    latest_question_list = Question.obj...</content>
   </entry>
   
   <entry>
@@ -1526,7 +1422,6 @@ def index(request):
 1. 准备测试数据
 
 以下测试以 impala 用户来运行：
-
 $ su - impala
 -bash-4.1$ whoami
 impala
@@ -1534,7 +1429,7 @@ $ hdfs dfs -ls /user
 Found 5 items
 drwxr-xr-x   - hdfs   hadoop          0 2014-09-22 18:36 /user/hdfs
 drwxrwxrwt   - mapred hadoop          0 2014-07-23 21:37 /user/history
-drwx...</content>
+drwxr...</content>
   </entry>
   
   <entry>
@@ -1549,10 +1444,10 @@ drwx...</content>
 采集数据之前，先要定义数据如何存放在 hadoop 以及一些相关约束。约束如下：
 
 
-  所有的日志数据都存放在 hdfs 上的 /logroot 路径下面
-  hive 中数据库命名方式为 dw_XXXX，例如：dw_srclog 存放外部来源的原始数据，dw_stat 存放统计结果的数据
-  原始数据都加工成为结构化的文本文件，字段分隔符统一使用制表符，并在 lzo 压缩之后上传到 hdfs 中。
-  hive 中使用外部表保存...</content>
+所有的日志数据都存放在 hdfs 上的 /logroot 路径下面
+hive 中数据库命名方式为 dw_XXXX，例如：dw_srclog 存放外部来源的原始数据，dw_stat 存放统计结果的数据
+原始数据都加工成为结构化的文本文件，字段分隔符统一使用制表符，并在 lzo 压缩之后上传到 hdfs 中。
+hive 中使用外部表保存数据，数据存放在...</content>
   </entry>
   
   <entry>
@@ -1569,8 +1464,8 @@ drwx...</content>
 Avro 版本使用1.7.6，重要的一些改变：
 
 
-  AVRO-1398。增加同步间隔，从16k 调整到64k，该参数可以在 mapreduce 的配置参数中通过 avro.mapred.sync.interval 参数来设置
-  AVRO-1355。schema 中不能包括相同的 field 名称。
+AVRO-1398。增加同步间隔，从16k 调整到64k，该参数可以在 mapreduce 的配置参数中通过 avro.mapred.sync.interval 参数来设置
+AVRO-1355。schema 中不能包括相同的 field 名称。
 
 
 1.2. Apache Hadoop
@@ -1580,7 +1475,7 @@ HDFS
 提供新的功能：
 
 
-  HDFS Dat...</content>
+HDFS Data at R...</content>
   </entry>
   
   <entry>
@@ -1608,18 +1503,17 @@ Spring 总共有十几个组件，其中核心组件只有三个：Core、Co...<
     <link href="/2014/09/24/compile-and-test-dubbo.html"/>
     <updated>2014-09-24T00:00:00+08:00</updated>
     <id>/2014/09/24/compile-and-test-dubbo.html</id>
-    <content type="html">Dubbo是阿里巴巴内部的SOA服务化治理方案的核心框架，每天为2000+ 个服务提供3,000,000,000+ 次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。Dubbo自2011年开源后，已被许多非阿里系公司使用。
+    <content type="html">Dubbo是阿里巴巴内部的SOA服务化治理方案的核心框架，每天为2000+ 个服务提供3,000,000,000+ 次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。Dubbo自2011年开源后，已被许多非阿里系公司使用。 
 
 
-  项目主页：http://alibaba.github.io/dubbo-doc-static/Home-zh.htm
-  项目源码：https://github.com/alibaba/dubbo
+项目主页：http://alibaba.github.io/dubbo-doc-static/Home-zh.htm 
+项目源码：https://github.com/alibaba/dubbo
 
 
 1. 安装
 
 首先从 github 下载源代码并阅读 readme.md ，参考该文档，首先下载 opensesame，并编译：
-
-$ git clone ...</content>
+$ git clone git...</content>
   </entry>
   
   <entry>
@@ -1654,15 +1548,12 @@ Gradle 官方网站：http://www.gradle.org/downloads
 一种方式是从 官方 下载解压然后配置环境变量。
 
 Mac 上安装：
-
 $ brew install gradle
 
-
 测试是否安装成功：
-
 $ gradle -v
 ------------------------------------------------------------
-Grad...</content>
+Gradle ...</content>
   </entry>
   
   <entry>
@@ -1677,19 +1568,15 @@ Grad...</content>
 读文件内容
 
 在groovy中输出文件的内容：
-
-println new File(&quot;tmp.csv&quot;).text  
-
+println new File(&amp;quot;tmp.csv&amp;quot;).text  
 
 上面代码非常简单，没有流的出现，没有资源关闭的出现，也没有异常控制的出现，所有的这些groovy已经搞定了。
 
 读取每一行内容：
-
-File file = new File(&#39;tmp.csv&#39;)
-assert file.name == &#39;tmp.csv&#39;
+File file = new File(&amp;#39;tmp.csv&amp;#39;)
+assert file.name == &amp;#39;tmp.csv&amp;#39;
 assert ! file.isAbsolute()
-assert file.path == &#39;tmp.csv&#39;
-assert f...</content>
+assert file.pat...</content>
   </entry>
   
   <entry>
@@ -1704,7 +1591,7 @@ Llama (Low Latency Application MAster) 是一个 Yarn 的  Application Master，
 个人理解，Llama 的作用就是使 Impala 能够工作在 YARN 之上，使得 Impala 和 YARN 共享集群资源，提供低延迟的查询。
 
 
-  Llama 官网地...</content>
+ Llama 官网地址...</content>
   </entry>
   
   <entry>
@@ -1719,16 +1606,13 @@ Llama (Low Latency Application MAster) 是一个 Yarn 的  Application Master，
 下载压缩包然后解压或者通过rpm、deb发行包安装。
 
 这里，我在 mac 上安装 grails ：
-
 $ brew install grails
-
 
 2. 创建应用
 
 以 blog 为例，创建一个应用程序，在命令行输入 grails create-app blog ：
-
 $ grails create-app blog
-2014-9-9 10:4...</content>
+2014-9-9 10:43:2...</content>
   </entry>
   
   <entry>
@@ -1740,9 +1624,9 @@ $ grails create-app blog
 
 Groovy 是基于 JRE 的脚本语言，和Perl，Python等等脚本语言一样，它能以快速简洁的方式来完成一些工作：如访问数据库，编写单元测试用例，快速实现产品原型等等。
 
-Groovy 是由James Strachan 和 Bob McWhirter 这两位天才发明的（JSR 241 2004 年 3 月）。Groovy 完全以Java API为基础，使用了Java开发人员最熟悉的功能和库。Groovy 的语法近似Java，并吸收了 Ruby 的一些特点，因此 Groovy 在某些场合可以扮演一种 “咖啡伴侣”的角色。
+Groovy 是由James Strachan 和 Bob McWhirter 这两位天才发明的（JSR 241 2004 年 3 月）。Groovy 完全以Java API为基础，使用了Java开发人员最熟悉的功能和库。Groovy 的语法近似Java，并吸收了 Ruby 的一些特点，因此 Groovy 在某些场合可以扮演一种 “咖啡伴侣”的角色。   
 
-官网地址：http://groovy.code...</content>
+官网地址：http://groovy.c...</content>
   </entry>
   
   <entry>
@@ -1758,8 +1642,8 @@ Azkaban 的下载地址：http://azkaban.github.io/downloads.html
 Azkaban 包括三个关键组件：
 
 
-  关系数据库：使用 Mysql数据库，主要用于保存流程、权限、任务状态、任务计划等信息。
-  Azkaba...</content>
+关系数据库：使用 Mysql数据库，主要用于保存流程、权限、任务状态、任务计划等信息。
+AzkabanWeb...</content>
   </entry>
   
   <entry>
@@ -1780,13 +1664,10 @@ Azkaban 包括三个关键组件：
 2.1.1 让 namenode 进入安全模式
 
 在NameNode或者配置了 HA 中的 active NameNode上运行下面命令：
-
 $ sudo -u hdfs hdfs dfsadmin -safemode enter
 
-
 保存 fsimage：
-
-$ sudo...</content>
+$ sudo -u...</content>
   </entry>
   
   <entry>
@@ -1799,18 +1680,15 @@ $ sudo...</content>
 1. 安装 Sqoop
 
 使用 rpm 安装即可。
-
 yum install sqoop sqoop-metastore -y
 
 
-
-  安装完之后需要下载 mysql jar 包到 sqoop 的 lib 目录。
+安装完之后需要下载 mysql jar 包到 sqoop 的 lib 目录。
 
 
 这里使用 hive 的 metastore 的 mysql 数据库作为关系数据库，以 TBLS 表为例，该表结构和数据如下：
-
 mysql&amp;gt; select * from TBLS limit 3;
-+--...</content>
++------+...</content>
   </entry>
   
   <entry>
@@ -1821,19 +1699,20 @@ mysql&amp;gt; select * from TBLS limit 3;
     <content type="html">在休息了将近三个月之后，7月9日终于开始上班了，新的工作还是和 hadoop 相关。7月主要的工作内容如下：
 
 
-  搭建新的 hadoop 集群，hadoop 版本为 CDH4.7.0，并配置 NameNode 的 QJM HA 方案。配置 HA 方法见 CDH 中配置 HDFS HA
-  购买了三本书：
-    
-      mahout实战
-      机器学习实战
-      这才是搜索引擎
-    
-  
-  调研了 flume-ng 日志采集方案
-    
-      大众点评的大数据实践
-      analyzing-twitter-data-with-hadoop
-  ...</content>
+搭建新的 hadoop 集群，hadoop 版本为 CDH4.7.0，并配置 NameNode 的 QJM HA 方案。配置 HA 方法见 CDH 中配置 HDFS HA
+购买了三本书：
+
+
+mahout实战
+机器学习实战
+这才是搜索引擎
+
+调研了 flume-ng 日志采集方案
+
+
+大众点评的大数据实践
+analyzing-twitter-data-with-hadoop
+Hadoop Analysis of Apache Logs Using Flume-NG, Hive...</content>
   </entry>
   
   <entry>
@@ -1848,15 +1727,15 @@ Impala 目前最新版本为 1.4.0，其下载地址为：http://archive.clouder
 不得不说的事情：
 
 
-  1.3.1 用于 CDH4
-  1.4.0 用于 CDH5
+1.3.1 用于 CDH4
+1.4.0 用于 CDH5
 
 
 1.4.0
 
 
-  CDH5 中增加 DECIMAL 数据类型，可以设置精度，其语法为：DECIMAL[(precision[,scale])]
-  CDH5 中，impala 可以使用 HDFS 缓存特性加快频繁访...</content>
+CDH5 中增加 DECIMAL 数据类型，可以设置精度，其语法为：DECIMAL[(precision[,scale])]
+CDH5 中，impala 可以使用 HDFS 缓存特性加快频繁访问的数据的速度，...</content>
   </entry>
   
   <entry>
@@ -1869,9 +1748,9 @@ Impala 目前最新版本为 1.4.0，其下载地址为：http://archive.clouder
 Phoenix 是 Salesforce.com 开源的一个 Java 中间件，可以让开发者在Apache HBase 上执行 SQL 查询。Phoenix完全使用Java编写，代码位于 GitHub 上，并且提供了一个客户端可嵌入的 JDBC 驱动。
 
 
-  根据项目所述，Phoenix 被 Salesforce.com 内部使用，对于简单的低延迟查询，其量级为毫秒；对于百万级别的行数来说，其量级为秒。Phoenix 并不是像 HBase 那样用于 map-reduce job 的，而是通过标准化的语言来访问 HBase 数据的。
+根据项目所述，Phoenix 被 Salesforce.com 内部使用，对于简单的低延迟查询，其量级为毫秒；对于百万级别的行数来说，其量级为秒。Phoenix 并不是像 HBase 那样用于 map-reduce job 的，而是通过标准化的语言来访问 HBase 数据的。
 
-  Phoenix 为 HBase 提...</content>
+Phoenix 为 HBase 提供 SQ...</content>
   </entry>
   
   <entry>
@@ -1884,10 +1763,9 @@ Phoenix 是 Salesforce.com 开源的一个 Java 中间件，可以让开发者�
 日志压缩
 
 flume中有个 HdfsSink 组件，其可以压缩日志进行保存，故首先想到我们的日志应该以压缩的方式进行保存，遂选择了 lzo 的压缩格式，HdfsSink 的配置如下:
-
 agent-1.sinks.sink_hdfs.channel = ch-1
 agent-1.sinks.sink_hdfs.type = hdfs
-agent-1...</content>
+agent-1....</content>
   </entry>
   
   <entry>
@@ -1902,8 +1780,8 @@ Flume NG是Cloudera提供的一个分布式、可靠、可用的系统，它能�
 Flume 使用 java 编写，其需要运行在 Java1.6 或更高版本之上。
 
 
-  官方网站：http://flume.apache.org/
-  用户文档：http://...</content>
+官方网站：http://flume.apache.org/
+用户文档：http://flum...</content>
   </entry>
   
   <entry>
@@ -1920,7 +1798,7 @@ Flume 使用 java 编写，其需要运行在 Java1.6 或更高版本之上。
 我一共安装了三个节点的集群，对于 HA 方案来说，三个节点准备安装如下服务：
 
 
-  cdh1：hadoop-hdfs-namenode(primary) 、hadoop-hdfs-journaln...</content>
+cdh1：hadoop-hdfs-namenode(primary) 、hadoop-hdfs-journalnod...</content>
   </entry>
   
   <entry>
@@ -1935,16 +1813,16 @@ Flume 使用 java 编写，其需要运行在 Java1.6 或更高版本之上。
 开始之前，还是说明一下环境：
 
 
-  操作系统：CentOs6.4
-  CDH版本：4.7.0
-  节点数：4个
+操作系统：CentOs6.4
+CDH版本：4.7.0
+节点数：4个
 
 
 在开始之前，你可以看看我以前写的一篇文章 使用yum安装CDH Hadoop集群，因为有些细节已经为什么这样做我不会在这篇文章中讲述。
 
 一些准备工作
 
-在开始前，先...</content>
+在开始前，先选择一个节点...</content>
   </entry>
   
   <entry>
@@ -1957,9 +1835,9 @@ Flume 使用 java 编写，其需要运行在 Java1.6 或更高版本之上。
 安装环境如下：
 
 
-  操作系统：CentOs 6.5
-  Hadoop 版本：cdh-5.4.0
-  Spark 版本：cdh5-1.3.0_5.4.0
+操作系统：CentOs 6.5
+Hadoop 版本：cdh-5.4.0
+Spark 版本：cdh5-1.3.0_5.4.0
 
 
 关于 yum 源的配置以及 Hadoop 集群的安装，请参考 使用yum安装CDH Hadoop集群。
@@ -1967,9 +1845,8 @@ Flume 使用 java 编写，其需要运行在 Java1.6 或更高版本之上。
 1. 安装
 
 首先查看 Spark 相关的包有哪些：
-
 $ yum list |grep spark
-spark-core.noarch                  1.3.0+cdh5.4.0+24-1.c...</content>
+spark-core.noarch                  1.3.0+cdh5.4.0+24-1.cdh5.4.0...</content>
   </entry>
   
   <entry>
@@ -1980,11 +1857,11 @@ spark-core.noarch                  1.3.0+cdh5.4.0+24-1.c...</content>
     <content type="html">1. 安装集群前
 
 
-  配置SSH无密码登陆
-  DNS。HBase使用本地 hostname 才获得IP地址，正反向的DNS都是可以的。你还可以设置 hbase.regionserver.dns.interface 来指定主接口，设置 hbase.regionserver.dns.nameserver 来指定nameserver，而不使用系统带的
-  安装NTP服务，并配置和检查crontab是否生效
-  操作系统调优，包括最大文件句柄，nproc hard 和 soft limits等等
-  conf/hdfs-site.xml里面的 dfs.datanode.max.xcieve...</content>
+配置SSH无密码登陆
+DNS。HBase使用本地 hostname 才获得IP地址，正反向的DNS都是可以的。你还可以设置 hbase.regionserver.dns.interface 来指定主接口，设置 hbase.regionserver.dns.nameserver 来指定nameserver，而不使用系统带的
+安装NTP服务，并配置和检查crontab是否生效
+操作系统调优，包括最大文件句柄，nproc hard 和 soft limits等等
+conf/hdfs-site.xml里面的 dfs.datanode.max.xcievers 参数，至少要有...</content>
   </entry>
   
   <entry>
@@ -1997,21 +1874,21 @@ spark-core.noarch                  1.3.0+cdh5.4.0+24-1.c...</content>
 Hadoop的默认配置文件（以cdh5.0.1为例）：
 
 
-  core-default.xml
-  hdfs-default.xml
-  mapred-default.xml
+core-default.xml
+hdfs-default.xml
+mapred-default.xml
 
 
 
-  说明：
+说明：
 
-  在hadoop2中有些参数名称过时了，例如原来的mapred.reduce.tasks改名为mapreduce.job.reduces了，当然，这两个参数你都可以使用，只是第一个参数过时了。
+在hadoop2中有些参数名称过时了，例如原来的mapred.reduce.tasks改名为mapreduce.job.reduces了，当然，这两个参数你都可以使用，只是第一个参数过时了。
 
 
 1. 操作系统调优
 
 
-  增大打开文件数据和网络连接上限，调整内核参数net.core.somaxco...</content>
+增大打开文件数据和网络连接上限，调整内核参数net.core.somaxconn，提高读写速度和网络...</content>
   </entry>
   
   <entry>
@@ -2026,18 +1903,20 @@ Hadoop的默认配置文件（以cdh5.0.1为例）：
 Map-Reduce的处理过程主要涉及以下四个部分：
 
 
-  客户端Client：用于提交Map-reduce任务job
-  JobTracker：协调整个job的运行，其为一个Java进程，其main class为JobTracker
-  TaskTracker：运行此job的task，处理input split，其为一个Java进程，其main class为TaskTracker
-  HDFS：hadoop分布式文件系统，用于在各个进程间共享Job相关的文件
+客户端Client：用于提交Map-reduce任务job
+JobTracker：协调整个job的运行，其为一个Java进程，其main class为JobTracker
+TaskTracker：运行此job的task，处理input split，其为一个Java进程，其main class为TaskTracker
+HDFS：hadoop分布式文件系统，用于在各个进程间共享Job相关的文件
 
 
 上图中主要包括以下过程：
 
 
-  提交作业
-  作业初始化
-  任务...</content>
+提交作业
+作业初始化
+任务分配
+执行任务
+进度和状态更...</content>
   </entry>
   
   <entry>
@@ -2045,13 +1924,11 @@ Map-Reduce的处理过程主要涉及以下四个部分：
     <link href="/2014/06/24/hbase-vs-cassandra.html"/>
     <updated>2014-06-24T00:00:00+08:00</updated>
     <id>/2014/06/24/hbase-vs-cassandra.html</id>
-    <content type="html">HBase是一个开源的分布式存储系统。他可以看作是Google的Bigtable的开源实现。如同Google的Bigtable使用Google File System一样，HBase构建于和Google File System类似的Hadoop HDFS之上。
+    <content type="html">HBase是一个开源的分布式存储系统。他可以看作是Google的Bigtable的开源实现。如同Google的Bigtable使用Google File System一样，HBase构建于和Google File System类似的Hadoop HDFS之上。  
 
 Cassandra可以看作是Amazon Dynamo的开源实现。和Dynamo不同之处在于，Cassandra结合了Google   Bigtable的ColumnFamily的数据模型。可以简单地认为，Cassandra是一个P2P的，高可靠性并具有丰富的数据模型的分布式文件系统。
 
-HBase vs Cassandra
-
-...</content>
+HBase vs Cassandra...</content>
   </entry>
   
   <entry>
@@ -2064,10 +1941,9 @@ HBase vs Cassandra
 hive中的ORDER BY语句和关系数据库中的sql语法相似。他会对查询结果做全局排序，这意味着所有的数据会传送到一个Reduce任务上，这样会导致在大数量的情况下，花费大量时间。
 
 与数据库中 ORDER BY 的区别在于在hive.mapred.mode = strict模式下，必须指定 limit 否则执行会报错。
-
 hive&amp;gt; set hive.mapred.mode=strict;
 hive&amp;gt; select * from test order by id;
-FAILED: SemanticException 1:28 In strict mod...</content>
+FAILED: SemanticException 1:28 In strict mode...</content>
   </entry>
   
   <entry>
@@ -2092,28 +1968,30 @@ Lucene的目的是为软件开发人员提供一个简单易用的工具包，�
 安装storm集群，需要依赖以下组件：
 
 
-  Zookeeper
-  Python
-  Zeromq
-  Storm
-  JDK
-  JZMQ
+Zookeeper
+Python
+Zeromq
+Storm
+JDK
+JZMQ
 
 
 故安装过程根据上面的组件分为以下几步：
 
 
-  安装JDK
-  安装Zookeeper集群
-  安装Python及依赖
-  安装Storm
+安装JDK
+安装Zookeeper集群
+安装Python及依赖
+安装Storm
 
 
 另外，操作系统环境为：Centos6.4，安装用户为：root。
 
 1. 安装JDK
 
-安装jdk有很多方法，可以参考文博客使用yum安装CDH Hadoop集群中的jdk安装步骤，需要说明的是下面的zooke...</content>
+安装jdk有很多方法，可以参考文博客使用yum安装CDH Hadoop集群中的jdk安装步骤，需要说明的是下面的zookeeper集群安装方法也可以参考此文。
+
+...</content>
   </entry>
   
   <entry>
@@ -2128,10 +2006,10 @@ NO.1 考虑用静态工厂方法代替构造函数
 静态工厂方法好处：
 
 
-  1、构造函数有命名的限制，而静态方法有自己的名字，更加易于理解。
-  2、静态工厂方法在每次调用的时候不要求创建一个新的对象。这种做法对于一个要频繁创建相同对象的程序来说，可以极大的提高性能。它使得一个类可以保证是一个singleton；他使非可变类可以保证“不会有两个相等的实例存在”。
-  3、静态工厂方法在选择返回类型时有更大的灵活性。使用静态工厂方法，可以通过调用方法时使用不同的参数创建不同类的实例，还可以创建非公有类的对象，这就封装了类的实现细节。
-  4、在创建参数化类型实例的时候，他们使...</content>
+1、构造函数有命名的限制，而静态方法有自己的名字，更加易于理解。
+2、静态工厂方法在每次调用的时候不要求创建一个新的对象。这种做法对于一个要频繁创建相同对象的程序来说，可以极大的提高性能。它使得一个类可以保证是一个singleton；他使非可变类可以保证“不会有两个相等的实例存在”。
+3、静态工厂方法在选择返回类型时有更大的灵活性。使用静态工厂方法，可以通过调用方法时使用不同的参数创建不同类的实例，还可以创建非公有类的对象，这就封装了类的实现细节。
+4、在创建参数化类型实例的时候，他们使代码变的更加简洁...</content>
   </entry>
   
   <entry>
@@ -2152,8 +2030,7 @@ NO.1 考虑用静态工厂方法代替构造函数
 1、put方法
 
 HTable的put有两个方法：
-
-public vo...</content>
+public voi...</content>
   </entry>
   
   <entry>
@@ -2187,10 +2064,9 @@ boolean, tinyint, smallint, int, bigint, float, double, string, struct
 说明：我使用的HBase版本为：cdh4-0.94.15_4.7.0。
 
 在org.apache.hadoop.hbase.client创建ParallelClientScanner类，代码如下：
-
 package org.apache.hadoop.hbase.client;
 
-im...</content>
+imp...</content>
   </entry>
   
   <entry>
@@ -2203,13 +2079,13 @@ im...</content>
 支持的简单聚合计算，包括：
 
 
-  rowcount
-  min
-  max
-  sum
-  std
-  avg
-  median
+rowcount
+min
+max
+sum
+std
+avg
+median
 
 
 1、 下载并编译hbase源代码
@@ -2218,7 +2094,8 @@ im...</content>
 
 2、 引入patch
 
-基于提交日志add-aggregate-support-in-hbase-shell生成patch文件，然后打patch，或者也可以使用...</content>
+基于提交日志add-aggregate-support-in-hbase-shell生成patch文件，然后打patch，或者也可以使用其他方法：
+$ git ap...</content>
   </entry>
   
   <entry>
@@ -2235,8 +2112,7 @@ apache的hive版本现在应该是 0.13.0，而我使用的 hadoop 版本是 CDH
 1. 准备测试数据
 
 首先创建普通表：
-
-create table test(id int, name string) ROW FORMAT DELIMITED...</content>
+create table test(id int, name string) ROW FORMAT DELIMITED ...</content>
   </entry>
   
   <entry>
@@ -2247,14 +2123,12 @@ create table test(id int, name string) ROW FORMAT DELIMITED...</content>
     <content type="html">Hive中有各种各样的Task任务，其中FetchTask算是最简单的一种了。FetchTask不同于MapReduce任务，它不会启动mapreduce，而是直接读取文件，输出结果。当你执行简单的select * with limit语句的时候，其不会运行mapreduce任务。
 
 例如，运行下面语句不会出现mapreduce任务（说明：t表有一个字段，id为int类型，该表没有数据）：
-
 hive&amp;gt; select * from t limit 1;            
 OK
 Time taken: 2.466 seconds
 
-
 去掉limit语句，再执行一次，结果如下：
-...</content>
+hi...</content>
   </entry>
   
   <entry>
@@ -2313,13 +2187,13 @@ Cloudera Search 核心部件包括 Hadoop 和 Solr，后者建立在 Lucene 之�
 2000年，Eric Brewer 教授在 ACM 分布式计算年会上指出了著名的 CAP 理论：
 
 
-  分布式系统不可能同时满足一致性(C: Consistency)，可用性(A: Availability)和分区容错性(P: Tolerance of network Partition)这三个需求。大约两年后，Seth Gilbert 和 Nancy lynch 两人证明了CAP理论的正确性。
+分布式系统不可能同时满足一致性(C: Consistency)，可用性(A: Availability)和分区容错性(P: Tolerance of network Partition)这三个需求。大约两年后，Seth Gilbert 和 Nancy lynch 两人证明了CAP理论的正确性。
 
 
 三者的含义如下：
 
 
-  Consistency：一致性，一个服务是一致的完整操作或完全不操作（A service that is consistent operates ...</content>
+Consistency：一致性，一个服务是一致的完整操作或完全不操作（A service that is consistent operates full...</content>
   </entry>
   
   <entry>
@@ -2330,9 +2204,9 @@ Cloudera Search 核心部件包括 Hadoop 和 Solr，后者建立在 Lucene 之�
     <content type="html">Scrapy是Python开发的一个快速,高层次的屏幕抓取和web抓取框架，用于抓取web站点并从页面中提取结构化的数据。Scrapy用途广泛，可以用于数据挖掘、监测和自动化测试。
 
 
-  官方主页： http://www.scrapy.org/
-  中文文档：Scrapy 0.22 文档
-  GitHub项目主页：https://github.com/scrapy/scrapy
+官方主页： http://www.scrapy.org/
+中文文档：Scrapy 0.22 文档
+GitHub项目主页：https://github.com/scrapy/scrapy
 
 
 Scrapy 使用了 Twisted 异步网络库来处理网络通讯。整体架构大致如下（注：图片来自互联网）：
@@ -2342,8 +2216,8 @@ Scrapy 使用了 Twisted 异步网络库来处理网络通讯。整体架构大�
 Scrapy主要包括了以下组件：
 
 
-  引擎，用来处理整个系统的数据流处理，触发事务。
-  ...</content>
+引擎，用来处理整个系统的数据流处理，触发事务。
+调度器，用来接受引擎...</content>
   </entry>
   
   <entry>
@@ -2378,13 +2252,13 @@ Flask 是一个基于Python的微型的web开发框架。虽然Flask是微框架
 关于Flask值得知道的一些事：
 
 
-  Flask由Armin Ronacher于2010年创建。
-  Flask的灵感来自Sinatra。（Sinatra是一个极力避免小题大作的创建web应用的Ruby框架。）
-  Flask 依赖两个外部库： Jinja2 模板引擎和 Werkzeug WSGI 工具集。
-  Flask遵循“约定优于配置”以及合理的默认值原则。
+Flask由Armin Ronacher于2010年创建。
+Flask的灵感来自Sinatra。（Sinatra是一个极力避免小题大作的创建web应用的Ruby框架。）
+Flask 依赖两个外部库： Jinja2 模板引擎和 Werkzeug WSGI 工具集。
+Flask遵循“约定优于配置”以及合理的默认值原则。
 
 
-默认情...</content>
+默认情况下，Flask...</content>
   </entry>
   
   <entry>
@@ -2403,7 +2277,7 @@ Bower 运行在 Git 之上，它将所有包都视作一个黑盒子。任何类
 包管理工具一般有以下的功能：
 
 
-  注册机制：每个包需要确定一个唯一的 ID 使得搜索和下载的时候能够正确匹配，所以包管理工具需要维...</content>
+注册机制：每个包需要确定一个唯一的 ID 使得搜索和下载的时候能够正确匹配，所以包管理工具需要维护注...</content>
   </entry>
   
   <entry>
@@ -2414,13 +2288,13 @@ Bower 运行在 Git 之上，它将所有包都视作一个黑盒子。任何类
     <content type="html">目录
 
 
-  概述
-  特点
-  语法
-  编辑器
-  浏览器插件
-  实现版本
-  参考资料
+概述
+特点
+语法
+编辑器
+浏览器插件
+实现版本
+参考资料
 
 
 概述
@@ -2431,7 +2305,7 @@ Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John G
 
 兼容 HTML
 
-要在Markdown中输写HTML区块元素，比如&amp;lt;div&amp;gt;、&amp;lt;table&amp;gt;、&amp;lt;pre&amp;gt;、&amp;lt;p&amp;gt; 等标签，必须在前后加上空行与其它...</content>
+要在Markdown中输写HTML区块元素，比如&amp;lt;div&amp;gt;、&amp;lt;table&amp;gt;、&amp;lt;pre&amp;gt;、&amp;lt;p&amp;gt; 等标签，必须在前后加上空行与其它内容区隔开，还要求它们的开始...</content>
   </entry>
   
   <entry>
@@ -2444,16 +2318,13 @@ Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John G
 系统偏好配置
 
 设置主机名：
-
 $ sudo scutil --set HostName june－mac
 
-
-设置鼠标滚轮滑动的方向：系统偏好设置－－&amp;gt;鼠标－－&amp;gt;”滚动方向：自然”前面的勾去掉
+设置鼠标滚轮滑动的方向：系统偏好设置－－&amp;gt;鼠标－－&amp;gt;&amp;quot;滚动方向：自然&amp;quot;前面的勾去掉
 
 显示/隐藏Mac隐藏文件：
-
 defaults write com.apple.finder AppleShowAllFiles -bool true  #显示Mac隐藏文件的命令
-defaults write com.apple.finder AppleShowAllFiles -bool false #隐藏Mac隐...</content>
+defaults write com.apple.finder AppleShowAllFiles -bool false ...</content>
   </entry>
   
   <entry>
@@ -2464,12 +2335,11 @@ defaults write com.apple.finder AppleShowAllFiles -bool false #隐藏Mac隐...</
     <content type="html">1. 安装系统依赖
 
 系统更新并安装新的包
-
 sudo apt-get update
 
 sudo apt-get install -y cmake git-core git-svn subversion checkinstall build-essential dh-make debhelper ant ant-optional autoconf automake liblzo2-dev libzip-dev sharutils libfuse-dev reprepro libtool libssl-dev asciidoc xmlto ssh curl
 
-sudo apt-get in...</content>
+sudo apt-get ins...</content>
   </entry>
   
   <entry>
@@ -2488,8 +2358,8 @@ sudo apt-get in...</content>
 并发需要处理两个关键问题：线程之间如何通信及线程之间如何同步。
 
 
-  通信：是指线程之间如何交换信息。在命令式编程中，线程之间的通信机制有两种：共享内存和消息传递。
-  同步：是指程序用于控制不同线程之间操作发生相对顺序的机制。...</content>
+通信：是指线程之间如何交换信息。在命令式编程中，线程之间的通信机制有两种：共享内存和消息传递。
+同步：是指程序用于控制不同线程之间操作发生相对顺序的机制。在Jav...</content>
   </entry>
   
   <entry>
@@ -2500,13 +2370,13 @@ sudo apt-get in...</content>
     <content type="html">部署环境
 
 
-  操作系统：RHEL 6.4 x86_64
-  Jira版本：atlassian-jira-5.2.11-x64.bin
-  安装路径:/opt/atlassian/jira/
-  数据保存路径：/opt/atlassian/application-data/jira
-  安装用户：jira
-  数据库：postgresql
-  JDK：1.6.0_43
+操作系统：RHEL 6.4 x86_64
+Jira版本：atlassian-jira-5.2.11-x64.bin
+安装路径:/opt/atlassian/jira/
+数据保存路径：/opt/atlassian/application-data/jira
+安装用户：jira
+数据库：postgresql
+JDK：1.6.0_43
 
 
 jira下载页面：https://www.atlassian.com/software/jira/download
@@ -2514,10 +2384,11 @@ jira下载页面：https://www.atlassian.com/software/jira/download
 安装步骤
 
 运行安装文件
-
 $ . atlassian-jira-5.2.11-x64.bin
 
-...</content>
+在安装过程中会出现选项：
+
+确...</content>
   </entry>
   
   <entry>
@@ -2528,11 +2399,10 @@ $ . atlassian-jira-5.2.11-x64.bin
     <content type="html">pgbench 是一个简单的给 PostgreSQL 做性能测试的程序。它反复运行同样的 SQL 命令序列，可能是在多个并发数据库会话上头，然后检查平均的事务速度（每秒的事务数 tps）。缺省的时候，pgbench 测试一个（松散的）接近 TPC-B 的情况，每个事务包括五个 SELECT，UPDATE，和 INSERT命令。不过，我们可以很轻松地使用自己的事务脚本文件来实现其它情况。
 
 典型的输出看上去会是这样：
-
 transaction type: TPC-B (sort of)
 scaling factor: 10
 number of clients: 10
-number of t...</content>
+number of tr...</content>
   </entry>
   
   <entry>
@@ -2547,14 +2417,11 @@ number of t...</content>
 数据库状态信息主要体现数据库的当前状态
 
 1.目前客户端的连接数
-
 postgres=# SELECT count(*) FROM pg_stat_activity WHERE NOT pid=pg_backend_pid();
 
-
 2.连接状态
-
 postgres=# SELECT pid,waiting,current_timestamp - least(query_start,xact_start) AS runtime,substr(query,1,25) AS current_query 
-FR...</content>
+FROM ...</content>
   </entry>
   
   <entry>
@@ -2565,8 +2432,8 @@ FR...</content>
     <content type="html">环境说明
 
 
-  OS：RHEL6.4（x86_64）
-  postgresql版本：PostgreSQL9.2.8
+OS：RHEL6.4（x86_64）
+postgresql版本：PostgreSQL9.2.8
 
 
 安装步骤
@@ -2576,15 +2443,16 @@ FR...</content>
 基础安装：
 
 
-  postgresql92-libs-9.2.8-1PGDG.rhel6.x86_64.rpm
-  postgresql92-9.2.8-1PGDG.rhel6.x86_64.rpm
-  postgresql92-server-9.2.8-1PGDG.rhel6.x86_64.rpm
+postgresql92-libs-9.2.8-1PGDG.rhel6.x86_64.rpm
+postgresql92-9.2.8-1PGDG.rhel6.x86_64.rpm
+postgresql92-server-9.2.8-1PGDG.rhel6.x86_64.rpm
 
 
 扩展安装：
 
 
-  postgresql92-contrib-9.2.8-1PGDG.rhel6.x8...</content>
+postgresql92-contrib-9.2.8-1PGDG.rhel6.x86_64.rpm
+pos...</content>
   </entry>
   
   <entry>
@@ -2595,16 +2463,16 @@ FR...</content>
     <content type="html">环境准备
 
 
-  操作系统： rhel6.4
-  数据库： percona 5.6.14
-  使用3306端口保证端口未被占用，selinux关闭状态
+操作系统： rhel6.4
+数据库： percona 5.6.14
+使用3306端口保证端口未被占用，selinux关闭状态
 
 
 原理说明
 
 mysql的复制（Replication)是一个异步的复制，从一个mysql instance(称之为master)复制到另一个mysql instance(称之为slave).实现整个复制操作主要由三个进程完成的，其中俩个进程在slave(sql进程和io进程），另外一个进程在master（IO进程）上。
 
-要实施复制，首先要打开master端的binary log(bin-log)功能，否则无法实现。因为整个复制过程实...</content>
+要实施复制，首先要打开master端的binary log(bin-log)功能，否则无法实现。因为整个复制过程实际上就是sl...</content>
   </entry>
   
   <entry>
@@ -2615,17 +2483,17 @@ mysql的复制（Replication)是一个异步的复制，从一个mysql instance(
     <content type="html">环境说明
 
 
-  操作系统:linux6.4
-  MySql版本：percona 5.6.14
-  rpm包下载地址：http://www.percona.com/downloads/Percona-Server-5.6/LATEST/RPM/rhel6/x86_64
+操作系统:linux6.4
+MySql版本：percona 5.6.14
+rpm包下载地址：http://www.percona.com/downloads/Percona-Server-5.6/LATEST/RPM/rhel6/x86_64
 
 
 安装步骤
 
 1. 安装所需要的rpm包
-
 rpm -ivh Percona-Server-shared-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
-rpm -ivh Percona-Server-client-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm...</content>
+rpm -ivh Percona-Server-client-56-5.6.14-rel62.0.483.rhel6.x86_64.rpm
+rpm -i...</content>
   </entry>
   
   <entry>
@@ -2639,16 +2507,16 @@ BroadleafCommerce是一个Java开源电子商务网站框架。其目标是开�
 
 2. 特性
 
-2.1	Catalog （目录分类）
+2.1  Catalog （目录分类）
 
 提供灵活的产品和类型管理，一个重要的特性是可以继承产品分类来满足特殊的商业需求。管理界面可以管理各种类别和产品。
 
-2.2	Promotion System（促销系统）
+2.2  Promotion System（促销系统）
 
 可通过配置的方式管理促销。以下类促销示无需客制化而通过管理界面即可管理：
 
 
-  百分比折扣、金额折扣、固定价格(Percent Off / Dollar Off / Fix...</content>
+百分比折扣、金额折扣、固定价格(Percent Off / Dollar Off / Fix...</content>
   </entry>
   
   <entry>
@@ -2659,16 +2527,15 @@ BroadleafCommerce是一个Java开源电子商务网站框架。其目标是开�
     <content type="html">创建states文件
 
 在/srv/salt目录下创建jdk目录，并在jdk目录创建init.sls文件，init.sls文件内容如下：
-
 jdk-file:
  file.managed:
    - source: salt://jdk/files/jdk1.6.0_39.tar.gz
    - name: /usr/java/jdk1.6.0_39.tar.gz
    - include_empty: True
- 
+
 jdk-install:
  cmd.run:
-   - name: &#39;/bin/tar -zxf jdk1.6.0_39.tar.gz &amp;amp;&amp;amp; /bin/ln...</content>
+   - name: &amp;#39;/bin/tar -zxf jdk1.6.0_39.tar.gz &amp;amp;&amp;amp; /bin/...</content>
   </entry>
   
   <entry>
@@ -2681,11 +2548,11 @@ jdk-install:
 环境说明：
 
 
-  操作系统：RHEL6.4
-  RHEL系统默认已安装RPM包的Lua-5.1.4，但其只具有Lua基本功能，不提供 lua.h 等，但 Lua-GD 编译需要用到 lua.h，故 Lua 需要编译安装。
-  Lua-GD 版本号格式为X.Y.XrW，其中X.Y.Z代表gd版本，W代表效力版本，所以 lua-gd 版本：lua-gd-2.0.33r2 相对应 gd 版本为：gd-2.0.33，须注意保持一致。
-  因生成gif的lua脚本中用到md5加密，故需编译安装md5。
-  因为生成图片需...</content>
+操作系统：RHEL6.4
+RHEL系统默认已安装RPM包的Lua-5.1.4，但其只具有Lua基本功能，不提供 lua.h 等，但 Lua-GD 编译需要用到 lua.h，故 Lua 需要编译安装。
+Lua-GD 版本号格式为X.Y.XrW，其中X.Y.Z代表gd版本，W代表效力版本，所以 lua-gd 版本：lua-gd-2.0.33r2 相对应 gd 版本为：gd-2.0.33，须注意保持一致。
+因生成gif的lua脚本中用到md5加密，故需编译安装md5。
+因为生成图片需要唯一命名，故依赖 ...</content>
   </entry>
   
   <entry>
@@ -2698,11 +2565,11 @@ jdk-install:
 新特性：
 
 
-  FLUME-2190 - 引入一个新的Twitter firehose的feed源
-  FLUME-2109 - HTTP输入源支持HTTPS.
-  FLUME-1666 - 系统日志的TCP源现在可以保持时间戳和处理领域中的事件主体.
-  FLUME-2202 - AsyncHBaseSink can now coalesce increments to the same row and column per transaction to reduce the number of RPC calls
-  FLUME-2189 - Avro ...</content>
+FLUME-2190 - 引入一个新的Twitter firehose的feed源
+FLUME-2109 - HTTP输入源支持HTTPS.
+FLUME-1666 - 系统日志的TCP源现在可以保持时间戳和处理领域中的事件主体.
+FLUME-2202 - AsyncHBaseSink can now coalesce increments to the same row and column per transaction to reduce the number of RPC calls
+FLUME-2189 - Avro Source can...</content>
   </entry>
   
   <entry>
@@ -2715,18 +2582,17 @@ jdk-install:
 代码
 
 下面的代码是来自上面这篇文章，并稍作修改添加了一些注释。
-
 # -*- coding: utf-8 -*
 
 import urllib2
 import urllib
 import cookielib
- 
+
 import lxml.html as HTML
- 
+
 class Fetcher(object):
     def __init__(self, username=None, pwd=None, cookie_filename=None):
-		#获取一个保存cookie的...</content>
+        #获取一个保存cook...</content>
   </entry>
   
   <entry>
@@ -2741,7 +2607,7 @@ type节点
 先来看下type节点，这里面定义FieldType子节点，包括name、class、positionIncrementGap等一些参数。必选参数：
 
 
-  nam...</content>
+name：...</content>
   </entry>
   
   <entry>
@@ -2749,7 +2615,7 @@ type节点
     <link href="/2014/03/15/new-features-in-idh-hbase.html"/>
     <updated>2014-03-15T00:00:00+08:00</updated>
     <id>/2014/03/15/new-features-in-idh-hbase.html</id>
-    <content type="html">IDH为Intel’s Distribution of Hadoop的简称，中文为英特尔Hadoop发行版，目前应该没有人在维护该产品了。这里简单介绍一下IDH HBase中实现的一些特性。
+    <content type="html">IDH为Intel&amp;#39;s Distribution of Hadoop的简称，中文为英特尔Hadoop发行版，目前应该没有人在维护该产品了。这里简单介绍一下IDH HBase中实现的一些特性。
 
 以下部分内容摘自IDH官方的一些文档，部分内容来自我的整理：
 
@@ -2758,8 +2624,8 @@ type节点
 对于写入的rowkey是基本单调的（例如时序数据），IDH引入了一个新的接口：SaltedTableInterface
 
 
-  提高近乎透明的“加盐”，方便使用
-  封装了get、scan、put、delete等操作
+提高近乎透明的“加盐”，方便使用
+封装了get、scan、put、delete等操作
 
 
 2、提供了Rolling Scanner应对HFile数量大量增加情况下的get、sc...</content>
@@ -2811,12 +2677,12 @@ GoogleCode地址：http://code.google.com/p/mmseg4j/
 Broadleaf项目中关于商品的搜索使用了嵌入式的Solr服务器，这个从配置文件中可以看出来。
 
 
-  项目主页： http://www.broadleafcommerce.com/
-  示例网站： http://demo.broadleafcommerce.org/
-  示例网站源代码： https://github.com/BroadleafCommerce/DemoSite
+项目主页： http://www.broadleafcommerce.com/
+示例网站： http://demo.broadleafcommerce.org/
+示例网站源代码： https://github.com/BroadleafCommerce/DemoSite
 
 
-从示例网站源代码的applic...</content>
+从示例网站源代码的applicationC...</content>
   </entry>
   
   <entry>
@@ -2831,9 +2697,12 @@ Broadleaf项目中关于商品的搜索使用了嵌入式的Solr服务器，这�
 我使用的安装程序各版本如下：
 
 
-  Solr： Apache Solr-4.4.0
-  Tomcat： Apache Tomcat 6.0.36
-  ZooKeeper： Apache ZooKeeper 3....</content>
+Solr： Apache Solr-4.4.0
+Tomcat： Apache Tomcat 6.0.36
+ZooKeeper： Apache ZooKeeper 3.4.5
+
+
+...</content>
   </entry>
   
   <entry>
@@ -2846,14 +2715,13 @@ Broadleaf项目中关于商品的搜索使用了嵌入式的Solr服务器，这�
 关于HMaster启动过程，请参考HBase源码：HMaster启动过程。先启动了HMaster之后，再启动HRegionServer。
 
 运行HRegionServerStarter类启动HRegionServer：
-
 package my.test.start;
 
 import org.apache.hadoop.hbase.regionserver.HRegionServer;
 
 public class HRegionServerStarter {
 
-    public static void main(String[] a...</content>
+    public static void main(String[] ar...</content>
   </entry>
   
   <entry>
@@ -2866,15 +2734,15 @@ public class HRegionServerStarter {
 调试HMaster
 
 
-  说明：
+说明：
 
-  这部分参考和使用了https://github.com/codefollower/HBase-Research上的代码（注意：原仓库已经被作者删除了），包括该作者自己写的一些测试类和文档。
+这部分参考和使用了https://github.com/codefollower/HBase-Research上的代码（注意：原仓库已经被作者删除了），包括该作者自己写的一些测试类和文档。
 
 
 首先，在IDE里启动HMaster和HRegionServer：
 
 运行/hbase/src/test/java/my/test/start/HMasterStarter.java，当看到提示Waiting for region servers count to settle时，
-再打开同目录中的HRe...</content>
+再打开同目录中的HRegion...</content>
   </entry>
   
   <entry>
@@ -2903,11 +2771,11 @@ public class HRegionServerStarter {
 常用：
 
 
-  q - 查询字符串，必须的。
-  fl - 指定返回那些字段内容，用逗号或空格分隔多个。
-  start - 返回第一条记录在完整找到结果中的偏移位置，0开始，一般分页用。
-  rows - 指定返回结果最多有多少条记录，配合start来实现分页。
-  sort - 排序，格式：sort=&amp;lt;field name&amp;gt;+&amp;lt;desc|asc&amp;gt;[,&amp;lt;field name&amp;gt;+&amp;lt;desc|asc&amp;gt;]。示例：（inStock desc, price asc）表示先 “inStock” 降序, 再 “price” 升序，默认是相关...</content>
+q - 查询字符串，必须的。
+fl - 指定返回那些字段内容，用逗号或空格分隔多个。
+start - 返回第一条记录在完整找到结果中的偏移位置，0开始，一般分页用。
+rows - 指定返回结果最多有多少条记录，配合start来实现分页。
+sort - 排序，格式：sort=&amp;lt;field name&amp;gt;+&amp;lt;desc|asc&amp;gt;[,&amp;lt;field name&amp;gt;+&amp;lt;desc|asc&amp;gt;]。示例：（inStock desc, price asc）表示先 &amp;quot;inStock&amp;quot; 降序, 再 &amp;quot;price&amp;quot...</content>
   </entry>
   
   <entry>
@@ -2944,11 +2812,11 @@ Solr和Lucene的本质区别有以下三点：搜索服务器、企业级和管�
 下载适合你的box，地址：http://www.vagrantbox.es/。
 
 例如下载 CentOS6.5：
-
 $ wget https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box
 
+添加box
 
-添加box...</content>
+...</content>
   </entry>
   
   <entry>
@@ -2963,14 +2831,12 @@ Python是一种解释性的面向对象的语言。Python使用C语言编写，�
 1.1 安装 Python
 
 现在的操作系统都自带安装了 Python，要测试你是否安装了Python，你可以打开一个shell程序（就像konsole或gnome-terminal），然后输入如下所示的命令python -V
-
 $ python -V
 Python 2.7.4
 
-
 如果你看见向上面所示的那样一些版本信息，那么你已经安装了Python了。
 
-2...</content>
+2. ...</content>
   </entry>
   
   <entry>
@@ -2983,17 +2849,14 @@ Python 2.7.4
 1、下载
 
 下载指定版本Confluence
-
 $ mkdir -p /data/confluence
 $ cd /data/confluence
 $ wget www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.4.2.tar.gz
 
-
 2、安装
 
 解压：
-
-$ tar -zxv...</content>
+$ tar -zxvf a...</content>
   </entry>
   
   <entry>
@@ -3020,21 +2883,17 @@ Crunch APIs 是以 FlumeJava 为蓝本开发的，FlumeJava 是 Google 用来在
     <content type="html">创建model
 
 模型是所有Javascript应用程序的核心，包括交互数据及相关的大量逻辑： 转换、验证、计算属性和访问控制。你可以用特定的方法扩展Backbone.Model，模型也提供了一组基本的管理变化的功能。
-
 Person = Backbone.Model.extend({
     initialize: function(){
-        alert(&quot;Welcome to this world&quot;);
+        alert(&amp;quot;Welcome to this world&amp;quot;);
     }
 });
 
 var person = new Person;
 
-
 new一个model的实例后就会触发initialize()函数。
 
-设置属性
-
-现在我们想设...</content>
+设置属性...</content>
   </entry>
   
   <entry>
@@ -3057,11 +2916,10 @@ new一个model的实例后就会触发initialize()函数。
     <updated>2014-01-24T00:00:00+08:00</updated>
     <id>/2014/01/24/how-to-install-nagios-on-rhel6.html</id>
     <content type="html">在管理机上安装rpm包
-
 $ rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 $ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 $ yum -y install nagios nagios-plugins-all nagios-plugins-nrpe nrpe php httpd
-$ chkconfig httpd on &amp;amp;&amp;amp; chkconfig nagios o...</content>
+$ chkconfig httpd on &amp;amp;&amp;amp; chkconfig nagios on...</content>
   </entry>
   
   <entry>
@@ -3084,11 +2942,12 @@ OpenTSDB用HBase存储所有的时序（无须采样）来构建一个分布式�
     <content type="html">Jekyll是一个简洁的、特别针对博客平台的静态网站生成器。它使用一个模板目录作为网站布局的基础框架，并在其上运行Textile、Markdown或Liquid标记语言的转换器，最终生成一个完整的静态Web站点，可以被放置在Apache或者你喜欢的其他任何Web服务器上。它同时也是GitHub Pages、一个由GitHub提供的用于托管项目主页或博客的服务，在后台所运行的引擎。
 
 1. 安装
+
 Jekyll使用动态脚本语言Ruby写成。请首先下载并安装Ruby，目前需要的ruby版本为1.9.1。
 
 在使用Jekyll之前，你可能想要对Ruby语言有一些初步了解（非必需）。
 
-安装Jek...</content>
+安装Je...</content>
   </entry>
   
   <entry>
@@ -3099,22 +2958,17 @@ Jekyll使用动态脚本语言Ruby写成。请首先下载并安装Ruby，目前
     <content type="html">1. 问题
 
 RHEL服务器A有个启动脚本（普通用户user01运行），里面使用ifconfig获取ip地址如下：
-
-Localhost_ip=$(ifconfig |awk -F &#39;addr:|Bcast&#39; &#39;/Bcast/{print $2}&#39;)
-
+Localhost_ip=$(ifconfig |awk -F &amp;#39;addr:|Bcast&amp;#39; &amp;#39;/Bcast/{print $2}&amp;#39;)
 
 由于普通用户user01不能直接识别ifconfig命令，只能使用全路径/sbin/ifconfig，目前处理方式为修改~/.bash_profile文件添加环境变量如下：
-
 PATH=$PATH:$HOME/bin
 
-
 改成如下：
-
 PATH=$PATH:$HOME/bin:/sbin
 
 
 
-经过如上配置后服务器本机user01用户登...</content>
+经过如上配置后服务器...</content>
   </entry>
   
   <entry>
@@ -3125,12 +2979,11 @@ PATH=$PATH:$HOME/bin:/sbin
     <content type="html">Region 概念
 
 Region是表获取和分布的基本元素，由每个列族的一个Store组成。对象层级图如下：
-
 Table       (HBase table)
     Region       (Regions for the table)
          Store          (Store per ColumnFamily for each Region for the table)
               MemStore        (MemStore for each Store for each Region for the table)
-         ...</content>
+          ...</content>
   </entry>
   
   <entry>
@@ -3148,12 +3001,11 @@ Table       (HBase table)
 
 使用 pathogen来管理插件
 
-项目地址:	https://github.com/tpope/vim-pathogen
+项目地址:   https://github.com/tpope/vim-pathogen
 
 安装方法：
-
 $ mkdir -p ~/.vim/autoload ~/.vim/bundle &amp;amp;&amp;amp; \
-$ curl -LSso ~/.vi...</content>
+$ curl -LSso ~/.v...</content>
   </entry>
   
   <entry>
@@ -3178,12 +3030,9 @@ SiteMesh是由一个基于Web页面布局、装饰以及与现存Web应用整合
 1. 创建项目
 
 运行下面命令就可以创建一个 django 项目，项目名称叫 mysite ：
-
 $ django-admin.py startproject mysite
 
-
 创建后的项目目录如下：
-
 mysite
 ├── manage.py
 └── mysite
@@ -3194,11 +3043,10 @@ mysite
 
 1 directory, 5 files
 
-
 说明：
 
 
-  __init__....</content>
+__init__.py ：让 ...</content>
   </entry>
   
   <entry>
@@ -3209,20 +3057,15 @@ mysite
     <content type="html">本文主要记录重装Linux-Mint系统之后的一些软件安装和环境变量配置。
 
 安装常用工具
-
 sudo apt-get install ctags curl vsftpd git vim tmux meld htop putty subversion  nload  iptraf iftop tree openssh-server gconf-editor gnome-tweak-tool
 
-
 挂载exfat格式磁盘
-
 sudo apt-get install exfat-fuse exfat-utils
-
 
 安装ibus
 
 在终端输入命令:
-
-sudo add-apt-reposito...</content>
+sudo add-apt-repository pp...</content>
   </entry>
   
   <entry>
@@ -3233,8 +3076,8 @@ sudo add-apt-reposito...</content>
     <content type="html">HAProxy是一款提供高可用性、负载均衡以及基于TCP（第四层）和HTTP（第七层）应用的代理软件，HAProxy是完全免费的、借助HAProxy可以快速并且可靠的提供基于TCP和HTTP应用的代理解决方案。
 
 
-  免费开源，稳定性也是非常好，这个可通过我做的一些小项目可以看出来，单Haproxy也跑得不错，稳定性可以与硬件级的F5相媲美。
-根据官方文档，HAProxy可以跑满10Gbps-New benchmark of HAProxy at 10 Gbps using Myricom’s 10GbE NICs （Myri-10G PCI-Express），这个数值作为软件级负载均...</content>
+免费开源，稳定性也是非常好，这个可通过我做的一些小项目可以看出来，单Haproxy也跑得不错，稳定性可以与硬件级的F5相媲美。
+根据官方文档，HAProxy可以跑满10Gbps-New benchmark of HAProxy at 10 Gbps using Myricom&amp;#39;s 10GbE NICs （Myri-10G PCI-Express），这个数值作为软件级负...</content>
   </entry>
   
   <entry>
@@ -3245,13 +3088,11 @@ sudo add-apt-reposito...</content>
     <content type="html">Git是一个分布式版本控制／软件配置管理软件，原来是linux内核开发者林纳斯·托瓦兹（Linus Torvalds）为了更好地管理linux内核开发而创立的。
 
 Git配置
-
-git config --global user.name &quot;javachen&quot;
-git config --global user.email &quot;june.chan@foxmail.com&quot;
+git config --global user.name &amp;quot;javachen&amp;quot;
+git config --global user.email &amp;quot;june.chan@foxmail.com&amp;quot;
 git config --global color.ui true
 git config --global alias.co checkout
-git config --global alias.ci commit
-git ...</content>
+git config --global a...</content>
   </entry>
   
   <entry>
@@ -3268,7 +3109,8 @@ git ...</content>
 2. 关于SaltStack
 
 2.1. 什么是SaltStack
-SaltStack是开源的管理基础设置的轻量级工具，容易搭建，为远程管理服务器提供一种更好、更快速、更有扩展性的解决方案。通过简单、可管...</content>
+
+SaltStack是开源的管理基础设置的轻量级工具，容易搭建，为远程管理服务器提供一种更好、更快速、更有扩展性的解决方案。通过简单、可...</content>
   </entry>
   
   <entry>
@@ -3294,16 +3136,12 @@ SaltStack是开源的管理基础设置的轻量级工具，容易搭建，为�
 配置yum源
 
 在每个节点上配置yum源：
-
 $ rpm -ivh http://mirrors.sohu.com/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
 
-
 然后通过下面命令查看epel参考是否安装成功：
-
 $ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
 
-
-如果没有安装成功，则可以手动下载epel-release-...</content>
+如果没有安装成功，则可以手动下载epel-release-6-8....</content>
   </entry>
   
   <entry>
@@ -3314,12 +3152,12 @@ $ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
     <content type="html">这篇文章记录一下如何在eclipse中调试运行hbase。
 
 下载并编译源代码
+
 请参考编译hbase源代码并打补丁
 
 修改配置文件
 
 修改 conf/hbase-site.xml文件：
-
 &amp;lt;property&amp;gt;
 &amp;lt;name&amp;gt;hbase.defaults.for.version&amp;lt;/name&amp;gt;
 &amp;lt;value&amp;gt;0.94.6-cdh4.4.0&amp;lt;/value&amp;gt;
@@ -3340,22 +3178,19 @@ $ yum list #或者查看/etc/yum.repos.d目录下是否有epel.repo
 下载源代码
 
 从Cloudera github上下载最新分支源代码，例如：当前最新分支为cdh4-0.94.6_4.4.0
-
 $ git clone git@github.com:cloudera/hbase.git -b cdh4-0.94.6_4.4.0 cdh4-0.94.6_4.4.0
-
 
 说明：
 
 
-  -b 指定下载哪个分支
-  最后一个参数指定下载下来的文件名称
+-b 指定下载哪个分支
+最后一个参数指定下载下来的文件名称
 
 
 添加snappy压缩支持
 
 编译snappy
-
-$ svn checkout http://snappy.googleco...</content>
+$ svn checkout http://snappy.googlecode.com/...</content>
   </entry>
   
   <entry>
@@ -3370,7 +3205,7 @@ $ svn checkout http://snappy.googleco...</content>
 集群环境使用的是cdh4.3，没有开启kerberos认证。
 
 
-  写完这篇文章之后，在...</content>
+写完这篇文章之后，在微博...</content>
   </entry>
   
   <entry>
@@ -3379,16 +3214,12 @@ $ svn checkout http://snappy.googleco...</content>
     <updated>2013-10-17T00:00:00+08:00</updated>
     <id>/2013/10/17/cartesian-product-in-hive-inner-join.html</id>
     <content type="html">在使用hive过程中遇到这样的一个异常：
-
-FAILED: ParseException line 1:18 Failed to recognize predicate &#39;a&#39;. Failed rule: &#39;kwInner&#39; in join type specifier
-
+FAILED: ParseException line 1:18 Failed to recognize predicate &amp;#39;a&amp;#39;. Failed rule: &amp;#39;kwInner&amp;#39; in join type specifier
 
 执行的hql语句如下：
+[root@javachen.com ~]# hive -e &amp;#39;select a.* from t a, t b where a.id=b.id&amp;#39;
 
-[root@javachen.com ~]# hive -e &#39;select a.* from t a, t b where a.id=b.id&#39;
-
-
-从异常信息中很难看出出错原因，hive.log中也没有打印出详细的异常对战信息。改用jdbc连接hive-server2，可以看到hive-...</content>
+从异常信息中很难看出出错原因，hive.log中也没有打印出详细的异常对战信息。改用jdbc连接hi...</content>
   </entry>
   
   <entry>
@@ -3415,9 +3246,8 @@ FAILED: ParseException line 1:18 Failed to recognize predicate &#39;a&#39;. Fail
 hive 默认的 input format
 
 在 cdh-4.3.0 的 hive 中查看 hive.input.format 值（为什么是hive.input.format？）：
-
 hive&amp;gt; set hive.input.format;
-hive.inp...</content>
+hive.inpu...</content>
   </entry>
   
   <entry>
@@ -3428,24 +3258,23 @@ hive.inp...</content>
     <content type="html">主要记录使用jekyll搭建博客时的一些配置和修改。
 
 注意：
-&amp;gt;使用时请删除{和%以及{和{之间的空格。
+
+
+使用时请删除{和%以及{和{之间的空格。
+
 
 预览文章
-
 source ~/.bash_profile
 jekyll server
-
 
 添加about me 边栏
 
 参考the5fire的技术博客在index.html页面加入如下代码：
-
 &amp;lt;section&amp;gt;
 &amp;lt;h4&amp;gt;About me&amp;lt;/h4&amp;gt;
 &amp;lt;div&amp;gt;
- 一个Java方案架构师，主要从事hadoop相关工作。&amp;lt;a href=&quot;/about.html&quot;&amp;gt;更多信息&amp;lt;/a&amp;gt; 
-&amp;lt;br/&amp;gt;
-...</content>
+ 一个Java方案架构师，主要从事hadoop相关工作。&amp;lt;a href=&amp;quot;/about.html&amp;quot;&amp;gt;更多信息&amp;lt;/a&amp;gt; 
+&amp;lt;br...</content>
   </entry>
   
   <entry>
@@ -3462,9 +3291,9 @@ ZooKeeper
 在《hive Driver类运行过程》一文中可以看到hive为了支持并发访问引入了ZooKeeper来实现分布式锁。参考《ZooKeeper典型应用场景一览》一文，ZooKeeper还可以用作其他用途，例如：
 
 
-  数据发布与订阅（配置中心）
-  负载均衡
-  命名服...</content>
+数据发布与订阅（配置中心）
+负载均衡
+命名服务(Nami...</content>
   </entry>
   
   <entry>
@@ -3479,10 +3308,9 @@ ZooKeeper
 概括
 
 从《hive cli的入口类》中可以知道hive中处理hive命令的处理器一共有以下几种：
-
 （1）set       SetProcessor，设置修改参数,设置到SessionState的HiveConf里。 
 （2）dfs       DfsProcessor，使用hadoop的FsShell运行hadoop的命令。 
-（3）add       AddResourceProcessor，添加到SessionState的resource_map里，运行提交job的时候会写入Hadoop的Distribu...</content>
+（3）add       AddResourceProcessor，添加到SessionState的resource_map里，运行提交job的时候会写入Hadoop的Distribut...</content>
   </entry>
   
   <entry>
@@ -3497,14 +3325,12 @@ ZooKeeper
 启动脚本
 
 从shell脚本/usr/lib/hive/bin/ext/cli.sh可以看到hive cli的入口类为org.apache.hadoop.hive.cli.CliDriver
-
-	cli () {
-	  CLASS=org.apache.hadoop.hive.cli.CliDriver
-	  execHiveCmd $CLASS &quot;$@&quot;
-	}
-	cli_help () {
-	  CLASS=org.apache.hadoop.hive.cli.CliDriver
-	  execHiveCmd $...</content>
+    cli () {
+      CLASS=org.apache.hadoop.hive.cli.CliDriver
+      execHiveCmd $CLASS &amp;quot;$@&amp;quot;
+    }
+    cli_help () {
+      CLASS=org.apache.hadoop.hive.cli...</content>
   </entry>
   
   <entry>
@@ -3517,10 +3343,10 @@ ZooKeeper
 安装hadoop过程中需要注意以下几点：
 
 
-  每个节点配置hosts
-  每个节点配置时钟同步
-  如果没有特殊要求，关闭防火墙
-  hadoop需要在/tmp目录下存放一些日志和临时文件，要求/tmp目录权限必须为1777
+每个节点配置hosts
+每个节点配置时钟同步
+如果没有特殊要求，关闭防火墙
+hadoop需要在/tmp目录下存放一些日志和临时文件，要求/tmp目录权限必须为1777
 
 
 
@@ -3529,7 +3355,7 @@ ZooKeeper
 
 使用intel的hadoop发行版IDH过程遇到问题：
 
-1、 IDH集群中需要配置管理节点到集群各节点的无密码登录，公钥文件存放路径为/etc/intelclou...</content>
+1、 IDH集群中需要配置管理节点到集群各节点的无密码登录，公钥文件存放路径为/etc/intelcloud目录下，文件名...</content>
   </entry>
   
   <entry>
@@ -3564,11 +3390,10 @@ Sun Microsystem 的 Java Platform Debugger Architecture (JPDA) 技术是一个�
     <content type="html">1. R Language Install
 
 安装相关依赖
-
 yum install -y perl* pcre-devel tcl-devel zlib-devel bzip2-devel libX11-devel tk-devel tetex-latex *gfortran*  compat-readline5
 yum install libRmath-*
 rpm -Uvh --force --nodeps  R-core-2.10.0-2.el5.x86_64.rpm
-rpm -Uvh R-2.10.0-2.el5.x86_64.rpm R-devel-2.10.0-2.el5.x...</content>
+rpm -Uvh R-2.10.0-2.el5.x86_64.rpm R-devel-2.10.0-2.el5.x8...</content>
   </entry>
   
   <entry>
@@ -3601,8 +3426,8 @@ HBase中的每张表都通过行键按照一定的范围被分割成多个子表
 HMaster的作用：
 
 
-  为Region server分配region
-  负责Regi...</content>
+为Region server分配region
+负责Region s...</content>
   </entry>
   
   <entry>
@@ -3615,20 +3440,19 @@ HMaster的作用：
 单例模式主要有3个特点：
 
 
-  1、单例类确保自己只有一个实例。
-  2、单例类必须自己创建自己的实例。
-  3、单例类必须为其他对象提供唯一的实例。
+1、单例类确保自己只有一个实例。
+2、单例类必须自己创建自己的实例。
+3、单例类必须为其他对象提供唯一的实例。
 
 
 单例模式的实现方式有五种方法：懒汉，恶汉，双重校验锁，枚举和静态内部类。
 
 懒汉模式：
-
 public class Singleton {
     private static Singleton instance;
     private Singleton (){}
 
- ...</content>
+    publ...</content>
   </entry>
   
   <entry>
@@ -3636,7 +3460,7 @@ public class Singleton {
     <link href="/2013/06/09/note-about-java-io.html"/>
     <updated>2013-06-09T00:00:00+08:00</updated>
     <id>/2013/06/09/note-about-java-io.html</id>
-    <content type="html">说明，本文内容来源于java io系列01之 “目录”，做了一些删减。
+    <content type="html">说明，本文内容来源于java io系列01之 &amp;quot;目录&amp;quot;，做了一些删减。
 
 Java库的IO分为输入/输出两部分。
 
@@ -3646,9 +3470,7 @@ Java库的IO分为输入/输出两部分。
 
 Java1.1之所以要重新设计，主要是为了添加国际化支持(即添加了对16位Unicode码的支持)。具体表现为Java 1.0的IO系统是字节流，而Java 1.1的IO系统是字符流。
 
-字节流，就是数据流中最小的数据单元是8位的字节。
-
-...</content>
+字节流，就是数据流中最小的数据单...</content>
   </entry>
   
   <entry>
@@ -3661,12 +3483,12 @@ Java1.1之所以要重新设计，主要是为了添加国际化支持(即添加
 工厂模式在《Java与模式》中分为三类：
 
 
-  1)简单工厂模式(Simple Factory)：不利于产生系列产品。
-  2)工厂方法模式(Factory Method)：又称为多形性工厂。
-  3)抽象工厂模式(Abstract Factory)：又称为工具箱，产生产品族，但不利于产生新的产品。
+1)简单工厂模式(Simple Factory)：不利于产生系列产品。
+2)工厂方法模式(Factory Method)：又称为多形性工厂。
+3)抽象工厂模式(Abstract Factory)：又称为工具箱，产生产品族，但不利于产生新的产品。
 
 
-GOF在《设计模式》一书中将工厂模式分为两类：工厂方法模式(Factory Method)与抽象工厂模式(Abstract Factory)。将简单工厂模式(Simple Factory)...</content>
+GOF在《设计模式》一书中将工厂模式分为两类：工厂方法模式(Factory Method)与抽象工厂模式(Abstract Factory)。将简单工厂模式(Simple Factory)看为工厂方法...</content>
   </entry>
   
   <entry>
@@ -3685,7 +3507,9 @@ GOF在《设计模式》一书中将工厂模式分为两类：工厂方法模�
 同时 执行是人的感觉，在线程之间实际上轮换执行。
 
 
-  多线程间堆空间共享，栈空间独立。堆存的是地址，栈存的是变量（如：局部变量）。这部分内容结合 Java 内存模型 来理解。
+多线程间堆空间共享，栈空间独立。堆存的是地址，栈存的是变量（如：局部变量）。这部分内容结合 Java 内存模型 来理解。
+
+
 ...</content>
   </entry>
   
@@ -3695,7 +3519,7 @@ GOF在《设计模式》一书中将工厂模式分为两类：工厂方法模�
     <updated>2013-06-08T00:00:00+08:00</updated>
     <id>/2013/06/08/java-collection-framework.html</id>
     <content type="html">
-  这篇文章是对http://www.cnblogs.com/skywang12345/category/455711.html中java集合框架相关文章的一个总结，在此对原作者的辛勤整理表示感谢。
+这篇文章是对http://www.cnblogs.com/skywang12345/category/455711.html中java集合框架相关文章的一个总结，在此对原作者的辛勤整理表示感谢。
 
 
 Java集合是java提供的工具包，包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是java.util.*
@@ -3706,7 +3530,7 @@ Java集合工具包框架图(如下)：
 
 
 
-Collection是...</content>
+Collection是一个...</content>
   </entry>
   
   <entry>
@@ -3737,8 +3561,8 @@ Kettle是一款国外开源的ETL工具，纯java编写，可以在Window、Linu
 上述问题可以拆分为两个问题：
 
 
-  从命令行接受一个参数作为一个字段
-  合并输入流和这个字段
+从命令行接受一个参数作为一个字段
+合并输入流和这个字段
 
 
 问题1
@@ -3748,11 +3572,12 @@ Kettle是一款国外开源的ETL工具，纯java编写，可以在Window、Linu
 
 
 问题2
+
 第二个问题可以使用kettle中记录关联 (笛卡尔输出)组件将两个组件关联起来，输出一个笛卡尔结果集，关联条件设定恒为true，在运行前设置第一个参数的值，然后运行即可。
 
 
 
-下...</content>
+下载脚本...</content>
   </entry>
   
   <entry>
@@ -3767,15 +3592,14 @@ Kettle是一款国外开源的ETL工具，纯java编写，可以在Window、Linu
 系统环境：
 
 
-  操作系统：CentOs 6.6
-  Hadoop版本：CDH5.4
-  JDK版本：1.7.0_71
-  运行用户：root
+操作系统：CentOs 6.6
+Hadoop版本：CDH5.4
+JDK版本：1.7.0_71
+运行用户：root
 
 
 集群各节点角色规划为：
-
-192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statesto...</content>
+192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry...</content>
   </entry>
   
   <entry>
@@ -3790,14 +3614,13 @@ Hadoop集群各节点的环境设置及安装过程见 使用yum安装CDH Hadoop
 1. 环境
 
 
-  CentOS 6.4 x86_64
-  CDH 5.0.1
-  jdk1.6.0_31
+CentOS 6.4 x86_64
+CDH 5.0.1
+jdk1.6.0_31
 
 
 集群规划为3个节点，每个节点的ip、主机名和部署的组件分配如下：
-
-192.168.56.121        cdh1     N...</content>
+192.168.56.121        cdh1     NameNode...</content>
   </entry>
   
   <entry>
@@ -3806,18 +3629,15 @@ Hadoop集群各节点的环境设置及安装过程见 使用yum安装CDH Hadoop
     <updated>2013-03-24T00:00:00+08:00</updated>
     <id>/2013/03/24/manual-install-Cloudera-hive-CDH.html</id>
     <content type="html">本文主要记录手动安装Cloudera Hive集群过程，环境设置及Hadoop安装过程见手动安装Cloudera Hadoop CDH,参考这篇文章，hadoop各个组件和jdk版本如下：
-
-	hadoop-2.0.0-cdh4.6.0
-	hbase-0.94.15-cdh4.6.0
-	hive-0.10.0-cdh4.6.0
-	jdk1.6.0_38
-
+    hadoop-2.0.0-cdh4.6.0
+    hbase-0.94.15-cdh4.6.0
+    hive-0.10.0-cdh4.6.0
+    jdk1.6.0_38
 
 hadoop各组件可以在这里下载。
 
 集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：
-
-	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、i...</content>
+    192.168.0.1        desktop1     NameNode、Hive、Resou...</content>
   </entry>
   
   <entry>
@@ -3826,18 +3646,15 @@ hadoop各组件可以在这里下载。
     <updated>2013-03-24T00:00:00+08:00</updated>
     <id>/2013/03/24/manual-install-Cloudera-hbase-CDH.html</id>
     <content type="html">本文主要记录手动安装Cloudera HBase集群过程，环境设置及Hadoop安装过程见手动安装Cloudera Hadoop CDH,参考这篇文章，hadoop各个组件和jdk版本如下：
-
-	hadoop-2.0.0-cdh4.6.0
-	hbase-0.94.15-cdh4.6.0
-	hive-0.10.0-cdh4.6.0
-	jdk1.6.0_38
-
+    hadoop-2.0.0-cdh4.6.0
+    hbase-0.94.15-cdh4.6.0
+    hive-0.10.0-cdh4.6.0
+    jdk1.6.0_38
 
 hadoop各组件可以在这里下载。
 
 集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：
-
-	192.168.0.1        desktop1     NameNode、Hive、ResourceManager、...</content>
+    192.168.0.1        desktop1     NameNode、Hive、Reso...</content>
   </entry>
   
   <entry>
@@ -3848,29 +3665,26 @@ hadoop各组件可以在这里下载。
     <content type="html">安装版本
 
 hadoop各个组件和jdk版本如下：
-
-	hadoop-2.0.0-cdh4.6.0
-	hbase-0.94.15-cdh4.6.0
-	hive-0.10.0-cdh4.6.0
-	jdk1.6.0_38
-
+    hadoop-2.0.0-cdh4.6.0
+    hbase-0.94.15-cdh4.6.0
+    hive-0.10.0-cdh4.6.0
+    jdk1.6.0_38
 
 hadoop各组件可以在这里下载。
 
 安装前说明
 
 
-  确定安装目录为/opt
-  检查hosts文件是否设置集群各节点的hostname和ip映射
-  关闭每个节点的防火墙
-  设置每个节点时钟同步
+确定安装目录为/opt
+检查hosts文件是否设置集群各节点的hostname和ip映射
+关闭每个节点的防火墙
+设置每个节点时钟同步
 
 
 规划
 
 集群规划为7个节点，每个节点的ip、主机名和部署的组件分配如下：
-
-	192.168.0.1        desktop1     NameNode、Hi...</content>
+    192.168.0.1        desktop1     NameNod...</content>
   </entry>
   
   <entry>
@@ -3889,9 +3703,8 @@ a. VirtualBox全局设定-网络中添加一个新的连接：vboxnet0
 b. 设置每一个虚拟机的网络为Host-Only
 
 c.分别修改每个虚拟机的ip，DHCP或手动设置
-
 vim /etc/sysconfig/network-scripts/ifcfg-eth0
-vim /etc/udev/rules.d/70-persisten...</content>
+vim /etc/udev/rules.d/70-persistent...</content>
   </entry>
   
   <entry>
@@ -3903,9 +3716,9 @@ vim /etc/udev/rules.d/70-persisten...</content>
 以下是2012年相对于2011年的一些变化。
 
 
-  2011年，在调研云计算产品过程中，深刻的意识到自身在linux方面存在的不足；2012年，熟悉了基本的linux命令，能够读懂并编写简单shell脚本；
+ 2011年，在调研云计算产品过程中，深刻的意识到自身在linux方面存在的不足；2012年，熟悉了基本的linux命令，能够读懂并编写简单shell脚本；
   2011年，工作环境是win7+fedora；2012年，一直使用fedora操作系统工作、编码；
-  2011年，较多的时间花在编写代码、完成开发任务上；2012年，...</content>
+  2011年，较多的时间花在编写代码、完成开发任务上；2012年，更...</content>
   </entry>
   
   <entry>
@@ -3920,9 +3733,9 @@ vim /etc/udev/rules.d/70-persisten...</content>
 我使用rvm安装：
     rvm install 1.9.2 &amp;amp;&amp;amp; rvm use 1.9.2
 安装完之后可以查看ruby版本：
-    ruby –version
+    ruby --version
 结果为：
-    ruby 1.9.2p320 (2012-04-20 revision 35421) [x86_64...</content>
+    ruby 1.9.2p320 (2012-04-20 revision 35421) [x86_6...</content>
   </entry>
   
   <entry>
@@ -3964,13 +3777,14 @@ vim /etc/udev/rules.d/70-persisten...</content>
 在kettle中实现cassandra的输入与输出有以下两种方式:
 
 
-  第一种方式:自己编写cassandra输入输出组件
-  第二种方式:使用别人编写好的插件,将其集成进来
+第一种方式:自己编写cassandra输入输出组件
+第二种方式:使用别人编写好的插件,将其集成进来
 
 
 当然还有第三种方法,直接使用4.3版本的pdi.
 
-第一种方法需要对cassandra很熟悉编写插件才可以做到,第二种方法可以通过拷贝pdi-ce-big-data-4.3.0-preview中的文件来...</content>
+第一种方法需要对cassandra很熟悉编写插件才可以做到,第二种方法可以通过拷贝pdi-ce-big-data-4.3.0-preview中的文件来完成.
+...</content>
   </entry>
   
   <entry>
@@ -3988,16 +3802,14 @@ vim /etc/udev/rules.d/70-persisten...</content>
     <link href="/2012/02/23/the-process-of-seam-initiation.html"/>
     <updated>2012-02-23T00:00:00+08:00</updated>
     <id>/2012/02/23/the-process-of-seam-initiation.html</id>
-    <content type="html">了解seam2的人知道，seam是通过在web. xml中配置监听器启动的。注意，本文中的seam是指的seam2，不是seam3.
-
+    <content type="html">了解seam2的人知道，seam是通过在web. xml中配置监听器启动的。注意，本文中的seam是指的seam2，不是seam3. 
 &amp;lt;listener&amp;gt;
-	&amp;lt;listenerclass&amp;gt;org. jboss. seam. servlet. SeamListener&amp;lt;/listenerclass&amp;gt;
+    &amp;lt;listenerclass&amp;gt;org. jboss. seam. servlet. SeamListener&amp;lt;/listenerclass&amp;gt;
 &amp;lt;/listener&amp;gt;
-
 
 该监听器会做哪些事情呢？看看Gavin King对SeamListener类的描述。
 
-Drives certain Seam functionality such as initialization and cle...</content>
+Drives certain Seam functionality such as initialization and c...</content>
   </entry>
   
   <entry>
@@ -4074,8 +3886,8 @@ kettle的数据抽取主要在于抽取数据，而没有考虑数据库的函�
 同时运行两个pdi程序，例如：一个为oracle到mysql，另一个为oracle到postgres，其中一个停止运行
 
 
-  原因：从oracle迁移到mysql创建的作业和转换文件和oracle到postgres的作业和转换保存到一个路径，导致同名称的转换相互之间被覆盖，故在运行时候会出现混乱。
-  解决办法：将新建的作业和转换分别保存在两个不同的路...</content>
+原因：从oracle迁移到mysql创建的作业和转换文件和oracle到postgres的作业和转换保存到一个路径，导致同名称的转换相互之间被覆盖，故在运行时候会出现混乱。
+解决办法：将新建的作业和转换分别保存在两个不同的路径，最好...</content>
   </entry>
   
   <entry>
@@ -4123,10 +3935,10 @@ Pentaho BI Server打包后的文件存于这里，其中包括（本文使用的
     <content type="html">很久没写文章了，最近在关注Pentaho。
  以下是9月16日现场提出的问题解决办法：
       1、PDF预览中文没显示，txt预览中文乱码：
-           1）、设置File-&amp;gt;Configuration -&amp;gt;output-pageable-pdf的encoding 为Identity-H
+           1）、设置File-&gt;Configuration -&gt;output-pageable-pdf的encoding 为Identity-H
            2）、将需要输出中文的报表项目的字体设置为中文字体，例如宋体
            3）、如要发布到服务器，需要修改如下的配置：
-             pentaho/server/biserver-ee/tomcat/webapps/pentaho...</content>
+             pentaho/server/biserver-ee/tomcat/webapps/pentaho/WEB-I...</content>
   </entry>
   
   <entry>
@@ -4190,11 +4002,10 @@ XML2PDF和XML2Excel工程内代码很相似，XML2PDF内部使用了PDFjet.jar�
 本文来源于http://dhtmlx.com/docs/products/dhtmlxGrid/，本人对其进行翻译整理成下文，贴出此文，紧供分享。
 
 dhtmlxGrid是一个拥有强大的数据绑定、优秀的大数据展示性能并支持ajax的JavaScript表格控件。该组件易于使用并通过富客户端的API提供了很大的扩展性。dhtmlxGrid支持不同的数据源（XML, JSON, CSV, JavaScript 数组和HTML表格），如果需要的话，还可以从自定义的xml中加载数据。
-
 跨浏览器
 使用JavaScript API进行控制
 Ajax支持
-简单的JavaScript 或者X...</content>
+简单的JavaScript 或者XM...</content>
   </entry>
   
   <entry>
@@ -4247,22 +4058,22 @@ OpenNebula是一款为云计算而打造的开源工具箱。它允许你与Xen�
     <updated>2011-06-22T00:00:00+08:00</updated>
     <id>/2011/06/22/the-technology-used-in-eucalyptus.html</id>
     <content type="html">
-  libvirt
+libvirt
 
 
 Libvirt 库是一种实现 Linux 虚拟化功能的 Linux® API，它支持各种虚拟机监控程序，包括 Xen 和 KVM，以及 QEMU 和用于其他操作系统的一些虚拟产品。
 
 
-  Netty
+Netty
 
 
 Netty 提供异步的、事件驱动的网络应用程序框架和工具，用以快速开发高性能、高可靠性的网络服务器和客户端程序。
 
 
-  Axis2
+Axis2
 
 
-Axis2是下一代 Apache Axis。Axis2 虽然由 Axis 1.x 处理程序模型提供支持，但它具有更强的灵活性并可扩展到新的体系结构。Axis2 基于新的体系结构进行了全新编写，而且没有采用 Axis 1.x ...</content>
+Axis2是下一代 Apache Axis。Axis2 虽然由 Axis 1.x 处理程序模型提供支持，但它具有更强的灵活性并可扩展到新的体系结构。Axis2 基于新的体系结构进行了全新编写，而且没有采用 Axis 1.x 的常用代码。...</content>
   </entry>
   
   <entry>
@@ -4275,7 +4086,7 @@ Axis2是下一代 Apache Axis。Axis2 虽然由 Axis 1.x 处理程序模型提�
 Eucalyptus的设计目的是从根本上易于安装和尽可能没有侵扰。该软件高度模块化，具有行业标准，和语言无关。它提供了可以与EC2兼容的云计算平台和与S3兼容的云存储平台。
 功能亮点
 
-	无缝管理多个管...</content>
+    无缝管理...</content>
   </entry>
   
   <entry>
@@ -4300,18 +4111,18 @@ Elastic Utility Computing Architecture for Linking Your Programs To Useful Syste
 需要的文件有：
 
 
-  1.html文件，此处以SASC.search.MtrUse.html为例
-  2.Extjs相关文件,见SASC.search.MtrUse.html文件中的引用
-  3.工具类，DomUtils.js
-  4.核心js类:SASC.extjs.search.MtrUse.js
-  5.java代码
+1.html文件，此处以SASC.search.MtrUse.html为例
+2.Extjs相关文件,见SASC.search.MtrUse.html文件中的引用
+3.工具类，DomUtils.js
+4.核心js类:SASC.extjs.search.MtrUse.js
+5.java代码
 
 
 详细html和js代码见相关文件，这里先描述思路。
 
 首先
 
-通过一个事件打开一个弹出窗口，该窗口的url指向SASC....</content>
+通过一个事件打开一个弹出窗口，该窗口的url指向SASC.search.Mtr...</content>
   </entry>
   
   <entry>
@@ -4319,17 +4130,15 @@ Elastic Utility Computing Architecture for Linking Your Programs To Useful Syste
     <link href="/2009/10/22/ext_readxml_in_bjsasc_wuzi.html"/>
     <updated>2009-10-22T00:00:00+08:00</updated>
     <id>/2009/10/22/ext_readxml_in_bjsasc_wuzi.html</id>
-    <content type="html">最近开发项目，需要动态读取xml文件，生成Extjs界面，xml文件通过前台页面的按钮事件传进来，可以在网上查找【javascript 弹出子窗口】的相关文章&amp;lt;/a&amp;gt;
+    <content type="html">最近开发项目，需要动态读取xml文件，生成Extjs界面，xml文件通过前台页面的按钮事件传进来，可以在网上查找【javascript 弹出子窗口】的相关文章
 获取弹出窗口url后的参数方法：
-
-	// 获取url后的参数值
-	function getQueryStringValue(name) {
-		var url = window.location.search;
-		if (url.indexOf(&#39;?&#39;) &amp;lt; 0) {
-			return null
-		}
-		var index = url.indexOf(name + &quot;=&quot;);
-		if (ind...</content>
+    // 获取url后的参数值
+    function getQueryStringValue(name) {
+        var url = window.location.search;
+        if (url.indexOf(&amp;#39;?&amp;#39;) &amp;lt; 0) {
+            return null
+        }
+        var index ...</content>
   </entry>
   
   <entry>
@@ -4340,14 +4149,13 @@ Elastic Utility Computing Architecture for Linking Your Programs To Useful Syste
     <content type="html">目前，博客使用的是Jekyll搭建的，markdown语法使用的是Redcarpet。Redcarpet支持设置 extensions ，值为一个字符串数组，每个字符串都是 Redcarpet::Markdown 类的扩展，相应的扩展就会设置为 true 。
 
 配置为：
-
 highlighter: pygments
 markdown: redcarpet  # [ maruku | rdiscount | kramdown | redcarpet ]
 
 redcarpet:
     extensions:
         - fenced_code_blocks
-        - no...</content>
+        - no_...</content>
   </entry>
   
 </feed>

@@ -109,28 +109,25 @@
 
 <p>本文主要是记录使用 Spring Boot 和 Gradle 创建项目的过程，其中会包括 Spring Boot 的安装及使用方法，希望通过这篇文章能够快速搭建一个项目。</p>
 
-<h1 id="section">1. 开发环境</h1>
+<h1 id="1-开发环境">1. 开发环境</h1>
 
 <ul>
-  <li>操作系统: mac</li>
-  <li>JDK：1.7.0_60</li>
-  <li>Gradle：2.2.1</li>
-  <li>IDE：Idea</li>
+<li>操作系统: mac</li>
+<li>JDK：1.7.0_60</li>
+<li>Gradle：2.2.1</li>
+<li>IDE：Idea</li>
 </ul>
 
-<h1 id="section-1">2. 创建项目</h1>
+<h1 id="2-创建项目">2. 创建项目</h1>
 
 <p>你可以通过 <a href="http://start.spring.io/">Spring Initializr</a> 来创建一个空的项目，也可以手动创建，这里我使用的是手动创建 gradle 项目。</p>
 
 <p>参考 <a href="/2014/09/15/build-project-with-gradle.html">使用Gradle构建项目</a> 创建一个 ng-spring-boot 项目，执行的命令如下：</p>
-
-<pre><code class="language-bash">$ mkdir ng-spring-boot &amp;&amp; cd ng-spring-boot
-$ gradle init
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir ng-spring-boot <span class="o">&amp;&amp;</span> <span class="nb">cd </span>ng-spring-boot
+<span class="nv">$ </span>gradle init
+</code></pre></div>
 <p>ng-spring-boot 目录结构如下：</p>
-
-<pre><code>➜  ng-spring-boot  tree
+<div class="highlight"><pre><code class="language-text" data-lang="text">➜  ng-spring-boot  tree
 .
 ├── build.gradle
 ├── gradle
@@ -142,313 +139,279 @@ $ gradle init
 └── settings.gradle
 
 2 directories, 6 files
-</code></pre>
-
+</code></pre></div>
 <p>然后修改 build.gradle 文件：</p>
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">buildscript</span> <span class="o">{</span>
+    <span class="n">ext</span> <span class="o">{</span>
+        <span class="n">springBootVersion</span> <span class="o">=</span> <span class="s1">&#39;1.2.2.RELEASE&#39;</span>
+    <span class="o">}</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">mavenCentral</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="n">classpath</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}&quot;</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-<pre><code class="language-groovy">buildscript {
-    ext {
-        springBootVersion = '1.2.2.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;java&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;eclipse&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;idea&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;spring-boot&#39;</span>
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
+<span class="n">jar</span> <span class="o">{</span>
+    <span class="n">baseName</span> <span class="o">=</span> <span class="s1">&#39;ng-spring-boot&#39;</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;0.0.1-SNAPSHOT&#39;</span>
+<span class="o">}</span>
+<span class="n">sourceCompatibility</span> <span class="o">=</span> <span class="mf">1.7</span>
+<span class="n">targetCompatibility</span> <span class="o">=</span> <span class="mf">1.7</span>
 
-jar {
-    baseName = 'ng-spring-boot'
-    version = '0.0.1-SNAPSHOT'
-}
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+<span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">mavenCentral</span><span class="o">()</span>
+    <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">&quot;https://repo.spring.io/libs-release&quot;</span> <span class="o">}</span>
+<span class="o">}</span>
 
-repositories {
-    mavenCentral()
-    maven { url "https://repo.spring.io/libs-release" }
-}
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">compile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-data-jpa&quot;</span><span class="o">)</span>
+    <span class="n">compile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-web&quot;</span><span class="o">)</span>
+    <span class="n">compile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-actuator&quot;</span><span class="o">)</span>
+    <span class="n">runtime</span><span class="o">(</span><span class="s2">&quot;org.hsqldb:hsqldb&quot;</span><span class="o">)</span>
+    <span class="n">testCompile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-test&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    runtime("org.hsqldb:hsqldb")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-}
+<span class="n">eclipse</span> <span class="o">{</span>
+    <span class="n">classpath</span> <span class="o">{</span>
+         <span class="n">containers</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="s1">&#39;org.eclipse.jdt.launching.JRE_CONTAINER&#39;</span><span class="o">)</span>
+         <span class="n">containers</span> <span class="s1">&#39;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-eclipse {
-    classpath {
-         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
-    }
-}
+<span class="n">task</span> <span class="nf">wrapper</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Wrapper</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">gradleVersion</span> <span class="o">=</span> <span class="s1">&#39;2.3&#39;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>使用 spring-boot-gradle-plugin 插件可以提供一些创建可执行 jar 和从源码运行项目的任务，它还提供了 <code class="prettyprint">ResolutionStrategy</code> 以方便依赖中不用写版本号。</p>
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
-</code></pre>
-
-<p>使用 spring-boot-gradle-plugin 插件可以提供一些创建可执行 jar 和从源码运行项目的任务，它还提供了 <code>ResolutionStrategy</code> 以方便依赖中不用写版本号。</p>
-
-<h1 id="section-2">3. 创建一个可执行的类</h1>
+<h1 id="3-创建一个可执行的类">3. 创建一个可执行的类</h1>
 
 <p>首先，新建一个符合 Maven 规范的目录结构：</p>
-
-<pre><code class="language-bash">$ mkdir -p src/main/java/com/javachen
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir -p src/main/java/com/javachen
+</code></pre></div>
 <p>创建一个 Sping boot 启动类：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen;
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.EnableAutoConfiguration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+<span class="nd">@Configuration</span>
+<span class="nd">@EnableAutoConfiguration</span>
+<span class="nd">@ComponentScan</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
-public class Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
-</code></pre>
-
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
 <p>main 方法使用了 SpringApplication 工具类。这将告诉Spring去读取 Application 的元信息，并在Spring的应用上下文作为一个组件被管理。</p>
 
 <ul>
-  <li>
-    <p><code>@Configuration</code> 注解告诉 spring 该类定义了 application context 的 bean 的一些配置。</p>
-  </li>
-  <li>
-    <p><code>@ComponentScan</code> 注解告诉 Spring 遍历带有 <code>@Component</code> 注解的类。这将保证 Spring 能找到并注册 GreetingController，因为它被 <code>@RestController</code> 标记，这也是 <code>@Component</code> 的一种。</p>
-  </li>
-  <li>
-    <p><code>@EnableAutoConfiguration</code> 注解会基于你的类加载路径的内容切换合理的默认行为。比如，因为应用要依赖内嵌版本的 tomcat，所以一个tomcat服务器会被启动并代替你进行合理的配置。再比如，因为应用要依赖 Spring 的 MVC 框架,一个 Spring MVC 的 DispatcherServlet 将被配置并注册，并且不再需要 web.xml 文件。</p>
-  </li>
-  <li>
-    <p>你还可以添加 <code>@EnableWebMvc</code> 注解配置 Spring Mvc。</p>
-  </li>
+<li><p><code class="prettyprint">@Configuration</code> 注解告诉 spring 该类定义了 application context 的 bean 的一些配置。</p></li>
+<li><p><code class="prettyprint">@ComponentScan</code> 注解告诉 Spring 遍历带有 <code class="prettyprint">@Component</code> 注解的类。这将保证 Spring 能找到并注册 GreetingController，因为它被 <code class="prettyprint">@RestController</code> 标记，这也是 <code class="prettyprint">@Component</code> 的一种。</p></li>
+<li><p><code class="prettyprint">@EnableAutoConfiguration</code> 注解会基于你的类加载路径的内容切换合理的默认行为。比如，因为应用要依赖内嵌版本的 tomcat，所以一个tomcat服务器会被启动并代替你进行合理的配置。再比如，因为应用要依赖 Spring 的 MVC 框架,一个 Spring MVC 的 DispatcherServlet 将被配置并注册，并且不再需要 web.xml 文件。</p></li>
+<li><p>你还可以添加 <code class="prettyprint">@EnableWebMvc</code> 注解配置 Spring Mvc。</p></li>
 </ul>
 
 <p>上面三个注解还可以用 @SpringBootApplication 代替：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">examples</span><span class="o">.</span><span class="na">springboot</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen.examples.springboot;
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
-public class Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
-</code></pre>
-
+<span class="nd">@SpringBootApplication</span> <span class="c1">// same as @Configuration @EnableAutoConfiguration @ComponentScan</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
 <p>你也可以修改该类的 main 方法，获取 ApplicationContext：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen;
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
 
-import java.util.Arrays;
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.EnableAutoConfiguration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+<span class="nd">@SpringBootApplication</span> 
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
 
-@SpringBootApplication 
-public class Application {
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
 
-    public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Let&#39;s inspect the beans provided by Spring Boot:&quot;</span><span class="o">);</span>
 
-        System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-        String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
-            System.out.println(beanName);
-        }
-    }
-}
-</code></pre>
-
-<h1 id="section-3">4. 创建一个实体类</h1>
+        <span class="n">String</span><span class="o">[]</span> <span class="n">beanNames</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBeanDefinitionNames</span><span class="o">();</span>
+        <span class="n">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">beanNames</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">beanName</span> <span class="o">:</span> <span class="n">beanNames</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">beanName</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h1 id="4-创建一个实体类">4. 创建一个实体类</h1>
 
 <p>创建一个实体类 src/main/java/com/javachen/model/Item.java：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">model</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen.model;
-
-import javax.persistence.*;
+<span class="kn">import</span> <span class="nn">javax.persistence.*</span><span class="o">;</span>
 
 
-@Entity
-public class Item {
-  @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  private Integer id;
-  @Column
-  private boolean checked;
-  @Column
-  private String description;
+<span class="nd">@Entity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Item</span> <span class="o">{</span>
+  <span class="nd">@Id</span>
+  <span class="nd">@GeneratedValue</span><span class="o">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">GenerationType</span><span class="o">.</span><span class="na">IDENTITY</span><span class="o">)</span>
+  <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+  <span class="nd">@Column</span>
+  <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">checked</span><span class="o">;</span>
+  <span class="nd">@Column</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
 
-  public Integer getId() {
-    return id;
-  }
+  <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public boolean isChecked() {
-    return checked;
-  }
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isChecked</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">checked</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public void setChecked(boolean checked) {
-    this.checked = checked;
-  }
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setChecked</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">checked</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">checked</span> <span class="o">=</span> <span class="n">checked</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public String getDescription() {
-    return description;
-  }
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getDescription</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">description</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-}
-</code></pre>
-
-<h1 id="section-4">5. 创建控制类</h1>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDescription</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h1 id="5-创建控制类">5. 创建控制类</h1>
 
 <p>创建一个 Restfull 的控制类，该类主要提供增删改查的方法：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">controller</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen.controller;
+<span class="kn">import</span> <span class="nn">com.javachen.model.Item</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.javachen.repository.ItemRepository</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.dao.EmptyResultDataAccessException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.http.HttpStatus</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.*</span><span class="o">;</span>
 
-import com.javachen.model.Item;
-import com.javachen.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+<span class="kn">import</span> <span class="nn">javax.persistence.EntityNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
 
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/items&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemController</span> <span class="o">{</span>
+  <span class="nd">@Autowired</span>
+  <span class="kd">private</span> <span class="n">ItemRepository</span> <span class="n">repo</span><span class="o">;</span>
 
-@RestController
-@RequestMapping("/items")
-public class ItemController {
-  @Autowired
-  private ItemRepository repo;
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">findItems</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="na">findAll</span><span class="o">();</span>
+  <span class="o">}</span>
 
-  @RequestMapping(method = RequestMethod.GET)
-  public List&lt;Item&gt; findItems() {
-    return repo.findAll();
-  }
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="n">Item</span> <span class="nf">addItem</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="n">Item</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">item</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="na">saveAndFlush</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @RequestMapping(method = RequestMethod.POST)
-  public Item addItem(@RequestBody Item item) {
-    item.setId(null);
-    return repo.saveAndFlush(item);
-  }
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">PUT</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="n">Item</span> <span class="nf">updateItem</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="n">Item</span> <span class="n">updatedItem</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Item</span> <span class="n">item</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="na">getOne</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="n">item</span><span class="o">.</span><span class="na">setChecked</span><span class="o">(</span><span class="n">updatedItem</span><span class="o">.</span><span class="na">isChecked</span><span class="o">());</span>
+    <span class="n">item</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">updatedItem</span><span class="o">.</span><span class="na">getDescription</span><span class="o">());</span>
+    <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="na">saveAndFlush</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-  public Item updateItem(@RequestBody Item updatedItem, @PathVariable Integer id) {
-    Item item = repo.getOne(id);
-    item.setChecked(updatedItem.isChecked());
-    item.setDescription(updatedItem.getDescription());
-    return repo.saveAndFlush(item);
-  }
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">DELETE</span><span class="o">)</span>
+  <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">HttpStatus</span><span class="o">.</span><span class="na">NO_CONTENT</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteItem</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">repo</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public void deleteItem(@PathVariable Integer id) {
-    repo.delete(id);
-  }
+  <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">BAD_REQUEST</span><span class="o">)</span>
+  <span class="nd">@ExceptionHandler</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span> <span class="n">EmptyResultDataAccessException</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">EntityNotFoundException</span><span class="o">.</span><span class="na">class</span> <span class="o">})</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleNotFound</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Greeting 对象会被转换成 JSON 字符串，这得益于 Spring 的 HTTP 消息转换支持，你不必人工处理。由于 Jackson2 在 classpath 里，Spring的 <code class="prettyprint">MappingJackson2HttpMessageConverter</code> 会自动完成这一工作。</p>
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(value = { EmptyResultDataAccessException.class, EntityNotFoundException.class })
-  public void handleNotFound() { }
-}
-</code></pre>
+<p>这段代码使用 Spring4 新的注解：<code class="prettyprint">@RestController</code>，表明该类的每个方法返回对象而不是视图。它实际就是 <code class="prettyprint">@Controller</code> 和 <code class="prettyprint">@ResponseBody</code> 混合使用的简写方法。</p>
 
-<p>Greeting 对象会被转换成 JSON 字符串，这得益于 Spring 的 HTTP 消息转换支持，你不必人工处理。由于 Jackson2 在 classpath 里，Spring的 <code>MappingJackson2HttpMessageConverter</code> 会自动完成这一工作。</p>
-
-<p>这段代码使用 Spring4 新的注解：<code>@RestController</code>，表明该类的每个方法返回对象而不是视图。它实际就是 <code>@Controller</code> 和 <code>@ResponseBody</code> 混合使用的简写方法。</p>
-
-<h1 id="jpa-">6. 创建 JPA 仓库</h1>
+<h1 id="6-创建-jpa-仓库">6. 创建 JPA 仓库</h1>
 
 <p>使用 JAP 来持久化数据：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">repository</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen.repository;
+<span class="kn">import</span> <span class="nn">com.javachen.model.Item</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.jpa.repository.JpaRepository</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.jpa.repository.Query</span><span class="o">;</span>
 
-import com.javachen.model.Item;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
 
-import java.util.List;
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ItemRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="o">{</span>
 
-public interface ItemRepository extends JpaRepository&lt;Item, Integer&gt; {
-
-  @Query("SELECT i FROM Item i WHERE i.checked=true")
-  List&lt;Item&gt; findChecked();
-}
-</code></pre>
-
-<p>Spring Boot 可以自动配置嵌入式的数据库，包括  H2、HSQL 和 Derby，你不需要配置数据库链接的 url，只需要添加相关的依赖即可。另外，你还需要依赖 spring-jdbc，在本例中，我们是引入了对 spring-boot-starter-data-jpa 的依赖。如果你想使用其他类型的数据库，则需要配置 <code>spring.datasource.*</code> 属性，一个示例是在 application.properties 中配置如下属性：</p>
-
-<pre><code class="language-properties">spring.datasource.url=jdbc:mysql://localhost/test
-spring.datasource.username=dbuser
-spring.datasource.password=dbpass
-spring.datasource.driver-class-name=com.mysql.jdbc.Driver
-</code></pre>
-
+  <span class="nd">@Query</span><span class="o">(</span><span class="s">&quot;SELECT i FROM Item i WHERE i.checked=true&quot;</span><span class="o">)</span>
+  <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">findChecked</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Spring Boot 可以自动配置嵌入式的数据库，包括  H2、HSQL 和 Derby，你不需要配置数据库链接的 url，只需要添加相关的依赖即可。另外，你还需要依赖 spring-jdbc，在本例中，我们是引入了对 spring-boot-starter-data-jpa 的依赖。如果你想使用其他类型的数据库，则需要配置 <code class="prettyprint">spring.datasource.*</code> 属性，一个示例是在 application.properties 中配置如下属性：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">spring.datasource.url</span><span class="o">=</span><span class="s">jdbc:mysql://localhost/test</span>
+<span class="na">spring.datasource.username</span><span class="o">=</span><span class="s">dbuser</span>
+<span class="na">spring.datasource.password</span><span class="o">=</span><span class="s">dbpass</span>
+<span class="na">spring.datasource.driver-class-name</span><span class="o">=</span><span class="s">com.mysql.jdbc.Driver</span>
+</code></pre></div>
 <p>创建 src/main/resources/application.properties 文件，修改 JPA 相关配置，如：</p>
-
-<pre><code class="language-properties">spring.jpa.hibernate.ddl-auto=create-drop
-</code></pre>
-
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">spring.jpa.hibernate.ddl-auto</span><span class="o">=</span><span class="s">create-drop</span>
+</code></pre></div>
 <blockquote>
-  <p>注意：</p>
+<p>注意：</p>
 
-  <p>SpringApplication 会在以下路径查找 application.properties 并加载该文件：</p>
+<p>SpringApplication 会在以下路径查找 application.properties 并加载该文件：</p>
 
-  <ul>
-    <li>/config 目录下</li>
-    <li>当前目录</li>
-    <li>classpath 中 /config 包下</li>
-    <li>classpath 根路径下</li>
-  </ul>
+<ul>
+<li>/config 目录下</li>
+<li>当前目录</li>
+<li>classpath 中 /config 包下</li>
+<li>classpath 根路径下</li>
+</ul>
 </blockquote>
 
-<h1 id="section-5">7. 运行项目</h1>
+<h1 id="7-运行项目">7. 运行项目</h1>
 
 <p>可以在项目根路径直接运行下面命令：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m -XX:MaxPermSize<span class="o">=</span>128M -Djava.security.egd<span class="o">=</span>file:/dev/./urandom
 
-<pre><code class="language-bash">$ export JAVA_OPTS=-Xmx1024m -XX:MaxPermSize=128M -Djava.security.egd=file:/dev/./urandom
-
-$ ./gradlew bootRun
-</code></pre>
-
+<span class="nv">$ </span>./gradlew bootRun
+</code></pre></div>
 <p>也可以先 build 生成一个 jar 文件，然后执行该 jar 文件：</p>
-
-<pre><code class="language-bash">$ ./gradlew build &amp;&amp; java -jar build/libs/ng-spring-boot-0.0.1-SNAPSHOT.jar
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./gradlew build <span class="o">&amp;&amp;</span> java -jar build/libs/ng-spring-boot-0.0.1-SNAPSHOT.jar
+</code></pre></div>
 <p>启动过程中你会看到如下内容，这部分内容是在 Application 类中打印出来的：</p>
-
-<pre><code>Let's inspect the beans provided by Spring Boot:
+<div class="highlight"><pre><code class="language-text" data-lang="text">Let&#39;s inspect the beans provided by Spring Boot:
 application
 beanNameHandlerMapping
 defaultServletHandlerMapping
@@ -483,289 +446,257 @@ resourceHandlerMapping
 simpleControllerHandlerAdapter
 tomcatEmbeddedServletContainerFactory
 viewControllerHandlerMapping
-</code></pre>
-
+</code></pre></div>
 <p>你也可以启动远程调试：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./gradlew build 
 
-<pre><code class="language-bash">$ ./gradlew build 
-
-$ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
+<span class="nv">$ </span>java -Xdebug -Xrunjdwp:server<span class="o">=</span>y,transport<span class="o">=</span>dt_socket,address<span class="o">=</span>8000,suspend<span class="o">=</span>n <span class="se">\</span>
        -jar build/libs/spring-boot-examples-0.0.1-SNAPSHOT.jar
-</code></pre>
-
+</code></pre></div>
 <p>接下来，打开浏览器访问 <a href="http://localhost:8080/items">http://localhost:8080/items</a>，你会看到页面输出一个空的数组。然后，你可以使用浏览器的 Restfull 插件来添加、删除、修改数据。</p>
 
-<h1 id="section-6">8. 添加前端库文件</h1>
+<h1 id="8-添加前端库文件">8. 添加前端库文件</h1>
 
 <p>这里主要使用 Bower 来管理前端依赖，包括 angular 和 bootstrap。</p>
 
 <p>配置 Bower ，需要在项目根目录下创建 .bowerrc 和 bower.json 两个文件。</p>
 
 <p>.bowerrc 文件制定下载的依赖存放路径：</p>
-
-<pre><code class="language-json">{
-  "directory": "src/main/resources/static/bower_components",
-  "json": "bower.json"
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;src/main/resources/static/bower_components&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;json&quot;</span><span class="p">:</span> <span class="s2">&quot;bower.json&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>bower.json 文件定义依赖关系：</p>
-
-<pre><code class="language-json">{
-  "name": "ng-spring-boot",
-  "dependencies": {
-    "angular": "~1.3.0",
-    "angular-resource": "~1.3.0",
-    "bootstrap-css-only": "~3.2.0"
-  }
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ng-spring-boot&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;angular&quot;</span><span class="p">:</span> <span class="s2">&quot;~1.3.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;angular-resource&quot;</span><span class="p">:</span> <span class="s2">&quot;~1.3.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;bootstrap-css-only&quot;</span><span class="p">:</span> <span class="s2">&quot;~3.2.0&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>如果你没有安装 Bower，则运行下面命令进行安装：</p>
-
-<pre><code>npm install -g bower
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">npm install -g bower
+</code></pre></div>
 <p>安装之后下载依赖：</p>
-
-<pre><code>bower install
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">bower install
+</code></pre></div>
 <p>运行成功之后，查看 src/main/resources/static/bower_components 目录结构：</p>
-
-<pre><code>src/main/resources/static/bower_components
+<div class="highlight"><pre><code class="language-text" data-lang="text">src/main/resources/static/bower_components
 ├── angular
 ├── angular-resource
 └── bootstrap-css-only
-</code></pre>
-
+</code></pre></div>
 <p>我们可以将bower_components目录改名为lib，同时修改.bowerrc文件如下：</p>
-
-<pre><code>{
-  "directory": "src/main/resources/static/libs",
-  "json": "bower.json"
+<div class="highlight"><pre><code class="language-text" data-lang="text">{
+  &quot;directory&quot;: &quot;src/main/resources/static/libs&quot;,
+  &quot;json&quot;: &quot;bower.json&quot;
 }
-</code></pre>
-
-<h1 id="section-7">9. 创建前端页面</h1>
+</code></pre></div>
+<h1 id="9-创建前端页面">9. 创建前端页面</h1>
 
 <blockquote>
-  <p>注意：</p>
+<p>注意：</p>
 
-  <p>前端页面和 js 存放到 public 目录下，是因为 Spring Boot 会自动在 /static 或者 /public 或者 /resources 或者 /META-INF/resources 加载静态页面。</p>
+<p>前端页面和 js 存放到 public 目录下，是因为 Spring Boot 会自动在 /static 或者 /public 或者 /resources 或者 /META-INF/resources 加载静态页面。</p>
 </blockquote>
 
-<h2 id="indexhtml">创建 index.html</h2>
+<h2 id="创建-index-html">创建 index.html</h2>
 
 <p>创建 public 目录存放静态页面 index.html：</p>
-
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;head&gt;
-    &lt;link rel="stylesheet" href="./lib/bootstrap-css-only/css/bootstrap.min.css" /&gt;
-  &lt;/head&gt;
-  &lt;body ng-app="myApp"&gt;
-    &lt;div class="container" ng-controller="AppController"&gt;
-      &lt;div class="page-header"&gt;
-        &lt;h1&gt;A checklist&lt;/h1&gt;
-      &lt;/div&gt;
-      &lt;div class="alert alert-info" role="alert" ng-hide="items &amp;amp;&amp;amp; items.length &gt; 0"&gt;
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;./lib/bootstrap-css-only/css/bootstrap.min.css&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body</span> <span class="na">ng-app=</span><span class="s">&quot;myApp&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span> <span class="na">ng-controller=</span><span class="s">&quot;AppController&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>A checklist<span class="nt">&lt;/h1&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;alert alert-info&quot;</span> <span class="na">role=</span><span class="s">&quot;alert&quot;</span> <span class="na">ng-hide=</span><span class="s">&quot;items &amp;amp;&amp;amp; items.length &gt; 0&quot;</span><span class="nt">&gt;</span>
         There are no items yet.
-      &lt;/div&gt;
-      &lt;form class="form-horizontal" role="form" ng-submit="addItem(newItem)"&gt;
-        &lt;div class="form-group" ng-repeat="item in items"&gt;
-          &lt;div class="checkbox col-xs-9"&gt;
-            &lt;label&gt;
-              &lt;input type="checkbox" ng-model="item.checked" ng-change="updateItem(item)"/&gt; 
-            &lt;/label&gt;
-          &lt;/div&gt;
-          &lt;div class="col-xs-3"&gt;
-            &lt;button class="pull-right btn btn-danger" type="button" title="Delete"
-              ng-click="deleteItem(item)"&gt;
-              &lt;span class="glyphicon glyphicon-trash"&gt;&lt;/span&gt;
-            &lt;/button&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;hr /&gt;
-        &lt;div class="input-group"&gt;
-          &lt;input type="text" class="form-control" ng-model="newItem" placeholder="Enter the description..." /&gt;
-          &lt;span class="input-group-btn"&gt;
-            &lt;button class="btn btn-default" type="submit" ng-disabled="!newItem" title="Add"&gt;
-              &lt;span class="glyphicon glyphicon-plus"&gt;&lt;/span&gt;
-            &lt;/button&gt;
-          &lt;/span&gt;
-        &lt;/div&gt;
-      &lt;/form&gt;
-    &lt;/div&gt;
-    &lt;script type="text/javascript" src="./lib/angular/angular.min.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./lib/angular-resource/angular-resource.min.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./lib/lodash/dist/lodash.min.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./app/app.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./app/controllers.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="./app/services.js"&gt;&lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-<h2 id="angularjs">初始化 AngularJS</h2>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-horizontal&quot;</span> <span class="na">role=</span><span class="s">&quot;form&quot;</span> <span class="na">ng-submit=</span><span class="s">&quot;addItem(newItem)&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span> <span class="na">ng-repeat=</span><span class="s">&quot;item in items&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;checkbox col-xs-9&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;label&gt;</span>
+              <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;item.checked&quot;</span> <span class="na">ng-change=</span><span class="s">&quot;updateItem(item)&quot;</span><span class="nt">/&gt;</span> 
+            <span class="nt">&lt;/label&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-xs-3&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;pull-right btn btn-danger&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">title=</span><span class="s">&quot;Delete&quot;</span>
+              <span class="na">ng-click=</span><span class="s">&quot;deleteItem(item)&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-trash&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+            <span class="nt">&lt;/button&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;input-group&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;newItem&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Enter the description...&quot;</span> <span class="nt">/&gt;</span>
+          <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;input-group-btn&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">ng-disabled=</span><span class="s">&quot;!newItem&quot;</span> <span class="na">title=</span><span class="s">&quot;Add&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-plus&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+            <span class="nt">&lt;/button&gt;</span>
+          <span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./lib/angular/angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./lib/angular-resource/angular-resource.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./lib/lodash/dist/lodash.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./app/app.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./app/controllers.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./app/services.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+<h2 id="初始化-angularjs">初始化 AngularJS</h2>
 
 <p>这里使用闭包的方式来初始化 AngularJS，代码见 public/app/app.js ：</p>
-
-<pre><code class="language-javascript">(function(angular) {
-  angular.module("myApp.controllers", []);
-  angular.module("myApp.services", []);
-  angular.module("myApp", ["ngResource", "myApp.controllers", "myApp.services"]);
-}(angular));
-</code></pre>
-
-<h2 id="resource-factory">创建 resource factory</h2>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.controllers&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+  <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.services&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+  <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;ngResource&quot;</span><span class="p">,</span> <span class="s2">&quot;myApp.controllers&quot;</span><span class="p">,</span> <span class="s2">&quot;myApp.services&quot;</span><span class="p">]);</span>
+<span class="p">}(</span><span class="nx">angular</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="创建-resource-factory">创建 resource factory</h2>
 
 <p>代码见 public/app/services.js ：</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ItemFactory</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$resource</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="s1">&#39;/items/:id&#39;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;@id&#39;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">update</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="s2">&quot;PUT&quot;</span>
+      <span class="p">},</span>
+      <span class="nx">remove</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="s2">&quot;DELETE&quot;</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
 
-<pre><code class="language-javascript">(function(angular) {
-  var ItemFactory = function($resource) {
-    return $resource('/items/:id', {
-      id: '@id'
-    }, {
-      update: {
-        method: "PUT"
-      },
-      remove: {
-        method: "DELETE"
-      }
-    });
-  };
-  
-  ItemFactory.$inject = ['$resource'];
-  angular.module("myApp.services").factory("Item", ItemFactory);
-}(angular));
-</code></pre>
-
-<h2 id="section-8">创建控制器</h2>
+  <span class="nx">ItemFactory</span><span class="p">.</span><span class="nx">$inject</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$resource&#39;</span><span class="p">];</span>
+  <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.services&quot;</span><span class="p">).</span><span class="nx">factory</span><span class="p">(</span><span class="s2">&quot;Item&quot;</span><span class="p">,</span> <span class="nx">ItemFactory</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">angular</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="创建控制器">创建控制器</h2>
 
 <p>代码见 public/app/controllers.js ：</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">AppController</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">Item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Item</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="nx">response</span> <span class="o">?</span> <span class="nx">response</span> <span class="o">:</span> <span class="p">[];</span>
+    <span class="p">});</span>
 
-<pre><code class="language-javascript">(function(angular) {
-  var AppController = function($scope, Item) {
-    Item.query(function(response) {
-      $scope.items = response ? response : [];
-    });
-    
-    $scope.addItem = function(description) {
-      new Item({
-        description: description,
-        checked: false
-      }).$save(function(item) {
-        $scope.items.push(item);
-      });
-      $scope.newItem = "";
-    };
-    
-    $scope.updateItem = function(item) {
-      item.$update();
-    };
-    
-    $scope.deleteItem = function(item) {
-      item.$remove(function() {
-        $scope.items.splice($scope.items.indexOf(item), 1);
-      });
-    };
-  };
-  
-  AppController.$inject = ['$scope', 'Item'];
-  angular.module("myApp.controllers").controller("AppController", AppController);
-}(angular));
-</code></pre>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">addItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">description</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">new</span> <span class="nx">Item</span><span class="p">({</span>
+        <span class="nx">description</span><span class="o">:</span> <span class="nx">description</span><span class="p">,</span>
+        <span class="nx">checked</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">}).</span><span class="nx">$save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+      <span class="p">});</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">newItem</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">};</span>
 
-<h1 id="section-9">10. 测试前端页面</h1>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">item</span><span class="p">.</span><span class="nx">$update</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">deleteItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">item</span><span class="p">.</span><span class="nx">$remove</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">};</span>
+  <span class="p">};</span>
+
+  <span class="nx">AppController</span><span class="p">.</span><span class="nx">$inject</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;Item&#39;</span><span class="p">];</span>
+  <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.controllers&quot;</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s2">&quot;AppController&quot;</span><span class="p">,</span> <span class="nx">AppController</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">angular</span><span class="p">));</span>
+</code></pre></div>
+<h1 id="10-测试前端页面">10. 测试前端页面</h1>
 
 <p>再一次打开浏览器，访问 <a href="http://localhost:8080/">http://localhost:8080/</a> 进行测试。</p>
 
-<p><img src="/static/images/2015/checklist-first-run.png" alt="" /></p>
+<p><img src="/static/images/2015/checklist-first-run.png" alt=""></p>
 
-<h1 id="section-10">11. 前后端分离部署</h1>
+<h1 id="11-前后端分离部署">11. 前后端分离部署</h1>
 
 <p>对于AngularJS应用，我们可以使用nodejs或者其他容器部署应用，例如，这里可以使用groovy服务来启动前端服务，然后通过http请求调用后端服务的接口。</p>
 
 <p>先创建app.groovy文件：</p>
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="nd">@Controller</span> <span class="kd">class</span> <span class="nc">JsApp</span> <span class="o">{</span> <span class="o">}</span>
+</code></pre></div>
+<p>修改services.js文件中的请求地址为 <code class="prettyprint">http://localhost:8080/items/:id</code>：</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ItemFactory</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$resource</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="s1">&#39;http://localhost:8080/items/:id&#39;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;@id&#39;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">update</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="s2">&quot;PUT&quot;</span>
+      <span class="p">},</span>
+      <span class="nx">remove</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="s2">&quot;DELETE&quot;</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
 
-<pre><code class="language-groovy">@Controller class JsApp { }
-</code></pre>
-
-<p>修改services.js文件中的请求地址为 <code>http://localhost:8080/items/:id</code>：</p>
-
-<pre><code class="language-javascript">(function(angular) {
-  var ItemFactory = function($resource) {
-    return $resource('http://localhost:8080/items/:id', {
-      id: '@id'
-    }, {
-      update: {
-        method: "PUT"
-      },
-      remove: {
-        method: "DELETE"
-      }
-    });
-  };
-  
-  ItemFactory.$inject = ['$resource'];
-  angular.module("myApp.services").factory("Item", ItemFactory);
-}(angular));
-</code></pre>
-
+  <span class="nx">ItemFactory</span><span class="p">.</span><span class="nx">$inject</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$resource&#39;</span><span class="p">];</span>
+  <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.services&quot;</span><span class="p">).</span><span class="nx">factory</span><span class="p">(</span><span class="s2">&quot;Item&quot;</span><span class="p">,</span> <span class="nx">ItemFactory</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">angular</span><span class="p">));</span>
+</code></pre></div>
 <p>然后，启动groovy服务来托管静态文件，这里使用9000端口：</p>
-
-<pre><code>spring run app.groovy -- --server.port=9000
-</code></pre>
-
-<p>这时候，就可以服务 http://localhost:9000/ 来查看前端页面了。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">spring run app.groovy -- --server.port=9000
+</code></pre></div>
+<p>这时候，就可以服务 <a href="http://localhost:9000/">http://localhost:9000/</a> 来查看前端页面了。</p>
 
 <p>这样，前后端就是分别部署属于两个不同的应用了，为了解决跨域的问题，需要添加一个过滤器，如下：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">filter</span><span class="o">;</span>
 
-<pre><code class="language-java">package com.javachen.filter;
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
 
-import org.springframework.stereotype.Component;
+<span class="kn">import</span> <span class="nn">javax.servlet.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SimpleCORSFilter</span> <span class="kd">implements</span> <span class="n">Filter</span> <span class="o">{</span>
 
-@Component
-public class SimpleCORSFilter implements Filter {
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+        <span class="n">HttpServletResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletResponse</span><span class="o">)</span> <span class="n">res</span><span class="o">;</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&quot;Access-Control-Allow-Origin&quot;</span><span class="o">,</span> <span class="s">&quot;*&quot;</span><span class="o">);</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&quot;Access-Control-Allow-Methods&quot;</span><span class="o">,</span> <span class="s">&quot;POST, GET, PUT, OPTIONS, DELETE&quot;</span><span class="o">);</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&quot;Access-Control-Max-Age&quot;</span><span class="o">,</span> <span class="s">&quot;3600&quot;</span><span class="o">);</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&quot;Access-Control-Allow-Headers&quot;</span><span class="o">,</span> <span class="s">&quot;Origin, X-Requested-With, Content-Type, Accept&quot;</span><span class="o">);</span>
+        <span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">res</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        chain.doFilter(req, res);
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">filterConfig</span><span class="o">)</span> <span class="o">{}</span>
 
-    public void init(FilterConfig filterConfig) {}
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{}</span>
 
-    public void destroy() {}
-
-}
-</code></pre>
-
+<span class="o">}</span>
+</code></pre></div>
 <p>然后，重启应用就可以了。</p>
 
-<h1 id="section-11">12. 总结</h1>
+<h1 id="12-总结">12. 总结</h1>
 
 <p>本文主要是记录快速使用 Spring Boot 和 Gradle 创建 AngularJS 项目的过程，并介绍了如何将前后端进行分离和解决跨域访问的问题，希望能对你有所帮助。</p>
 
-<p>文中相关的源码在 <a href="https://github.com/javachen/spring-examples/tree/master/ng-spring-boot">ng-spring-boot</a>，你可以下载该项目，然后编译、运行代码。</p>
+<p>文中相关的源码在 <a href="https://github.com/javachen/spring-examples/tree/master/spring-boot/ng-spring-boot">ng-spring-boot</a>，你可以下载该项目，然后编译、运行代码。</p>
 
-<h1 id="section-12">13. 参考文章</h1>
+<h1 id="13-参考文章">13. 参考文章</h1>
 
 <ul>
-  <li><a href="http://g00glen00b.be/prototyping-spring-boot-angularjs/">Rapid prototyping with Spring Boot and AngularJS</a></li>
-  <li><a href="http://spring.io/guides/gs/spring-boot/">Building an Application with Spring Boot</a></li>
-  <li><a href="http://spring.io/guides/gs/rest-service/">Building a RESTful Web Service</a></li>
-  <li><a href="http://spring.io/guides/gs/rest-service-cors">Enabling Cross Origin Requests for a RESTful Web Service</a></li>
+<li><a href="http://g00glen00b.be/prototyping-spring-boot-angularjs/">Rapid prototyping with Spring Boot and AngularJS</a></li>
+<li><a href="http://spring.io/guides/gs/spring-boot/">Building an Application with Spring Boot</a></li>
+<li><a href="http://spring.io/guides/gs/rest-service/">Building a RESTful Web Service</a></li>
+<li><a href="http://spring.io/guides/gs/rest-service-cors">Enabling Cross Origin Requests for a RESTful Web Service</a></li>
 </ul>
-
 
                     <br/>
                     <div class="well">

@@ -110,352 +110,334 @@
 <p>相对于原文做了一些修改：</p>
 
 <ul>
-  <li>基于 django1.7，修复了不兼容的配置</li>
-  <li>前端使用 bootstrap3，并修改了页面的一些内容</li>
-  <li>【TODO】代码中关键的地方添加注释，帮助理解</li>
+<li>基于 django1.7，修复了不兼容的配置</li>
+<li>前端使用 bootstrap3，并修改了页面的一些内容</li>
+<li>【TODO】代码中关键的地方添加注释，帮助理解</li>
 </ul>
 
-<h1 id="section">1. 安装依赖</h1>
+<h1 id="1-安装依赖">1. 安装依赖</h1>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">pip install markdown pygments django-pagedown
+</code></pre></div>
+<p><strong>说明：</strong>我使用的 django 版本为 <code class="prettyprint">1.7</code>。</p>
 
-<pre><code class="language-bash">pip install markdown pygments django-pagedown
-</code></pre>
-
-<p><strong>说明：</strong>我使用的 django 版本为 <code>1.7</code>。</p>
-
-<h1 id="section-1">2. 创建项目</h1>
+<h1 id="2-创建项目">2. 创建项目</h1>
 
 <p>创建项目 django_blog 和 blog app：</p>
-
-<pre><code>django-admin.py startproject django_blog
+<div class="highlight"><pre><code class="language-text" data-lang="text">django-admin.py startproject django_blog
 python manage.py startapp blog
-</code></pre>
-
-<h3 id="settingspy">修改 settings.py</h3>
+</code></pre></div>
+<h3 id="修改-settings-py">修改 settings.py</h3>
 
 <p>设置 SITE_ID 并修改时区等：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">SITE_ID</span> <span class="o">=</span> <span class="mi">1</span>
 
-<pre><code class="language-python">SITE_ID = 1
+<span class="n">LANGUAGE_CODE</span> <span class="o">=</span> <span class="s">&#39;zh_CN&#39;</span>
 
-LANGUAGE_CODE = 'zh_CN'
+<span class="n">TIME_ZONE</span> <span class="o">=</span> <span class="s">&#39;Asia/Shanghai&#39;</span>
 
-TIME_ZONE = 'Asia/Shanghai'
-
-USE_TZ = True 
-</code></pre>
-
+<span class="n">USE_TZ</span> <span class="o">=</span> <span class="bp">True</span> 
+</code></pre></div>
 <p>添加 app:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.sites&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pagedown&#39;</span><span class="p">,</span> <span class="c"># App for adding markdown preview to the django admin</span>
+    <span class="s">&#39;blog&#39;</span><span class="p">,</span> <span class="c"># Blog Module</span>
+    <span class="s">&#39;django.contrib.comments&#39;</span><span class="p">,</span> <span class="c"># comments for the blog</span>
 
-<pre><code class="language-python">INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.sites',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'pagedown', # App for adding markdown preview to the django admin
-    'blog', # Blog Module
-    'django.contrib.comments', # comments for the blog
-
-)
-</code></pre>
-
+<span class="p">)</span>
+</code></pre></div>
 <p>设置静态文件目录和模板目录：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Additional locations of static files</span>
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span><span class="s">&#39;static&#39;</span><span class="p">),</span>
+    <span class="c"># Put strings here, like &quot;/home/html/static&quot; or &quot;C:/www/django/static&quot;.</span>
+    <span class="c"># Always use forward slashes, even on Windows.</span>
+    <span class="c"># Don&#39;t forget to use absolute paths, not relative paths.</span>
+<span class="p">)</span>
 
-<pre><code class="language-python"># Additional locations of static files
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static'),
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+<span class="c"># List of finder classes that know how to find static files in</span>
+<span class="c"># various locations.</span>
+<span class="n">STATICFILES_FINDERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.staticfiles.finders.FileSystemFinder&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.staticfiles.finders.AppDirectoriesFinder&#39;</span><span class="p">,</span>
+<span class="c">#    &#39;django.contrib.staticfiles.finders.DefaultStorageFinder&#39;,</span>
+<span class="p">)</span>
 
-# List of finder classes that know how to find static files in
-# various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,'templates'),
-)
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-</code></pre>
-
-<h1 id="section-2">3. 创建模型</h1>
+<span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span><span class="s">&#39;templates&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="c"># List of callables that know how to import templates from various sources.</span>
+<span class="n">TEMPLATE_LOADERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.template.loaders.filesystem.Loader&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.template.loaders.app_directories.Loader&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<h1 id="3-创建模型">3. 创建模型</h1>
 
 <p>在 blog/models.py 中创建模型 Category 和 Article：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">markdown</span> <span class="kn">import</span> <span class="n">markdown</span>
 
-<pre><code class="language-python">from django.db import models
-from django.utils.translation import ugettext as _
-from markdown import markdown
+<span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Category Model&quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Title&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="p">),</span>
+        <span class="n">max_length</span> <span class="o">=</span> <span class="mi">255</span>
+    <span class="p">)</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Slug&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Uri identifier.&#39;</span><span class="p">),</span>
+        <span class="n">max_length</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span>
+        <span class="n">unique</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">)</span>
 
-class Category(models.Model) :
-    """Category Model"""
-    title = models.CharField(
-        verbose_name = _(u'Title'),
-        help_text = _(u' '),
-        max_length = 255
-    )
-    slug = models.SlugField(
-        verbose_name = _(u'Slug'),
-        help_text = _(u'Uri identifier.'),
-        max_length = 255,
-        unique = True
-    )
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">app_label</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;blog&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Category&quot;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Categories&quot;</span><span class="p">)</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">,]</span>
 
-    class Meta:
-        app_label = _(u'blog')
-        verbose_name = _(u"Category")
-        verbose_name_plural = _(u"Categories")
-        ordering = ['title',]
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,)</span>
 
-    def __unicode__(self):
-        return "%s" % (self.title,)
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Article Model&quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Title&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="p">),</span>
+        <span class="n">max_length</span> <span class="o">=</span> <span class="mi">255</span>
+    <span class="p">)</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Slug&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Uri identifier.&#39;</span><span class="p">),</span>
+        <span class="n">max_length</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span>
+        <span class="n">unique</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">)</span>
+    <span class="n">content_markdown</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Content (Markdown)&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">content_markup</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Content (Markup)&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
+        <span class="n">Category</span><span class="p">,</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Categories&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="p">),</span>
+        <span class="n">null</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">blank</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">)</span>
+    <span class="n">date_publish</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;Publish Date&#39;</span><span class="p">),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="p">)</span>
+    <span class="p">)</span>
 
-class Article(models.Model) :
-    """Article Model"""
-    title = models.CharField(
-        verbose_name = _(u'Title'),
-        help_text = _(u' '),
-        max_length = 255
-    )
-    slug = models.SlugField(
-        verbose_name = _(u'Slug'),
-        help_text = _(u'Uri identifier.'),
-        max_length = 255,
-        unique = True
-    )
-    content_markdown = models.TextField(
-        verbose_name = _(u'Content (Markdown)'),
-        help_text = _(u' '),
-    )
-    content_markup = models.TextField(
-        verbose_name = _(u'Content (Markup)'),
-        help_text = _(u' '),
-    )
-    categories = models.ManyToManyField(
-        Category,
-        verbose_name = _(u'Categories'),
-        help_text = _(u' '),
-        null = True,
-        blank = True
-    )
-    date_publish = models.DateField(
-        verbose_name = _(u'Publish Date'),
-        help_text = _(u' ')
-    )
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">app_label</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;blog&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Article&quot;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Articles&quot;</span><span class="p">)</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;-date_publish&#39;</span><span class="p">]</span>
 
-    class Meta:
-        app_label = _(u'blog')
-        verbose_name = _(u"Article")
-        verbose_name_plural = _(u"Articles")
-        ordering = ['-date_publish']
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content_markup</span> <span class="o">=</span> <span class="n">markdown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content_markdown</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;codehilite&#39;</span><span class="p">])</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-    def save(self):
-        self.content_markup = markdown(self.content_markdown, ['codehilite'])
-        super(Article, self).save()
-
-    def __unicode__(self):
-        return "%s" % (self.title,)
-</code></pre>
-
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,)</span>
+</code></pre></div>
 <p>将模型加入到 django admin，修改 blog/admin.py:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">pagedown.widgets</span> <span class="kn">import</span> <span class="n">AdminPagedownWidget</span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Article</span>
 
-<pre><code class="language-python">from django.contrib import admin
-from django import forms
-from pagedown.widgets import AdminPagedownWidget
-from models import Category, Article
+<span class="k">class</span> <span class="nc">CategoryAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">prepopulated_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,)}</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">fieldsets</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="bp">None</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s">&#39;fields&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="s">&#39;slug&#39;</span><span class="p">,)</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
 
-class CategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', )
-    search_fields = ('title', )
-    fieldsets = (
-        (
-            None,
-            {
-                'fields': ('title', 'slug',)
-            }
-        ),
-    )
+<span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+        <span class="n">widgets</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;content_markdown&#39;</span> <span class="p">:</span> <span class="n">AdminPagedownWidget</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;content_markup&#39;</span><span class="p">,]</span>
 
-class ArticleForm(forms.ModelForm):
-    class Meta:
-        model = Article
-        widgets = {
-            'content_markdown' : AdminPagedownWidget(),
-        }
-        exclude = ['content_markup',]
+<span class="k">class</span> <span class="nc">ArticleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span>
+    <span class="n">prepopulated_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,)}</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="s">&#39;date_publish&#39;</span><span class="p">)</span>
+    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="s">&#39;content_markdown&#39;</span><span class="p">,)</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;categories&#39;</span><span class="p">,)</span>
+    <span class="n">fieldsets</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="bp">None</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s">&#39;fields&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="s">&#39;slug&#39;</span><span class="p">,</span> <span class="s">&#39;content_markdown&#39;</span><span class="p">,</span> <span class="s">&#39;categories&#39;</span><span class="p">,</span> <span class="s">&#39;date_publish&#39;</span><span class="p">,)</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
 
-class ArticleAdmin(admin.ModelAdmin):
-    form = ArticleForm
-    prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'date_publish')
-    search_fields = ('title', 'content_markdown',)
-    list_filter = ('categories',)
-    fieldsets = (
-        (
-            None,
-            {
-                'fields': ('title', 'slug', 'content_markdown', 'categories', 'date_publish',)
-            }
-        ),
-    )
-
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Article, ArticleAdmin)
-</code></pre>
-
-<h1 id="url-">4. 创建 url 路由</h1>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">CategoryAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">ArticleAdmin</span><span class="p">)</span>
+</code></pre></div>
+<h1 id="4-创建-url-路由">4. 创建 url 路由</h1>
 
 <p>修改 django_blog/urls.py：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">blog.views</span> <span class="kn">import</span> <span class="n">index</span>
 
-<pre><code class="language-python">from django.conf.urls import patterns, include, url
-from django.contrib import admin
-from blog.views import index
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;home&#39;</span><span class="p">),</span>
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', index, name='home'),
-
-    url('^blog/archive/(?P&lt;year&gt;[\d]+)/(?P&lt;month&gt;[\d]+)/$', 'blog.views.date_archive', name="blog_date_archive"),
-    url('^blog/archive/(?P&lt;slug&gt;[-\w]+)/$', 'blog.views.category_archive', name="blog_category_archive"),
-    url('^blog/(?P&lt;slug&gt;[-\w]+)/$', 'blog.views.single', name="blog_article_single"),
-    url('^blog/$', 'blog.views.index', name="blog_article_index"),
-    url(r'^comments/', include('django.contrib.comments.urls')),
-)
-</code></pre>
-
-<h1 id="section-3">5. 创建视图</h1>
+    <span class="n">url</span><span class="p">(</span><span class="s">&#39;^blog/archive/(?P&lt;year&gt;[\d]+)/(?P&lt;month&gt;[\d]+)/$&#39;</span><span class="p">,</span> <span class="s">&#39;blog.views.date_archive&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;blog_date_archive&quot;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">&#39;^blog/archive/(?P&lt;slug&gt;[-\w]+)/$&#39;</span><span class="p">,</span> <span class="s">&#39;blog.views.category_archive&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;blog_category_archive&quot;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">&#39;^blog/(?P&lt;slug&gt;[-\w]+)/$&#39;</span><span class="p">,</span> <span class="s">&#39;blog.views.single&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;blog_article_single&quot;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">&#39;^blog/$&#39;</span><span class="p">,</span> <span class="s">&#39;blog.views.index&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;blog_article_index&quot;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^comments/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;django.contrib.comments.urls&#39;</span><span class="p">)),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h1 id="5-创建视图">5. 创建视图</h1>
 
 <p>创建 blog/views.py：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span><span class="p">,</span> <span class="n">EmptyPage</span><span class="p">,</span> <span class="n">PageNotAnInteger</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Article</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">import</span> <span class="nn">calendar</span><span class="o">,</span> <span class="nn">datetime</span>
 
-<pre><code class="language-python">from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, get_object_or_404
-from models import Category, Article
-from django.shortcuts import render_to_response
-import calendar, datetime
+<span class="c"># Create your views here.</span>
 
-# Create your views here.
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The news index&quot;&quot;&quot;</span>
+    <span class="n">archive_dates</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">dates</span><span class="p">(</span><span class="s">&#39;date_publish&#39;</span><span class="p">,</span><span class="s">&#39;month&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;DESC&#39;</span><span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 
-def index(request) :
-    """The news index"""
-    archive_dates = Article.objects.dates('date_publish','month', order='DESC')
-    categories = Category.objects.all()
+    <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+    <span class="n">article_queryset</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">article_queryset</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
-    page = request.GET.get('page')
-    article_queryset = Article.objects.all()
-    paginator = Paginator(article_queryset, 5)
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+        <span class="c"># If page is not an integer, deliver first page.</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">EmptyPage</span><span class="p">:</span>
+        <span class="c"># If page is out of range (e.g. 9999), deliver last page of results.</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
 
-    try:
-        articles = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        articles = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        articles = paginator.page(paginator.num_pages)
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s">&quot;blog/article/index.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s">&quot;articles&quot;</span> <span class="p">:</span> <span class="n">articles</span><span class="p">,</span>
+            <span class="s">&quot;archive_dates&quot;</span> <span class="p">:</span> <span class="n">archive_dates</span><span class="p">,</span>
+            <span class="s">&quot;categories&quot;</span> <span class="p">:</span> <span class="n">categories</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
 
-    return render(
-        request,
-        "blog/article/index.html",
-        {
-            "articles" : articles,
-            "archive_dates" : archive_dates,
-            "categories" : categories
-        }
-    )
+<span class="k">def</span> <span class="nf">single</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A single article&quot;&quot;&quot;</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+    <span class="n">archive_dates</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">dates</span><span class="p">(</span><span class="s">&#39;date_publish&#39;</span><span class="p">,</span><span class="s">&#39;month&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;DESC&#39;</span><span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s">&quot;blog/article/single.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s">&quot;article&quot;</span> <span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+            <span class="s">&quot;archive_dates&quot;</span> <span class="p">:</span> <span class="n">archive_dates</span><span class="p">,</span>
+            <span class="s">&quot;categories&quot;</span> <span class="p">:</span> <span class="n">categories</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
 
-def single(request, slug) :
-    """A single article"""
-    article = get_object_or_404(Article, slug=slug)
-    archive_dates = Article.objects.dates('date_publish','month', order='DESC')
-    categories = Category.objects.all()
-    return render(
-        request,
-        "blog/article/single.html",
-        {
-            "article" : article,
-            "archive_dates" : archive_dates,
-            "categories" : categories
-        }
-    )
+<span class="k">def</span> <span class="nf">date_archive</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The blog date archive&quot;&quot;&quot;</span>
+    <span class="c"># this archive pages dates</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">month</span><span class="p">)</span>
+    <span class="n">month_range</span> <span class="o">=</span> <span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="c">#.replace(tzinfo=utc)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">month_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="c">#.replace(tzinfo=utc)</span>
+    <span class="n">archive_dates</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">dates</span><span class="p">(</span><span class="s">&#39;date_publish&#39;</span><span class="p">,</span><span class="s">&#39;month&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;DESC&#39;</span><span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 
-def date_archive(request, year, month) :
-    """The blog date archive"""
-    # this archive pages dates
-    year = int(year)
-    month = int(month)
-    month_range = calendar.monthrange(year, month)
-    start = datetime.datetime(year=year, month=month,day=1)#.replace(tzinfo=utc)
-    end = datetime.datetime(year=year, month=month, day=month_range[1])#.replace(tzinfo=utc)
-    archive_dates = Article.objects.dates('date_publish','month', order='DESC')
-    categories = Category.objects.all()
+    <span class="c"># Pagination</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+    <span class="n">article_queryset</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">date_publish__range</span><span class="o">=</span><span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()))</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">article_queryset</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
-    # Pagination
-    page = request.GET.get('page')
-    article_queryset = Article.objects.filter(date_publish__range=(start.date(), end.date()))
-    paginator = Paginator(article_queryset, 5)
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+        <span class="c"># If page is not an integer, deliver first page.</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">EmptyPage</span><span class="p">:</span>
+        <span class="c"># If page is out of range (e.g. 9999), deliver last page of results.</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
 
-    try:
-        articles = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        articles = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        articles = paginator.page(paginator.num_pages)
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s">&quot;blog/article/date_archive.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s">&quot;start&quot;</span> <span class="p">:</span> <span class="n">start</span><span class="p">,</span>
+            <span class="s">&quot;end&quot;</span> <span class="p">:</span> <span class="n">end</span><span class="p">,</span>
+            <span class="s">&quot;articles&quot;</span> <span class="p">:</span> <span class="n">articles</span><span class="p">,</span>
+            <span class="s">&quot;archive_dates&quot;</span> <span class="p">:</span> <span class="n">archive_dates</span><span class="p">,</span>
+            <span class="s">&quot;categories&quot;</span> <span class="p">:</span> <span class="n">categories</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
 
-    return render(
-        request,
-        "blog/article/date_archive.html",
-        {
-            "start" : start,
-            "end" : end,
-            "articles" : articles,
-            "archive_dates" : archive_dates,
-            "categories" : categories
-        }
-    )
+<span class="k">def</span> <span class="nf">category_archive</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="n">archive_dates</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">dates</span><span class="p">(</span><span class="s">&#39;date_publish&#39;</span><span class="p">,</span><span class="s">&#39;month&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;DESC&#39;</span><span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
 
-def category_archive(request, slug):
-    archive_dates = Article.objects.dates('date_publish','month', order='DESC')
-    categories = Category.objects.all()
-    category = get_object_or_404(Category, slug=slug)
+    <span class="c"># Pagination</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+    <span class="n">article_queryset</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="n">category</span><span class="p">)</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">article_queryset</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
-    # Pagination
-    page = request.GET.get('page')
-    article_queryset = Article.objects.filter(categories=category)
-    paginator = Paginator(article_queryset, 5)
-
-    try:
-        articles = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        articles = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        articles = paginator.page(paginator.num_pages)
-    return render(
-        request,
-        "blog/article/category_archive.html",
-        {
-            "articles" : articles,
-            "archive_dates" : archive_dates,
-            "categories" : categories,
-            "category" : category
-        }
-    )
-</code></pre>
-
-<h1 id="section-4">6. 创建模板</h1>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+        <span class="c"># If page is not an integer, deliver first page.</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">EmptyPage</span><span class="p">:</span>
+        <span class="c"># If page is out of range (e.g. 9999), deliver last page of results.</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s">&quot;blog/article/category_archive.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s">&quot;articles&quot;</span> <span class="p">:</span> <span class="n">articles</span><span class="p">,</span>
+            <span class="s">&quot;archive_dates&quot;</span> <span class="p">:</span> <span class="n">archive_dates</span><span class="p">,</span>
+            <span class="s">&quot;categories&quot;</span> <span class="p">:</span> <span class="n">categories</span><span class="p">,</span>
+            <span class="s">&quot;category&quot;</span> <span class="p">:</span> <span class="n">category</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+</code></pre></div>
+<h1 id="6-创建模板">6. 创建模板</h1>
 
 <p>创建 templates/blog/base.html：</p>
 
@@ -523,22 +505,20 @@ def category_archive(request, slug):
 
 <p>其他 html 文件见<a href="https://github.com/javachen/django_blog">源代码</a>。</p>
 
-<h1 id="section-5">7. 运行项目</h1>
-
-<pre><code class="language-bash">python manage.py makemigrations
+<h1 id="7-运行项目">7. 运行项目</h1>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py makemigrations
 python manage.py migrate
 python manage.py syncdb
 python manage.py runserver
-</code></pre>
-
+</code></pre></div>
 <p>打开浏览器访问后台页面 <a href="http://localhost:8000/admin">http://localhost:8000/admin</a> 添加分类和文章，然后再访问前台页面 <a href="http://localhost:8000/">http://localhost:8000/</a>。</p>
 
-<h1 id="section-6">8. 参考文章</h1>
+<h1 id="8-参考文章">8. 参考文章</h1>
 
 <ul>
-  <li><a href="http://www.yaconiello.com/blog/part-1-creating-blog-system-using-django-markdown/">Part 1: Creating a blog system using django + markdown</a></li>
-  <li><a href="http://www.yaconiello.com/blog/part-2-creating-blog-system-using-django-markdown/">Part 2: Creating a blog system using django + markdown</a></li>
-  <li><a href="http://www.yaconiello.com/blog/part-3-creating-blog-system-using-django-markdown/">Part 3: Creating a blog system using django + markdown</a></li>
+<li><a href="http://www.yaconiello.com/blog/part-1-creating-blog-system-using-django-markdown/">Part 1: Creating a blog system using django + markdown</a></li>
+<li><a href="http://www.yaconiello.com/blog/part-2-creating-blog-system-using-django-markdown/">Part 2: Creating a blog system using django + markdown</a></li>
+<li><a href="http://www.yaconiello.com/blog/part-3-creating-blog-system-using-django-markdown/">Part 3: Creating a blog system using django + markdown</a></li>
 </ul>
 
                     <br/>

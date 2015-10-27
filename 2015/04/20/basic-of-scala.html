@@ -107,231 +107,187 @@
               <div id="post-text">
                     <p>本文主要包括Scala的安装过程并理解Scala的基本语法和概念，包括表达式、变量、基本类型、函数、流程控制等相关内容。</p>
 
-<h1 id="section">1. 安装</h1>
+<h1 id="1-安装">1. 安装</h1>
 
 <p>从<a href="http://www.scala-lang.org/download/all.html">All Versions Scala</a>下载所需版本Scala安装包，解压到指定目录之后，配置环境变量并使其生效。</p>
 
-<p>如果你使用Mac，则可以使用<code>brew</code>安装：</p>
+<p>如果你使用Mac，则可以使用<code class="prettyprint">brew</code>安装：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">⇒  brew install scala
+</code></pre></div>
+<p>在终端键入<code class="prettyprint">scala</code>查看Scala的版本，并进入Scala的解释器：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">⇒</span>  <span class="n">scala</span>
+<span class="nc">Welcome</span> <span class="n">to</span> <span class="nc">Scala</span> <span class="n">version</span> <span class="mf">2.11</span><span class="o">.</span><span class="mi">6</span> <span class="o">(</span><span class="nc">Java</span> <span class="nc">HotSpot</span><span class="o">(</span><span class="nc">TM</span><span class="o">)</span> <span class="mi">64</span><span class="o">-</span><span class="nc">Bit</span> <span class="nc">Server</span> <span class="nc">VM</span><span class="o">,</span> <span class="nc">Java</span> <span class="mf">1.7</span><span class="o">.</span><span class="mi">0</span><span class="n">_60</span><span class="o">).</span>
+<span class="nc">Type</span> <span class="n">in</span> <span class="n">expressions</span> <span class="n">to</span> <span class="n">have</span> <span class="n">them</span> <span class="n">evaluated</span><span class="o">.</span>
+<span class="nc">Type</span> <span class="k">:</span><span class="kt">help</span> <span class="kt">for</span> <span class="kt">more</span> <span class="kt">information.</span>
 
-<pre><code class="language-bash">⇒  brew install scala
-</code></pre>
-
-<p>在终端键入<code>scala</code>查看Scala的版本，并进入Scala的解释器：</p>
-
-<pre><code class="language-scala">⇒  scala
-Welcome to Scala version 2.11.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0_60).
-Type in expressions to have them evaluated.
-Type :help for more information.
-
-scala&gt;
-</code></pre>
-
-<h1 id="section-1">2. 表达式</h1>
-
-<pre><code class="language-scala">scala&gt; 1 + 1
-res0: Int = 2
-</code></pre>
-
+<span class="kt">scala&gt;</span>
+</code></pre></div>
+<h1 id="2-表达式">2. 表达式</h1>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">res0</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">2</span>
+</code></pre></div>
 <p>res0是解释器自动创建的变量名称，用来指代表达式的计算结果。它是Int类型，值为2。</p>
 
 <p>resX识别符还将用在后续的代码行中。例如,既然res0已在之前设为3，res0 * 3就是 9:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">res0</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">9</span>
+</code></pre></div>
+<p>打印 &quot;Hello, world!&#39;&#39;  : </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="o">)</span>
+<span class="nc">Hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
+<p><code class="prettyprint">println</code>函数在标准输出上打印传给它的字串，就跟Java里的<code class="prettyprint">System.out.println</code>一样。</p>
 
-<pre><code class="language-scala">scala&gt; res0 * 3
-res1: Int = 9
-</code></pre>
+<h1 id="3-变量">3. 变量</h1>
 
-<p>打印 “Hello, world!’’  :</p>
-
-<pre><code class="language-scala">scala&gt; println("Hello, world!")
-Hello, world!
-</code></pre>
-
-<p><code>println</code>函数在标准输出上打印传给它的字串，就跟Java里的<code>System.out.println</code>一样。</p>
-
-<h1 id="section-2">3. 变量</h1>
-
-<p>Scala 有两种变量：<code>val</code> 和 <code>var</code>。val 类似于 Java 里的 final 变量。一旦初始化了，val 就不能再赋值了。与之对应的，var 如同 Java 里面的非 final 变量。var 可以在它生命周期 中被多次赋值。下面是一个 val 的定义:</p>
-
-<pre><code class="language-scala">scala&gt; val msg = "Hello, world!"
-msg: String = Hello, world!
-</code></pre>
-
-<p>这个语句引入了msg当作字串”Hello, world!”的名字。类型是 java.lang.String，因为 Scala 的字串是由 Java 的 String 类实现的。</p>
+<p>Scala 有两种变量：<code class="prettyprint">val</code> 和 <code class="prettyprint">var</code>。val 类似于 Java 里的 final 变量。一旦初始化了，val 就不能再赋值了。与之对应的，var 如同 Java 里面的非 final 变量。var 可以在它生命周期 中被多次赋值。下面是一个 val 的定义:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">msg</span> <span class="k">=</span> <span class="s">&quot;Hello, world!&quot;</span>
+<span class="n">msg</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
+<p>这个语句引入了msg当作字串&quot;Hello, world!&quot;的名字。类型是 java.lang.String，因为 Scala 的字串是由 Java 的 String 类实现的。</p>
 
 <p>这里定义的msg变量并没有指定类型，Scala解释器会自动推断出其类型，当然你也可以显示的标注类型：</p>
-
-<pre><code class="language-scala">scala&gt; val msg2: java.lang.String = "Hello again, world!"
-msg2: String = Hello again, world!
-</code></pre>
-
-<p>因为在Scala程序里<code>java.lang</code>类型的简化名也是可见的，所以可以简化为:</p>
-
-<pre><code class="language-scala">scala&gt; val msg3: String = "Hello yet again, world!"
-msg3: String = Hello yet again, world!
-</code></pre>
-
-<p>如果你想定义一个变量并修改它的值，你可以选择使用<code>var</code>。</p>
-
-<pre><code class="language-scala">scala&gt; var greeting = "Hello, world!"
-greeting: String = Hello, world!
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">msg2</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="s">&quot;Hello again, world!&quot;</span>
+<span class="n">msg2</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span> <span class="n">again</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
+<p>因为在Scala程序里<code class="prettyprint">java.lang</code>类型的简化名也是可见的，所以可以简化为:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">msg3</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;Hello yet again, world!&quot;</span>
+<span class="n">msg3</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span> <span class="n">yet</span> <span class="n">again</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
+<p>如果你想定义一个变量并修改它的值，你可以选择使用<code class="prettyprint">var</code>。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">var</span> <span class="n">greeting</span> <span class="k">=</span> <span class="s">&quot;Hello, world!&quot;</span>
+<span class="n">greeting</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
 <p>由于 greeting 是 var 而不是 val,你可以在之后对它重新赋值。</p>
-
-<pre><code class="language-scala">scala&gt; greeting = "Leave me alone, world!"
-greeting: String = Leave me alone, world!
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">greeting</span> <span class="k">=</span> <span class="s">&quot;Leave me alone, world!&quot;</span>
+<span class="n">greeting</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Leave</span> <span class="n">me</span> <span class="n">alone</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
 <p>要输入一些能跨越多行的东西,只要一行行输进去就行。如果输到行尾还没结束,解释器 将在下一行回应一个竖线。</p>
-
-<pre><code class="language-scala">scala&gt; val multiLine =
-     | "This is the next line."
-multiLine: java.lang.String = This is the next line.
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">multiLine</span> <span class="k">=</span>
+     <span class="o">|</span> <span class="s">&quot;This is the next line.&quot;</span>
+<span class="n">multiLine</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="nc">This</span> <span class="n">is</span> <span class="n">the</span> <span class="n">next</span> <span class="n">line</span><span class="o">.</span>
+</code></pre></div>
 <p>如果你意识到你输入了一些错误的东西,而解释器仍在等着你更多的输入,你可以通过按 两次回车取消掉:</p>
-
-<pre><code class="language-scala">scala&gt; val oops =
-     |
-     |
-You typed two blank lines. Starting a new command.
-scala&gt;
-</code></pre>
-
-<p>var 变量可重新赋值，如果赋值为<code>_</code>，则表示使用缺省值(0、false、null)，例如：</p>
-
-<pre><code class="language-scala">var d:Double = _ // d = 0.0
-var i:Int = _ // i = 0
-var s:String = _ // s = null
-var t:T = _  // 泛型T对应的默认值
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">oops</span> <span class="k">=</span>
+     <span class="o">|</span>
+     <span class="o">|</span>
+<span class="nc">You</span> <span class="n">typed</span> <span class="n">two</span> <span class="n">blank</span> <span class="n">lines</span><span class="o">.</span> <span class="nc">Starting</span> <span class="n">a</span> <span class="k">new</span> <span class="n">command</span><span class="o">.</span>
+<span class="n">scala</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>var 变量可重新赋值，如果赋值为<code class="prettyprint">_</code>，则表示使用缺省值(0、false、null)，例如：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">d</span><span class="k">:</span><span class="kt">Double</span> <span class="o">=</span> <span class="k">_</span> <span class="c1">// d = 0.0</span>
+<span class="k">var</span> <span class="n">i</span><span class="k">:</span><span class="kt">Int</span> <span class="o">=</span> <span class="k">_</span> <span class="c1">// i = 0</span>
+<span class="k">var</span> <span class="n">s</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="k">_</span> <span class="c1">// s = null</span>
+<span class="k">var</span> <span class="n">t</span><span class="k">:</span><span class="kt">T</span> <span class="o">=</span> <span class="k">_</span>  <span class="c1">// 泛型T对应的默认值</span>
+</code></pre></div>
 <p>Scala还能像Python一样方便的赋值：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// 给多个变量赋同一初始值</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="k">=</span><span class="mi">0</span>
+<span class="n">x</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">y</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
 
-<pre><code class="language-scala">// 给多个变量赋同一初始值
-scala&gt; val x,y=0
-x: Int = 0
-y: Int = 0
+<span class="c1">// 同时定义多个变量，注意：val x,y=10,&quot;hello&quot; 是错误的</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="s">&quot;hello&quot;</span><span class="o">)</span>
+<span class="n">x</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">hello</span>
 
-// 同时定义多个变量，注意：val x,y=10,"hello" 是错误的
-scala&gt; val (x,y) = (10, "hello")
-x: Int = 10
-y: String = hello
+<span class="c1">// x = 1, y = List(2,3,4)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">x</span><span class="o">::</span><span class="n">y</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">)</span>
+<span class="n">x</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">y</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
 
-// x = 1, y = List(2,3,4)
-scala&gt; val x::y = List(1,2,3,4)
-x: Int = 1
-y: List[Int] = List(2, 3, 4)
+<span class="c1">// a = 1, b = 2, c = 3</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="nc">List</span><span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">,</span><span class="n">c</span><span class="o">)</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">a</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">c</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
 
-// a = 1, b = 2, c = 3
-scala&gt; val List(a,b,c) = List(1,2,3)
-a: Int = 1
-b: Int = 2
-c: Int = 3
-
-// 也可以用List，Seq
-scala&gt; val Array(a, b, _, _, c @ _*) = Array(1, 2, 3, 4, 5, 6, 7)
-a: Int = 1
-b: Int = 2
-c: Seq[Int] = Vector(5, 6, 7) // Array(5, 6, 7), _*匹配0个到多个
-</code></pre>
-
+<span class="c1">// 也可以用List，Seq</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="nc">Array</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="n">c</span> <span class="k">@</span> <span class="k">_</span><span class="o">*)</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">)</span>
+<span class="n">a</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">c</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Vector</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">)</span> <span class="c1">// Array(5, 6, 7), _*匹配0个到多个</span>
+</code></pre></div>
 <p>使用正则表达式赋值：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">regex</span> <span class="k">=</span> <span class="s">&quot;(\\d+)/(\\d+)/(\\d+)&quot;</span><span class="o">.</span><span class="n">r</span>
+<span class="n">regex</span><span class="k">:</span> <span class="kt">scala.util.matching.Regex</span> <span class="o">=</span> <span class="o">(\</span><span class="n">d</span><span class="o">+)/(\</span><span class="n">d</span><span class="o">+)/(\</span><span class="n">d</span><span class="o">+)</span>
 
-<pre><code class="language-scala">scala&gt; val regex = "(\\d+)/(\\d+)/(\\d+)".r
-regex: scala.util.matching.Regex = (\d+)/(\d+)/(\d+)
-
-scala&gt; val regex(year, month, day) = "2015/04/20"
-year: String = 2015
-month: String = 04
-day: String = 20
-</code></pre>
-
-<p>除了<code>val</code>，你还可以使用<code>lazy</code>：</p>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">regex</span><span class="o">(</span><span class="n">year</span><span class="o">,</span> <span class="n">month</span><span class="o">,</span> <span class="n">day</span><span class="o">)</span> <span class="k">=</span> <span class="s">&quot;2015/04/20&quot;</span>
+<span class="n">year</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="mi">2015</span>
+<span class="n">month</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="mi">04</span>
+<span class="n">day</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="mi">20</span>
+</code></pre></div>
+<p>除了<code class="prettyprint">val</code>，你还可以使用<code class="prettyprint">lazy</code>：</p>
 
 <ul>
-  <li><code>val</code>：定义时就一次求值完成，保持不变</li>
-  <li><code>lazy</code>：定义时不求值，第一次使用时完成求值，保持不变</li>
+<li><code class="prettyprint">val</code>：定义时就一次求值完成，保持不变</li>
+<li><code class="prettyprint">lazy</code>：定义时不求值，第一次使用时完成求值，保持不变</li>
 </ul>
 
 <p>总结：</p>
 
 <ul>
-  <li>Scala是严格意义上的静态类型语言，由于其采用了先进的类型推断技术，程序员不需要在写程序时显式指定类型，编译器会根据上下文推断出类型信息。</li>
-  <li>Scala程序语句结尾没有分号，这也是 Scala中约定俗成的编程习惯。大多数情况下分号都是可省的，如果你需要将两条语句写在同一行，则需要用分号分开它们。</li>
-  <li>val用于定义不能修改的变量，var定义的变量可以修改和赋值，赋值为<code>_</code>表示使用默认值。</li>
+<li>Scala是严格意义上的静态类型语言，由于其采用了先进的类型推断技术，程序员不需要在写程序时显式指定类型，编译器会根据上下文推断出类型信息。</li>
+<li>Scala程序语句结尾没有分号，这也是 Scala中约定俗成的编程习惯。大多数情况下分号都是可省的，如果你需要将两条语句写在同一行，则需要用分号分开它们。</li>
+<li>val用于定义不能修改的变量，var定义的变量可以修改和赋值，赋值为<code class="prettyprint">_</code>表示使用默认值。</li>
 </ul>
 
-<h1 id="section-3">4. 基本类型和操作</h1>
+<h1 id="4-基本类型和操作">4. 基本类型和操作</h1>
 
-<h2 id="section-4">一些基本类型</h2>
+<h2 id="一些基本类型">一些基本类型</h2>
 
 <p>Scala 中的一些基本类型和其实例值域范围如下：</p>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">值</th>
-      <th style="text-align: left">类型</th>
-      <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">Byte</td>
-      <td style="text-align: left">8 位有符号补码整数(-27~27-1)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Short</td>
-      <td style="text-align: left">16 位有符号补码整数(-215~215-1)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Int</td>
-      <td style="text-align: left">32 位有符号补码整数(-231~231-1)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Long</td>
-      <td style="text-align: left">64 位有符号补码整数(-263~263-1)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Char</td>
-      <td style="text-align: left">16 位无符号Unicode字符(0~216-1)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">String</td>
-      <td style="text-align: left">字符序列</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Float</td>
-      <td style="text-align: left">32 位 IEEE754 单精度浮点数</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Double</td>
-      <td style="text-align: left">64 位 IEEE754 单精度浮点数</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Boolean</td>
-      <td style="text-align: left">true 或 false</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<table><thead>
+<tr>
+<th style="text-align: left">值</th>
+<th style="text-align: left">类型</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Byte</td>
+<td style="text-align: left">8 位有符号补码整数(-27~27-1)</td>
+</tr>
+<tr>
+<td style="text-align: left">Short</td>
+<td style="text-align: left">16 位有符号补码整数(-215~215-1)</td>
+</tr>
+<tr>
+<td style="text-align: left">Int</td>
+<td style="text-align: left">32 位有符号补码整数(-231~231-1)</td>
+</tr>
+<tr>
+<td style="text-align: left">Long</td>
+<td style="text-align: left">64 位有符号补码整数(-263~263-1)</td>
+</tr>
+<tr>
+<td style="text-align: left">Char</td>
+<td style="text-align: left">16 位无符号Unicode字符(0~216-1)</td>
+</tr>
+<tr>
+<td style="text-align: left">String</td>
+<td style="text-align: left">字符序列</td>
+</tr>
+<tr>
+<td style="text-align: left">Float</td>
+<td style="text-align: left">32 位 IEEE754 单精度浮点数</td>
+</tr>
+<tr>
+<td style="text-align: left">Double</td>
+<td style="text-align: left">64 位 IEEE754 单精度浮点数</td>
+</tr>
+<tr>
+<td style="text-align: left">Boolean</td>
+<td style="text-align: left">true 或 false</td>
+</tr>
+</tbody></table>
 
-<p>除了String归于<code>java.lang</code>包之外，其余所有的基本类型都是包scala的成员。如<code>Int</code>的全名是<code>scala.Int</code>。然而，由于包<code>scala</code>和<code>java.lang</code>的所有成员都被每个Scala源文件自动引用，你可以在任何地方只用简化名。</p>
+<p>除了String归于<code class="prettyprint">java.lang</code>包之外，其余所有的基本类型都是包scala的成员。如<code class="prettyprint">Int</code>的全名是<code class="prettyprint">scala.Int</code>。然而，由于包<code class="prettyprint">scala</code>和<code class="prettyprint">java.lang</code>的所有成员都被每个Scala源文件自动引用，你可以在任何地方只用简化名。</p>
 
 <p>Scala的基本类型与Java的对应类型范围完全一样，这让Scala编译器能直接把Scala的值类型在它产生的 字节码里转译成 Java 原始类型。</p>
 
-<p>Scala用<code>Any</code>统一了原生类型和引用类型。</p>
-
-<pre><code>Any
+<p>Scala用<code class="prettyprint">Any</code>统一了原生类型和引用类型。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Any
     AnyRef
         java String
         其他Java类型
@@ -346,1010 +302,850 @@ day: String = 20
         scala Boolean
         scala Char
         scala Byte
-</code></pre>
+</code></pre></div>
+<p>对于基本类型，可以用<code class="prettyprint">asInstanseOf[T]</code>方法来强制转换类型：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">i</span> <span class="k">=</span> <span class="mf">10.</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>
+<span class="n">i</span><span class="k">:</span> <span class="kt">Double</span>
 
-<p>对于基本类型，可以用<code>asInstanseOf[T]</code>方法来强制转换类型：</p>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="-Symbol">&#39;A</span><span class="sc">&#39;,&#39;</span><span class="n">B</span><span class="sc">&#39;,&#39;</span><span class="n">C</span><span class="err">&#39;</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">c</span><span class="o">=&gt;(</span><span class="n">c</span><span class="o">+</span><span class="mi">32</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">Char</span><span class="o">])</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Char</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">c</span><span class="o">)</span>
+</code></pre></div>
+<p>用<code class="prettyprint">isInstanceOf[T]</code>方法来判断类型：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">b</span> <span class="k">=</span> <span class="mf">10.</span><span class="n">isInstanceOf</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
+<span class="n">b</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
+</code></pre></div>
+<p>而在<code class="prettyprint">match ... case</code>中可以直接判断而不用此方法。</p>
 
-<pre><code class="language-scala">scala&gt; def i = 10.asInstanceOf[Double]
-i: Double
+<h2 id="操作符和方法">操作符和方法</h2>
 
-scala&gt; List('A','B','C').map(c=&gt;(c+32).asInstanceOf[Char])
-res1: List[Char] = List(a, b, c)
-</code></pre>
-
-<p>用<code>isInstanceOf[T]</code>方法来判断类型：</p>
-
-<pre><code class="language-scala">scala&gt; val b = 10.isInstanceOf[Int]
-b: Boolean = true
-</code></pre>
-
-<p>而在<code>match ... case</code>中可以直接判断而不用此方法。</p>
-
-<h2 id="section-5">操作符和方法</h2>
-
-<p>Scala为它的基本类型提供了丰富的操作符集。例如，<code>1 + 2</code>与<code>(1).+(2)</code>其实是一回事。换句话说，就是 Int 类包含了叫做<code>+</code>的方法，它带一个 Int 参数并返回一个 Int 结果。这个<code>+</code>方法在两 个 Int 相加时被调用：</p>
-
-<pre><code class="language-scala">scala&gt; val sum = 1 + 2 // Scala调用了(1).+(2) 
-sum: Int = 3
-</code></pre>
-
+<p>Scala为它的基本类型提供了丰富的操作符集。例如，<code class="prettyprint">1 + 2</code>与<code class="prettyprint">(1).+(2)</code>其实是一回事。换句话说，就是 Int 类包含了叫做<code class="prettyprint">+</code>的方法，它带一个 Int 参数并返回一个 Int 结果。这个<code class="prettyprint">+</code>方法在两 个 Int 相加时被调用：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">sum</span> <span class="k">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="c1">// Scala调用了(1).+(2) </span>
+<span class="n">sum</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+</code></pre></div>
 <p>想要证实这点，可以把表达式显式地写成方法调用：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">sumMore</span> <span class="k">=</span> <span class="o">(</span><span class="mi">1</span><span class="o">).+(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">sumMore</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+</code></pre></div>
+<p>而真正的事实是，Int包含了许多带不同的参数类型的重载的<code class="prettyprint">+</code>方法。</p>
 
-<pre><code class="language-scala">scala&gt; val sumMore = (1).+(2)
-sumMore: Int = 3
-</code></pre>
-
-<p>而真正的事实是，Int包含了许多带不同的参数类型的重载的<code>+</code>方法。</p>
-
-<p>符号<code>+</code>是操作符——更明确地说，是中缀操作符。操作符标注不仅限于像<code>+</code>这种其他语言里 看上去像操作符一样的东西。你可以把任何方法都当作操作符来标注。例如，类 String 有一个方法 <code>indexOf</code> 带一个 Char 参数。<code>indexOf</code> 方法搜索 String 里第一次出现的指定字符，并返回它的索引或 -1 如果没有找到。你可以把 <code>indexOf</code> 当作中缀操作符使用，就像这样：</p>
-
-<pre><code class="language-scala">scala&gt; val s = "Hello, world!"
-s: String = Hello, world!
-scala&gt; s indexOf 'o' // Scala调用了s.indexOf(’o’) 
-res30: Int = 4
-</code></pre>
-
+<p>符号<code class="prettyprint">+</code>是操作符——更明确地说，是中缀操作符。操作符标注不仅限于像<code class="prettyprint">+</code>这种其他语言里 看上去像操作符一样的东西。你可以把任何方法都当作操作符来标注。例如，类 String 有一个方法 <code class="prettyprint">indexOf</code> 带一个 Char 参数。<code class="prettyprint">indexOf</code> 方法搜索 String 里第一次出现的指定字符，并返回它的索引或 -1 如果没有找到。你可以把 <code class="prettyprint">indexOf</code> 当作中缀操作符使用，就像这样：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">s</span> <span class="k">=</span> <span class="s">&quot;Hello, world!&quot;</span>
+<span class="n">s</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span> <span class="n">indexOf</span> <span class="-Symbol">&#39;o</span><span class="err">&#39;</span> <span class="c1">// Scala调用了s.indexOf(’o’) </span>
+<span class="n">res30</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">4</span>
+</code></pre></div>
 <p>String 提供一个重载的 indexOf 方法，带两个参数，分别是要搜索的字符和从哪个索引开始搜索。尽管 这个 indexOf 方法带两个参数,你仍然可以用操作符标注的方式使用它。</p>
-
-<pre><code class="language-scala">scala&gt; s indexOf ('o', 5) // Scala调用了s.indexOf(’o’, 5) 
-res31: Int = 8
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span> <span class="n">indexOf</span> <span class="o">(</span><span class="-Symbol">&#39;o</span><span class="err">&#39;</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span> <span class="c1">// Scala调用了s.indexOf(’o’, 5) </span>
+<span class="n">res31</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">8</span>
+</code></pre></div>
 <blockquote>
-  <p>任何方法都可以是操作符。</p>
+<p>任何方法都可以是操作符。</p>
 </blockquote>
 
-<p>Scala 还有另外两种操作符标注：前缀和后缀。前缀标注中，方法名被放在调用的对象之前，如，<code>-7</code> 里的<code>-</code>。后缀标注在方法放在对象之后，如<code>7 toLong</code>里的<code>toLong</code>。</p>
+<p>Scala 还有另外两种操作符标注：前缀和后缀。前缀标注中，方法名被放在调用的对象之前，如，<code class="prettyprint">-7</code> 里的<code class="prettyprint">-</code>。后缀标注在方法放在对象之后，如<code class="prettyprint">7 toLong</code>里的<code class="prettyprint">toLong</code>。</p>
 
-<p>与中缀操作符——-操作符带后两个操作数，一个在左一个在右，相反，前缀和后缀操作符都是一元 unary 的：它们仅带一个操作数。前缀方式中，操作数在操作符的右边。前缀操作符的例子有 <code>-2.0</code>、<code>!found</code>和<code>~0xFF</code>。与中缀操作符一致，这些前缀操作符是在值类型对象上调用方法的简写方式。然而这种情况下，方法名在操作符字符上前缀了<code>unary_</code>。 例如，Scala 会把表达式 <code>-2.0</code> 转换成方法调用<code>(2.0).unary_-</code>。你可以输入通过操作符和显式方法名两种方式对方法的调用来演示这一点：</p>
-
-<pre><code class="language-scala">scala&gt; -2.0 // Scala调用了(2.0).unary_- res2: Double = -2.0
-scala&gt; (2.0).unary_-
-res32: Double = -2.0
-</code></pre>
-
+<p>与中缀操作符-------操作符带后两个操作数，一个在左一个在右，相反，前缀和后缀操作符都是一元 unary 的：它们仅带一个操作数。前缀方式中，操作数在操作符的右边。前缀操作符的例子有 <code class="prettyprint">-2.0</code>、<code class="prettyprint">!found</code>和<code class="prettyprint">~0xFF</code>。与中缀操作符一致，这些前缀操作符是在值类型对象上调用方法的简写方式。然而这种情况下，方法名在操作符字符上前缀了<code class="prettyprint">unary_</code>。 例如，Scala 会把表达式 <code class="prettyprint">-2.0</code> 转换成方法调用<code class="prettyprint">(2.0).unary_-</code>。你可以输入通过操作符和显式方法名两种方式对方法的调用来演示这一点：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">-</span><span class="mf">2.0</span> <span class="c1">// Scala调用了(2.0).unary_- res2: Double = -2.0</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mf">2.0</span><span class="o">).</span><span class="n">unary_-</span>
+<span class="n">res32</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
+</code></pre></div>
 <blockquote>
-  <p>可以当作前缀操作符用的标识符只有+,-,!和~</p>
+<p>可以当作前缀操作符用的标识符只有+,-,!和~</p>
 </blockquote>
 
 <p>后缀操作符是不用点或括号调用的不带任何参数的方法。</p>
-
-<pre><code class="language-scala">scala&gt; val s = "Hello, world!"
-s: String = Hello, world!
-scala&gt; s.toLowerCase
-res33: String = hello, world!
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">s</span> <span class="k">=</span> <span class="s">&quot;Hello, world!&quot;</span>
+<span class="n">s</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">toLowerCase</span>
+<span class="n">res33</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
 <p>后面的这个例子里，方法没带参数，或者还可以去掉点，采用后缀操作符标注方式：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span> <span class="n">toLowerCase</span>
+<span class="n">res34</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">hello</span><span class="o">,</span> <span class="n">world</span><span class="o">!</span>
+</code></pre></div>
+<h2 id="数学运算">数学运算</h2>
 
-<pre><code class="language-scala">scala&gt; s toLowerCase
-res34: String = hello, world!
-</code></pre>
+<p>Int 无<code class="prettyprint">++</code>、<code class="prettyprint">--</code>操作，但可以<code class="prettyprint">+=</code>、<code class="prettyprint">-=</code>, 如下：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">i</span> <span class="k">=</span> <span class="mi">0</span>
+<span class="n">i</span><span class="o">++</span>  <span class="c1">// 报错，无此操作</span>
+<span class="n">i</span><span class="o">+=</span><span class="mi">1</span> <span class="c1">// 1</span>
+<span class="n">i</span><span class="o">--</span>  <span class="c1">// 报错，无此操作</span>
+<span class="n">i</span><span class="o">-=</span><span class="mi">1</span> <span class="c1">// 0</span>
+</code></pre></div>
+<h2 id="对象相等性">对象相等性</h2>
 
-<h2 id="section-6">数学运算</h2>
+<p>如果你想比较一下看看两个对象是否相等，可以使用<code class="prettyprint">==</code>，或它的反义<code class="prettyprint">!=</code>。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//比较基本类型</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="n">res36</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
 
-<p>Int 无<code>++</code>、<code>--</code>操作，但可以<code>+=</code>、<code>-=</code>, 如下：</p>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">!=</span> <span class="mi">2</span>
+<span class="n">res37</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
 
-<pre><code class="language-scala">var i = 0
-i++  // 报错，无此操作
-i+=1 // 1
-i--  // 报错，无此操作
-i-=1 // 0
-</code></pre>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="n">res38</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
 
-<h2 id="section-7">对象相等性</h2>
+<span class="c1">//比较对象</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="o">==</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res39</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
 
-<p>如果你想比较一下看看两个对象是否相等，可以使用<code>==</code>，或它的反义<code>!=</code>。</p>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="o">==</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)</span>
+<span class="n">res40</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
 
-<pre><code class="language-scala">//比较基本类型
-scala&gt; 1 == 2
-res36: Boolean = false
+<span class="c1">//比较不同类型</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mf">1.0</span>
+<span class="n">res41</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
 
-scala&gt; 1 != 2
-res37: Boolean = true
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="o">==</span> <span class="s">&quot;hello&quot;</span>
+<span class="n">res42</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
 
-scala&gt; 2 == 2
-res38: Boolean = true
+<span class="c1">//和null进行比较，不会有任何异常抛出</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+<span class="n">res43</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
 
-//比较对象
-scala&gt; List(1, 2, 3) == List(1, 2, 3)
-res39: Boolean = true
+<span class="n">scala</span><span class="o">&gt;</span> <span class="kc">null</span> <span class="o">==</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res44</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
 
-scala&gt; List(1, 2, 3) == List(4, 5, 6)
-res40: Boolean = false
-
-//比较不同类型
-scala&gt; 1 == 1.0
-res41: Boolean = true
-
-scala&gt; List(1, 2, 3) == "hello"
-res42: Boolean = false
-
-//和null进行比较，不会有任何异常抛出
-scala&gt; List(1, 2, 3) == null
-res43: Boolean = false
-
-scala&gt; null == List(1, 2, 3)
-res44: Boolean = false
-
-scala&gt; null == List(1, 2, 3)
-res45: Boolean = false
-</code></pre>
-
-<p>Scala的<code>==</code>很智能，他知道对于数值类型要调用Java中的<code>==</code>，引用类型要调用Java的<code>equals()</code>：</p>
-
-<pre><code class="language-scala">scala&gt; "hello"=="Hello".toLowerCase()
-res46: Boolean = truescala
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="kc">null</span> <span class="o">==</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res45</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
+</code></pre></div>
+<p>Scala的<code class="prettyprint">==</code>很智能，他知道对于数值类型要调用Java中的<code class="prettyprint">==</code>，引用类型要调用Java的<code class="prettyprint">equals()</code>：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="s">&quot;hello&quot;</span><span class="o">==</span><span class="s">&quot;Hello&quot;</span><span class="o">.</span><span class="n">toLowerCase</span><span class="o">()</span>
+<span class="n">res46</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="n">truescala</span>
+</code></pre></div>
 <p>在java中为false，在scala中为true。</p>
 
-<p>Scala的<code>==</code>总是内容对比，<code>eq</code>才是引用对比，例如：</p>
-
-<pre><code class="language-scala">val s1,s2 = "hello"
-val s3 = new String("hello")
-s1==s2 // true
-s1 eq s2 // true
-s1==s3 // true 值相同
-s1 eq s3 // false 不是同一个引用
-</code></pre>
-
-<h2 id="section-8">富包装器</h2>
+<p>Scala的<code class="prettyprint">==</code>总是内容对比，<code class="prettyprint">eq</code>才是引用对比，例如：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">s1</span><span class="o">,</span><span class="n">s2</span> <span class="k">=</span> <span class="s">&quot;hello&quot;</span>
+<span class="k">val</span> <span class="n">s3</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span>
+<span class="n">s1</span><span class="o">==</span><span class="n">s2</span> <span class="c1">// true</span>
+<span class="n">s1</span> <span class="n">eq</span> <span class="n">s2</span> <span class="c1">// true</span>
+<span class="n">s1</span><span class="o">==</span><span class="n">s3</span> <span class="c1">// true 值相同</span>
+<span class="n">s1</span> <span class="n">eq</span> <span class="n">s3</span> <span class="c1">// false 不是同一个引用</span>
+</code></pre></div>
+<h2 id="富包装器">富包装器</h2>
 
 <p>Scala的每一个基本类型都有一个富包装类：</p>
 
 <ul>
-  <li>Byte：scala.runtime.RichByte</li>
-  <li>Short：scala.runtime.RichShort</li>
-  <li>Int：scala.runtime.RichInt</li>
-  <li>Long：scala.runtime.RichLong</li>
-  <li>Char：scala.runtime.RichChar</li>
-  <li>String：scala.runtime.RichString</li>
-  <li>Float：scala.runtime.RichFloat</li>
-  <li>Double：scala.runtime.RichDouble</li>
-  <li>Boolean：scala.runtime.RichBoolean</li>
+<li>Byte：scala.runtime.RichByte </li>
+<li>Short：scala.runtime.RichShort </li>
+<li>Int：scala.runtime.RichInt </li>
+<li>Long：scala.runtime.RichLong </li>
+<li>Char：scala.runtime.RichChar </li>
+<li>String：scala.runtime.RichString </li>
+<li>Float：scala.runtime.RichFloat </li>
+<li>Double：scala.runtime.RichDouble </li>
+<li>Boolean：scala.runtime.RichBoolean</li>
 </ul>
 
 <p>一些富操作的例子如下：</p>
-
-<pre><code class="language-scala">0 max 5
-0 min 5
--2.7 abs
--2.7 round
-1.5 isInfinity
-(1.0 / 0) isInfinity
-4 to 6
-"bob" capitalize
-"robert" drop 2
-</code></pre>
-
-<h1 id="section-9">5. 函数</h1>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="mi">0</span> <span class="n">max</span> <span class="mi">5</span>
+<span class="mi">0</span> <span class="n">min</span> <span class="mi">5</span>
+<span class="o">-</span><span class="mf">2.7</span> <span class="n">abs</span>
+<span class="o">-</span><span class="mf">2.7</span> <span class="n">round</span>
+<span class="mf">1.5</span> <span class="n">isInfinity</span>
+<span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">0</span><span class="o">)</span> <span class="n">isInfinity</span>
+<span class="mi">4</span> <span class="n">to</span> <span class="mi">6</span>
+<span class="s">&quot;bob&quot;</span> <span class="n">capitalize</span>
+<span class="s">&quot;robert&quot;</span> <span class="n">drop</span> <span class="mi">2</span>
+</code></pre></div>
+<h1 id="5-函数">5. 函数</h1>
 
 <p>函数的地位和一般的变量是同等的，可以作为函数的参数，可以作为返回值。传入函数的任何输入是只读的，比如一个字符串，不会被改变，只会返回一个新的字符串。</p>
 
 <p>Java里面的一个问题就是很多只用到一次的private方法，没有和使用它的方法紧密结合；Scala可以在函数里面定义函数，很好地解决了这个问题。</p>
 
-<h2 id="section-10">函数定义</h2>
+<h2 id="函数定义">函数定义</h2>
 
-<p>函数和方法一般用<code>def</code>定义。</p>
-
-<pre><code class="language-scala">scala&gt; def max(x: Int, y: Int): Int = {
-     |   if (x &gt; y) x
-     |   else y }
-max: (x: Int, y: Int)Int
-</code></pre>
-
+<p>函数和方法一般用<code class="prettyprint">def</code>定义。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">max</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">{</span>
+     <span class="o">|</span>   <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="o">)</span> <span class="n">x</span>
+     <span class="o">|</span>   <span class="k">else</span> <span class="n">y</span> <span class="o">}</span>
+<span class="n">max</span><span class="k">:</span> <span class="o">(</span><span class="kt">x:</span> <span class="kt">Int</span><span class="o">,</span> <span class="kt">y:</span> <span class="kt">Int</span><span class="o">)</span><span class="nc">Int</span>
+</code></pre></div>
 <p>函数的基本结构如下：</p>
 
-<p><img src="/static/images/2015/scala-function-defined.jpg" alt="" /></p>
+<p><img src="/static/images/2015/scala-function-defined.jpg" alt=""></p>
 
 <p>有时候Scala编译器会需要你定义函数的结果类型。比方说，如果函数是递归的，你就必须显式地定义函数结果类型。然而在max的例子里，你可以不用写结果类型，编译器也能够推断它。同样，如果函数仅由一个句子组成，你可以可选地不写大括号。这样，你就可以把max函数写成这样:</p>
-
-<pre><code class="language-scala">scala&gt; def max2(x: Int, y: Int) = if (x &gt; y) x else y
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">max2</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="o">)</span> <span class="n">x</span> <span class="k">else</span> <span class="n">y</span>
+</code></pre></div>
 <p>一旦你定义了函数，你就可以用它的名字调用它，如：</p>
-
-<pre><code class="language-scala">scala&gt; max(3, 5)
-res25: Int = 5
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">max</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+<span class="n">res25</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">5</span>
+</code></pre></div>
 <p>函数不带参数，调用时括号可以省略：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">three</span><span class="o">()</span> <span class="k">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="n">three</span><span class="k">:</span> <span class="o">()</span><span class="kt">Int</span>
 
-<pre><code class="language-scala">scala&gt; def three() = 1 + 2
-three: ()Int
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">three</span><span class="o">()</span>
+<span class="n">res26</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
 
-scala&gt; three()
-res26: Int = 3
-
-scala&gt; three
-res27: Int = 3
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">three</span>
+<span class="n">res27</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+</code></pre></div>
 <p>还有既不带参数也不返回有用结果的函数定义：</p>
-
-<pre><code class="language-scala">scala&gt; def greet() = println("Hello, world!")
-greet: ()Unit
-</code></pre>
-
-<p>当你定义了<code>greet()</code>函数，解释器会回应一个<code>greet: ()Unit</code>。空白的括号说明函数不带参数。Unit 是 greet 的结果类型，Unit 的结果类型指的是函数没有返回有用的值。Scala 的 Unit 类型比较接近 Java 的 void 类型，而且实际上 Java 里 每一个返回 void 的方法都被映射为 Scala 里返回 Unit 的方法。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">greet</span><span class="o">()</span> <span class="k">=</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="o">)</span>
+<span class="n">greet</span><span class="k">:</span> <span class="o">()</span><span class="kt">Unit</span>
+</code></pre></div>
+<p>当你定义了<code class="prettyprint">greet()</code>函数，解释器会回应一个<code class="prettyprint">greet: ()Unit</code>。空白的括号说明函数不带参数。Unit 是 greet 的结果类型，Unit 的结果类型指的是函数没有返回有用的值。Scala 的 Unit 类型比较接近 Java 的 void 类型，而且实际上 Java 里 每一个返回 void 的方法都被映射为 Scala 里返回 Unit 的方法。</p>
 
 <p><strong>总结</strong>：</p>
 
 <ul>
-  <li>函数体没有像Java那样放在<code>{}</code>里，Scala 中的一条语句其实是一个表达式</li>
-  <li>如果函数体只包含一条表达式，则可以省略<code>{}</code></li>
-  <li>函数体没有显示的return语句，最后一条表达式的值会自动返回给函数的调用者</li>
-  <li>没有参数的函数调用时，括号可以省略</li>
+<li>函数体没有像Java那样放在<code class="prettyprint">{}</code>里，Scala 中的一条语句其实是一个表达式</li>
+<li>如果函数体只包含一条表达式，则可以省略<code class="prettyprint">{}</code></li>
+<li>函数体没有显示的return语句，最后一条表达式的值会自动返回给函数的调用者</li>
+<li>没有参数的函数调用时，括号可以省略</li>
 </ul>
 
-<h2 id="section-11">映射式定义</h2>
+<h2 id="映射式定义">映射式定义</h2>
 
 <p>一种特殊的定义：映射式定义（直接相当于数学中的映射关系）；其实也可以看成是没有参数的函数，返回一个匿名函数；调用的时候是调用这个返回的匿名函数。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">f</span><span class="k">:</span><span class="kt">Int</span><span class="o">=&gt;</span><span class="nc">Double</span> <span class="k">=</span> <span class="o">{</span> 
+    <span class="k">case</span> <span class="mi">1</span> <span class="k">=&gt;</span> <span class="mf">0.1</span>
+    <span class="k">case</span> <span class="mi">2</span> <span class="k">=&gt;</span> <span class="mf">0.2</span>
+    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="mf">0.0</span>
+<span class="o">}</span>
+<span class="n">f</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="c1">// 0.1</span>
+<span class="n">f</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span> <span class="c1">// 0.0</span>
 
-<pre><code class="language-scala">def f:Int=&gt;Double = { 
-    case 1 =&gt; 0.1
-    case 2 =&gt; 0.2
-    case _ =&gt; 0.0
-}
-f(1) // 0.1
-f(3) // 0.0
+<span class="k">def</span> <span class="n">m</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span><span class="k">=&gt;</span><span class="nc">User</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="kc">null</span>
+<span class="o">}</span>
+<span class="n">m</span><span class="o">(</span><span class="n">o</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;none...&quot;</span><span class="o">)</span>
 
-def m:Option[User]=&gt;User = {
-    case Some(x) =&gt; x
-    case None =&gt; null
-}
-m(o).getOrElse("none...")
+<span class="k">def</span> <span class="n">m</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">,</span><span class="kt">Int</span><span class="o">)</span><span class="k">=&gt;</span><span class="nc">Int</span> <span class="k">=</span> <span class="k">_</span><span class="o">+</span><span class="k">_</span>
+<span class="n">m</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)</span> <span class="c1">// 5</span>
 
-def m:(Int,Int)=&gt;Int = _+_
-m(2,3) // 5
+<span class="k">def</span> <span class="n">m</span><span class="k">:</span><span class="kt">Int</span><span class="o">=&gt;</span><span class="nc">Int</span> <span class="k">=</span> <span class="mi">30</span><span class="o">+</span>  <span class="c1">// 相当于30+_,如果唯一的&quot;_&quot;在最后,可以省略</span>
+<span class="n">m</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// 35</span>
+</code></pre></div>
+<h2 id="特殊函数名">特殊函数名 + - * /</h2>
 
-def m:Int=&gt;Int = 30+  // 相当于30+_,如果唯一的"_"在最后,可以省略
-m(5) // 35
-</code></pre>
-
-<h2 id="section-12">特殊函数名 + - * /</h2>
-
-<p>方法名可以是<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>：</p>
-
-<pre><code class="language-scala">def *(x:Int, y:Int) = { x*y }
-*(10,20) // = 200
-1+2  //相当于1.+(2)
-</code></pre>
-
-<p>定义一元操作符（置前）可用<code>unary_</code>：一元的，单一元素的，单一构成的。</p>
-
-<pre><code class="language-scala">-2  //相当于：(2).unary_- 
-+2 //相当于：(2).unary_+ 
-!true //相当于：(true).unary_! 
-~0  //相当于 (0).unary_~  
-</code></pre>
-
-<h2 id="section-13">函数的调用</h2>
+<p>方法名可以是<code class="prettyprint">+</code>、<code class="prettyprint">-</code>、<code class="prettyprint">*</code>、<code class="prettyprint">/</code>：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="o">*(</span><span class="n">x</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="o">}</span>
+<span class="o">*(</span><span class="mi">10</span><span class="o">,</span><span class="mi">20</span><span class="o">)</span> <span class="c1">// = 200</span>
+<span class="mi">1</span><span class="o">+</span><span class="mi">2</span>  <span class="c1">//相当于1.+(2)</span>
+</code></pre></div>
+<p>定义一元操作符（置前）可用<code class="prettyprint">unary_</code>：一元的，单一元素的，单一构成的。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="o">-</span><span class="mi">2</span>  <span class="c1">//相当于：(2).unary_- </span>
+<span class="o">+</span><span class="mi">2</span> <span class="c1">//相当于：(2).unary_+ </span>
+<span class="o">!</span><span class="kc">true</span> <span class="c1">//相当于：(true).unary_! </span>
+<span class="o">~</span><span class="mi">0</span>  <span class="c1">//相当于 (0).unary_~  </span>
+</code></pre></div>
+<h2 id="函数的调用">函数的调用</h2>
 
 <p>正常调用，不传参数时候可以省略括号：</p>
-
-<pre><code class="language-scala">def f(s: String = "default") = { s }
-f // "hello world"
-f() // "hello world"
-</code></pre>
-
-<p>对象的无参数方法的调用，可以省略<code>.</code>和<code>()</code>：</p>
-
-<pre><code class="language-scala">"hello world" toUpperCase // "HELLO WORLD"
-</code></pre>
-
-<p>对象的1个参数方法的调用，可以省略<code>.</code>和<code>()</code>：</p>
-
-<pre><code class="language-scala">"hello world" indexOf w // 6
-"hello world" substring 5 // "world"
-Console print 10 // 但不能写 print 10，只能print(10)，省略Console.
-1 + 2 // 相当于 (1).+(2)
-</code></pre>
-
-<p>对象的多个参数方法的调用,也可省略<code>.</code>但不能省略<code>()</code>：</p>
-
-<pre><code class="language-scala">"hello world" substring (0, 5) // "hello"
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">f</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">s</span> <span class="o">}</span>
+<span class="n">f</span> <span class="c1">// &quot;hello world&quot;</span>
+<span class="n">f</span><span class="o">()</span> <span class="c1">// &quot;hello world&quot;</span>
+</code></pre></div>
+<p>对象的无参数方法的调用，可以省略<code class="prettyprint">.</code>和<code class="prettyprint">()</code>：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="s">&quot;hello world&quot;</span> <span class="n">toUpperCase</span> <span class="c1">// &quot;HELLO WORLD&quot;</span>
+</code></pre></div>
+<p>对象的1个参数方法的调用，可以省略<code class="prettyprint">.</code>和<code class="prettyprint">()</code>：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="s">&quot;hello world&quot;</span> <span class="n">indexOf</span> <span class="n">w</span> <span class="c1">// 6</span>
+<span class="s">&quot;hello world&quot;</span> <span class="n">substring</span> <span class="mi">5</span> <span class="c1">// &quot;world&quot;</span>
+<span class="nc">Console</span> <span class="n">print</span> <span class="mi">10</span> <span class="c1">// 但不能写 print 10，只能print(10)，省略Console.</span>
+<span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="c1">// 相当于 (1).+(2)</span>
+</code></pre></div>
+<p>对象的多个参数方法的调用,也可省略<code class="prettyprint">.</code>但不能省略<code class="prettyprint">()</code>：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="s">&quot;hello world&quot;</span> <span class="n">substring</span> <span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span> <span class="c1">// &quot;hello&quot;</span>
+</code></pre></div>
 <p><strong>注意</strong>：</p>
 
 <ul>
-  <li>不在class或者object中的函数不能如此调用：</li>
+<li>不在class或者object中的函数不能如此调用：</li>
 </ul>
-
-<pre><code class="language-scala">def m(i:Int) = i*i
-m 10 // 错误
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">m</span><span class="o">(</span><span class="n">i</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+<span class="n">m</span> <span class="mi">10</span> <span class="c1">// 错误</span>
+</code></pre></div>
 <ul>
-  <li>但在class或者object中可以使用<code>this</code>调用：</li>
+<li>但在class或者object中可以使用<code class="prettyprint">this</code>调用：</li>
 </ul>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">object</span> <span class="nc">method</span> <span class="o">{</span>
+   <span class="k">def</span> <span class="n">m</span><span class="o">(</span><span class="n">i</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+   <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="k">=</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="n">ii</span> <span class="k">=</span> <span class="k">this</span> <span class="n">m</span> <span class="mi">15</span>  <span class="c1">// 等同于 m(15), this 不能省略</span>
+       <span class="n">println</span><span class="o">(</span><span class="n">ii</span><span class="o">)</span>
+   <span class="o">}</span>
+<span class="o">}</span>   
+</code></pre></div>
+<h2 id="匿名函数">匿名函数</h2>
 
-<pre><code class="language-scala">object method {
-   def m(i:Int) = i*i
-   def main(args: Array[String]) = {
-        val ii = this m 15  // 等同于 m(15), this 不能省略
-       println(ii)
-   }
-}   
-</code></pre>
-
-<h2 id="section-14">匿名函数</h2>
-
-<p>形式：<code>((命名参数列表)=&gt;函数实现)(参数列表)</code></p>
+<p>形式：<code class="prettyprint">((命名参数列表)=&gt;函数实现)(参数列表)</code></p>
 
 <p>特殊地：</p>
 
 <ul>
-  <li>无参数： <code>(()=&gt;函数实现)()</code></li>
-  <li>有一个参数且在最后： <code>(函数实现)(参数)</code></li>
-  <li>无返回值： <code>((命名参数列表)=&gt;Unit)(参数列表)</code></li>
+<li>无参数： <code class="prettyprint">(()=&gt;函数实现)()</code></li>
+<li>有一个参数且在最后： <code class="prettyprint">(函数实现)(参数)</code></li>
+<li>无返回值： <code class="prettyprint">((命名参数列表)=&gt;Unit)(参数列表)</code></li>
 </ul>
 
-<p>使用<code>=&gt;</code>创建匿名函数：</p>
+<p>使用<code class="prettyprint">=&gt;</code>创建匿名函数：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">scala&gt; <span class="o">(</span>x: Int<span class="o">)=</span>&gt; x+1 
+res23: <span class="nv">Int</span> <span class="o">=</span>&gt; <span class="nv">Int</span> <span class="o">=</span> &lt;function1&gt;
 
-<pre><code class="language-bash">scala&gt; (x: Int)=&gt; x+1 
-res23: Int =&gt; Int = &lt;function1&gt;
+scala&gt; x:Int <span class="o">=</span>&gt; x+1 // 没有大括号时，<span class="o">()</span>是必须的
+&lt;console&gt;:1: error: <span class="s1">&#39;;&#39;</span> expected but <span class="s1">&#39;=&gt;&#39;</span> found.
+       x:Int <span class="o">=</span>&gt; x+1
 
-scala&gt; x:Int =&gt; x+1 // 没有大括号时，()是必须的
-&lt;console&gt;:1: error: ';' expected but '=&gt;' found.
-       x:Int =&gt; x+1
+scala&gt; <span class="o">{(</span>x: Int<span class="o">)=</span>&gt; x+1 <span class="o">}</span> 
+res24: <span class="nv">Int</span> <span class="o">=</span>&gt; <span class="nv">Int</span> <span class="o">=</span> &lt;function1&gt;
 
-scala&gt; {(x: Int)=&gt; x+1 } 
-res24: Int =&gt; Int = &lt;function1&gt;
-
-scala&gt; {x:Int =&gt; x+1} // 有大括号时，()可以去掉
-res25: Int =&gt; Int = &lt;function1&gt;
-</code></pre>
-
-<p>函数值是对象，所以如果你愿意可以把它们存入变量。它们也是函数，所以你可以使用通常的括<br />
+scala&gt; <span class="o">{</span>x:Int <span class="o">=</span>&gt; x+1<span class="o">}</span> // 有大括号时，<span class="o">()</span>可以去掉
+res25: <span class="nv">Int</span> <span class="o">=</span>&gt; <span class="nv">Int</span> <span class="o">=</span> &lt;function1&gt;
+</code></pre></div>
+<p>函数值是对象，所以如果你愿意可以把它们存入变量。它们也是函数，所以你可以使用通常的括
 号函数调用写法调用它们：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">m1</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span><span class="k">=&gt;</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span>
+<span class="n">m1</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function1</span><span class="o">&gt;</span>
 
-<pre><code class="language-scala">scala&gt; val m1 = (x:Int)=&gt; x+1
-m1: Int =&gt; Int = &lt;function1&gt;
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">m2</span> <span class="k">=</span> <span class="o">{</span><span class="n">x</span><span class="k">:</span><span class="kt">Int</span><span class="o">=&gt;</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="o">}</span> <span class="c1">// 不用(), 用{}</span>
+<span class="n">m2</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function1</span><span class="o">&gt;</span>
 
-scala&gt; val m2 = {x:Int=&gt; x+1} // 不用(), 用{}
-m2: Int =&gt; Int = &lt;function1&gt;
-
-scala&gt; m1(10)
-res26: Int = 11
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">m1</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="n">res26</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">11</span>
+</code></pre></div>
 <p>有参数的匿名函数的调用：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">((</span><span class="n">i</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span><span class="k">=&gt;</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">)(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">res25</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">9</span>
 
-<pre><code class="language-scala">scala&gt; ((i:Int)=&gt; i*i)(3)
-res25: Int = 9
-
-scala&gt; ((i:Int, j:Int) =&gt; i+j)(3, 4)
-res26: Int = 7
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">((</span><span class="n">i</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">j</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">)(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+<span class="n">res26</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">7</span>
+</code></pre></div>
 <p>有一个参数且在最后的匿名函数的调用：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">10</span><span class="o">*)(</span><span class="mi">2</span><span class="o">)</span> <span class="c1">// 20, 相当于 ((x:Int)=&gt;10*x)(2)</span>
+<span class="n">res27</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">20</span>
 
-<pre><code class="language-scala">scala&gt; (10*)(2) // 20, 相当于 ((x:Int)=&gt;10*x)(2)
-res27: Int = 20
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">10</span><span class="o">+)(</span><span class="mi">2</span><span class="o">)</span> <span class="c1">// 12, 相当于 ((x:Int)=&gt;10+x)(2)</span>
+<span class="n">res28</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">12</span>
 
-scala&gt; (10+)(2) // 12, 相当于 ((x:Int)=&gt;10+x)(2)
-res28: Int = 12
-
-scala&gt; (List("a","b","c") mkString)("=") // a=b=c
-res29: String = a=b=c
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span><span class="s">&quot;b&quot;</span><span class="o">,</span><span class="s">&quot;c&quot;</span><span class="o">)</span> <span class="n">mkString</span><span class="o">)(</span><span class="s">&quot;=&quot;</span><span class="o">)</span> <span class="c1">// a=b=c</span>
+<span class="n">res29</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">a</span><span class="k">=</span><span class="n">b</span><span class="k">=</span><span class="n">c</span>
+</code></pre></div>
 <p>无参数的匿名函数的调用：</p>
-
-<pre><code class="language-scala">scala&gt; (()=&gt; 10)() // 10
-res30: Int = 10
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(()</span><span class="k">=&gt;</span> <span class="mi">10</span><span class="o">)()</span> <span class="c1">// 10</span>
+<span class="n">res30</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span>
+</code></pre></div>
 <p>无参数无返回值：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(()</span> <span class="k">=&gt;</span> <span class="nc">Unit</span><span class="o">)</span>
+<span class="n">res31</span><span class="k">:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">.</span><span class="k">type</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function0</span><span class="o">&gt;</span>
 
-<pre><code class="language-scala">scala&gt; (() =&gt; Unit)
-res31: () =&gt; Unit.type = &lt;function0&gt;
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span> <span class="o">()</span><span class="k">=&gt;</span> <span class="o">{</span><span class="n">println</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">);</span> <span class="mi">20</span><span class="o">*</span><span class="mi">10</span><span class="o">}</span> <span class="o">)()</span>
+<span class="n">hello</span>
+<span class="n">res32</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">200</span>
 
-scala&gt; ( ()=&gt; {println("hello"); 20*10} )()
-hello
-res32: Int = 200
-
-//相当于调用一段方法
-scala&gt; { println("hello"); 20*10 }
-hello
-res33: Int = 200
-</code></pre>
-
+<span class="c1">//相当于调用一段方法</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">{</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">);</span> <span class="mi">20</span><span class="o">*</span><span class="mi">10</span> <span class="o">}</span>
+<span class="n">hello</span>
+<span class="n">res33</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">200</span>
+</code></pre></div>
 <p>匿名函数的两个例子：</p>
 
 <ul>
-  <li>例子1：直接使用匿名函数。</li>
+<li>例子1：直接使用匿名函数。</li>
 </ul>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">).</span><span class="n">map</span><span class="o">(</span> <span class="o">(</span><span class="n">i</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span><span class="k">=&gt;</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">)</span>
+<span class="n">res34</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">16</span><span class="o">)</span>
 
-<pre><code class="language-scala">scala&gt; List(1,2,3,4).map( (i:Int)=&gt; i*i)
-res34: List[Int] = List(1, 4, 9, 16)
-
-//这里对变量 i 使用了类型推断
-scala&gt; List(1,2,3,4).map( i=&gt; i*i)
-res35: List[Int] = List(1, 4, 9, 16)
-</code></pre>
-
+<span class="c1">//这里对变量 i 使用了类型推断</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">).</span><span class="n">map</span><span class="o">(</span> <span class="n">i</span><span class="k">=&gt;</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">)</span>
+<span class="n">res35</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">16</span><span class="o">)</span>
+</code></pre></div>
 <ul>
-  <li>例子2：无参数的匿名函数</li>
+<li>例子2：无参数的匿名函数</li>
 </ul>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//定义一个普通的函数，参数为函数，返回值为空</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">times3</span><span class="o">(</span><span class="n">m</span><span class="k">:</span><span class="o">()=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">m</span><span class="o">();</span><span class="n">m</span><span class="o">();</span><span class="n">m</span><span class="o">()</span> <span class="o">}</span>
+<span class="n">times3</span><span class="k">:</span> <span class="o">(</span><span class="kt">m:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="kt">Unit</span><span class="o">)</span><span class="nc">Unit</span>
 
-<pre><code class="language-scala">//定义一个普通的函数，参数为函数，返回值为空
-scala&gt; def times3(m:()=&gt; Unit) = { m();m();m() }
-times3: (m: () =&gt; Unit)Unit
-
-//传入一个无参数的匿名函数
-scala&gt; times3 ( ()=&gt; println("hello world") )
-hello world
-hello world
-hello world
-</code></pre>
-
+<span class="c1">//传入一个无参数的匿名函数</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">times3</span> <span class="o">(</span> <span class="o">()</span><span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span> <span class="o">)</span>
+<span class="n">hello</span> <span class="n">world</span>
+<span class="n">hello</span> <span class="n">world</span>
+<span class="n">hello</span> <span class="n">world</span>
+</code></pre></div>
 <p>由于是无参数的匿名函数，可进一步简化：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">times3</span><span class="o">(</span><span class="n">m</span><span class="k">:</span> <span class="o">=&gt;</span><span class="nc">Unit</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">m</span><span class="o">;</span><span class="n">m</span><span class="o">;</span><span class="n">m</span> <span class="o">}</span>  <span class="c1">// 参见“lazy参数”</span>
+<span class="n">times3</span><span class="k">:</span> <span class="o">(</span><span class="kt">m:</span> <span class="o">=&gt;</span> <span class="kt">Unit</span><span class="o">)</span><span class="nc">Unit</span>
 
-<pre><code class="language-scala">scala&gt; def times3(m: =&gt;Unit) = { m;m;m }  // 参见“lazy参数”
-times3: (m: =&gt; Unit)Unit
-
-scala&gt; times3 ( println("hello world") )
-hello world
-hello world
-hello world
-</code></pre>
-
-<h2 id="partial-application">偏应用函数（Partial application）</h2>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">times3</span> <span class="o">(</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span> <span class="o">)</span>
+<span class="n">hello</span> <span class="n">world</span>
+<span class="n">hello</span> <span class="n">world</span>
+<span class="n">hello</span> <span class="n">world</span>
+</code></pre></div>
+<h2 id="偏应用函数（partial-application）">偏应用函数（Partial application）</h2>
 
 <p>用下划线代替一个或多个参数的函数叫偏应用函数（partially applied function），例如：</p>
-
-<pre><code class="language-scala">scala&gt; def sum(a: Int, b: Int, c: Int) = a + b + c
-sum: (Int,Int,Int)Int
-</code></pre>
-
-<p>你就可以把函数 sum 应用到参数 1、2 和 3 上，如下:</p>
-
-<pre><code class="language-scala">scala&gt; sum(1, 2, 3)
-res1: Int = 6
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">sum</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">c</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
+<span class="n">sum</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span><span class="kt">Int</span><span class="o">,</span><span class="nc">Int</span><span class="o">)</span><span class="nc">Int</span>
+</code></pre></div>
+<p>你就可以把函数 sum 应用到参数 1、2 和 3 上，如下: </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">sum</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div>
 <p>偏应用函数是一种表达式，你不需要提供函数需要的所有参数。代之以仅提供部分，或不提供所需参数。比如，要创建不提供任何三个所需参数的调用 sum 的偏应用表达式，只要在“sum”之后放一个下划线即可，然后可以把得到的函数存入变量。举例如下:</p>
-
-<pre><code class="language-scala">scala&gt; val a = sum _
-a: (Int, Int, Int) =&gt; Int = &lt;function&gt;
-</code></pre>
-
-<p>有了这个代码，Scala 编译器以偏应用函数表达式<code>sum _</code>，实例化一个带三个缺失整数参数的函数值，并把这个新的函数值的索引赋给变量 a。当你把这个新函数值应用于三个参数之上时，它就转回头调用 <code>sum</code>，并传入这三个参数:</p>
-
-<pre><code class="language-scala">scala&gt; a(1, 2, 3)
-res2: Int = 6
-</code></pre>
-
-<p>实际发生的事情是这样的：名为a的变量指向一个函数值对象。这个函数值是由Scala编译器依照偏应用函数表达式<code>sum _</code>，自动产生的类的一个实例。编译器产生的类有一个<code>apply</code>方法带三个参数。之所以带三个参数是因为<code>sum _</code>表达式缺少的参数数量为三。Scala编译器把表达式<code>a(1,2,3)</code>翻译成对函数值的<code>apply</code>方法的调用，传入三个参数 1、2、3。因此 <code>a(1,2,3)</code>是下列代码的短格式：</p>
-
-<pre><code class="language-scala">scala&gt; a.apply(1, 2, 3)
-res3: Int = 6
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="n">sum</span> <span class="k">_</span>
+<span class="n">a</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>有了这个代码，Scala 编译器以偏应用函数表达式<code class="prettyprint">sum _</code>，实例化一个带三个缺失整数参数的函数值，并把这个新的函数值的索引赋给变量 a。当你把这个新函数值应用于三个参数之上时，它就转回头调用 <code class="prettyprint">sum</code>，并传入这三个参数:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">a</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res2</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div>
+<p>实际发生的事情是这样的：名为a的变量指向一个函数值对象。这个函数值是由Scala编译器依照偏应用函数表达式<code class="prettyprint">sum _</code>，自动产生的类的一个实例。编译器产生的类有一个<code class="prettyprint">apply</code>方法带三个参数。之所以带三个参数是因为<code class="prettyprint">sum _</code>表达式缺少的参数数量为三。Scala编译器把表达式<code class="prettyprint">a(1,2,3)</code>翻译成对函数值的<code class="prettyprint">apply</code>方法的调用，传入三个参数 1、2、3。因此 <code class="prettyprint">a(1,2,3)</code>是下列代码的短格式：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res3</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div>
 <p>也可针对部分参数使用：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">b</span> <span class="k">=</span> <span class="n">sum</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="k">_:</span> <span class="kt">Int</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">b</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">b</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">res4</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div>
+<p><code class="prettyprint">_</code> 在Scala中的使用场景，见 <a href="/2015/04/23/all-the-uses-of-an-underscore-in-scala.html">Scala中下划线的用途</a>。</p>
 
-<pre><code class="language-scala">scala&gt; val b = sum(1, _: Int, 3)
-b: (Int) =&gt; Int = &lt;function&gt;
-scala&gt; b(2)
-res4: Int = 6
-</code></pre>
-
-<p><code>_</code> 在Scala中的使用场景，见 <a href="/2015/04/23/all-the-uses-of-an-underscore-in-scala.html">Scala中下划线的用途</a>。</p>
-
-<p>如果<code>_</code>在最后，则可以省略：</p>
-
-<pre><code class="language-scala">1 to 5 foreach println
-1 to 5 map (10*)
-</code></pre>
-
-<h2 id="section-15">柯里化函数</h2>
+<p>如果<code class="prettyprint">_</code>在最后，则可以省略：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span> <span class="n">foreach</span> <span class="n">println</span>
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span> <span class="n">map</span> <span class="o">(</span><span class="mi">10</span><span class="o">*)</span>
+</code></pre></div>
+<h2 id="柯里化函数">柯里化函数</h2>
 
 <p>有时会有这样的需求：允许别人一会在你的函数上应用一些参数，然后又应用另外的一些参数。</p>
 
 <p>例如一个乘法函数，在一个场景需要选择乘数，而另一个场景需要选择被乘数。</p>
-
-<pre><code class="language-scala">scala&gt; def multiply(m: Int)(n: Int): Int = m * n
-multiply: (m: Int)(n: Int)Int
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">multiply</span><span class="o">(</span><span class="n">m</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)(</span><span class="n">n</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">m</span> <span class="o">*</span> <span class="n">n</span>
+<span class="n">multiply</span><span class="k">:</span> <span class="o">(</span><span class="kt">m:</span> <span class="kt">Int</span><span class="o">)(</span><span class="kt">n:</span> <span class="kt">Int</span><span class="o">)</span><span class="kt">Int</span>
+</code></pre></div>
 <p>你可以直接传入两个参数。</p>
-
-<pre><code class="language-scala">scala&gt; multiply(2)(3)
-res0: Int = 6
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">multiply</span><span class="o">(</span><span class="mi">2</span><span class="o">)(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">res0</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div>
 <p>你可以填上第一个参数并且部分应用第二个参数。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">timesTwo</span> <span class="k">=</span> <span class="n">multiply</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="k">_</span>
+<span class="n">timesTwo</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function1</span><span class="o">&gt;</span>
 
-<pre><code class="language-scala">scala&gt; val timesTwo = multiply(2) _
-timesTwo: (Int) =&gt; Int = &lt;function1&gt;
-
-scala&gt; timesTwo(3)
-res1: Int = 6
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">timesTwo</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div>
 <p>你可以对任何多参数函数执行柯里化。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">multiply</span> <span class="k">_</span><span class="o">).</span><span class="n">curried</span>
+<span class="n">res1</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="o">(</span><span class="nc">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function1</span><span class="o">&gt;</span>
+</code></pre></div>
+<h2 id="可变长度参数">可变长度参数</h2>
 
-<pre><code class="language-scala">scala&gt; (multiply _).curried
-res1: (Int) =&gt; (Int) =&gt; Int = &lt;function1&gt;
-</code></pre>
+<p>这是一个特殊的语法，可以向方法传入任意多个同类型的参数。例如要在多个字符串上执行String的<code class="prettyprint">capitalize</code>函数，可以这样写：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">capitalizeAll</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">String*</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="n">args</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">arg</span> <span class="k">=&gt;</span>
+    <span class="n">arg</span><span class="o">.</span><span class="n">capitalize</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-<h2 id="section-16">可变长度参数</h2>
-
-<p>这是一个特殊的语法，可以向方法传入任意多个同类型的参数。例如要在多个字符串上执行String的<code>capitalize</code>函数，可以这样写：</p>
-
-<pre><code class="language-scala">def capitalizeAll(args: String*) = {
-  args.map { arg =&gt;
-    arg.capitalize
-  }
-}
-
-scala&gt; capitalizeAll("rarity", "applejack")
-res1: Seq[String] = ArrayBuffer(Rarity, Applejack)
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">capitalizeAll</span><span class="o">(</span><span class="s">&quot;rarity&quot;</span><span class="o">,</span> <span class="s">&quot;applejack&quot;</span><span class="o">)</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ArrayBuffer</span><span class="o">(</span><span class="nc">Rarity</span><span class="o">,</span> <span class="nc">Applejack</span><span class="o">)</span>
+</code></pre></div>
 <p>函数内部，重复参数的类型是声明参数类型的数组。因此，capitalizeAll函数里被声明为类型“String*” 的args的类型实际上是 Array[String]。然而，如果你有一个合适类型的数组，并尝试把它当作重复参数传入，你会得到一个编译器错误:</p>
-
-<pre><code class="language-scala">scala&gt; val arr = Array("what's", "up", "doc?")
-scala&gt; capitalizeAll(arr)
-&lt;console&gt;:31: error: type mismatch;
- found   : Array[String]
- required: String
-              capitalizeAll(arr)
-                            ^
-</code></pre>
-
-<p>要实现这个做法，你需要在数组参数后添加一个冒号和一个<code>_*</code>符号，像这样:</p>
-
-<pre><code class="language-scala">scala&gt; capitalizeAll(arr: _*)
-res2: Seq[String] = ArrayBuffer(What's, Up, Doc?)
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">arr</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="s">&quot;what&#39;s&quot;</span><span class="o">,</span> <span class="s">&quot;up&quot;</span><span class="o">,</span> <span class="s">&quot;doc?&quot;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">capitalizeAll</span><span class="o">(</span><span class="n">arr</span><span class="o">)</span>
+<span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">31</span><span class="k">:</span> <span class="kt">error:</span> <span class="k">type</span> <span class="kt">mismatch</span><span class="o">;</span>
+ <span class="n">found</span>   <span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
+ <span class="n">required</span><span class="k">:</span> <span class="kt">String</span>
+              <span class="n">capitalizeAll</span><span class="o">(</span><span class="n">arr</span><span class="o">)</span>
+                            <span class="o">^</span>
+</code></pre></div>
+<p>要实现这个做法，你需要在数组参数后添加一个冒号和一个<code class="prettyprint">_*</code>符号，像这样:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">capitalizeAll</span><span class="o">(</span><span class="n">arr</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+<span class="n">res2</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ArrayBuffer</span><span class="o">(</span><span class="nc">What</span><span class="-Symbol">&#39;s</span><span class="o">,</span> <span class="nc">Up</span><span class="o">,</span> <span class="nc">Doc</span><span class="o">?)</span>
+</code></pre></div>
 <p>这个标注告诉编译器把arr的每个元素当作参数，而不是当作单一的参数传给capitalizeAll。</p>
 
-<h2 id="lazy">lazy参数</h2>
+<h2 id="lazy参数">lazy参数</h2>
 
 <p>就是调用时用到函数的该参数，每次都重新计算。</p>
 
 <p>lazy参数是变量或值：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//一般参数</span>
+<span class="k">def</span> <span class="n">f1</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span><span class="s">&quot;a=&quot;</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="s">&quot;,b=&quot;</span><span class="o">+</span><span class="n">b</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="n">f1</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="n">nanoTime</span><span class="o">)</span>
+<span class="c1">//a=1429501936753731000,b=1429501936753731000</span>
 
-<pre><code class="language-scala">//一般参数
-def f1(x: Long) = {
-  val (a,b) = (x,x)
-  println("a="+a+",b="+b)
-}
-f1(System.nanoTime)
-//a=1429501936753731000,b=1429501936753731000
-
-//lazy参数
-def f2(x: =&gt;Long) = {
-  val (a,b) = (x,x)
-  println("a="+a+",b="+b)
-}
-f2(System.nanoTime)
-//a=1429502007512014000,b=1429502007512015000
-</code></pre>
-
+<span class="c1">//lazy参数</span>
+<span class="k">def</span> <span class="n">f2</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="o">=&gt;</span><span class="nc">Long</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span><span class="s">&quot;a=&quot;</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="s">&quot;,b=&quot;</span><span class="o">+</span><span class="n">b</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="n">f2</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="n">nanoTime</span><span class="o">)</span>
+<span class="c1">//a=1429502007512014000,b=1429502007512015000</span>
+</code></pre></div>
 <p>lazy参数是函数时：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//一般参数，打印一次</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">times1</span><span class="o">(</span><span class="n">m</span><span class="k">:</span> <span class="kt">Unit</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">m</span><span class="o">;</span><span class="n">m</span><span class="o">;</span><span class="n">m</span> <span class="o">}</span>
+<span class="n">times1</span><span class="k">:</span> <span class="o">(</span><span class="kt">m:</span> <span class="kt">Unit</span><span class="o">)</span><span class="kt">Unit</span>
 
-<pre><code class="language-scala">//一般参数，打印一次
-scala&gt; def times1(m: Unit) = { m;m;m }
-times1: (m: Unit)Unit
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">times1</span> <span class="o">(</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span> <span class="o">)</span>
+<span class="n">hello</span> <span class="n">world</span>
 
-scala&gt; times1 ( println("hello world") )
-hello world
+<span class="c1">//lazy参数，打印三次</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">times2</span><span class="o">(</span><span class="n">m</span><span class="k">:</span> <span class="o">=&gt;</span><span class="nc">Unit</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">m</span><span class="o">;</span><span class="n">m</span><span class="o">;</span><span class="n">m</span> <span class="o">}</span>
+<span class="n">times2</span><span class="k">:</span> <span class="o">(</span><span class="kt">m:</span> <span class="o">=&gt;</span> <span class="kt">Unit</span><span class="o">)</span><span class="nc">Unit</span>
 
-//lazy参数，打印三次
-scala&gt; def times2(m: =&gt;Unit) = { m;m;m }
-times2: (m: =&gt; Unit)Unit
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">times2</span> <span class="o">(</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span> <span class="o">)</span>
+<span class="n">hello</span> <span class="n">world</span>
+<span class="n">hello</span> <span class="n">world</span>
+<span class="n">hello</span> <span class="n">world</span>
+</code></pre></div>
+<h1 id="6-流程控制">6. 流程控制</h1>
 
-scala&gt; times2 ( println("hello world") )
-hello world
-hello world
-hello world
-</code></pre>
-
-<h1 id="section-17">6. 流程控制</h1>
-
-<h2 id="ifelse">if..else</h2>
+<h2 id="if-else">if..else</h2>
 
 <p>使用 if else 表达式:</p>
-
-<pre><code class="language-scala">if (x&gt;y) 100 else -1
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&gt;</span><span class="n">y</span><span class="o">)</span> <span class="mi">100</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div>
 <h2 id="while">while</h2>
 
 <p>使用 while 为列表求和:</p>
-
-<pre><code class="language-scala">def sum(xs: List[Int]) = { 
-    var total = 0 
-    var index = 0 
-    while (index &lt; xs.size) { 
-        total += xs(index) 
-        index += 1 
-    } 
-    total 
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">sum</span><span class="o">(</span><span class="n">xs</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">{</span> 
+    <span class="k">var</span> <span class="n">total</span> <span class="k">=</span> <span class="mi">0</span> 
+    <span class="k">var</span> <span class="n">index</span> <span class="k">=</span> <span class="mi">0</span> 
+    <span class="k">while</span> <span class="o">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">xs</span><span class="o">(</span><span class="n">index</span><span class="o">)</span> 
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span> 
+    <span class="o">}</span> 
+    <span class="n">total</span> 
+<span class="o">}</span>
+</code></pre></div>
 <p>Scala 也有 do-while 循环。除了把状态测试从前面移到后面之外,与 while 循环没有区别。</p>
-
-<pre><code class="language-scala">var line = ""
-do {
-  line = readLine()
-  println("Read: " + line)
-} while (line != null)
-</code></pre>
-
-<h2 id="section-18">循环操作</h2>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">line</span> <span class="k">=</span> <span class="s">&quot;&quot;</span>
+<span class="k">do</span> <span class="o">{</span>
+  <span class="n">line</span> <span class="k">=</span> <span class="n">readLine</span><span class="o">()</span>
+  <span class="n">println</span><span class="o">(</span><span class="s">&quot;Read: &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="o">)</span>
+<span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="n">line</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</code></pre></div>
+<h2 id="循环操作">循环操作</h2>
 
 <p>for：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//循环中的变量不用定义，如：</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span><span class="o">(</span><span class="n">i</span><span class="k">&lt;-</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">3</span><span class="o">;</span> <span class="n">j</span><span class="k">=</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">j</span><span class="o">)</span>  <span class="c1">// 包含3</span>
+<span class="mi">1</span>
+<span class="mi">4</span>
+<span class="mi">9</span>
 
-<pre><code class="language-scala">//循环中的变量不用定义，如：
-scala&gt; for(i&lt;-1 to 3; j=i*i) println(j)  // 包含3
-1
-4
-9
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">3</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>  <span class="c1">// 不包含3</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
 
-scala&gt; for (i &lt;- 1 until 3) println(i)  // 不包含3
-1
-2
+<span class="c1">//如果for条件是多行，不能用()，要用{}</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span><span class="o">{</span><span class="n">i</span><span class="k">&lt;-</span><span class="mi">0</span> <span class="n">to</span> <span class="mi">5</span>
+     <span class="o">|</span> <span class="n">j</span><span class="k">&lt;-</span><span class="mi">0</span> <span class="n">to</span> <span class="mi">2</span><span class="o">}</span> <span class="k">yield</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span>
+<span class="n">res3</span><span class="k">:</span> <span class="kt">scala.collection.immutable.IndexedSeq</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Vector</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">)</span>
 
-//如果for条件是多行，不能用()，要用{}
-scala&gt; for{i&lt;-0 to 5
-     | j&lt;-0 to 2} yield i+j
-res3: scala.collection.immutable.IndexedSeq[Int] = Vector(0, 1, 2, 1, 2, 3, 2, 3, 4, 3, 4, 5, 4, 5, 6, 5, 6, 7)
+<span class="c1">//带有过滤条件，可以有多个过滤条件，逗号分隔</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">10</span> <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+<span class="mi">2</span>
+<span class="mi">4</span>
+<span class="mi">6</span>
+<span class="mi">8</span>
 
-//带有过滤条件，可以有多个过滤条件，逗号分隔
-scala&gt; for (i &lt;- 1 until 10 if i%2 == 0) println(i)
-2
-4
-6
-8
-
-//for中的嵌套循环，包括多个 &lt;-
-scala&gt; for {i &lt;- 1 until 3; j &lt;- 1 until 3} println(i*j)
-1
-2
-2
-4
-</code></pre>
-
-<p>for yield：把每次循环的结果<code>移进</code>一个集合（类型和循环内的一致），格式：<code>for {子句} yield {循环体}</code></p>
-
-<pre><code class="language-scala">for (e&lt;-List(1,2,3)) yield (e*e) // List(1,4,9)
-for {e&lt;-List(1,2,3)} yield { e*e } // List(1,4,9)
-for {e&lt;-List(1,2,3)} yield e*e // List(1,4,9)
-</code></pre>
-
+<span class="c1">//for中的嵌套循环，包括多个 &lt;-</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">{</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">3</span><span class="o">;</span> <span class="n">j</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">3</span><span class="o">}</span> <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">*</span><span class="n">j</span><span class="o">)</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">2</span>
+<span class="mi">4</span>
+</code></pre></div>
+<p>for yield：把每次循环的结果<code class="prettyprint">移进</code>一个集合（类型和循环内的一致），格式：<code class="prettyprint">for {子句} yield {循环体}</code></p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">for</span> <span class="o">(</span><span class="n">e</span><span class="k">&lt;-</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">))</span> <span class="k">yield</span> <span class="o">(</span><span class="n">e</span><span class="o">*</span><span class="n">e</span><span class="o">)</span> <span class="c1">// List(1,4,9)</span>
+<span class="k">for</span> <span class="o">{</span><span class="n">e</span><span class="k">&lt;-</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)}</span> <span class="k">yield</span> <span class="o">{</span> <span class="n">e</span><span class="o">*</span><span class="n">e</span> <span class="o">}</span> <span class="c1">// List(1,4,9)</span>
+<span class="k">for</span> <span class="o">{</span><span class="n">e</span><span class="k">&lt;-</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)}</span> <span class="k">yield</span> <span class="n">e</span><span class="o">*</span><span class="n">e</span> <span class="c1">// List(1,4,9)</span>
+</code></pre></div>
 <p>foreach:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
 
-<pre><code class="language-scala">scala&gt; List(1,2,3).foreach(println)
-1
-2
-3
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">3</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
 
-scala&gt; (1 to 3).foreach(println)
-1
-2
-3
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">1</span> <span class="n">until</span> <span class="mi">4</span><span class="o">)</span> <span class="n">foreach</span> <span class="n">println</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
 
-scala&gt; (1 until 4) foreach println
-1
-2
-3
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">4</span><span class="o">)</span> <span class="n">foreach</span> <span class="n">println</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
 
-scala&gt; Range(1,4) foreach println
-1
-2
-3
+<span class="c1">//可以写步长</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="n">to</span> <span class="o">(</span><span class="mi">11</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">res9</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Range.Inclusive</span> <span class="o">=</span> <span class="nc">Range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">11</span><span class="o">)</span>
 
-//可以写步长
-scala&gt; 1 to (11,2)
-res9: scala.collection.immutable.Range.Inclusive = Range(1, 3, 5, 7, 9, 11)
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">11</span> <span class="n">by</span> <span class="mi">2</span>
+<span class="n">res10</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Range</span> <span class="o">=</span> <span class="nc">Range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">11</span><span class="o">)</span>
 
-scala&gt; 1 to 11 by 2
-res10: scala.collection.immutable.Range = Range(1, 3, 5, 7, 9, 11)
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="n">until</span> <span class="o">(</span><span class="mi">11</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">res11</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Range</span> <span class="o">=</span> <span class="nc">Range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">9</span><span class="o">)</span>
 
-scala&gt; 1 until (11,2)
-res11: scala.collection.immutable.Range = Range(1, 3, 5, 7, 9)
+<span class="n">scala</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">11</span> <span class="n">by</span> <span class="mi">2</span>
+<span class="n">res12</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Range</span> <span class="o">=</span> <span class="nc">Range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">9</span><span class="o">)</span>
 
-scala&gt; 1 until 11 by 2
-res12: scala.collection.immutable.Range = Range(1, 3, 5, 7, 9)
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">r</span> <span class="k">=</span> <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">by</span> <span class="mi">4</span><span class="o">)</span>
+<span class="n">r</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Range</span> <span class="o">=</span> <span class="nc">Range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">9</span><span class="o">)</span>
 
-scala&gt; val r = (1 to 10 by 4)
-r: scala.collection.immutable.Range = Range(1, 5, 9)
-
-//也可以是BigInt
-scala&gt; (1:BigInt) to 3
-res13: scala.collection.immutable.NumericRange.Inclusive[BigInt] = NumericRange(1, 2, 3)
-</code></pre>
-
+<span class="c1">//也可以是BigInt</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">1</span><span class="k">:</span><span class="kt">BigInt</span><span class="o">)</span> <span class="n">to</span> <span class="mi">3</span>
+<span class="n">res13</span><span class="k">:</span> <span class="kt">scala.collection.immutable.NumericRange.Inclusive</span><span class="o">[</span><span class="kt">BigInt</span><span class="o">]</span> <span class="k">=</span> <span class="nc">NumericRange</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+</code></pre></div>
 <p>forall：判断是否所有都符合。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">3</span><span class="o">)</span> <span class="n">forall</span> <span class="o">(</span><span class="mi">0</span><span class="o">&lt;)</span>
+<span class="n">res0</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
 
-<pre><code class="language-scala">scala&gt; (1 to 3) forall (0&lt;)
-res0: Boolean = true
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(-</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">3</span><span class="o">)</span> <span class="n">forall</span> <span class="o">(</span><span class="mi">0</span><span class="o">&lt;)</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
 
-scala&gt; (-1 to 3) forall (0&lt;)
-res1: Boolean = false
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">isPrime</span><span class="o">(</span><span class="n">n</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="mi">2</span> <span class="n">until</span> <span class="n">n</span> <span class="n">forall</span> <span class="o">(</span><span class="n">n</span><span class="o">%</span><span class="k">_</span><span class="o">!=</span><span class="mi">0</span><span class="o">)</span>
+<span class="n">isPrime</span><span class="k">:</span> <span class="o">(</span><span class="kt">n:</span> <span class="kt">Int</span><span class="o">)</span><span class="kt">Boolean</span>
 
-scala&gt; def isPrime(n:Int) = 2 until n forall (n%_!=0)
-isPrime: (n: Int)Boolean
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">(</span><span class="n">i</span><span class="k">&lt;-</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="k">if</span> <span class="n">isPrime</span><span class="o">(</span><span class="n">i</span><span class="o">))</span> <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
+<span class="mi">5</span>
+<span class="mi">7</span>
 
-scala&gt; for (i&lt;-1 to 10 if isPrime(i)) println(i)
-1
-2
-3
-5
-7
-
-scala&gt; (2 to 20) partition (isPrime _)
-res4: (scala.collection.immutable.IndexedSeq[Int], scala.collection.immutable.IndexedSeq[Int]) = (Vector(2, 3, 5, 7, 11, 13, 17, 19),Vector(4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20))
-//也可直接调用BigInt的内部方法
-scala&gt; (2 to 20) partition (BigInt(_) isProbablePrime(10))
-res5: (scala.collection.immutable.IndexedSeq[Int], scala.collection.immutable.IndexedSeq[Int]) = (Vector(2, 3, 5, 7, 11, 13, 17, 19),Vector(4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20))
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">2</span> <span class="n">to</span> <span class="mi">20</span><span class="o">)</span> <span class="n">partition</span> <span class="o">(</span><span class="n">isPrime</span> <span class="k">_</span><span class="o">)</span>
+<span class="n">res4</span><span class="k">:</span> <span class="o">(</span><span class="kt">scala.collection.immutable.IndexedSeq</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="n">scala</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">immutable</span><span class="o">.</span><span class="nc">IndexedSeq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="nc">Vector</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">13</span><span class="o">,</span> <span class="mi">17</span><span class="o">,</span> <span class="mi">19</span><span class="o">),</span><span class="nc">Vector</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">14</span><span class="o">,</span> <span class="mi">15</span><span class="o">,</span> <span class="mi">16</span><span class="o">,</span> <span class="mi">18</span><span class="o">,</span> <span class="mi">20</span><span class="o">))</span>
+<span class="c1">//也可直接调用BigInt的内部方法</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">2</span> <span class="n">to</span> <span class="mi">20</span><span class="o">)</span> <span class="n">partition</span> <span class="o">(</span><span class="nc">BigInt</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="n">isProbablePrime</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span>
+<span class="n">res5</span><span class="k">:</span> <span class="o">(</span><span class="kt">scala.collection.immutable.IndexedSeq</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="n">scala</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">immutable</span><span class="o">.</span><span class="nc">IndexedSeq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="nc">Vector</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">13</span><span class="o">,</span> <span class="mi">17</span><span class="o">,</span> <span class="mi">19</span><span class="o">),</span><span class="nc">Vector</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">14</span><span class="o">,</span> <span class="mi">15</span><span class="o">,</span> <span class="mi">16</span><span class="o">,</span> <span class="mi">18</span><span class="o">,</span> <span class="mi">20</span><span class="o">))</span>
+</code></pre></div>
 <p>reduceLeft方法首先应用于前两个元素，然后再应用于第一次应用的结果和接下去的一个元素，等等，直至整个列表。</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//计算阶乘</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">fac</span><span class="o">(</span><span class="n">n</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">n</span> <span class="n">reduceLeft</span><span class="o">(</span><span class="k">_</span><span class="o">*</span><span class="k">_</span><span class="o">)</span>
+<span class="n">fac</span><span class="k">:</span> <span class="o">(</span><span class="kt">n:</span> <span class="kt">Int</span><span class="o">)</span><span class="kt">Int</span>
 
-<pre><code class="language-scala">//计算阶乘
-scala&gt; def fac(n: Int) = 1 to n reduceLeft(_*_)
-fac: (n: Int)Int
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">fac</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// 5*4*3*2 = 120</span>
+<span class="n">res6</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">120</span>
 
-scala&gt; fac(5) // 5*4*3*2 = 120
-res6: Int = 120
+<span class="c1">//求和</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">6</span><span class="o">).</span><span class="n">reduceLeft</span><span class="o">(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span>
+<span class="n">res7</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">12</span>
 
-//求和
-scala&gt; List(2,4,6).reduceLeft(_+_)
-res7: Int = 12
-
-//取max：
-scala&gt; List(1,4,9,6,7).reduceLeft( (x,y)=&gt; if (x&gt;y) x else y )
-res8: Int = 9
-//或者简化为：  
-scala&gt; List(1,4,9,6,7).reduceLeft(_ max _)
-res9: Int = 9
-</code></pre>
-
+<span class="c1">//取max：</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">9</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">7</span><span class="o">).</span><span class="n">reduceLeft</span><span class="o">(</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span><span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&gt;</span><span class="n">y</span><span class="o">)</span> <span class="n">x</span> <span class="k">else</span> <span class="n">y</span> <span class="o">)</span>
+<span class="n">res8</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="c1">//或者简化为：  </span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">9</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">7</span><span class="o">).</span><span class="n">reduceLeft</span><span class="o">(</span><span class="k">_</span> <span class="n">max</span> <span class="k">_</span><span class="o">)</span>
+<span class="n">res9</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">9</span>
+</code></pre></div>
 <p>foldLeft：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//累加</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">sum</span><span class="o">(</span><span class="n">L</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="n">L</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)((</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+<span class="n">sum</span><span class="k">:</span> <span class="o">(</span><span class="kt">L:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="nc">Int</span>
 
-<pre><code class="language-scala">//累加
-scala&gt; def sum(L: Seq[Int]) = L.foldLeft(0)((a, b) =&gt; a + b)
-sum: (L: Seq[Int])Int
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">sum</span><span class="o">(</span><span class="n">L</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="n">L</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
+<span class="n">sum</span><span class="k">:</span> <span class="o">(</span><span class="kt">L:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="nc">Int</span>
 
-scala&gt; def sum(L: Seq[Int]) = L.foldLeft(0)(_ + _)
-sum: (L: Seq[Int])Int
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">sum</span><span class="o">(</span><span class="n">L</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="mi">0</span><span class="o">/:</span><span class="n">L</span><span class="o">){</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">}</span>
+<span class="n">sum</span><span class="k">:</span> <span class="o">(</span><span class="kt">L:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="nc">Int</span>
 
-scala&gt; def sum(L: List[Int]) = (0/:L){_ + _}
-sum: (L: List[Int])Int
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">sum</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">7</span><span class="o">))</span>
+<span class="n">res10</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">16</span>
 
-scala&gt; sum(List(1,3,5,7))
-res10: Int = 16
+<span class="c1">//乘法：</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">multiply</span><span class="o">(</span><span class="n">L</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="n">L</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="mi">1</span><span class="o">)(</span><span class="k">_</span> <span class="o">*</span> <span class="k">_</span><span class="o">)</span>
+<span class="n">multiply</span><span class="k">:</span> <span class="o">(</span><span class="kt">L:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="nc">Int</span>
 
-//乘法：
-scala&gt; def multiply(L: Seq[Int]) = L.foldLeft(1)(_ * _)
-multiply: (L: Seq[Int])Int
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">multiply</span><span class="o">(</span><span class="nc">Seq</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">))</span>
+<span class="n">res11</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">120</span>
 
-scala&gt; multiply(Seq(1,2,3,4,5))
-res11: Int = 120
-
-scala&gt; multiply(1 until 5+1)
-res12: Int = 120
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">multiply</span><span class="o">(</span><span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o">+</span><span class="mi">1</span><span class="o">)</span>
+<span class="n">res12</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">120</span>
+</code></pre></div>
 <p>scanLeft:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">).</span><span class="n">scanLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span>
+<span class="n">res13</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">15</span><span class="o">)</span>
+<span class="c1">//相当于 (0,(0+1),(0+1+2),(0+1+2+3),(0+1+2+3+4),(0+1+2+3+4+5))</span>
 
-<pre><code class="language-scala">scala&gt; List(1,2,3,4,5).scanLeft(0)(_+_)
-res13: List[Int] = List(0, 1, 3, 6, 10, 15)
-//相当于 (0,(0+1),(0+1+2),(0+1+2+3),(0+1+2+3+4),(0+1+2+3+4+5))
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">).</span><span class="n">scanLeft</span><span class="o">(</span><span class="mi">1</span><span class="o">)(</span><span class="k">_</span><span class="o">*</span><span class="k">_</span><span class="o">)</span>
+<span class="n">res14</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">24</span><span class="o">,</span> <span class="mi">120</span><span class="o">)</span>
+<span class="c1">//相当于 (1, 1*1, 1*1*2, 1*1*2*3, 1*1*2*3*4, 1*1*2*3*4*5)</span>
 
-scala&gt; List(1,2,3,4,5).scanLeft(1)(_*_)
-res14: List[Int] = List(1, 1, 2, 6, 24, 120)
-//相当于 (1, 1*1, 1*1*2, 1*1*2*3, 1*1*2*3*4, 1*1*2*3*4*5)
-
-scala&gt; List(1,2,3,4,5).scanLeft(2)(_*_)
-res16: List[Int] = List(2, 2, 4, 12, 48, 240)
-</code></pre>
-
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">).</span><span class="n">scanLeft</span><span class="o">(</span><span class="mi">2</span><span class="o">)(</span><span class="k">_</span><span class="o">*</span><span class="k">_</span><span class="o">)</span>
+<span class="n">res16</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">48</span><span class="o">,</span> <span class="mi">240</span><span class="o">)</span>
+</code></pre></div>
 <p>take、drop、splitAt:</p>
-
-<pre><code class="language-scala">1 to 10 by 2 take 3 // Range(1, 3, 5)
-1 to 10 by 2 drop 3 // Range(7, 9)
-1 to 10 by 2 splitAt 2 // (Range(1, 3),Range(5, 7, 9))
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">by</span> <span class="mi">2</span> <span class="n">take</span> <span class="mi">3</span> <span class="c1">// Range(1, 3, 5)</span>
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">by</span> <span class="mi">2</span> <span class="n">drop</span> <span class="mi">3</span> <span class="c1">// Range(7, 9)</span>
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">by</span> <span class="mi">2</span> <span class="n">splitAt</span> <span class="mi">2</span> <span class="c1">// (Range(1, 3),Range(5, 7, 9))</span>
+</code></pre></div>
 <p>takeWhile、dropWhile、span：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">takeWhile</span> <span class="o">(</span><span class="k">_</span><span class="o">&lt;</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// (1,2,3,4)</span>
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">takeWhile</span> <span class="o">(</span><span class="k">_</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// ()</span>
+<span class="mi">10</span> <span class="n">to</span> <span class="o">(</span><span class="mi">1</span><span class="o">,-</span><span class="mi">1</span><span class="o">)</span> <span class="n">takeWhile</span><span class="o">(</span><span class="k">_</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">)</span> <span class="c1">// (10,9,8,7)</span>
 
-<pre><code class="language-scala">1 to 10 takeWhile (_&lt;5) // (1,2,3,4)
-1 to 10 takeWhile (_&gt;5) // ()
-10 to (1,-1) takeWhile(_&gt;6) // (10,9,8,7)
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">takeWhile</span> <span class="o">(</span> <span class="n">n</span><span class="k">=&gt;</span> <span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">25</span><span class="o">)</span>  <span class="c1">// (1, 2, 3, 4)</span>
 
-1 to 10 takeWhile ( n=&gt; n*n&lt;25)  // (1, 2, 3, 4)
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">dropWhile</span> <span class="o">(</span><span class="k">_</span><span class="o">&lt;</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// (5,6,7,8,9,10)</span>
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">dropWhile</span> <span class="o">(</span><span class="n">n</span><span class="k">=&gt;</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">25</span><span class="o">)</span> <span class="c1">// (5,6,7,8,9,10)</span>
 
-1 to 10 dropWhile (_&lt;5) // (5,6,7,8,9,10)
-1 to 10 dropWhile (n=&gt;n*n&lt;25) // (5,6,7,8,9,10)
- 
-1 to 10 span (_&lt;5) // ((1,2,3,4),(5,6,7,8)
-List(1,0,1,0) span (_&gt;0) // ((1), (0,1,0))
-// 注意，partition是和span完全不同的操作
-List(1,0,1,0) partition (_&gt;0) // ((1,1),(0,0))
-</code></pre>
-
-<h2 id="match-">match 表达式</h2>
+<span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">span</span> <span class="o">(</span><span class="k">_</span><span class="o">&lt;</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// ((1,2,3,4),(5,6,7,8)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">)</span> <span class="n">span</span> <span class="o">(</span><span class="k">_</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">)</span> <span class="c1">// ((1), (0,1,0))</span>
+<span class="c1">// 注意，partition是和span完全不同的操作</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">)</span> <span class="n">partition</span> <span class="o">(</span><span class="k">_</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">)</span> <span class="c1">// ((1,1),(0,0))</span>
+</code></pre></div>
+<h2 id="match-表达式">match 表达式</h2>
 
 <p>Scala 的匹配表达式允许你在许多可选项中做选择，就好象其它语言中的 switch 语句。通常说来 match 表达式可以让你使用任意的模式。</p>
 
 <p>匹配值：</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">times</span> <span class="k">=</span> <span class="mi">1</span>
 
-<pre><code class="language-scala">val times = 1
-
-times match {
-  case -1|0 =&gt; "zore"
-  case 1 =&gt; "one"
-  case 2 =&gt; "two"
-  case _ =&gt; "some other number"
-}
-</code></pre>
-
+<span class="n">times</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="o">-</span><span class="mi">1</span><span class="o">|</span><span class="mi">0</span> <span class="k">=&gt;</span> <span class="s">&quot;zore&quot;</span>
+  <span class="k">case</span> <span class="mi">1</span> <span class="k">=&gt;</span> <span class="s">&quot;one&quot;</span>
+  <span class="k">case</span> <span class="mi">2</span> <span class="k">=&gt;</span> <span class="s">&quot;two&quot;</span>
+  <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="s">&quot;some other number&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
 <p>使用守卫进行匹配:</p>
-
-<pre><code class="language-scala">times match {
-  case i if i == 1 =&gt; "one"
-  case i if i == 2 =&gt; "two"
-  case _ =&gt; "some other number"
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">times</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">=&gt;</span> <span class="s">&quot;one&quot;</span>
+  <span class="k">case</span> <span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">=&gt;</span> <span class="s">&quot;two&quot;</span>
+  <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="s">&quot;some other number&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
 <p>匹配类型:</p>
-
-<pre><code>def bigger(o: Any): Any = {
+<div class="highlight"><pre><code class="language-text" data-lang="text">def bigger(o: Any): Any = {
   o match {
     case i: Int if i &lt; 0 =&gt; i - 1
     case i: Int =&gt; i + 1
     case d: Double if d &lt; 0.0 =&gt; d - 0.1
     case d: Double =&gt; d + 0.1
-    case text: String =&gt; text + "s"
+    case text: String =&gt; text + &quot;s&quot;
   }
 }
-</code></pre>
-
+</code></pre></div>
 <p>匹配 Option 类型：</p>
-
-<pre><code class="language-scala">scala&gt; map.get(1) match {
-     |  case Some(i) =&gt; println("Got something")
-     |  case None =&gt; println("Got nothing")
-     | }
-Got something
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+     <span class="o">|</span>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;Got something&quot;</span><span class="o">)</span>
+     <span class="o">|</span>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;Got nothing&quot;</span><span class="o">)</span>
+     <span class="o">|</span> <span class="o">}</span>
+<span class="nc">Got</span> <span class="n">something</span>
+</code></pre></div>
 <p>匹配类成员:</p>
-
-<pre><code class="language-scala">def calcType(calc: Calculator) = calc match {
-  case _ if calc.brand == "hp" &amp;&amp; calc.model == "20B" =&gt; "financial"
-  case _ if calc.brand == "hp" &amp;&amp; calc.model == "48G" =&gt; "scientific"
-  case _ if calc.brand == "hp" &amp;&amp; calc.model == "30B" =&gt; "business"
-  case _ =&gt; "unknown"
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">calcType</span><span class="o">(</span><span class="n">calc</span><span class="k">:</span> <span class="kt">Calculator</span><span class="o">)</span> <span class="k">=</span> <span class="n">calc</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="k">_</span> <span class="k">if</span> <span class="n">calc</span><span class="o">.</span><span class="n">brand</span> <span class="o">==</span> <span class="s">&quot;hp&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">calc</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&quot;20B&quot;</span> <span class="k">=&gt;</span> <span class="s">&quot;financial&quot;</span>
+  <span class="k">case</span> <span class="k">_</span> <span class="k">if</span> <span class="n">calc</span><span class="o">.</span><span class="n">brand</span> <span class="o">==</span> <span class="s">&quot;hp&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">calc</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&quot;48G&quot;</span> <span class="k">=&gt;</span> <span class="s">&quot;scientific&quot;</span>
+  <span class="k">case</span> <span class="k">_</span> <span class="k">if</span> <span class="n">calc</span><span class="o">.</span><span class="n">brand</span> <span class="o">==</span> <span class="s">&quot;hp&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">calc</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&quot;30B&quot;</span> <span class="k">=&gt;</span> <span class="s">&quot;business&quot;</span>
+  <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="s">&quot;unknown&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
 <p>与 Java 的 switch 语句比，匹配表达式还有一些重要的差别：</p>
 
 <ul>
-  <li>case 后面可以是任意类型。</li>
-  <li>每个可选项的最后并没有 break，break 是隐含的。</li>
-  <li>match 表达式也能产生值。</li>
-  <li>在最后一行指令中的<code>_</code>是一个通配符，它保证了我们可以处理所有的情况。</li>
+<li>case 后面可以是任意类型。</li>
+<li>每个可选项的最后并没有 break，break 是隐含的。</li>
+<li>match 表达式也能产生值。</li>
+<li>在最后一行指令中的<code class="prettyprint">_</code>是一个通配符，它保证了我们可以处理所有的情况。</li>
 </ul>
 
-<p>参考 Effective Scala 对<a href="http://twitter.github.com/effectivescala/#Functional programming-Pattern matching">什么时候使用模式匹配</a>和 <a href="http://twitter.github.com/effectivescala/#Formatting-Pattern matching">模式匹配格式化</a>的建议。A Tour of Scala 也描述了<a href="http://www.scala-lang.org/node/120">模式匹配</a>。</p>
+<p>参考 Effective Scala 对<a href="http://twitter.github.com/effectivescala/#Functional%20programming-Pattern%20matching">什么时候使用模式匹配</a>和 <a href="http://twitter.github.com/effectivescala/#Formatting-Pattern%20matching">模式匹配格式化</a>的建议。A Tour of Scala 也描述了<a href="http://www.scala-lang.org/node/120">模式匹配</a>。</p>
 
-<h2 id="case-if-">case if 表达式</h2>
+<h2 id="case-if-表达式">case if 表达式</h2>
 
 <p>写法1：</p>
-
-<pre><code class="language-scala">(1 to 20) foreach {                          
-    case x if (x % 15 == 0) =&gt; printf("%2d:15n\n",x)
-    case x if (x % 3 == 0)  =&gt; printf("%2d:3n\n",x)
-    case x if (x % 5 == 0)  =&gt; printf("%2d:5n\n",x)
-    case x =&gt; printf("%2d\n",x)                          
-}
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">20</span><span class="o">)</span> <span class="n">foreach</span> <span class="o">{</span>                          
+    <span class="k">case</span> <span class="n">x</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">15</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d:15n\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">case</span> <span class="n">x</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d:3n\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">case</span> <span class="n">x</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d:5n\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">case</span> <span class="n">x</span> <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>                          
+<span class="o">}</span>
+</code></pre></div>
 <p>写法2：</p>
-
-<pre><code class="language-scala">(1 to 20) map (x=&gt; (x%3,x%5) match {
-  case (0,0) =&gt; printf("%2d:15n\n",x)
-  case (0,_) =&gt; printf("%2d:3n\n",x)
-  case (_,0) =&gt; printf("%2d:5n\n",x)
-  case (_,_) =&gt; printf("%2d\n",x)
-})
-</code></pre>
-
-<h2 id="breakcontinue">break、continue</h2>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">20</span><span class="o">)</span> <span class="n">map</span> <span class="o">(</span><span class="n">x</span><span class="k">=&gt;</span> <span class="o">(</span><span class="n">x</span><span class="o">%</span><span class="mi">3</span><span class="o">,</span><span class="n">x</span><span class="o">%</span><span class="mi">5</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d:15n\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+  <span class="k">case</span> <span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d:3n\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+  <span class="k">case</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span><span class="mi">0</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d:5n\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+  <span class="k">case</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%2d\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">)</span>
+<span class="o">})</span>
+</code></pre></div>
+<h2 id="break、continue">break、continue</h2>
 
 <p>Scala中没有break和continue语法，需要break得加辅助boolean变量，或者用库（continue没有）。</p>
 
-<p>例子1：打印’a’到’z’的前10个</p>
+<p>例子1：打印&#39;a&#39;到&#39;z&#39;的前10个</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">val</span> <span class="n">rt</span> <span class="o">=</span> <span class="k">for</span><span class="o">(</span><span class="n">e</span><span class="o">&lt;-(</span><span class="sc">&#39;a&#39;</span> <span class="n">to</span> <span class="sc">&#39;z&#39;</span><span class="o">)</span> <span class="k">if</span> <span class="o">{</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="mi">10</span><span class="o">})</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;%d:%s\n&quot;</span><span class="o">,</span><span class="n">i</span><span class="o">,</span><span class="n">e</span><span class="o">)</span>
 
-<pre><code class="language-java">var i=0; val rt = for(e&lt;-('a' to 'z') if {i=i+1;i&lt;=10}) printf("%d:%s\n",i,e)
-
-('a' to 'z').slice(0,10).foreach(println)
-</code></pre>
-
+<span class="o">(</span><span class="sc">&#39;a&#39;</span> <span class="n">to</span> <span class="sc">&#39;z&#39;</span><span class="o">).</span><span class="na">slice</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">10</span><span class="o">).</span><span class="na">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div>
 <p>例子2：1 到 100 和小于1000的数</p>
-
-<pre><code class="language-scala">var (n,sum)=(0,0); for(i&lt;-0 to 100 if (sum+i&lt;1000)) { n=i; sum+=i }
-// n = 44, sum = 990
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span><span class="n">sum</span><span class="o">)=(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span> <span class="k">for</span><span class="o">(</span><span class="n">i</span><span class="k">&lt;-</span><span class="mi">0</span> <span class="n">to</span> <span class="mi">100</span> <span class="k">if</span> <span class="o">(</span><span class="n">sum</span><span class="o">+</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">1000</span><span class="o">))</span> <span class="o">{</span> <span class="n">n</span><span class="k">=</span><span class="n">i</span><span class="o">;</span> <span class="n">sum</span><span class="o">+=</span><span class="n">i</span> <span class="o">}</span>
+<span class="c1">// n = 44, sum = 990</span>
+</code></pre></div>
 <p>例子3：使用库来实现break</p>
-
-<pre><code class="language-scala">import scala.util.control.Breaks._
-for(e&lt;-1 to 10) { val e2 = e*e; if (e2&gt;10) break; println(e) }
-</code></pre>
-
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">scala.util.control.Breaks._</span>
+<span class="k">for</span><span class="o">(</span><span class="n">e</span><span class="k">&lt;-</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span><span class="o">)</span> <span class="o">{</span> <span class="k">val</span> <span class="n">e2</span> <span class="k">=</span> <span class="n">e</span><span class="o">*</span><span class="n">e</span><span class="o">;</span> <span class="k">if</span> <span class="o">(</span><span class="n">e2</span><span class="o">&gt;</span><span class="mi">10</span><span class="o">)</span> <span class="n">break</span><span class="o">;</span> <span class="n">println</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="o">}</span>
+</code></pre></div>
 <h2 id="try-catch-finally">try catch finally</h2>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">f</span> <span class="k">=</span> <span class="n">openFile</span><span class="o">()</span>
+<span class="k">try</span> <span class="o">{</span>
+  <span class="n">f</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">&quot;input.txt&quot;</span><span class="o">)</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">FileNotFoundException</span> <span class="o">=&gt;</span> <span class="c1">// Handle missing file</span>
+  <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">IOException</span> <span class="o">=&gt;</span> <span class="c1">// Handle other I/O error</span>
+<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>捕获异常使用的是<code class="prettyprint">模式匹配</code>。</p>
 
-<pre><code class="language-scala">var f = openFile()
-try {
-  f = new FileReader("input.txt")
-} catch {
-  case ex: FileNotFoundException =&gt; // Handle missing file
-  case ex: IOException =&gt; // Handle other I/O error
-} finally {
-  f.close()
-}
-</code></pre>
-
-<p>捕获异常使用的是<code>模式匹配</code>。</p>
-
-<h1 id="section-19">7. 其他</h1>
+<h1 id="7-其他">7. 其他</h1>
 
 <h2 id="null-none-nil-nothing">Null, None, Nil, Nothing</h2>
 
 <ul>
-  <li><code>Null</code>： <code>Trait</code>，其唯一实例为null，是<code>AnyRef</code>的子类，<em>不是</em> <code>AnyVal</code>的子类</li>
-  <li><code>Nothing</code>： <code>Trait</code>，所有类型（包括<code>AnyRef</code>和<code>AnyVal</code>）的子类，没有实例</li>
-  <li><code>None</code>： <code>Option</code>的两个子类之一，另一个是<code>Some</code>，用于安全的函数返回值</li>
-  <li><code>Unit</code>： 无返回值的函数的类型，和java的void对应</li>
-  <li><code>Nil</code>： 长度为0的List</li>
+<li><code class="prettyprint">Null</code>： <code class="prettyprint">Trait</code>，其唯一实例为null，是<code class="prettyprint">AnyRef</code>的子类，<em>不是</em> <code class="prettyprint">AnyVal</code>的子类</li>
+<li><code class="prettyprint">Nothing</code>： <code class="prettyprint">Trait</code>，所有类型（包括<code class="prettyprint">AnyRef</code>和<code class="prettyprint">AnyVal</code>）的子类，没有实例</li>
+<li><code class="prettyprint">None</code>： <code class="prettyprint">Option</code>的两个子类之一，另一个是<code class="prettyprint">Some</code>，用于安全的函数返回值</li>
+<li><code class="prettyprint">Unit</code>： 无返回值的函数的类型，和java的void对应</li>
+<li><code class="prettyprint">Nil</code>： 长度为0的List</li>
 </ul>
 
-<h2 id="section-20">区分&lt;-,=&gt;,-&gt;</h2>
+<h2 id="区分-lt-gt-gt">区分&lt;-,=&gt;,-&gt;</h2>
 
-<p><code>&lt;-</code>用于for循环，符号<code>∈</code>的象形:</p>
-
-<pre><code class="language-scala">for (i &lt;- 0 until 100)
-</code></pre>
-
-<p><code>=&gt;</code>用于匿名函数，也可用在import中定义别名：<code>import javax.swing.{JFrame=&gt;jf}</code></p>
-
-<pre><code class="language-scala">List(1,2,3).map(x=&gt; x*x)
-((i:Int)=&gt;i*i)(5) // 25
-</code></pre>
-
-<p><code>-&gt;</code>用于Map初始化</p>
-
-<pre><code class="language-scala">Map(1-&gt;"a",2-&gt;"b") // (1:"a",2:"b")
-</code></pre>
-
+<p><code class="prettyprint">&lt;-</code>用于for循环，符号<code class="prettyprint">∈</code>的象形:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">0</span> <span class="n">until</span> <span class="mi">100</span><span class="o">)</span>
+</code></pre></div>
+<p><code class="prettyprint">=&gt;</code>用于匿名函数，也可用在import中定义别名：<code class="prettyprint">import javax.swing.{JFrame=&gt;jf}</code></p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">x</span><span class="k">=&gt;</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">)</span>
+<span class="o">((</span><span class="n">i</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span><span class="k">=&gt;</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">)(</span><span class="mi">5</span><span class="o">)</span> <span class="c1">// 25</span>
+</code></pre></div>
+<p><code class="prettyprint">-&gt;</code>用于Map初始化</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nc">Map</span><span class="o">(</span><span class="mi">1</span><span class="o">-&gt;</span><span class="s">&quot;a&quot;</span><span class="o">,</span><span class="mi">2</span><span class="o">-&gt;</span><span class="s">&quot;b&quot;</span><span class="o">)</span> <span class="c1">// (1:&quot;a&quot;,2:&quot;b&quot;)</span>
+</code></pre></div>
 <blockquote>
-  <p>注意：在scala中任何对象都能调用<code>-&gt;</code>方法（隐式转换），返回包含键值对的二元组!</p>
+<p>注意：在scala中任何对象都能调用<code class="prettyprint">-&gt;</code>方法（隐式转换），返回包含键值对的二元组!</p>
 </blockquote>
 
-<h1 id="section-21">8. 参考资料</h1>
+<h1 id="8-参考资料">8. 参考资料</h1>
 
 <ul>
-  <li><a href="http://www.scala-lang.org/">http://www.scala-lang.org/</a></li>
-  <li><a href="http://twitter.github.io/scala_school/zh_cn/index.html">Scala 课堂</a></li>
-  <li><a href="http://qiujj.com/static/Scala-Handbook.htm">Scala 2.8+ Handbook</a></li>
-  <li><a href="http://www.ibm.com/developerworks/cn/java/j-scala/">面向 Java 开发人员的 Scala 指南系列</a></li>
+<li><a href="http://www.scala-lang.org/">http://www.scala-lang.org/</a></li>
+<li><a href="http://twitter.github.io/scala_school/zh_cn/index.html">Scala 课堂</a></li>
+<li><a href="http://qiujj.com/static/Scala-Handbook.htm">Scala 2.8+ Handbook</a></li>
+<li><a href="http://www.ibm.com/developerworks/cn/java/j-scala/">面向 Java 开发人员的 Scala 指南系列</a></li>
 </ul>
-
 
                     <br/>
                     <div class="well">
