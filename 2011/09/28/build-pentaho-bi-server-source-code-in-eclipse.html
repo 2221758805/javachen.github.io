@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -116,12 +110,15 @@
 <p><strong>以下操作是在eclipse3.7+tomcat 6.20的环境中进行的。</strong></p>
 
 <p>在eclipse中创建一个web项目，名称为pentaho，然后将<em>biserver-ce/tomcat/webapps</em>下的<code>pentaho-style</code>和<code>sw-style</code>拷贝到你的tomcat 6服务器的webapps目录下，将pentaho文件下的所有文件拷贝到工程下的WebContent目录下。由于biserver需要访问pentaho-solutions下的文件，故还需要修改<code>WEB-INF/web.xml</code>文件你的以下配置，用于指定pentaho-solutions的路径：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt; context-param &gt;
-    &lt; param-name &gt;solution-path&lt; /param-name&gt;
-    &lt; param-value &gt;/home/june.chan/opt/biserver-ce/pentaho-solutions&lt; /param-value&gt;
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt; context-param &gt;
+	&lt; param-name &gt;solution-path&lt; /param-name&gt;
+	&lt; param-value &gt;/home/june.chan/opt/biserver-ce/pentaho-solutions&lt; /param-value&gt;
 &lt; /context-param &gt;
-</code></pre></div>
-<p>现在即可部署项目，运行<code>biserver-ce/data/start_hypersonic.bat</code>（用于启动数据库），然后启动tomcat，就可以通过<em><a href="http://localhost:8080/pentaho">http://localhost:8080/pentaho</a></em>访问biserver。如果启动报错，需要将hsqldb-1.8.0.7.jar包，拷贝到应用路径下（<em>\tomcat-pci-test\biserver-ce\tomcat\webapps\pentaho\WEB-INF\lib</em>）。<br />
+</code></pre>
+</div>
+
+<p>现在即可部署项目，运行<code>biserver-ce/data/start_hypersonic.bat</code>（用于启动数据库），然后启动tomcat，就可以通过<em>http://localhost:8080/pentaho</em>访问biserver。如果启动报错，需要将hsqldb-1.8.0.7.jar包，拷贝到应用路径下（<em>\tomcat-pci-test\biserver-ce\tomcat\webapps\pentaho\WEB-INF\lib</em>）。<br />
 现在可以看到biserver的登录页面，但是还是没有看到biserver的源代码。</p>
 
 <p><strong>接下来，构建源代码。</strong>
@@ -137,7 +134,8 @@
 * biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-repository-3.9.0-stable.jar文件中有hibernate配置文件，
 * biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/pentaho-bi-platform-security-userroledao-3.9.0-stable.jar文件中有hibernated的实体映射文件。</p>
 
-<p>4.biserver-ce-3.9.0-stable.zip的lib（<code class="prettyprint">biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib</code>）目录下的servlete jar包的版本为2.3，版本过低需要替换为更高版本知道源码中不在有servlete编译错误</p>
+<p>4.biserver-ce-3.9.0-stable.zip的lib（<code class="highlighter-rouge">biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib</code>）目录下的servlete jar包的版本为2.3，版本过低需要替换为更高版本知道源码中不在有servlete编译错误</p>
+
 
                     <br/>
                     <div class="well">
@@ -184,7 +182,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

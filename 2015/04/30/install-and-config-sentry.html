@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,44 +101,51 @@
               <div id="post-text">
                     <p>本文主要记录安装和配置Sentry的过程，关于Sentry的介绍，请参考<a href="/2015/04/29/apache-sentry-architecture.html">Apache Sentry架构介绍</a>。</p>
 
-<h1 id="1-环境说明">1. 环境说明</h1>
+<h1 id="section">1. 环境说明</h1>
 
 <p>系统环境：</p>
 
 <ul>
-<li>操作系统：CentOs 6.6</li>
-<li>Hadoop版本：<code class="prettyprint">CDH5.4</code></li>
-<li>运行用户：root</li>
+  <li>操作系统：CentOs 6.6</li>
+  <li>Hadoop版本：<code class="highlighter-rouge">CDH5.4</code></li>
+  <li>运行用户：root</li>
 </ul>
 
 <p>这里，我参考<a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>一文搭建了一个测试集群，并选择cdh1节点来安装sentry服务。</p>
 
-<h1 id="2-安装">2. 安装</h1>
+<h1 id="section-1">2. 安装</h1>
 
 <p>在cdh1节点上运行下面命令查看Sentry的相关组件有哪些:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>yum list sentry*
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum list sentry<span class="k">*</span>
 
 sentry.noarch                        1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6                            @cdh
 sentry-hdfs-plugin.noarch        1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6                            @cdh
 sentry-store.noarch                1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6                            @cdh
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>以上组件说明：</p>
 
 <ul>
-<li><code class="prettyprint">sentry</code>：sentry的基本包</li>
-<li><code class="prettyprint">sentry-hdfs-plugin</code>：hdfs插件</li>
-<li><code class="prettyprint">sentry-store</code>：sentry store组件</li>
+  <li><code class="highlighter-rouge">sentry</code>：sentry的基本包</li>
+  <li><code class="highlighter-rouge">sentry-hdfs-plugin</code>：hdfs插件</li>
+  <li><code class="highlighter-rouge">sentry-store</code>：sentry store组件</li>
 </ul>
 
 <p>这里安装以上所有组件：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>yum install sentry* -y
-</code></pre></div>
-<h1 id="3-配置">3. 配置</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install sentry<span class="k">*</span> -y
+</code></pre>
+</div>
+
+<h1 id="section-2">3. 配置</h1>
 
 <p>参考<a href="https://github.com/cloudera/sentry/blob/cdh5-1.4.0_5.4.0/conf/sentry-site.xml.service.template">sentry-site.xml.service.template</a>，来修改Sentry的配置文件 /etc/sentry/conf/sentry-site.xml。</p>
 
-<h2 id="配置-sentry-service-相关的参数">配置 sentry service 相关的参数</h2>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+<h2 id="sentry-service-">配置 sentry service 相关的参数</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
         <span class="nt">&lt;name&gt;</span>sentry.service.admin.group<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>impala,hive,solr,hue<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
@@ -172,9 +173,12 @@ sentry-store.noarch                1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6      
         <span class="nt">&lt;name&gt;</span>sentry.service.web.enable<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>如果需要使用kerberos认证，则还需要配置以下参数：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
         <span class="nt">&lt;name&gt;</span>sentry.service.security.mode<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>kerberos<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
@@ -186,11 +190,14 @@ sentry-store.noarch                1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6      
         <span class="nt">&lt;name&gt;</span>sentry.service.server.keytab<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
-<h2 id="配置-sentry-store-相关参数">配置 sentry store 相关参数</h2>
+</code></pre>
+</div>
+
+<h2 id="sentry-store-">配置 sentry store 相关参数</h2>
 
 <p>sentry store可以使用两种方式，如果使用基于SimpleDbProviderBackend的方式，则需要设置jdbc相关的参数：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
         <span class="nt">&lt;name&gt;</span>sentry.store.jdbc.url<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>jdbc:postgresql://cdh1:5432/sentry<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
@@ -206,9 +213,12 @@ sentry-store.noarch                1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6      
         <span class="nt">&lt;name&gt;</span>sentry.store.jdbc.password<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>sentry<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
-<p>Sentry store的组映射<code class="prettyprint">sentry.store.group.mapping</code>有些两种配置方式：<code class="prettyprint">org.apache.sentry.provider.common.HadoopGroupMappingService</code>或者<code class="prettyprint">org.apache.sentry.provider.file.LocalGroupMapping</code>，当使用后者的时候，还需要配置<code class="prettyprint">sentry.store.group.mapping.resource</code>参数，即设置Policy file的路径。</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+</code></pre>
+</div>
+
+<p>Sentry store的组映射<code class="highlighter-rouge">sentry.store.group.mapping</code>有些两种配置方式：<code class="highlighter-rouge">org.apache.sentry.provider.common.HadoopGroupMappingService</code>或者<code class="highlighter-rouge">org.apache.sentry.provider.file.LocalGroupMapping</code>，当使用后者的时候，还需要配置<code class="highlighter-rouge">sentry.store.group.mapping.resource</code>参数，即设置Policy file的路径。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
         <span class="nt">&lt;name&gt;</span>sentry.store.group.mapping<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>org.apache.sentry.provider.common.HadoopGroupMappingService<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
@@ -217,34 +227,43 @@ sentry-store.noarch                1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6      
         <span class="nt">&lt;value&gt;</span> <span class="nt">&lt;/value&gt;</span>
         <span class="nt">&lt;description&gt;</span> Policy file for group mapping. Policy file path for local group mapping, when sentry.store.group.mapping is set to LocalGroupMapping Service class.<span class="nt">&lt;/description&gt;</span>
   <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
-<h2 id="配置客户端的参数：">配置客户端的参数：</h2>
+</code></pre>
+</div>
 
-<p>配置Sentry和hive集成时的服务名称，默认值为<code class="prettyprint">HS2</code>，这里设置为server1：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+<h2 id="section-3">配置客户端的参数：</h2>
+
+<p>配置Sentry和hive集成时的服务名称，默认值为<code class="highlighter-rouge">HS2</code>，这里设置为server1：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
         <span class="nt">&lt;name&gt;</span>sentry.hive.server<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>server1<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
-<h2 id="初始化数据库">初始化数据库</h2>
+</code></pre>
+</div>
 
-<p>如果配置 sentry store 使用 <code class="prettyprint">posrgres</code> 数据库，当然你也可以使用其他的数据库，则需要创建并初始化数据库。数据库的创建过程，请参考 <a href="/2013/08/02/hadoop-install-script/">Hadoop自动化安装shell脚本</a>，下面列出关键脚本。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">yum install postgresql-server postgresql-jdbc -y
+<h2 id="section-4">初始化数据库</h2>
+
+<p>如果配置 sentry store 使用 <code class="highlighter-rouge">posrgres</code> 数据库，当然你也可以使用其他的数据库，则需要创建并初始化数据库。数据库的创建过程，请参考 <a href="/2013/08/02/hadoop-install-script/">Hadoop自动化安装shell脚本</a>，下面列出关键脚本。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yum install postgresql-server postgresql-jdbc -y
 
 ln -s /usr/share/java/postgresql-jdbc.jar /usr/lib/hive/lib/postgresql-jdbc.jar
 ln -s /usr/share/java/postgresql-jdbc.jar /usr/lib/sentry/lib/postgresql-jdbc.jar
 
-su -c <span class="s2">&quot;cd ; /usr/bin/pg_ctl start -w -m fast -D /var/lib/pgsql/data&quot;</span> postgres
-su -c <span class="s2">&quot;cd ; /usr/bin/psql --command \&quot;create user sentry with password &#39;sentry&#39;; \&quot; &quot;</span> postgres
-su -c <span class="s2">&quot;cd ; /usr/bin/psql --command \&quot;drop database sentry;\&quot; &quot;</span> postgres
-su -c <span class="s2">&quot;cd ; /usr/bin/psql --command \&quot;CREATE DATABASE sentry owner=sentry;\&quot; &quot;</span> postgres
-su -c <span class="s2">&quot;cd ; /usr/bin/psql --command \&quot;GRANT ALL privileges ON DATABASE sentry TO sentry;\&quot; &quot;</span> postgres
-su -c <span class="s2">&quot;cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsql/data&quot;</span> postgres
-</code></pre></div>
-<p>然后，修改 /var/lib/pgsql/data/pg_hba.conf 内容如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+su -c <span class="s2">"cd ; /usr/bin/pg_ctl start -w -m fast -D /var/lib/pgsql/data"</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">create user sentry with password 'sentry'; </span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">drop database sentry;</span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">CREATE DATABASE sentry owner=sentry;</span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">GRANT ALL privileges ON DATABASE sentry TO sentry;</span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsql/data"</span> postgres
+</code></pre>
+</div>
 
-# &quot;local&quot; is for Unix domain socket connections only
+<p>然后，修改 /var/lib/pgsql/data/pg_hba.conf 内容如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+
+# "local" is for Unix domain socket connections only
 local   all         all                               md5
 # IPv4 local connections:
 #host    all         all         0.0.0.0/0             trust
@@ -252,9 +271,12 @@ host    all         all         127.0.0.1/32          md5
 
 # IPv6 local connections:
 #host    all         all         ::1/128               nd5
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>如果是第一次安装，则初始化 sentry 的元数据库：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sentry --command schema-tool --conffile /etc/sentry/conf/sentry-site.xml --dbType postgres --initSchema
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sentry --command schema-tool --conffile /etc/sentry/conf/sentry-site.xml --dbType postgres --initSchema
 Sentry store connection URL:     jdbc:postgresql://cdh1/sentry
 Sentry store Connection Driver :     org.postgresql.Driver
 Sentry store connection User:    sentry
@@ -264,30 +286,41 @@ Connecting to jdbc:postgresql://cdh1/sentry
 Connected to: PostgreSQL <span class="o">(</span>version 8.4.18<span class="o">)</span>
 Driver: PostgreSQL Native Driver <span class="o">(</span>version PostgreSQL 9.0 JDBC4 <span class="o">(</span>build 801<span class="o">))</span>
 Transaction isolation: TRANSACTION_REPEATABLE_READ
-Autocommit status: <span class="nb">true</span>
-<span class="m">1</span> row affected <span class="o">(</span>0.002 seconds<span class="o">)</span>
+Autocommit status: <span class="nb">true
+</span>1 row affected <span class="o">(</span>0.002 seconds<span class="o">)</span>
 No rows affected <span class="o">(</span>0.004 seconds<span class="o">)</span>
 Closing: 0: jdbc:postgresql://cdh1/sentry
 Initialization script completed
 Sentry schemaTool completed
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>如果是更新，则执行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sentry --command schema-tool --conffile /etc/sentry/conf/sentry-site.xml --dbType postgres --upgradeSchema
-</code></pre></div>
-<h1 id="4-启动">4. 启动</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sentry --command schema-tool --conffile /etc/sentry/conf/sentry-site.xml --dbType postgres --upgradeSchema
+</code></pre>
+</div>
+
+<h1 id="section-5">4. 启动</h1>
 
 <p>在cdh1上启动sentry-store服务：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>/etc/init.d/sentry-store start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>/etc/init.d/sentry-store start
+</code></pre>
+</div>
+
 <p>查看日志：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>cat /var/log/sentry/sentry-store.out
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>cat /var/log/sentry/sentry-store.out
+</code></pre>
+</div>
+
 <p>查看sentry的web监控界面<a href="http://cdh1:51000/">http://cdh1:51000/</a>。</p>
 
-<h1 id="5-参考文章">5. 参考文章</h1>
+<h1 id="section-6">5. 参考文章</h1>
 
 <ul>
-<li><a href="http://www.cloudera.com/content/cloudera/en/documentation/cloudera-manager/v4-8-0/Cloudera-Manager-Managing-Clusters/cmmc_sentry_config.html">Setting Up Hive Authorization with Sentry</a></li>
+  <li><a href="http://www.cloudera.com/content/cloudera/en/documentation/cloudera-manager/v4-8-0/Cloudera-Manager-Managing-Clusters/cmmc_sentry_config.html">Setting Up Hive Authorization with Sentry</a></li>
 </ul>
 
                     <br/>
@@ -335,7 +368,8 @@ Sentry schemaTool completed
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

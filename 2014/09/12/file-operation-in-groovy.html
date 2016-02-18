@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,33 +101,40 @@
               <div id="post-text">
                     <p>Java 读写文件比较麻烦，那 Groovy 操作文件又如何呢？</p>
 
-<h1 id="1-读文件">1. 读文件</h1>
+<h1 id="section">1. 读文件</h1>
 
-<h2 id="读文件内容">读文件内容</h2>
+<h2 id="section-1">读文件内容</h2>
 
 <p>在groovy中输出文件的内容：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">println</span> <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s2">&quot;tmp.csv&quot;</span><span class="o">).</span><span class="na">text</span>  
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">println</span> <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s2">"tmp.csv"</span><span class="o">).</span><span class="na">text</span>  
+</code></pre>
+</div>
+
 <p>上面代码非常简单，没有流的出现，没有资源关闭的出现，也没有异常控制的出现，所有的这些groovy已经搞定了。</p>
 
 <p>读取每一行内容：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s1">&#39;tmp.csv&#39;</span><span class="o">)</span>
-<span class="k">assert</span> <span class="n">file</span><span class="o">.</span><span class="na">name</span> <span class="o">==</span> <span class="s1">&#39;tmp.csv&#39;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s1">'tmp.csv'</span><span class="o">)</span>
+<span class="k">assert</span> <span class="n">file</span><span class="o">.</span><span class="na">name</span> <span class="o">==</span> <span class="s1">'tmp.csv'</span>
 <span class="k">assert</span> <span class="o">!</span> <span class="n">file</span><span class="o">.</span><span class="na">isAbsolute</span><span class="o">()</span>
-<span class="k">assert</span> <span class="n">file</span><span class="o">.</span><span class="na">path</span> <span class="o">==</span> <span class="s1">&#39;tmp.csv&#39;</span>
+<span class="k">assert</span> <span class="n">file</span><span class="o">.</span><span class="na">path</span> <span class="o">==</span> <span class="s1">'tmp.csv'</span>
 <span class="k">assert</span> <span class="n">file</span><span class="o">.</span><span class="na">parent</span> <span class="o">==</span> <span class="kc">null</span>
 
 <span class="c1">//使用系统默认的编码处理文件流  </span>
 <span class="n">file</span><span class="o">.</span><span class="na">eachLine</span> <span class="o">{</span><span class="n">println</span> <span class="n">it</span> <span class="o">}</span>  
 <span class="c1">//指定处理流的编码</span>
-<span class="n">file</span><span class="o">.</span><span class="na">eachLine</span><span class="o">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">println</span> <span class="n">it</span> <span class="o">}</span>
+<span class="n">file</span><span class="o">.</span><span class="na">eachLine</span><span class="o">(</span><span class="s2">"UTF-8"</span><span class="o">)</span> <span class="o">{</span> <span class="n">println</span> <span class="n">it</span> <span class="o">}</span>
 
-<span class="n">file</span><span class="o">.</span><span class="na">eachLine</span><span class="o">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="o">,</span><span class="mi">10</span><span class="o">)</span> <span class="o">{</span><span class="n">str</span><span class="o">,</span><span class="n">no</span><span class="o">-&gt;</span>  
+<span class="n">file</span><span class="o">.</span><span class="na">eachLine</span><span class="o">(</span><span class="s2">"UTF-8"</span><span class="o">,</span><span class="mi">10</span><span class="o">)</span> <span class="o">{</span><span class="n">str</span><span class="o">,</span><span class="n">no</span><span class="o">-&gt;</span>  
     <span class="n">println</span> <span class="n">str</span>  
     <span class="n">println</span> <span class="n">no</span> <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>对文件中每一行的内容做处理：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">file</span><span class="o">.</span><span class="na">splitEachLine</span><span class="o">(</span><span class="s2">&quot;\t&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">println</span> <span class="n">it</span>  <span class="o">}</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">file</span><span class="o">.</span><span class="na">splitEachLine</span><span class="o">(</span><span class="s2">"\t"</span><span class="o">)</span> <span class="o">{</span> <span class="n">println</span> <span class="n">it</span>  <span class="o">}</span>
 
 <span class="c1">//以大写行式输出文件内容  </span>
 <span class="n">lineList</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">readLines</span><span class="o">();</span>  
@@ -142,56 +143,74 @@
 <span class="o">}</span>
 
 <span class="n">file</span><span class="o">.</span><span class="na">filterLine</span> <span class="o">{</span><span class="n">String</span> <span class="n">str</span><span class="o">-&gt;</span>  
-    <span class="k">if</span> <span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s1">&#39;code&#39;</span><span class="o">))</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s1">'code'</span><span class="o">))</span>  
         <span class="n">println</span> <span class="n">str</span>  
 <span class="o">}.</span><span class="na">writeTo</span><span class="o">(</span><span class="k">new</span> <span class="n">PrintWriter</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">))</span> 
-</code></pre></div>
-<h2 id="解析-xml-文件">解析 xml 文件</h2>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span> 
+</code></pre>
+</div>
+
+<h2 id="xml-">解析 xml 文件</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span> 
 <span class="nt">&lt;customers&gt;</span> 
   <span class="nt">&lt;corporate&gt;</span> 
-    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">&quot;bill gates&quot;</span> <span class="na">company=</span><span class="s">&quot;microsoft&quot;</span><span class="nt">&gt;&lt;/customer&gt;</span> 
-    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">&quot;steve jobs&quot;</span> <span class="na">company=</span><span class="s">&quot;apple&quot;</span><span class="nt">&gt;&lt;/customer&gt;</span> 
-    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">&quot;bill dyh&quot;</span> <span class="na">company=</span><span class="s">&quot;sun&quot;</span><span class="nt">&gt;&lt;/customer&gt;</span> 
+    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">"bill gates"</span> <span class="na">company=</span><span class="s">"microsoft"</span><span class="nt">&gt;&lt;/customer&gt;</span> 
+    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">"steve jobs"</span> <span class="na">company=</span><span class="s">"apple"</span><span class="nt">&gt;&lt;/customer&gt;</span> 
+    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">"bill dyh"</span> <span class="na">company=</span><span class="s">"sun"</span><span class="nt">&gt;&lt;/customer&gt;</span> 
   <span class="nt">&lt;/corporate&gt;</span> 
   <span class="nt">&lt;consumer&gt;</span> 
-    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">&quot;jone Doe&quot;</span><span class="nt">&gt;&lt;/customer&gt;</span> 
-    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">&quot;jane Doe&quot;</span><span class="nt">&gt;&lt;/customer&gt;</span>    
+    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">"jone Doe"</span><span class="nt">&gt;&lt;/customer&gt;</span> 
+    <span class="nt">&lt;customer</span> <span class="na">name=</span><span class="s">"jane Doe"</span><span class="nt">&gt;&lt;/customer&gt;</span>    
   <span class="nt">&lt;/consumer&gt;</span> 
 <span class="nt">&lt;/customers&gt;</span>
-</code></pre></div><div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="kt">def</span> <span class="n">customers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XmlSlurper</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s2">&quot;customers.xml&quot;</span><span class="o">))</span> 
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">def</span> <span class="n">customers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XmlSlurper</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s2">"customers.xml"</span><span class="o">))</span> 
 <span class="cm">/*对文件进行解析*/</span> 
 <span class="k">for</span><span class="o">(</span><span class="n">customer</span> <span class="k">in</span> <span class="n">customers</span><span class="o">.</span><span class="na">corporate</span><span class="o">.</span><span class="na">customer</span><span class="o">){</span> 
-    <span class="n">println</span> <span class="s2">&quot;${customer.@name} works for${customer.@company}&quot;</span><span class="o">;</span> 
+    <span class="n">println</span> <span class="s2">"${customer.@name} works for${customer.@company}"</span><span class="o">;</span> 
 <span class="o">}</span> 
-</code></pre></div>
-<h2 id="解析-propeties-文件">解析 propeties 文件</h2>
+</code></pre>
+</div>
+
+<h2 id="propeties-">解析 propeties 文件</h2>
 
 <p>参考 <a href="http://stackoverflow.com/questions/2055959/groovy-how-to-access-to-properties-file">groovy: How to access to properties file?</a>，代码如下：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="kt">def</span> <span class="n">props</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">()</span>
-<span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s2">&quot;message.properties&quot;</span><span class="o">).</span><span class="na">withInputStream</span> <span class="o">{</span> 
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">def</span> <span class="n">props</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">()</span>
+<span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s2">"message.properties"</span><span class="o">).</span><span class="na">withInputStream</span> <span class="o">{</span> 
   <span class="n">stream</span> <span class="o">-&gt;</span> <span class="n">props</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">stream</span><span class="o">)</span> 
 <span class="o">}</span>
-<span class="c1">// accessing the property from Properties object using Groovy&#39;s map notation</span>
-<span class="n">println</span> <span class="s2">&quot;capacity.created=&quot;</span> <span class="o">+</span> <span class="n">props</span><span class="o">[</span><span class="s2">&quot;capacity.created&quot;</span><span class="o">]</span>
+<span class="c1">// accessing the property from Properties object using Groovy's map notation</span>
+<span class="n">println</span> <span class="s2">"capacity.created="</span> <span class="o">+</span> <span class="n">props</span><span class="o">[</span><span class="s2">"capacity.created"</span><span class="o">]</span>
 
 <span class="kt">def</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConfigSlurper</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">props</span><span class="o">)</span>
 <span class="c1">// accessing the property from ConfigSlurper object using GPath expression</span>
-<span class="n">println</span> <span class="s2">&quot;capacity.created=&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="na">capacity</span><span class="o">.</span><span class="na">created</span>
-</code></pre></div>
+<span class="n">println</span> <span class="s2">"capacity.created="</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="na">capacity</span><span class="o">.</span><span class="na">created</span>
+</code></pre>
+</div>
+
 <p>另外一种方式：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="kt">def</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConfigSlurper</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s2">&quot;message.groovy&quot;</span><span class="o">).</span><span class="na">toURL</span><span class="o">())</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">def</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConfigSlurper</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s2">"message.groovy"</span><span class="o">).</span><span class="na">toURL</span><span class="o">())</span>
+</code></pre>
+</div>
+
 <p>message.groovy 内容如下：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">capacity</span> <span class="o">{</span>
-  <span class="n">created</span><span class="o">=</span><span class="s2">&quot;x&quot;</span>
-  <span class="n">modified</span><span class="o">=</span><span class="s2">&quot;y&quot;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">capacity</span> <span class="o">{</span>
+  <span class="n">created</span><span class="o">=</span><span class="s2">"x"</span>
+  <span class="n">modified</span><span class="o">=</span><span class="s2">"y"</span>
 <span class="o">}</span>
-</code></pre></div>
-<h1 id="2-操作目录">2. 操作目录</h1>
+</code></pre>
+</div>
+
+<h1 id="section-2">2. 操作目录</h1>
 
 <p>列出目录所有文件（包含子文件夹，子文件夹内文件） ：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="kt">def</span> <span class="n">dir</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">dirName</span><span class="o">)</span>  
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">def</span> <span class="n">dir</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">dirName</span><span class="o">)</span>  
 <span class="k">if</span> <span class="o">(</span><span class="n">dir</span><span class="o">.</span><span class="na">isDirectory</span><span class="o">())</span> <span class="o">{</span>  
     <span class="n">dir</span><span class="o">.</span><span class="na">eachFileRecurse</span> <span class="o">{</span> <span class="n">file</span> <span class="o">-&gt;</span>  
         <span class="n">println</span> <span class="n">file</span>  
@@ -200,34 +219,42 @@
 
 <span class="n">dir</span><span class="o">.</span><span class="na">eachFileMatch</span><span class="o">(~</span><span class="s">/.*\.txt/</span><span class="o">)</span> <span class="o">{</span><span class="n">File</span> <span class="n">it</span><span class="o">-&gt;</span> <span class="n">println</span> <span class="n">it</span><span class="o">.</span><span class="na">name</span>  <span class="o">}</span> <span class="c1">//使正则表达式匹配文件名  </span>
 <span class="n">dir</span><span class="o">.</span><span class="na">eachFileMatch</span><span class="o">(</span><span class="n">FILES</span><span class="o">,</span> <span class="o">~</span><span class="s">/.*\.txt/</span><span class="o">)</span> <span class="o">{</span> <span class="n">File</span> <span class="n">it</span><span class="o">-&gt;</span> <span class="n">println</span> <span class="n">it</span><span class="o">.</span><span class="na">name</span>  <span class="o">}</span>   
-</code></pre></div>
-<h1 id="3-写文件">3. 写文件</h1>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="kn">import</span> <span class="nn">java.io.File</span>  
+</code></pre>
+</div>
 
+<h1 id="section-3">3. 写文件</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.File</span>  
+  
 <span class="kt">def</span> <span class="nf">writeFile</span><span class="o">(</span><span class="n">fileName</span><span class="o">)</span> <span class="o">{</span>  
     <span class="kt">def</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">)</span>  
-
+      
     <span class="k">if</span> <span class="o">(</span><span class="n">file</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span>   
         <span class="n">file</span><span class="o">.</span><span class="na">delete</span><span class="o">()</span>  
-
+          
     <span class="kt">def</span> <span class="n">printWriter</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">newPrintWriter</span><span class="o">()</span> <span class="c1">//   </span>
-
-    <span class="n">printWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s1">&#39;The first content of file&#39;</span><span class="o">)</span>  
-    <span class="n">printWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s1">&#39;\n&#39;</span><span class="o">)</span>  
-    <span class="n">printWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s1">&#39;The first content of file&#39;</span><span class="o">)</span>  
-
+      
+    <span class="n">printWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s1">'The first content of file'</span><span class="o">)</span>  
+    <span class="n">printWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s1">'\n'</span><span class="o">)</span>  
+    <span class="n">printWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s1">'The first content of file'</span><span class="o">)</span>  
+      
     <span class="n">printWriter</span><span class="o">.</span><span class="na">flush</span><span class="o">()</span>  
     <span class="n">printWriter</span><span class="o">.</span><span class="na">close</span><span class="o">()</span>  
 <span class="o">}</span>  
-</code></pre></div>
-<p>除了 <code class="prettyprint">file.newPrintWriter()</code> 可以得到一个 PrintWriter，类似方法还有 <code class="prettyprint">file.newInputStream()</code>、
-<code class="prettyprint">file.newObjectInputStream()</code>等。</p>
+</code></pre>
+</div>
+
+<p>除了 <code class="highlighter-rouge">file.newPrintWriter()</code> 可以得到一个 PrintWriter，类似方法还有 <code class="highlighter-rouge">file.newInputStream()</code>、
+<code class="highlighter-rouge">file.newObjectInputStream()</code>等。</p>
 
 <p>更简洁写法：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">).</span><span class="na">withPrintWriter</span> <span class="o">{</span> <span class="n">printWriter</span> <span class="o">-&gt;</span>  
-     <span class="n">printWriter</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s1">&#39;The first content of file&#39;</span><span class="o">)</span>  
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">).</span><span class="na">withPrintWriter</span> <span class="o">{</span> <span class="n">printWriter</span> <span class="o">-&gt;</span>  
+     <span class="n">printWriter</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s1">'The first content of file'</span><span class="o">)</span>  
 <span class="o">}</span>  
-</code></pre></div>
+</code></pre>
+</div>
+
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
@@ -273,7 +300,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,42 +101,46 @@
               <div id="post-text">
                     <p>Git是一个分布式版本控制／软件配置管理软件，原来是linux内核开发者林纳斯·托瓦兹（Linus Torvalds）为了更好地管理linux内核开发而创立的。</p>
 
-<h1 id="git配置">Git配置</h1>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git config --global user.name &quot;javachen&quot;
-git config --global user.email &quot;june.chan@foxmail.com&quot;
+<h1 id="git">Git配置</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git config --global user.name "javachen"
+git config --global user.email "june.chan@foxmail.com"
 git config --global color.ui true
 git config --global alias.co checkout
 git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.br branch
 git config -l  # 列举所有配置
-</code></pre></div>
+</code></pre>
+</div>
+
 <!-- more -->
 
-<p>用户的git配置文件在<code class="prettyprint">~/.gitconfig</code>，我的配置：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">june@june-mint ~/workspace/snippets/dotfiles $ cat .gitconfig 
+<p>用户的git配置文件在<code class="highlighter-rouge">~/.gitconfig</code>，我的配置：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>june@june-mint ~/workspace/snippets/dotfiles $ cat .gitconfig 
 [user]
-    email = june.chan@foxmail.com
-    name = javachen
+	email = june.chan@foxmail.com
+	name = javachen
 [color]
     ui = auto
-[color &quot;branch&quot;]
+[color "branch"]
     current = yellow reverse
     local = yellow
     remote = green
-[color &quot;diff&quot;]
+[color "diff"]
     meta = yellow bold
     frag = magenta bold
     old = red bold
     new = green bold
-[color &quot;status&quot;]
+[color "status"]
     added = yellow
     changed = green
     untracked = cyan
 [alias]
-    st = &quot;status&quot;
+    st = "status"
     co = checkout
-    ls = &quot;ls-files&quot;
+    ls = "ls-files"
     ci = commit
     br = branch
     rt = reset --hard
@@ -156,123 +154,177 @@ git config -l  # 列举所有配置
     cb = checkout -b 
 [core]
     filemode = true
-</code></pre></div>
-<h1 id="git常用命令">Git常用命令</h1>
+</code></pre>
+</div>
 
-<h2 id="查看、帮助命令">查看、帮助命令</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git help &lt;command&gt;  # 显示command的help
+<h1 id="git-1">Git常用命令</h1>
+
+<h2 id="section">查看、帮助命令</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git help &lt;command&gt;  # 显示command的help
 git show            # 显示某次提交的内容
 git show $id
-</code></pre></div>
-<h2 id="查看提交记录">查看提交记录</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git log
+</code></pre>
+</div>
+
+<h2 id="section-1">查看提交记录</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git log
 git log &lt;file&gt;      # 查看该文件每次提交记录
 git log -p &lt;file&gt;   # 显示版本历史，以及版本间的内容差异
 git log -p -2       # 查看最近两次详细修改内容的diff
 git log --stat      # 查看提交统计信息
-git log --since=&quot;6 hours&quot;  # 显示最近6小时提交
-git log --before=&quot;2 days&quot;  # 显示2天前提交
+git log --since="6 hours"  # 显示最近6小时提交
+git log --before="2 days"  # 显示2天前提交
 git log -1 HEAD~3          # 显示比HEAD早3个提交的那个提交
 git log -1 HEAD^^^
-git reflog                 # 查看操作记录
-</code></pre></div>
-<h1 id="添加、提交、删除、找回，重置修改文件">添加、提交、删除、找回，重置修改文件</h1>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git add &lt;file&gt;      # 将工作文件修改提交到本地暂存区
+git reflog				   # 查看操作记录
+</code></pre>
+</div>
+
+<h1 id="section-2">添加、提交、删除、找回，重置修改文件</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git add &lt;file&gt;      # 将工作文件修改提交到本地暂存区
 git add .           # 将所有修改过的工作文件提交暂存区
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git co  -- &lt;file&gt;    # 抛弃工作区修改
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git co  -- &lt;file&gt;    # 抛弃工作区修改
 git co  .               # 抛弃工作区修改
 git co HEAD &lt;file&gt;  # 抛弃工作目录区中文件的修改
 git co HEAD~3       # 回退三个版本
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git ci &lt;file&gt;
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git ci &lt;file&gt;
 git ci .
 git ci -a           # 将git add, git rm和git ci等操作都合并在一起做
-git ci -am &quot;some comments&quot;
+git ci -am "some comments"
 git ci --amend      # 修改最后一次提交记录
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git rm &lt;file&gt;       # 从版本库中删除文件
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git rm &lt;file&gt;       # 从版本库中删除文件
 git rm &lt;file&gt; --cached  # 从版本库中删除文件，但不删除文件
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git mv &lt;file1&gt;  &lt;file2&gt;    # 重命名文件
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git reset --hard  HEAD^ # 恢复最近一次提交过的状态，即放弃上次提交后的所有本次修改
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git mv &lt;file1&gt;  &lt;file2&gt;    # 重命名文件
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git reset --hard  HEAD^ # 恢复最近一次提交过的状态，即放弃上次提交后的所有本次修改
 git reset --hard &lt;commit id&gt;  # 恢复到某一次提交的状态
 git reset HEAD &lt;file&gt; # 抛弃暂存区中文件的修改
 git reset &lt;file&gt;    # 从暂存区恢复到工作文件
 git reset -- .      # 从暂存区恢复到工作文件
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git revert &lt;$id&gt;    # 恢复某次提交的状态，恢复动作本身也创建了一次提交对象
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git revert &lt;$id&gt;    # 恢复某次提交的状态，恢复动作本身也创建了一次提交对象
 git revert HEAD     # 恢复最后一次提交的状态
-</code></pre></div>
-<h2 id="查看文件diff">查看文件diff</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git diff &lt;file&gt;     # 比较当前文件和暂存区文件差异
+</code></pre>
+</div>
+
+<h2 id="diff">查看文件diff</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git diff &lt;file&gt;     # 比较当前文件和暂存区文件差异
 git diff
-git diff &lt;$id1&gt; &lt;$id2&gt;      # 比较两次提交之间的差异
+git diff &lt;$id1&gt; &lt;$id2&gt;   	# 比较两次提交之间的差异
 git diff &lt;branch1&gt; &lt;branch2&gt;   # 在两个分支之间比较 
 git diff --staged   # 比较暂存区和版本库差异
 git diff --cached   # 比较暂存区和版本库差异
 git diff --stat     # 仅仅比较统计信息
 
-git diff &quot;@{yesterday}&quot;     # 查看昨天的改变
-git diff 1b6d &quot;master~2&quot;    # 查看一个特定版本与倒数第二个变更之间的改变
-</code></pre></div>
-<h1 id="git-本地分支管理">Git 本地分支管理</h1>
+git diff "@{yesterday}"     # 查看昨天的改变
+git diff 1b6d "master~2"    # 查看一个特定版本与倒数第二个变更之间的改变
+</code></pre>
+</div>
 
-<h2 id="查看、切换、创建和删除分支">查看、切换、创建和删除分支</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git br -r           # 查看远程分支
+<h1 id="git-">Git 本地分支管理</h1>
+
+<h2 id="section-3">查看、切换、创建和删除分支</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git br -r           # 查看远程分支
 git br -v           # 查看各个分支最后提交信息
 git br -a           # 列出所有分支
 git br --merged     # 查看已经被合并到当前分支的分支
 git br --no-merged  # 查看尚未被合并到当前分支的分支
 git br &lt;new_branch&gt; # 基于当前分支创建新的分支
-git br &lt;new_branch&gt;  &lt;start_point&gt;      # 基于另一个起点（分支名称，提交名称或则标签名称），创建新的分支
-git br -f &lt;existing_branch&gt;  &lt;start_point&gt;  # 创建同名新分支，覆盖已有分支
+git br &lt;new_branch&gt;  &lt;start_point&gt;		# 基于另一个起点（分支名称，提交名称或则标签名称），创建新的分支
+git br -f &lt;existing_branch&gt;  &lt;start_point&gt;	# 创建同名新分支，覆盖已有分支
 git br -d &lt;branch&gt;  # 删除某个分支
 git br -D &lt;branch&gt;  # 强制删除某个分支 (未被合并的分支被删除的时候需要强制)
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git co &lt;branch&gt;         # 切换到某个分支
-git co -b &lt;new_branch&gt;  # 创建新的分支，并且切换过去
-git co -b &lt;new_branch&gt; &lt;branch&gt;       # 基于branch创建新的new_branch
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git co &lt;branch&gt;     	# 切换到某个分支
+git co -b &lt;new_branch&gt; 	# 创建新的分支，并且切换过去
+git co -b &lt;new_branch&gt; &lt;branch&gt;  	  # 基于branch创建新的new_branch
 git co -m &lt;existing_branch&gt; &lt;new_branch&gt;  # 移动或重命名分支，当新分支不存在时
 git co -M &lt;existing_branch&gt; &lt;new_branch&gt;  # 移动或重命名分支，当新分支存在时就覆盖
 
-git co $id               # 把某次历史提交记录checkout出来，但无分支信息，切换到其他分支会自动删除
+git co $id         		 # 把某次历史提交记录checkout出来，但无分支信息，切换到其他分支会自动删除
 git co $id -b &lt;new_branch&gt;       # 把某次历史提交记录checkout出来，创建成一个分支
-</code></pre></div>
-<h2 id="分支合并和rebase">分支合并和rebase</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git merge &lt;branch&gt;                  # 将branch分支合并到当前分支
+</code></pre>
+</div>
+
+<h2 id="rebase">分支合并和rebase</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git merge &lt;branch&gt;                  # 将branch分支合并到当前分支
 git merge origin/master --no-ff     # 不要Fast-Foward合并，这样可以生成merge提交
 git merge --no-commit &lt;branch&gt;      # 合并但不提交
 git merge --squash &lt;branch&gt;         # 把一条分支上的内容合并到另一个分支上的一个提交
 
 git rebase master &lt;branch&gt;          # 将master rebase到branch，相当于：
 git co &lt;branch&gt; &amp;&amp; git rebase master &amp;&amp; git co master &amp;&amp; git merge &lt;branch&gt;
-</code></pre></div>
-<h2 id="git补丁管理">Git补丁管理</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git diff &gt; ../sync.patch         # 生成补丁
+</code></pre>
+</div>
+
+<h2 id="git-2">Git补丁管理</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git diff &gt; ../sync.patch         # 生成补丁
 git apply ../sync.patch          # 打补丁
 git apply --check ../sync.patch  # 测试补丁能否成功
 git format-patch -X              # 根据提交的log生成patch，X为数字，表示最近的几个日志
-</code></pre></div>
-<h2 id="git暂存管理">Git暂存管理</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git stash                        # 暂存
+</code></pre>
+</div>
+
+<h2 id="git-3">Git暂存管理</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git stash                        # 暂存
 git stash list                   # 列所有stash
 git stash apply                  # 恢复暂存的内容
 git stash drop                   # 删除暂存区
-</code></pre></div>
-<h2 id="git远程分支管理">Git远程分支管理</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git pull                         # 抓取远程仓库所有分支更新并合并到本地
+</code></pre>
+</div>
+
+<h2 id="git-4">Git远程分支管理</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git pull                         # 抓取远程仓库所有分支更新并合并到本地
 git pull --no-ff                 # 抓取远程仓库所有分支更新并合并到本地，不要快进合并
 git fetch origin                 # 抓取远程仓库所有更新
 git fetch origin remote-branch:local-branch #抓取remote-branch分支的更新
-git fetch origin --tags          # 抓取远程上的所有分支
+git fetch origin --tags 		 # 抓取远程上的所有分支
 git checkout -b &lt;new-branch&gt; &lt;remote_tag&gt; # 抓取远程上的分支
 git merge origin/master          # 将远程主分支合并到本地当前分支
 git co --track origin/branch     # 跟踪某个远程分支创建相应的本地分支
 git co -b &lt;local_branch&gt; origin/&lt;remote_branch&gt;  # 基于远程分支创建本地分支，功能同上
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">git push                         # push所有分支
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git push                         # push所有分支
 git push origin master           # 将本地主分支推到远程主分支
 git push -u origin master        # 将本地主分支推到远程(如无远程主分支则创建，用于初始化远程仓库)
 git push origin &lt;local_branch&gt;   # 创建远程分支， origin是远程仓库名
 git push origin &lt;local_branch&gt;:&lt;remote_branch&gt;  # 创建远程分支
 git push origin :&lt;remote_branch&gt;  #先删除本地分支(git br -d &lt;branch&gt;)，然后再push删除远程分支
-</code></pre></div>
-<h2 id="git远程仓库管理">Git远程仓库管理</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git remote -v                    # 查看远程服务器地址和仓库名称
+</code></pre>
+</div>
+
+<h2 id="git-5">Git远程仓库管理</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git remote -v                    # 查看远程服务器地址和仓库名称
 git remote show origin           # 查看远程服务器仓库状态
 git remote add origin git@github:XXX/test.git         # 添加远程仓库地址
 git remote set-url origin git@github.com:XXX/test.git # 设置远程仓库地址(用于修改远程仓库地址)
@@ -281,16 +333,20 @@ git remote set-head origin master   # 设置远程仓库的HEAD指向master分�
 
 git branch --set-upstream master origin/master
 git branch --set-upstream develop origin/develop
-</code></pre></div>
-<h1 id="实例">实例</h1>
+</code></pre>
+</div>
 
-<h2 id="打patch过程">打patch过程</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git add .
+<h1 id="section-4">实例</h1>
+<p>## 打patch过程</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git add .
 git status
 git diff --cached &gt;XXX.patch
-git ci -m &#39;add patch&#39;
-</code></pre></div>
-<h1 id="分支策略">分支策略</h1>
+git ci -m 'add patch'
+</code></pre>
+</div>
+
+<h1 id="section-5">分支策略</h1>
 
 <p>在实际开发中，我们应该按照几个基本原则进行分支管理：</p>
 
@@ -299,6 +355,7 @@ git ci -m &#39;add patch&#39;
 <p>那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；</p>
 
 <p>你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。</p>
+
 
                     <br/>
                     <div class="well">
@@ -345,7 +402,8 @@ git ci -m &#39;add patch&#39;
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

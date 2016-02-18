@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -110,25 +104,24 @@
 <p>上述问题可以拆分为两个问题：</p>
 
 <ol>
-<li>从命令行接受一个参数作为一个字段</li>
-<li>合并输入流和这个字段</li>
+  <li>从命令行接受一个参数作为一个字段</li>
+  <li>合并输入流和这个字段</li>
 </ol>
 
-<h2 id="问题1">问题1</h2>
+<h2 id="section">问题1</h2>
 
-<p>第一个问题可以使用kettle中<code class="prettyprint">获取系统信息</code>组件，定义一个变量，该值来自命令行参数，见下图：</p>
+<p>第一个问题可以使用kettle中<code class="highlighter-rouge">获取系统信息</code>组件，定义一个变量，该值来自命令行参数，见下图：</p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/get-a-field-from-paramter.png" alt="get-a-field-from-paramter"></p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/get-a-field-from-paramter.png" alt="get-a-field-from-paramter" /></p>
 
-<h2 id="问题2">问题2</h2>
+<h2 id="section-1">问题2</h2>
+<p>第二个问题可以使用kettle中<code class="highlighter-rouge">记录关联 (笛卡尔输出)</code>组件将两个组件关联起来，输出一个笛卡尔结果集，关联条件设定恒为true，在运行前设置第一个参数的值，然后运行即可。</p>
 
-<p>第二个问题可以使用kettle中<code class="prettyprint">记录关联 (笛卡尔输出)</code>组件将两个组件关联起来，输出一个笛卡尔结果集，关联条件设定恒为true，在运行前设置第一个参数的值，然后运行即可。</p>
+<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/run-kettle-for-join-two-inputs.png" alt="run-kettle-for-join-two-inputs" /></p>
 
-<p><img src="http://7xnrdo.com1.z0.glb.clouddn.com/2013/run-kettle-for-join-two-inputs.png" alt="run-kettle-for-join-two-inputs"></p>
-
-<h2 id="下载脚本">下载脚本</h2>
-
+<h2 id="section-2">下载脚本</h2>
 <p>最后，kettle转换文件下载地址：<a href="http://7xnrdo.com1.z0.glb.clouddn.com/2013/join-a-paramter-to-input-in-kettle.zip">在这里</a>。</p>
+
 
                     <br/>
                     <div class="well">
@@ -177,7 +170,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

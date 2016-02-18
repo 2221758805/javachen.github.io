@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -105,78 +99,85 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <h1 id="介绍">介绍</h1>
+                    <h1 id="section">介绍</h1>
 
 <p>Spring Boot 是 Spring 产品中一个新的子项目，致力于简便快捷地搭建基于 Spring 的独立可运行的应用。大多数的 Spring Boot  应用只需要非常少的 Spring 配置。</p>
 
-<p>你能够使用 Spring Boot  创建 Java 应用并通过 <code class="prettyprint">java -jar</code> 来运行或者创建传统的通过 war 来部署的应用。Spring Boot 也提供了一个命令行工具来运行 spring 脚本。</p>
+<p>你能够使用 Spring Boot  创建 Java 应用并通过 <code class="highlighter-rouge">java -jar</code> 来运行或者创建传统的通过 war 来部署的应用。Spring Boot 也提供了一个命令行工具来运行 spring 脚本。</p>
 
 <p>Spring Boot 的目标是：</p>
 
 <ul>
-<li>快速开发基于 Spring 的应用</li>
-<li>开箱即用的微服务</li>
-<li>提供一些大型项目常用的非功能性特性，例如：嵌入式服务、安全、监控、健康检查、外部配置</li>
-<li>不用生成代码，没有 xml 配置</li>
+  <li>快速开发基于 Spring 的应用</li>
+  <li>开箱即用的微服务</li>
+  <li>提供一些大型项目常用的非功能性特性，例如：嵌入式服务、安全、监控、健康检查、外部配置</li>
+  <li>不用生成代码，没有 xml 配置</li>
 </ul>
 
-<h1 id="系统要求">系统要求</h1>
+<h1 id="section-1">系统要求</h1>
 
-<p>截至本文编写之前，Spring Boot 的最新发布版本为 <code class="prettyprint">1.2.2.RELEASE</code>，其需要 Java 7 和 Spring 4.1.3 或以上版本才能运行。当然，你也可以添加一些配置使其能够使用 Java 6。虽然，你可以使用 Java 6 或7 来运行 Spring Boot，但是，在可能的情况下，更建议你使用 Java 8。编译 Spring Boot 需要 Maven 3.2+ 或者 Gradle 1.12+。</p>
+<p>截至本文编写之前，Spring Boot 的最新发布版本为 <code class="highlighter-rouge">1.2.2.RELEASE</code>，其需要 Java 7 和 Spring 4.1.3 或以上版本才能运行。当然，你也可以添加一些配置使其能够使用 Java 6。虽然，你可以使用 Java 6 或7 来运行 Spring Boot，但是，在可能的情况下，更建议你使用 Java 8。编译 Spring Boot 需要 Maven 3.2+ 或者 Gradle 1.12+。</p>
 
 <p>Servlet 容易要求：</p>
 
-<table><thead>
-<tr>
-<th style="text-align: left">Name</th>
-<th style="text-align: left">Servlet Version</th>
-<th style="text-align: left">Java Version</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left">Tomcat 8</td>
-<td style="text-align: left">3.1</td>
-<td style="text-align: left">Java 7+</td>
-</tr>
-<tr>
-<td style="text-align: left">Tomcat 7</td>
-<td style="text-align: left">3.0</td>
-<td style="text-align: left">Java 6+</td>
-</tr>
-<tr>
-<td style="text-align: left">Jetty 9</td>
-<td style="text-align: left">3.1</td>
-<td style="text-align: left">Java 7+</td>
-</tr>
-<tr>
-<td style="text-align: left">Jetty 8</td>
-<td style="text-align: left">3.0</td>
-<td style="text-align: left">Java 6+</td>
-</tr>
-<tr>
-<td style="text-align: left">Undertow 1.1</td>
-<td style="text-align: left">3.1</td>
-<td style="text-align: left">Java 7+</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Servlet Version</th>
+      <th style="text-align: left">Java Version</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Tomcat 8</td>
+      <td style="text-align: left">3.1</td>
+      <td style="text-align: left">Java 7+</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Tomcat 7</td>
+      <td style="text-align: left">3.0</td>
+      <td style="text-align: left">Java 6+</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Jetty 9</td>
+      <td style="text-align: left">3.1</td>
+      <td style="text-align: left">Java 7+</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Jetty 8</td>
+      <td style="text-align: left">3.0</td>
+      <td style="text-align: left">Java 6+</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Undertow 1.1</td>
+      <td style="text-align: left">3.1</td>
+      <td style="text-align: left">Java 7+</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>你也可以在兼容 <code class="prettyprint">Servlet 3.0+</code> 的容器中部署 Spring Boot 应用。</p>
+<p>你也可以在兼容 <code class="highlighter-rouge">Servlet 3.0+</code> 的容器中部署 Spring Boot 应用。</p>
 
-<h1 id="安装">安装</h1>
+<h1 id="section-2">安装</h1>
 
 <p>首先，需要安装 Java 并确认版本是否满足要求。</p>
 
-<h2 id="maven安装">Maven安装</h2>
+<h2 id="maven">Maven安装</h2>
 
 <p>Spring Boot 可以使用 Maven3.2 以上版本进行编译。使用压缩包解压安装 Maven 或者通过命令安装，例如，在 Mac 上安装：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew install maven
-</code></pre></div>
-<p>要创建一个 Spring Boot 的项目，你需要创建一个 Maven 的 POM 文件并继承 <code class="prettyprint">spring-boot-starter-parent</code> 项目，然后添加一些 Spring Boot 子项目的依赖，你也可以使用 <code class="prettyprint">spring-boot-maven-plugin</code> 插件来创建可执行的 jar 包。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install maven
+</code></pre>
+</div>
+
+<p>要创建一个 Spring Boot 的项目，你需要创建一个 Maven 的 POM 文件并继承 <code class="highlighter-rouge">spring-boot-starter-parent</code> 项目，然后添加一些 Spring Boot 子项目的依赖，你也可以使用 <code class="highlighter-rouge">spring-boot-maven-plugin</code> 插件来创建可执行的 jar 包。</p>
 
 <p>一个典型的 pom.xml 示例如下：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
 
     <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
@@ -208,10 +209,36 @@
         <span class="nt">&lt;/plugins&gt;</span>
     <span class="nt">&lt;/build&gt;</span>
 
+    <span class="c">&lt;!-- (you don't need this if you are using a .RELEASE version) --&gt;</span>
+    <span class="nt">&lt;repositories&gt;</span>
+        <span class="nt">&lt;repository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>spring-snapshots<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;url&gt;</span>http://repo.spring.io/snapshot<span class="nt">&lt;/url&gt;</span>
+            <span class="nt">&lt;snapshots&gt;&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;&lt;/snapshots&gt;</span>
+        <span class="nt">&lt;/repository&gt;</span>
+        <span class="nt">&lt;repository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>spring-milestones<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;url&gt;</span>http://repo.spring.io/milestone<span class="nt">&lt;/url&gt;</span>
+        <span class="nt">&lt;/repository&gt;</span>
+    <span class="nt">&lt;/repositories&gt;</span>
+    <span class="nt">&lt;pluginRepositories&gt;</span>
+        <span class="nt">&lt;pluginRepository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>spring-snapshots<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;url&gt;</span>http://repo.spring.io/snapshot<span class="nt">&lt;/url&gt;</span>
+        <span class="nt">&lt;/pluginRepository&gt;</span>
+        <span class="nt">&lt;pluginRepository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>spring-milestones<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;url&gt;</span>http://repo.spring.io/milestone<span class="nt">&lt;/url&gt;</span>
+        <span class="nt">&lt;/pluginRepository&gt;</span>
+    <span class="nt">&lt;/pluginRepositories&gt;</span>
+
 <span class="nt">&lt;/project&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>如果你不想继承 spring-boot-starter-parent 父项目，你也可以使用依赖管理来引入对 Spring Boot 的依赖。</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencyManagement&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependencyManagement&gt;</span>
      <span class="nt">&lt;dependencies&gt;</span>
         <span class="nt">&lt;dependency&gt;</span>
             <span class="c">&lt;!-- Import dependency management from Spring Boot --&gt;</span>
@@ -223,169 +250,272 @@
         <span class="nt">&lt;/dependency&gt;</span>
     <span class="nt">&lt;/dependencies&gt;</span>
 <span class="nt">&lt;/dependencyManagement&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>还可以通过下面方式修改 Maven 使用的 Java 版本：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;properties&gt;</span>
     <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
 <span class="nt">&lt;/properties&gt;</span>
-</code></pre></div>
-<h2 id="gradle-安装">Gradle 安装</h2>
+</code></pre>
+</div>
 
-<p>一个典型的 <code class="prettyprint">build.gradle</code> 文件如下：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">buildscript</span> <span class="o">{</span>
+<h2 id="gradle-">Gradle 安装</h2>
+
+<p>一个典型的 <code class="highlighter-rouge">build.gradle</code> 文件如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
     <span class="n">repositories</span> <span class="o">{</span>
         <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">&quot;http://repo.spring.io/snapshot&quot;</span> <span class="o">}</span>
-        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">&quot;http://repo.spring.io/milestone&quot;</span> <span class="o">}</span>
+        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"http://repo.spring.io/snapshot"</span> <span class="o">}</span>
+        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"http://repo.spring.io/milestone"</span> <span class="o">}</span>
     <span class="o">}</span>
     <span class="n">dependencies</span> <span class="o">{</span>
-        <span class="n">classpath</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE&quot;</span><span class="o">)</span>
+        <span class="n">classpath</span><span class="o">(</span><span class="s2">"org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE"</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;java&#39;</span>
-<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;spring-boot&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'java'</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'spring-boot'</span>
 
 <span class="n">jar</span> <span class="o">{</span>
-    <span class="n">baseName</span> <span class="o">=</span> <span class="s1">&#39;myproject&#39;</span>
-    <span class="n">version</span> <span class="o">=</span>  <span class="s1">&#39;0.0.1-SNAPSHOT&#39;</span>
+    <span class="n">baseName</span> <span class="o">=</span> <span class="s1">'myproject'</span>
+    <span class="n">version</span> <span class="o">=</span>  <span class="s1">'0.0.1-SNAPSHOT'</span>
 <span class="o">}</span>
 
 <span class="n">repositories</span> <span class="o">{</span>
     <span class="n">jcenter</span><span class="o">()</span>
-    <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">&quot;http://repo.spring.io/snapshot&quot;</span> <span class="o">}</span>
-    <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">&quot;http://repo.spring.io/milestone&quot;</span> <span class="o">}</span>
+    <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"http://repo.spring.io/snapshot"</span> <span class="o">}</span>
+    <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"http://repo.spring.io/milestone"</span> <span class="o">}</span>
 <span class="o">}</span>
 
 <span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">compile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-web&quot;</span><span class="o">)</span>
-    <span class="n">testCompile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-test&quot;</span><span class="o">)</span>
+    <span class="n">compile</span><span class="o">(</span><span class="s2">"org.springframework.boot:spring-boot-starter-web"</span><span class="o">)</span>
+    <span class="n">testCompile</span><span class="o">(</span><span class="s2">"org.springframework.boot:spring-boot-starter-test"</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre></div>
-<h2 id="安装-spring-boot-cli">安装 Spring Boot CLI</h2>
+</code></pre>
+</div>
+
+<h2 id="spring-boot-cli">安装 Spring Boot CLI</h2>
 
 <p>你可以手动安装：</p>
 
 <ul>
-<li><a href="http://repo.spring.io/release/org/springframework/boot/spring-boot-cli/1.2.2.RELEASE/spring-boot-cli-1.2.2.RELEASE-bin.zip">spring-boot-cli-1.2.2.RELEASE-bin.zip</a></li>
-<li><a href="http://repo.spring.io/release/org/springframework/boot/spring-boot-cli/1.2.2.RELEASE/spring-boot-cli-1.2.2.RELEASE-bin.tar.gz">spring-boot-cli-1.2.2.RELEASE-bin.tar.gz</a></li>
+  <li><a href="http://repo.spring.io/release/org/springframework/boot/spring-boot-cli/1.2.2.RELEASE/spring-boot-cli-1.2.2.RELEASE-bin.zip">spring-boot-cli-1.2.2.RELEASE-bin.zip</a></li>
+  <li><a href="http://repo.spring.io/release/org/springframework/boot/spring-boot-cli/1.2.2.RELEASE/spring-boot-cli-1.2.2.RELEASE-bin.tar.gz">spring-boot-cli-1.2.2.RELEASE-bin.tar.gz</a></li>
 </ul>
 
 <p>或者使用 GVM 安装：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gvm install springboot
-<span class="nv">$ </span>spring --version
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gvm install springboot
+<span class="gp">$ </span>spring --version
 Spring Boot v1.2.2.RELEASE
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>如果你使用 Mac，则可以通过 <a href="http://brew.sh/">Homebrew</a> 或者 <a href="http://www.macports.org/">MacPorts</a> 安装：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew tap pivotal/tap
-<span class="nv">$ </span>brew install springboot
-</code></pre></div><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo port install spring-boot-cli
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew tap pivotal/tap
+<span class="gp">$ </span>brew install springboot
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo port install spring-boot-cli
+</code></pre>
+</div>
+
 <p>spring 命令用法：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>spring
-usage: spring <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span>
-       &lt;<span class="nb">command</span>&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spring
+usage: spring <span class="o">[</span>--help] <span class="o">[</span>--version]
+       &lt;<span class="nb">command</span>&gt; <span class="o">[</span>&lt;args&gt;]
 
 Available commands are:
 
-  run <span class="o">[</span>options<span class="o">]</span> &lt;files&gt; <span class="o">[</span>--<span class="o">]</span> <span class="o">[</span>args<span class="o">]</span>
+  run <span class="o">[</span>options] &lt;files&gt; <span class="o">[</span>--] <span class="o">[</span>args]
     Run a spring groovy script
 
   ... more <span class="nb">command help </span>is shown here
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>使用 你可以很快创建一个简单的 web 应用来测试是否安装成功。创建 hello.groovy 文件，内容如下：</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="nd">@RestController</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">class</span> <span class="nc">ThisWillActuallyRun</span> <span class="o">{</span>
 
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s2">&quot;/&quot;</span><span class="o">)</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s2">"/"</span><span class="o">)</span>
     <span class="n">String</span> <span class="nf">home</span><span class="o">()</span> <span class="o">{</span>
-        <span class="s2">&quot;Hello World!&quot;</span>
+        <span class="s2">"Hello World!"</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>然后，运行下面命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>spring run hello.groovy
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spring run hello.groovy
+</code></pre>
+</div>
+
 <p>使用浏览器打开 <a href="http://localhost:8080/">http://localhost:8080/</a> 你会看到下面的输出：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">Hello World!
-</code></pre></div>
-<p>你还可以传递一些命令行的参数，使用 <code class="prettyprint">--</code> 分隔命令行参数，下面命令修改服务启动端口为 9000：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>spring run hello.groovy -- --server.port<span class="o">=</span>9000
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hello World!
+</code></pre>
+</div>
+
+<p>你还可以传递一些命令行的参数，使用 <code class="highlighter-rouge">--</code> 分隔命令行参数，下面命令修改服务启动端口为 9000：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>spring run hello.groovy -- --server.port<span class="o">=</span>9000
+</code></pre>
+</div>
+
 <p>设置 JVM 参数之后，在运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ JAVA_OPTS</span><span class="o">=</span>-Xmx1024m 
-<span class="nv">$ </span>spring run hello.groovy
-</code></pre></div>
-<h1 id="spring-boot-cli-使用方法">Spring Boot CLI 使用方法</h1>
 
-<h1 id="部署-spring-boot-应用">部署 Spring Boot 应用</h1>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m 
+<span class="gp">$ </span>spring run hello.groovy
+</code></pre>
+</div>
 
-<h2 id="maven-项目">Maven 项目</h2>
+<p>也可以创建一个java文件类测试，Maven默认会编译src/main/java下的源码，所以你需要创建那样的文件结构，然后添加一个名为src/main/java/Example.java的文件：</p>
 
-<p>如果你使用 Maven 编译项目，则你可以通过下面命令查看项目依赖：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn dependency:tree
-</code></pre></div>
-<p>如果你的 pom.xml 使用了 spring-boot-starter-parent，则我们可以运行 <code class="prettyprint">mvn spring-boot:run</code> 命令启动应用：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn spring-boot:run
-</code></pre></div>
-<p>然后，使用浏览器打开 <a href="http://localhost:8080/">http://localhost:8080/</a> 你会看到下面的输出：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">Hello World!
-</code></pre></div>
-<p>如果你的 pom.xml 中添加了 <code class="prettyprint">spring-boot-maven-plugin</code> 插件，你可以运行 <code class="prettyprint">mvn package</code> 命令在 target 目录生成一个可执行的 jar 文件：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn package
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.boot.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.*</span><span class="o">;</span>
 
-<span class="o">[</span>INFO<span class="o">]</span> Scanning <span class="k">for</span> projects...
-<span class="o">[</span>INFO<span class="o">]</span>
-<span class="o">[</span>INFO<span class="o">]</span> ------------------------------------------------------------------------
-<span class="o">[</span>INFO<span class="o">]</span> Building myproject 0.0.1-SNAPSHOT
-<span class="o">[</span>INFO<span class="o">]</span> ------------------------------------------------------------------------
-<span class="o">[</span>INFO<span class="o">]</span> .... ..
-<span class="o">[</span>INFO<span class="o">]</span> --- maven-jar-plugin:2.4:jar <span class="o">(</span>default-jar<span class="o">)</span> @ myproject ---
-<span class="o">[</span>INFO<span class="o">]</span> Building jar: /Users/developer/example/spring-boot-example/target/myproject-0.0.1-SNAPSHOT.jar
-<span class="o">[</span>INFO<span class="o">]</span>
-<span class="o">[</span>INFO<span class="o">]</span> --- spring-boot-maven-plugin:1.2.2.RELEASE:repackage <span class="o">(</span>default<span class="o">)</span> @ myproject ---
-<span class="o">[</span>INFO<span class="o">]</span> ------------------------------------------------------------------------
-<span class="o">[</span>INFO<span class="o">]</span> BUILD SUCCESS
-<span class="o">[</span>INFO<span class="o">]</span> ------------------------------------------------------------------------
-</code></pre></div>
-<p>然后，你可以运行项目命令执行生成的 jar 文件：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar target/myproject-0.0.1-SNAPSHOT.jar
+<span class="nd">@RestController</span>
+<span class="nd">@EnableAutoConfiguration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+    <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Example</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>由于使用了spring-boot-starter-parent POM，这样我们就有了一个非常有用的run目标，我们可以用它启动程序。在项目根目录下输入<code class="highlighter-rouge">mvn spring-boot:run</code>来启动应用：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn spring-boot:run
 
   .   ____          _            __ _ _
- /<span class="se">\\</span> / ___<span class="s1">&#39;_ __ _ _(_)_ __  __ _ \ \ \ \</span>
-<span class="s1">( ( )\___ | &#39;</span>_ <span class="p">|</span> <span class="s1">&#39;_| | &#39;</span>_ <span class="se">\/</span> _ <span class="p">|</span> <span class="se">\ \ \ \</span>
- <span class="se">\\</span>/  ___<span class="o">)</span><span class="p">|</span> <span class="p">|</span>_<span class="o">)</span><span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="o">||</span> <span class="o">(</span>_<span class="p">|</span> <span class="p">|</span>  <span class="o">)</span> <span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
-  <span class="err">&#39;</span>  <span class="p">|</span>____<span class="p">|</span> .__<span class="p">|</span>_<span class="p">|</span> <span class="p">|</span>_<span class="p">|</span>_<span class="p">|</span> <span class="p">|</span>_<span class="se">\_</span>_, <span class="p">|</span> / / / /
- <span class="o">=========</span><span class="p">|</span>_<span class="p">|</span><span class="o">==============</span><span class="p">|</span>___/<span class="o">=</span>/_/_/_/
- :: Spring Boot ::  <span class="o">(</span>v1.2.2.RELEASE<span class="o">)</span>
+ /<span class="se">\\</span> / ___<span class="s1">'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '</span>_ | <span class="s1">'_| | '</span>_ <span class="se">\/</span> _ | <span class="se">\ \ \ \</span>
+ <span class="se">\\</span>/  ___<span class="o">)</span>| |_<span class="o">)</span>| | | | | <span class="o">||</span> <span class="o">(</span>_| |  <span class="o">)</span> <span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
+  <span class="s1">'  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::  (v1.2.2.BUILD-SNAPSHOT)
 ....... . . .
-....... . . . <span class="o">(</span>log output here<span class="o">)</span>
+....... . . . (log output here)
 ....... . . .
-........ Started Example in 2.536 seconds <span class="o">(</span>JVM running <span class="k">for</span> 2.864<span class="o">)</span>
-</code></pre></div>
+........ Started Example in 2.222 seconds (JVM running for 6.514)
+</span></code></pre>
+</div>
+
+<h1 id="spring-boot-cli-">Spring Boot CLI 使用方法</h1>
+
+<h1 id="spring-boot-">部署 Spring Boot 应用</h1>
+
+<h2 id="maven-">Maven 项目</h2>
+
+<p>如果你使用 Maven 编译项目，则你可以通过下面命令查看项目依赖：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn dependency:tree
+</code></pre>
+</div>
+
+<p>如果你的 pom.xml 使用了 spring-boot-starter-parent，则我们可以运行 <code class="highlighter-rouge">mvn spring-boot:run</code> 命令启动应用：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn spring-boot:run
+</code></pre>
+</div>
+
+<p>然后，使用浏览器打开 http://localhost:8080/ 你会看到下面的输出：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hello World!
+</code></pre>
+</div>
+
+<p>如果你的 pom.xml 中添加了 <code class="highlighter-rouge">spring-boot-maven-plugin</code> 插件，你可以运行 <code class="highlighter-rouge">mvn package</code> 命令在 target 目录生成一个可执行的 jar 文件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn package
+
+<span class="o">[</span>INFO] Scanning <span class="k">for </span>projects...
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] ------------------------------------------------------------------------
+<span class="o">[</span>INFO] Building myproject 0.0.1-SNAPSHOT
+<span class="o">[</span>INFO] ------------------------------------------------------------------------
+<span class="o">[</span>INFO] .... ..
+<span class="o">[</span>INFO] --- maven-jar-plugin:2.4:jar <span class="o">(</span>default-jar<span class="o">)</span> @ myproject ---
+<span class="o">[</span>INFO] Building jar: /Users/developer/example/spring-boot-example/target/myproject-0.0.1-SNAPSHOT.jar
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- spring-boot-maven-plugin:1.2.2.RELEASE:repackage <span class="o">(</span>default<span class="o">)</span> @ myproject ---
+<span class="o">[</span>INFO] ------------------------------------------------------------------------
+<span class="o">[</span>INFO] BUILD SUCCESS
+<span class="o">[</span>INFO] ------------------------------------------------------------------------
+</code></pre>
+</div>
+
+<p>然后，你可以运行项目命令执行生成的 jar 文件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar target/myproject-0.0.1-SNAPSHOT.jar
+
+  .   ____          _            __ _ _
+ /<span class="se">\\</span> / ___<span class="s1">'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '</span>_ | <span class="s1">'_| | '</span>_ <span class="se">\/</span> _ | <span class="se">\ \ \ \</span>
+ <span class="se">\\</span>/  ___<span class="o">)</span>| |_<span class="o">)</span>| | | | | <span class="o">||</span> <span class="o">(</span>_| |  <span class="o">)</span> <span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
+  <span class="s1">'  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::  (v1.2.2.RELEASE)
+....... . . .
+....... . . . (log output here)
+....... . . .
+........ Started Example in 2.536 seconds (JVM running for 2.864)
+</span></code></pre>
+</div>
+
 <p>如果 Maven 运行过程出现内存溢出，则可以添加下面参数：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m -XX:MaxPermSize<span class="o">=</span>128M -Djava.security.egd<span class="o">=</span>file:/dev/./urandom
-</code></pre></div>
-<h2 id="gradle-项目">Gradle 项目</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m -XX:MaxPermSize<span class="o">=</span>128M -Djava.security.egd<span class="o">=</span>file:/dev/./urandom
+</code></pre>
+</div>
+
+<h2 id="gradle--1">Gradle 项目</h2>
 
 <p>如果你使用 Gradle 编译项目，则可以在项目根路径直接运行下面命令来运行应用：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m -XX:MaxPermSize<span class="o">=</span>128M -Djava.security.egd<span class="o">=</span>file:/dev/./urandom
 
-<span class="nv">$ </span>./gradlew bootRun
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m -XX:MaxPermSize<span class="o">=</span>128M -Djava.security.egd<span class="o">=</span>file:/dev/./urandom
+
+<span class="gp">$ </span>./gradlew bootRun
+</code></pre>
+</div>
+
 <p>也可以先 build 生成一个 jar 文件，然后执行该 jar 文件：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./gradlew build <span class="o">&amp;&amp;</span> java -jar build/libs/myproject-0.0.1-SNAPSHOT.jar
-</code></pre></div>
-<p>你也可以启动远程调试：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./gradlew build 
 
-<span class="nv">$ </span>java -Xdebug -Xrunjdwp:server<span class="o">=</span>y,transport<span class="o">=</span>dt_socket,address<span class="o">=</span>8000,suspend<span class="o">=</span>n <span class="se">\</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./gradlew build <span class="o">&amp;&amp;</span> java -jar build/libs/myproject-0.0.1-SNAPSHOT.jar
+</code></pre>
+</div>
+
+<p>你也可以启动远程调试：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./gradlew build 
+
+<span class="gp">$ </span>java -Xdebug -Xrunjdwp:server<span class="o">=</span>y,transport<span class="o">=</span>dt_socket,address<span class="o">=</span>8000,suspend<span class="o">=</span>n <span class="se">\</span>
        -jar build/libs/myproject-0.0.1-SNAPSHOT.jar
-</code></pre></div>
-<h1 id="参考文章">参考文章</h1>
+</code></pre>
+</div>
+
+<h1 id="section-3">参考文章</h1>
 
 <ul>
-<li><a href="http://docs.spring.io/spring-boot/docs/1.2.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
+  <li><a href="http://docs.spring.io/spring-boot/docs/1.2.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
 </ul>
 
                     <br/>
@@ -435,7 +565,8 @@ Available commands are:
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

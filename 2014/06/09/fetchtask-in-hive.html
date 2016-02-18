@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -105,28 +99,35 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>Hive中有各种各样的Task任务，其中FetchTask算是最简单的一种了。FetchTask不同于MapReduce任务，它不会启动mapreduce，而是直接读取文件，输出结果。当你执行简单的<code class="prettyprint">select * with limit</code>语句的时候，其不会运行mapreduce任务。</p>
+                    <p>Hive中有各种各样的Task任务，其中FetchTask算是最简单的一种了。FetchTask不同于MapReduce任务，它不会启动mapreduce，而是直接读取文件，输出结果。当你执行简单的<code class="highlighter-rouge">select * with limit</code>语句的时候，其不会运行mapreduce任务。</p>
 
 <p>例如，运行下面语句不会出现mapreduce任务（说明：t表有一个字段，id为int类型，该表没有数据）：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">limit</span> <span class="mi">1</span><span class="p">;</span>            
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">limit</span> <span class="mi">1</span><span class="p">;</span>            
 <span class="n">OK</span>
 <span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">2</span><span class="p">.</span><span class="mi">466</span> <span class="n">seconds</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>去掉limit语句，再执行一次，结果如下：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="p">;</span>       
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="p">;</span>       
 <span class="n">OK</span>
 <span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">097</span> <span class="n">seconds</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>从结果来看，这种查询应该是有个默认的limit限制吧。</p>
 
 <p>如果修改查询语句，只查询某一些列呢？</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">id</span> <span class="k">from</span> <span class="n">t</span> <span class="p">;</span>                 
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">id</span> <span class="k">from</span> <span class="n">t</span> <span class="p">;</span>                 
 <span class="n">Total</span> <span class="n">MapReduce</span> <span class="n">jobs</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">Launching</span> <span class="n">Job</span> <span class="mi">1</span> <span class="k">out</span> <span class="k">of</span> <span class="mi">1</span>
-<span class="nb">Number</span> <span class="k">of</span> <span class="n">reduce</span> <span class="n">tasks</span> <span class="k">is</span> <span class="k">set</span> <span class="k">to</span> <span class="mi">0</span> <span class="n">since</span> <span class="n">there</span> <span class="k">is</span> <span class="k">no</span> <span class="n">reduce</span> <span class="k">operator</span>
+<span class="n">Number</span> <span class="k">of</span> <span class="n">reduce</span> <span class="n">tasks</span> <span class="k">is</span> <span class="k">set</span> <span class="k">to</span> <span class="mi">0</span> <span class="n">since</span> <span class="n">there</span> <span class="k">is</span> <span class="k">no</span> <span class="n">reduce</span> <span class="k">operator</span>
 <span class="n">Starting</span> <span class="n">Job</span> <span class="o">=</span> <span class="n">job_1402248601715_0004</span><span class="p">,</span> <span class="n">Tracking</span> <span class="n">URL</span> <span class="o">=</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">8088</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">application_1402248601715_0004</span><span class="o">/</span>
 <span class="n">Kill</span> <span class="n">Command</span> <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">job</span>  <span class="o">-</span><span class="n">kill</span> <span class="n">job_1402248601715_0004</span>
-<span class="n">Hadoop</span> <span class="n">job</span> <span class="n">information</span> <span class="k">for</span> <span class="n">Stage</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="nb">number</span> <span class="k">of</span> <span class="n">mappers</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span> <span class="nb">number</span> <span class="k">of</span> <span class="n">reducers</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">Hadoop</span> <span class="n">job</span> <span class="n">information</span> <span class="k">for</span> <span class="n">Stage</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">number</span> <span class="k">of</span> <span class="n">mappers</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span> <span class="n">number</span> <span class="k">of</span> <span class="n">reducers</span><span class="p">:</span> <span class="mi">0</span>
 <span class="mi">2014</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">09</span> <span class="mi">11</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">54</span><span class="p">,</span><span class="mi">817</span> <span class="n">Stage</span><span class="o">-</span><span class="mi">1</span> <span class="k">map</span> <span class="o">=</span> <span class="mi">0</span><span class="o">%</span><span class="p">,</span>  <span class="n">reduce</span> <span class="o">=</span> <span class="mi">0</span><span class="o">%</span>
 <span class="mi">2014</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">09</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span><span class="mi">790</span> <span class="n">Stage</span><span class="o">-</span><span class="mi">1</span> <span class="k">map</span> <span class="o">=</span> <span class="mi">100</span><span class="o">%</span><span class="p">,</span>  <span class="n">reduce</span> <span class="o">=</span> <span class="mi">0</span><span class="o">%</span><span class="p">,</span> <span class="n">Cumulative</span> <span class="n">CPU</span> <span class="mi">2</span><span class="p">.</span><span class="mi">96</span> <span class="n">sec</span>
 <span class="mi">2014</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">09</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span><span class="mi">982</span> <span class="n">Stage</span><span class="o">-</span><span class="mi">1</span> <span class="k">map</span> <span class="o">=</span> <span class="mi">100</span><span class="o">%</span><span class="p">,</span>  <span class="n">reduce</span> <span class="o">=</span> <span class="mi">0</span><span class="o">%</span><span class="p">,</span> <span class="n">Cumulative</span> <span class="n">CPU</span> <span class="mi">2</span><span class="p">.</span><span class="mi">96</span> <span class="n">sec</span>
@@ -137,11 +138,14 @@
 <span class="n">Total</span> <span class="n">MapReduce</span> <span class="n">CPU</span> <span class="n">Time</span> <span class="n">Spent</span><span class="p">:</span> <span class="mi">2</span> <span class="n">seconds</span> <span class="mi">960</span> <span class="n">msec</span>
 <span class="n">OK</span>
 <span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">51</span><span class="p">.</span><span class="mi">496</span> <span class="n">seconds</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>查看上面运行日志，可以看到该次查询启动了mapreduce任务，mapper数为1，没有reducer任务。有没有一种方法，让上面语句也不允许mapreduce任务呢？</p>
 
-<p>答案是肯定的！这就要用到 <code class="prettyprint">hive.fetch.task.conversion</code> 参数：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+<p>答案是肯定的！这就要用到 <code class="highlighter-rouge">hive.fetch.task.conversion</code> 参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
   <span class="nt">&lt;name&gt;</span>hive.fetch.task.conversion<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>minimal<span class="nt">&lt;/value&gt;</span>
   <span class="nt">&lt;description&gt;</span>
@@ -154,27 +158,33 @@
     2. more    : SELECT, FILTER, LIMIT only (+TABLESAMPLE, virtual columns)
   <span class="nt">&lt;/description&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>该参数默认值为minimal，表示运行“select * ”并带有limit查询时候，会将其转换为FetchTask；如果参数值为more，则select某一些列并带有limit条件时，也会将其转换为FetchTask任务。当然，还有前天条件：单一数据源，即输入来源一个表或者分区；没有子查询；没有聚合运算和distinct；不能用于视图和join。</p>
 
 <p>测试一下，先讲其参数值设为more，再运行：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">hive</span><span class="p">.</span><span class="k">fetch</span><span class="p">.</span><span class="n">task</span><span class="p">.</span><span class="k">conversion</span><span class="o">=</span><span class="k">more</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">hive</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">hive</span><span class="p">.</span><span class="k">fetch</span><span class="p">.</span><span class="n">task</span><span class="p">.</span><span class="k">conversion</span><span class="o">=</span><span class="k">more</span><span class="p">;</span>
 <span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">id</span> <span class="k">from</span> <span class="n">t</span> <span class="k">limit</span> <span class="mi">1</span><span class="p">;</span>           
 <span class="n">OK</span>
 <span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">242</span> <span class="n">seconds</span>
 <span class="n">hive</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">id</span> <span class="k">from</span> <span class="n">t</span> <span class="p">;</span>                  
 <span class="n">OK</span>
 <span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">496</span> <span class="n">seconds</span>
-</code></pre></div>
-<p>最后，在hive源码中搜索一下<code class="prettyprint">hive.fetch.task.conversion</code>，可以找到下面代码(来自SimpleFetchOptimizer类):</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// returns non-null FetchTask instance when succeeded</span>
-  <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">&quot;unchecked&quot;</span><span class="o">)</span>
-  <span class="kd">private</span> <span class="n">FetchTask</span> <span class="nf">optimize</span><span class="o">(</span><span class="n">ParseContext</span> <span class="n">pctx</span><span class="o">,</span> <span class="n">String</span> <span class="n">alias</span><span class="o">,</span> <span class="n">TableScanOperator</span> <span class="n">source</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>最后，在hive源码中搜索一下<code class="highlighter-rouge">hive.fetch.task.conversion</code>，可以找到下面代码(来自SimpleFetchOptimizer类):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// returns non-null FetchTask instance when succeeded</span>
+  <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+  <span class="kd">private</span> <span class="n">FetchTask</span> <span class="n">optimize</span><span class="o">(</span><span class="n">ParseContext</span> <span class="n">pctx</span><span class="o">,</span> <span class="n">String</span> <span class="n">alias</span><span class="o">,</span> <span class="n">TableScanOperator</span> <span class="n">source</span><span class="o">)</span>
       <span class="kd">throws</span> <span class="n">HiveException</span> <span class="o">{</span>
     <span class="n">String</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">HiveConf</span><span class="o">.</span><span class="na">getVar</span><span class="o">(</span>
         <span class="n">pctx</span><span class="o">.</span><span class="na">getConf</span><span class="o">(),</span> <span class="n">HiveConf</span><span class="o">.</span><span class="na">ConfVars</span><span class="o">.</span><span class="na">HIVEFETCHTASKCONVERSION</span><span class="o">);</span>
 
-    <span class="kt">boolean</span> <span class="n">aggressive</span> <span class="o">=</span> <span class="s">&quot;more&quot;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">mode</span><span class="o">);</span>
+    <span class="kt">boolean</span> <span class="n">aggressive</span> <span class="o">=</span> <span class="s">"more"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">mode</span><span class="o">);</span>
     <span class="n">FetchData</span> <span class="n">fetch</span> <span class="o">=</span> <span class="n">checkTree</span><span class="o">(</span><span class="n">aggressive</span><span class="o">,</span> <span class="n">pctx</span><span class="o">,</span> <span class="n">alias</span><span class="o">,</span> <span class="n">source</span><span class="o">);</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">fetch</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
       <span class="kt">int</span> <span class="n">limit</span> <span class="o">=</span> <span class="n">pctx</span><span class="o">.</span><span class="na">getQB</span><span class="o">().</span><span class="na">getParseInfo</span><span class="o">().</span><span class="na">getOuterQueryLimit</span><span class="o">();</span>
@@ -187,8 +197,11 @@
     <span class="o">}</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
   <span class="o">}</span>
-</code></pre></div>
-<p>从源码中，简单分析可以知道，hive优化器在做FetchTask优化的时候，如果<code class="prettyprint">hive.fetch.task.conversion</code>为more，则会做一些优化。</p>
+</code></pre>
+</div>
+
+<p>从源码中，简单分析可以知道，hive优化器在做FetchTask优化的时候，如果<code class="highlighter-rouge">hive.fetch.task.conversion</code>为more，则会做一些优化。</p>
+
 
                     <br/>
                     <div class="well">
@@ -237,7 +250,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,86 +101,85 @@
               <div id="post-text">
                     <p>使用kettle进行oracle或db2数据导入到mysql或postgres数据库过程中遇到以下问题，以下只是一个简单描述，详细的说明以及所做的代码修改没有提及。下面所提到的最新的pdi程序是我修改kettle源码并编译之后的版本。</p>
 
-<h4 id="同时运行两个pdi程序，例如：一个为oracle到mysql，另一个为oracle到postgres，其中一个停止运行">同时运行两个pdi程序，例如：一个为oracle到mysql，另一个为oracle到postgres，其中一个停止运行</h4>
+<h4 id="pdioraclemysqloraclepostgres">同时运行两个pdi程序，例如：一个为oracle到mysql，另一个为oracle到postgres，其中一个停止运行</h4>
 
 <ul>
-<li>原因：从oracle迁移到mysql创建的作业和转换文件和oracle到postgres的作业和转换保存到一个路径，导致同名称的转换相互之间被覆盖，故在运行时候会出现混乱。</li>
-<li>解决办法：将新建的作业和转换分别保存在两个不同的路径，最好是新建两个不同路径的仓库，关于如何新建仓库，请参考《kettle使用说明》文档。</li>
+  <li>原因：从oracle迁移到mysql创建的作业和转换文件和oracle到postgres的作业和转换保存到一个路径，导致同名称的转换相互之间被覆盖，故在运行时候会出现混乱。</li>
+  <li>解决办法：将新建的作业和转换分别保存在两个不同的路径，最好是新建两个不同路径的仓库，关于如何新建仓库，请参考《kettle使用说明》文档。</li>
 </ul>
 
-<h4 id="关键字的问题。">关键字的问题。</h4>
-
+<h4 id="section">关键字的问题。</h4>
 <p>Oracle初始化到mysql，关键字前面会加上前缀“MY_”。如果在建表的时候出现错误，则需要检查表的字段中是否有关键字。</p>
 
 <ul>
-<li>解决办法：出差的表单独进行处理，新建一个转换，实现关键字段该名称然后初始化出错的表。具体操作参见文档。</li>
+  <li>解决办法：出差的表单独进行处理，新建一个转换，实现关键字段该名称然后初始化出错的表。具体操作参见文档。</li>
 </ul>
 
-<h4 id="oracle中的字段名从中可以有-号，但是到mysql会报错">oracle中的字段名从中可以有#号，但是到mysql会报错</h4>
+<h4 id="oraclemysql">oracle中的字段名从中可以有#号，但是到mysql会报错</h4>
 
 <ul>
-<li>解决办法：字段改名称，去掉#号</li>
+  <li>解决办法：字段改名称，去掉#号</li>
 </ul>
 
-<h4 id="db2初始化到mysql或是postgres出错">Db2初始化到mysql或是postgres出错</h4>
+<h4 id="db2mysqlpostgres">Db2初始化到mysql或是postgres出错</h4>
 
 <ul>
-<li>原因：1）db2数据库连接用户没有权限访问出错的表；2）出错的表名存在小写字母</li>
-<li>解决办法：使用更新后的pdi程序，更新后的程序会将db2的表名使用双引号括起来。</li>
+  <li>原因：1）db2数据库连接用户没有权限访问出错的表；2）出错的表名存在小写字母</li>
+  <li>解决办法：使用更新后的pdi程序，更新后的程序会将db2的表名使用双引号括起来。</li>
 </ul>
 
-<h4 id="oracle到mysql和pg时日期类型数据值有偏差">Oracle到mysql和pg时日期类型数据值有偏差</h4>
+<h4 id="oraclemysqlpg">Oracle到mysql和pg时日期类型数据值有偏差</h4>
 
 <ul>
-<li>原因：从oracle中读取日期类型的数据时候，读取结果与oracle数据库中的数据已经存在偏差。少数记录使用oracle10g的驱动读取数据少一个小时，用oracle11g的驱动会多一个小时，该问题尚待oracle工程师给出解决方案。</li>
+  <li>原因：从oracle中读取日期类型的数据时候，读取结果与oracle数据库中的数据已经存在偏差。少数记录使用oracle10g的驱动读取数据少一个小时，用oracle11g的驱动会多一个小时，该问题尚待oracle工程师给出解决方案。</li>
 </ul>
 
-<h4 id="主键从oracle导入不到mysql和postgres">主键从ORACLE导入不到MYSQL和POSTGRES</h4>
+<h4 id="oraclemysqlpostgres">主键从ORACLE导入不到MYSQL和POSTGRES</h4>
 
 <ul>
-<li>原因：pdi程序中没有对主键进行处理</li>
-<li>解决办法：使用更新的pdi程序，执行Tools####Wizzard####Copy Tables Extension...功能添加主键；执行Tools####Wizzard####Copy Tables Data Only...功能可以只复制数据</li>
+  <li>原因：pdi程序中没有对主键进行处理</li>
+  <li>解决办法：使用更新的pdi程序，执行Tools####Wizzard####Copy Tables Extension…功能添加主键；执行Tools####Wizzard####Copy Tables Data Only…功能可以只复制数据</li>
 </ul>
 
-<h4 id="oracle中存在ascii字符导入到postgres时候报错：error-invalid-byte-sequence-for-encoding-quot-utf8-quot-0x00">Oracle中存在ascii字符导入到postgres时候报错：ERROR: invalid byte sequence for encoding &quot;UTF8&quot;: 0x00</h4>
+<h4 id="oracleasciipostgreserror-invalid-byte-sequence-for-encoding-utf8-0x00">Oracle中存在ascii字符导入到postgres时候报错：ERROR: invalid byte sequence for encoding “UTF8”: 0x00</h4>
 
 <ul>
-<li>原因：PostgreSQL内部采用C语言风格的字符串（以0x00）表示结尾，因而不允许字符串中包括0x00，建议在转换时先对字符串类型的数据进行清洗，也就是增加一个节点用于删除字符串数据中的特殊字符0x00。</li>
-<li>解决办法:使用新的pdi程序。在kettle的DataBase类中修改PreparedStatement.setString(int index,String value)方法传入的参数，将value的值trim之后在setString</li>
+  <li>原因：PostgreSQL内部采用C语言风格的字符串（以0x00）表示结尾，因而不允许字符串中包括0x00，建议在转换时先对字符串类型的数据进行清洗，也就是增加一个节点用于删除字符串数据中的特殊字符0x00。</li>
+  <li>解决办法:使用新的pdi程序。在kettle的DataBase类中修改PreparedStatement.setString(int index,String value)方法传入的参数，将value的值trim之后在setString</li>
 </ul>
 
-<h4 id="异构数据库之间的类型兼容问题。日期类型和时间类型的数据初始化到mysql或postgres中都为时间类型的数据，导致数据对比时候数据不一致。">异构数据库之间的类型兼容问题。日期类型和时间类型的数据初始化到mysql或postgres中都为时间类型的数据，导致数据对比时候数据不一致。</h4>
+<h4 id="mysqlpostgres">异构数据库之间的类型兼容问题。日期类型和时间类型的数据初始化到mysql或postgres中都为时间类型的数据，导致数据对比时候数据不一致。</h4>
 
 <ul>
-<li>原因：Pdi程序中的类型转换采用的是向上兼容的方式，故日期和时间类型都转换为时间类型数据。</li>
-<li>解决办法：针对与db2数据初始化到mysql和postgres，该问题在最新的pdi程序中已经处理。因为oracle中的日期类型字段既可以存日期又可以存时间，故没针对oracle数据做出处理。</li>
+  <li>原因：Pdi程序中的类型转换采用的是向上兼容的方式，故日期和时间类型都转换为时间类型数据。</li>
+  <li>解决办法：针对与db2数据初始化到mysql和postgres，该问题在最新的pdi程序中已经处理。因为oracle中的日期类型字段既可以存日期又可以存时间，故没针对oracle数据做出处理。</li>
 </ul>
 
-<h4 id="db2中没有主键的数据初始化到mysql和postgres需要添加索引">Db2中没有主键的数据初始化到mysql和postgres需要添加索引</h4>
+<h4 id="db2mysqlpostgres-1">Db2中没有主键的数据初始化到mysql和postgres需要添加索引</h4>
 
 <ul>
-<li>解决办法：使用最新的pdi程序，最新的pdi程序会添加主键和索引。</li>
+  <li>解决办法：使用最新的pdi程序，最新的pdi程序会添加主键和索引。</li>
 </ul>
 
-<h4 id="db2中decimal（n-m）类型的数据初始化到postgres数据库被四舍五入。">Db2中decimal（n,m）类型的数据初始化到postgres数据库被四舍五入。</h4>
+<h4 id="db2decimalnmpostgres">Db2中decimal（n,m）类型的数据初始化到postgres数据库被四舍五入。</h4>
 
 <ul>
-<li>原因：Db2中decimal（n,m）类型的数据初始化到postgres中的类型不对。</li>
-<li>解决办法：使用最新的pdi程序。</li>
+  <li>原因：Db2中decimal（n,m）类型的数据初始化到postgres中的类型不对。</li>
+  <li>解决办法：使用最新的pdi程序。</li>
 </ul>
 
-<h4 id="导数据中途时没有报错，直接软件退出">导数据中途时没有报错，直接软件退出</h4>
+<h4 id="section-1">导数据中途时没有报错，直接软件退出</h4>
 
 <ul>
-<li>原因：1）jvm内存溢出，需要修改jvm参数；2）pdi程序报swt错误</li>
-<li>解决办法：修改jvm参数</li>
+  <li>原因：1）jvm内存溢出，需要修改jvm参数；2）pdi程序报swt错误</li>
+  <li>解决办法：修改jvm参数</li>
 </ul>
 
-<h4 id="初次使用kettle做db2的初始化会报错">初次使用kettle做db2的初始化会报错</h4>
+<h4 id="kettledb2">初次使用kettle做db2的初始化会报错</h4>
 
 <ul>
-<li>原因：kettle中的db2的jdbc驱动与使用的db2版本不对应。</li>
-<li>解决办法：从db2的安装目录下拷贝jdbc驱动到kettle目录（libext/JDBC）下</li>
+  <li>原因：kettle中的db2的jdbc驱动与使用的db2版本不对应。</li>
+  <li>解决办法：从db2的安装目录下拷贝jdbc驱动到kettle目录（libext/JDBC）下</li>
 </ul>
 
                     <br/>
@@ -236,7 +229,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

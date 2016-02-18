@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -105,7 +99,7 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>IDH为Intel&#39;s Distribution of Hadoop的简称，中文为英特尔Hadoop发行版，目前应该没有人在维护该产品了。这里简单介绍一下IDH HBase中实现的一些特性。</p>
+                    <p>IDH为Intel’s Distribution of Hadoop的简称，中文为英特尔Hadoop发行版，目前应该没有人在维护该产品了。这里简单介绍一下IDH HBase中实现的一些特性。</p>
 
 <p>以下部分内容摘自IDH官方的一些文档，部分内容来自我的整理：</p>
 
@@ -114,8 +108,8 @@
 <p>对于写入的rowkey是基本单调的（例如时序数据），IDH引入了一个新的接口：SaltedTableInterface</p>
 
 <ul>
-<li>提高近乎透明的“加盐”，方便使用</li>
-<li>封装了get、scan、put、delete等操作</li>
+  <li>提高近乎透明的“加盐”，方便使用</li>
+  <li>封装了get、scan、put、delete等操作</li>
 </ul>
 
 <p>2、提供了Rolling Scanner应对HFile数量大量增加情况下的get、scan性能</p>
@@ -133,20 +127,20 @@
 <p>6、提供大对象的高效存储</p>
 
 <ul>
-<li>类似Oracle的BLOB存储</li>
-<li>对用户透明</li>
-<li>2x以上的写入性能，还有些进步空间</li>
-<li>2x的随机访问性能</li>
-<li>1.3x的scan性能</li>
-<li>接近直接写入hdfs性能</li>
+  <li>类似Oracle的BLOB存储</li>
+  <li>对用户透明</li>
+  <li>2x以上的写入性能，还有些进步空间</li>
+  <li>2x的随机访问性能</li>
+  <li>1.3x的scan性能</li>
+  <li>接近直接写入hdfs性能</li>
 </ul>
 
 <p>7、引入交互式的hive over hbase</p>
 
 <ul>
-<li>完全的hive支持，常用功能（select、group by、top n等等）用hbase协作器实现，其余功能（大表关联等等）用mapreduce无缝对接</li>
-<li>去除mapreduce的overhead，大大地减少了数据传输</li>
-<li>性能有3x-10x提升</li>
+  <li>完全的hive支持，常用功能（select、group by、top n等等）用hbase协作器实现，其余功能（大表关联等等）用mapreduce无缝对接</li>
+  <li>去除mapreduce的overhead，大大地减少了数据传输</li>
+  <li>性能有3x-10x提升</li>
 </ul>
 
 <p>具体介绍，请参考<a href="/2014/06/12/intro-of-hive-over-hbase.html">Hive Over HBase的介绍</a></p>
@@ -156,6 +150,7 @@
 <p>9、HBase中支持对某列族设置副本数</p>
 
 <p>10、可以通过定时任务设置文件压缩合并频率</p>
+
 
                     <br/>
                     <div class="well">
@@ -202,7 +197,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -111,209 +105,275 @@
 
 <p>关于 Kerberos 的安装和 Hive 配置 kerberos 认证，请参考 <a href="/2014/11/06/config-kerberos-in-cdh-hive.html">Hive配置kerberos认证</a>。</p>
 
-<h1 id="1-环境说明">1. 环境说明</h1>
+<h1 id="section">1. 环境说明</h1>
 
 <p>系统环境：</p>
 
 <ul>
-<li>操作系统：CentOs 6.6</li>
-<li>Hadoop版本：<code class="prettyprint">CDH5.4</code></li>
-<li>JDK版本：<code class="prettyprint">1.7.0_71</code></li>
-<li>运行用户：root</li>
+  <li>操作系统：CentOs 6.6</li>
+  <li>Hadoop版本：<code class="highlighter-rouge">CDH5.4</code></li>
+  <li>JDK版本：<code class="highlighter-rouge">1.7.0_71</code></li>
+  <li>运行用户：root</li>
 </ul>
 
 <p>集群各节点角色规划为：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
+
+<div class="highlighter-rouge"><pre class="highlight"><code>192.168.56.121        cdh1     NameNode、ResourceManager、HBase、Hive metastore、Impala Catalog、Impala statestore、Sentry 
 192.168.56.122        cdh2     DataNode、SecondaryNameNode、NodeManager、HBase、Hive Server2、Impala Server
 192.168.56.123        cdh3     DataNode、HBase、NodeManager、Hive Server2、Impala Server
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>cdh1作为master节点，其他节点作为slave节点，hostname 请使用小写，要不然在集成 kerberos 时会出现一些错误。</p>
 
-<h1 id="2-安装必须的依赖">2. 安装必须的依赖</h1>
+<h1 id="section-1">2. 安装必须的依赖</h1>
 
 <p>在每个节点上运行下面的命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>yum install python-devel openssl-devel python-pip cyrus-sasl cyrus-sasl-gssapi cyrus-sasl-devel -y
-<span class="nv">$ </span>pip-python install ssl
-</code></pre></div>
-<h1 id="3-生成-keytab">3. 生成 keytab</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install python-devel openssl-devel python-pip cyrus-sasl cyrus-sasl-gssapi cyrus-sasl-devel -y
+<span class="gp">$ </span>pip-python install ssl
+</code></pre>
+</div>
+
+<h1 id="keytab">3. 生成 keytab</h1>
 
 <p>在 cdh1 节点，即 KDC server 节点上执行下面命令：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
 
-kadmin.local -q <span class="s2">&quot;addprinc -randkey impala/cdh1@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey impala/cdh2@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey impala/cdh3@JAVACHEN.COM &quot;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
 
-kadmin.local -q <span class="s2">&quot;xst  -k impala-unmerge.keytab  impala/cdh1@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;xst  -k impala-unmerge.keytab  impala/cdh2@JAVACHEN.COM &quot;</span>
-kadmin.local -q <span class="s2">&quot;xst  -k impala-unmerge.keytab  impala/cdh3@JAVACHEN.COM &quot;</span>
-</code></pre></div>
+kadmin.local -q <span class="s2">"addprinc -randkey impala/cdh1@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"addprinc -randkey impala/cdh2@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"addprinc -randkey impala/cdh3@JAVACHEN.COM "</span>
+
+kadmin.local -q <span class="s2">"xst  -k impala-unmerge.keytab  impala/cdh1@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"xst  -k impala-unmerge.keytab  impala/cdh2@JAVACHEN.COM "</span>
+kadmin.local -q <span class="s2">"xst  -k impala-unmerge.keytab  impala/cdh3@JAVACHEN.COM "</span>
+</code></pre>
+</div>
+
 <p>另外，如果你使用了haproxy来做负载均衡，参考官方文档<a href="http://www.cloudera.com/content/cloudera/en/documentation/cloudera-impala/latest/topics/impala_proxy.html">Using Impala through a Proxy for High Availability</a>，还需生成 proxy.keytab：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd</span> /var/kerberos/krb5kdc/
 
 <span class="c"># proxy 为安装了 haproxy 的机器</span>
-kadmin.local -q <span class="s2">&quot;addprinc -randkey impala/proxy@JAVACHEN.COM &quot;</span>
+kadmin.local -q <span class="s2">"addprinc -randkey impala/proxy@JAVACHEN.COM "</span>
 
-kadmin.local -q <span class="s2">&quot;xst  -k proxy.keytab impala/proxy@JAVACHEN.COM &quot;</span>
-</code></pre></div>
+kadmin.local -q <span class="s2">"xst  -k proxy.keytab impala/proxy@JAVACHEN.COM "</span>
+</code></pre>
+</div>
+
 <p>合并 proxy.keytab 和 impala-unmerge.keytab 生成 impala.keytab：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ktutil
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ktutil
 ktutil: rkt proxy.keytab
 ktutil: rkt impala-unmerge.keytab
 ktutil: wkt impala.keytab
 ktutil: quit
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>拷贝 impala.keytab 和 proxy_impala.keytab 文件到其他节点的 /etc/impala/conf 目录</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp impala.keytab cdh1:/etc/impala/conf
-<span class="nv">$ </span>scp impala.keytab cdh2:/etc/impala/conf
-<span class="nv">$ </span>scp impala.keytab cdh3:/etc/impala/conf
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp impala.keytab cdh1:/etc/impala/conf
+<span class="gp">$ </span>scp impala.keytab cdh2:/etc/impala/conf
+<span class="gp">$ </span>scp impala.keytab cdh3:/etc/impala/conf
+</code></pre>
+</div>
+
 <p>并设置权限，分别在 cdh1、cdh2、cdh3 上执行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ssh cdh1 <span class="s2">&quot;cd /etc/impala/conf/;chown impala:hadoop *.keytab ;chmod 400 *.keytab&quot;</span>
-<span class="nv">$ </span>ssh cdh2 <span class="s2">&quot;cd /etc/impala/conf/;chown impala:hadoop *.keytab ;chmod 400 *.keytab&quot;</span>
-<span class="nv">$ </span>ssh cdh3 <span class="s2">&quot;cd /etc/impala/conf/;chown impala:hadoop *.keytab ;chmod 400 *.keytab&quot;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ssh cdh1 <span class="s2">"cd /etc/impala/conf/;chown impala:hadoop *.keytab ;chmod 400 *.keytab"</span>
+<span class="gp">$ </span>ssh cdh2 <span class="s2">"cd /etc/impala/conf/;chown impala:hadoop *.keytab ;chmod 400 *.keytab"</span>
+<span class="gp">$ </span>ssh cdh3 <span class="s2">"cd /etc/impala/conf/;chown impala:hadoop *.keytab ;chmod 400 *.keytab"</span>
+</code></pre>
+</div>
+
 <p>由于 keytab 相当于有了永久凭证，不需要提供密码(如果修改 kdc 中的 principal 的密码，则该 keytab 就会失效)，所以其他用户如果对该文件有读权限，就可以冒充 keytab 中指定的用户身份访问 hadoop，所以 keytab 文件需要确保只对 owner 有读权限(0400)</p>
 
-<h1 id="4-修改-impala-配置文件">4. 修改 impala 配置文件</h1>
+<h1 id="impala-">4. 修改 impala 配置文件</h1>
 
-<p>修改 cdh1 节点上的 /etc/default/impala，在 <code class="prettyprint">IMPALA_CATALOG_ARGS</code> 、<code class="prettyprint">IMPALA_SERVER_ARGS</code> 和 <code class="prettyprint">IMPALA_STATE_STORE_ARGS</code> 中添加下面参数：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">-kerberos_reinit_interval<span class="o">=</span>60
+<p>修改 cdh1 节点上的 /etc/default/impala，在 <code class="highlighter-rouge">IMPALA_CATALOG_ARGS</code> 、<code class="highlighter-rouge">IMPALA_SERVER_ARGS</code> 和 <code class="highlighter-rouge">IMPALA_STATE_STORE_ARGS</code> 中添加下面参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-kerberos_reinit_interval<span class="o">=</span>60
 -principal<span class="o">=</span>impala/_HOST@JAVACHEN.COM
 -keytab_file<span class="o">=</span>/etc/impala/conf/impala.keytab
-</code></pre></div>
-<p>如果使用了 HAProxy（关于 HAProxy 的配置请参考 <a href="/2014/01/08/hive-ha-by-haproxy.html">Hive使用HAProxy配置HA</a>），则 <code class="prettyprint">IMPALA_SERVER_ARGS</code> 参数需要修改为（proxy为 HAProxy 机器的名称，这里我是将 HAProxy 安装在 cdh1 节点上）：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">-kerberos_reinit_interval<span class="o">=</span>60
+</code></pre>
+</div>
+
+<p>如果使用了 HAProxy（关于 HAProxy 的配置请参考 <a href="/2014/01/08/hive-ha-by-haproxy.html">Hive使用HAProxy配置HA</a>），则 <code class="highlighter-rouge">IMPALA_SERVER_ARGS</code> 参数需要修改为（proxy为 HAProxy 机器的名称，这里我是将 HAProxy 安装在 cdh1 节点上）：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-kerberos_reinit_interval<span class="o">=</span>60
 -be_principal<span class="o">=</span>impala/_HOST@JAVACHEN.COM
 -principal<span class="o">=</span>impala/proxy@JAVACHEN.COM
 -keytab_file<span class="o">=</span>/etc/impala/conf/impala.keytab
-</code></pre></div>
-<p>在 <code class="prettyprint">IMPALA_CATALOG_ARGS</code> 中添加：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">-state_store_host=${IMPALA_STATE_STORE_HOST} \
-</code></pre></div>
-<p>将修改的上面文件同步到其他节点。最后，/etc/default/impala 文件如下，这里，为了避免 hostname 存在大写的情况，使用 <code class="prettyprint">hostname</code> 变量替换 <code class="prettyprint">_HOST</code>：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">IMPALA_CATALOG_SERVICE_HOST</span><span class="o">=</span>cdh1
+</code></pre>
+</div>
+
+<p>在 <code class="highlighter-rouge">IMPALA_CATALOG_ARGS</code> 中添加：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-state_store_host=${IMPALA_STATE_STORE_HOST} \
+</code></pre>
+</div>
+
+<p>将修改的上面文件同步到其他节点。最后，/etc/default/impala 文件如下，这里，为了避免 hostname 存在大写的情况，使用 <code class="highlighter-rouge">hostname</code> 变量替换 <code class="highlighter-rouge">_HOST</code>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">IMPALA_CATALOG_SERVICE_HOST</span><span class="o">=</span>cdh1
 <span class="nv">IMPALA_STATE_STORE_HOST</span><span class="o">=</span>cdh1
 <span class="nv">IMPALA_STATE_STORE_PORT</span><span class="o">=</span>24000
 <span class="nv">IMPALA_BACKEND_PORT</span><span class="o">=</span>22000
 <span class="nv">IMPALA_LOG_DIR</span><span class="o">=</span>/var/log/impala
 
-<span class="nv">IMPALA_MEM_DEF</span><span class="o">=</span><span class="k">$(</span>free -m <span class="p">|</span>awk <span class="s1">&#39;NR==2{print $2-5120}&#39;</span><span class="k">)</span>
-<span class="nv">hostname</span><span class="o">=</span><span class="sb">`</span>hostname -f <span class="p">|</span>tr <span class="s2">&quot;[:upper:]&quot;</span> <span class="s2">&quot;[:lower:]&quot;</span><span class="sb">`</span>
+<span class="nv">IMPALA_MEM_DEF</span><span class="o">=</span><span class="k">$(</span>free -m |awk <span class="s1">'NR==2{print $2-5120}'</span><span class="k">)</span>
+<span class="nv">hostname</span><span class="o">=</span><span class="sb">`</span>hostname -f |tr <span class="s2">"[:upper:]"</span> <span class="s2">"[:lower:]"</span><span class="sb">`</span>
 
-<span class="nv">IMPALA_CATALOG_ARGS</span><span class="o">=</span><span class="s2">&quot; -log_dir=${IMPALA_LOG_DIR} -state_store_host=${IMPALA_STATE_STORE_HOST} \</span>
-<span class="s2">    -kerberos_reinit_interval=60\</span>
-<span class="s2">    -principal=impala/${hostname}@JAVACHEN.COM \</span>
-<span class="s2">    -keytab_file=/etc/impala/conf/impala.keytab</span>
-<span class="s2">&quot;</span>
+<span class="nv">IMPALA_CATALOG_ARGS</span><span class="o">=</span><span class="s2">" -log_dir=</span><span class="k">${</span><span class="nv">IMPALA_LOG_DIR</span><span class="k">}</span><span class="s2"> -state_store_host=</span><span class="k">${</span><span class="nv">IMPALA_STATE_STORE_HOST</span><span class="k">}</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+    -kerberos_reinit_interval=60</span><span class="se">\</span><span class="s2">
+    -principal=impala/</span><span class="k">${</span><span class="nv">hostname</span><span class="k">}</span><span class="s2">@JAVACHEN.COM </span><span class="se">\</span><span class="s2">
+    -keytab_file=/etc/impala/conf/impala.keytab
+"</span>
 
-<span class="nv">IMPALA_STATE_STORE_ARGS</span><span class="o">=</span><span class="s2">&quot; -log_dir=${IMPALA_LOG_DIR} -state_store_port=${IMPALA_STATE_STORE_PORT}\</span>
-<span class="s2">    -statestore_subscriber_timeout_seconds=15 \</span>
-<span class="s2">    -kerberos_reinit_interval=60 \</span>
-<span class="s2">    -principal=impala/${hostname}@JAVACHEN.COM \</span>
-<span class="s2">    -keytab_file=/etc/impala/conf/impala.keytab</span>
-<span class="s2">&quot;</span>
-<span class="nv">IMPALA_SERVER_ARGS</span><span class="o">=</span><span class="s2">&quot; \</span>
-<span class="s2">    -log_dir=${IMPALA_LOG_DIR} \</span>
-<span class="s2">    -catalog_service_host=${IMPALA_CATALOG_SERVICE_HOST} \</span>
-<span class="s2">    -state_store_port=${IMPALA_STATE_STORE_PORT} \</span>
-<span class="s2">    -use_statestore \</span>
-<span class="s2">    -state_store_host=${IMPALA_STATE_STORE_HOST} \</span>
-<span class="s2">    -be_port=${IMPALA_BACKEND_PORT} \</span>
-<span class="s2">    -kerberos_reinit_interval=60 \</span>
-<span class="s2">    -be_principal=impala/${hostname}@JAVACHEN.COM \</span>
-<span class="s2">    -principal=impala/cdh1@JAVACHEN.COM \</span>
-<span class="s2">    -keytab_file=/etc/impala/conf/impala.keytab \</span>
-<span class="s2">    -mem_limit=${IMPALA_MEM_DEF}m</span>
-<span class="s2">&quot;</span>
+<span class="nv">IMPALA_STATE_STORE_ARGS</span><span class="o">=</span><span class="s2">" -log_dir=</span><span class="k">${</span><span class="nv">IMPALA_LOG_DIR</span><span class="k">}</span><span class="s2"> -state_store_port=</span><span class="k">${</span><span class="nv">IMPALA_STATE_STORE_PORT</span><span class="k">}</span><span class="se">\</span><span class="s2">
+    -statestore_subscriber_timeout_seconds=15 </span><span class="se">\</span><span class="s2">
+    -kerberos_reinit_interval=60 </span><span class="se">\</span><span class="s2">
+    -principal=impala/</span><span class="k">${</span><span class="nv">hostname</span><span class="k">}</span><span class="s2">@JAVACHEN.COM </span><span class="se">\</span><span class="s2">
+    -keytab_file=/etc/impala/conf/impala.keytab
+"</span>
+<span class="nv">IMPALA_SERVER_ARGS</span><span class="o">=</span><span class="s2">" </span><span class="se">\</span><span class="s2">
+    -log_dir=</span><span class="k">${</span><span class="nv">IMPALA_LOG_DIR</span><span class="k">}</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+    -catalog_service_host=</span><span class="k">${</span><span class="nv">IMPALA_CATALOG_SERVICE_HOST</span><span class="k">}</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+    -state_store_port=</span><span class="k">${</span><span class="nv">IMPALA_STATE_STORE_PORT</span><span class="k">}</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+    -use_statestore </span><span class="se">\</span><span class="s2">
+    -state_store_host=</span><span class="k">${</span><span class="nv">IMPALA_STATE_STORE_HOST</span><span class="k">}</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+    -be_port=</span><span class="k">${</span><span class="nv">IMPALA_BACKEND_PORT</span><span class="k">}</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+    -kerberos_reinit_interval=60 </span><span class="se">\</span><span class="s2">
+    -be_principal=impala/</span><span class="k">${</span><span class="nv">hostname</span><span class="k">}</span><span class="s2">@JAVACHEN.COM </span><span class="se">\</span><span class="s2">
+    -principal=impala/cdh1@JAVACHEN.COM </span><span class="se">\</span><span class="s2">
+    -keytab_file=/etc/impala/conf/impala.keytab </span><span class="se">\</span><span class="s2">
+    -mem_limit=</span><span class="k">${</span><span class="nv">IMPALA_MEM_DEF</span><span class="k">}</span><span class="s2">m
+"</span>
 
 <span class="nv">ENABLE_CORE_DUMPS</span><span class="o">=</span><span class="nb">false</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>将修改的上面文件同步到其他节点：cdh2、cdh3：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>scp /etc/default/impala cdh2:/etc/default/impala
-<span class="nv">$ </span>scp /etc/default/impala cdh3:/etc/default/impala
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>scp /etc/default/impala cdh2:/etc/default/impala
+<span class="gp">$ </span>scp /etc/default/impala cdh3:/etc/default/impala
+</code></pre>
+</div>
+
 <p>更新 impala 配置文件下的文件并同步到其他节点：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">cp /etc/hadoop/conf/core-site.xml /etc/impala/conf/
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp /etc/hadoop/conf/core-site.xml /etc/impala/conf/
 cp /etc/hadoop/conf/hdfs-site.xml /etc/impala/conf/
 cp /etc/hive/conf/hive-site.xml /etc/impala/conf/
 
 scp -r /etc/impala/conf cdh2:/etc/impala
 scp -r /etc/impala/conf cdh3:/etc/impala
-</code></pre></div>
-<h1 id="5-启动服务">5. 启动服务</h1>
+</code></pre>
+</div>
 
-<h2 id="启动-impala-state-store">启动 impala-state-store</h2>
+<h1 id="section-2">5. 启动服务</h1>
+
+<h2 id="impala-state-store">启动 impala-state-store</h2>
 
 <p>impala-state-store 是通过 impala 用户启动的，故在 cdh1 上先获取 impala 用户的 ticket 再启动服务：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kinit -k -t /etc/impala/conf/impala.keytab impala/cdh1@JAVACHEN.COM
-<span class="nv">$ </span>service impala-state-store start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kinit -k -t /etc/impala/conf/impala.keytab impala/cdh1@JAVACHEN.COM
+<span class="gp">$ </span>service impala-state-store start
+</code></pre>
+</div>
+
 <p>然后查看日志，确认是否启动成功。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>tailf /var/log/impala/statestored.INFO
-</code></pre></div>
-<h2 id="启动-impala-catalog">启动 impala-catalog</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tailf /var/log/impala/statestored.INFO
+</code></pre>
+</div>
+
+<h2 id="impala-catalog">启动 impala-catalog</h2>
 
 <p>impala-catalog 是通过 impala 用户启动的，故在 cdh1 上先获取 impala 用户的 ticket 再启动服务：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kinit -k -t /etc/impala/conf/impala.keytab impala/cdh1@JAVACHEN.COM
-<span class="nv">$ </span>service impala-catalog start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kinit -k -t /etc/impala/conf/impala.keytab impala/cdh1@JAVACHEN.COM
+<span class="gp">$ </span>service impala-catalog start
+</code></pre>
+</div>
+
 <p>然后查看日志，确认是否启动成功。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>tailf /var/log/impala/catalogd.INFO
-</code></pre></div>
-<h2 id="启动-impala-server">启动 impala-server</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tailf /var/log/impala/catalogd.INFO
+</code></pre>
+</div>
+
+<h2 id="impala-server">启动 impala-server</h2>
 
 <p>impala-server 是通过 impala 用户启动的，故在 cdh1 上先获取 impala 用户的 ticket 再启动服务：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>kinit -k -t /etc/impala/conf/impala.keytab impala/cdh1@JAVACHEN.COM
-<span class="nv">$ </span>service impala-server start
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kinit -k -t /etc/impala/conf/impala.keytab impala/cdh1@JAVACHEN.COM
+<span class="gp">$ </span>service impala-server start
+</code></pre>
+</div>
+
 <p>然后查看日志，确认是否启动成功。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>tailf /var/log/impala/impalad.INFO
-</code></pre></div>
-<h1 id="6-测试">6. 测试</h1>
 
-<h2 id="测试-impala-shell">测试 impala-shell</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tailf /var/log/impala/impalad.INFO
+</code></pre>
+</div>
 
-<p>在启用了 kerberos 之后，运行 impala-shell 时，需要添加 <code class="prettyprint">-k</code> 参数：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>impala-shell -k
+<h1 id="section-3">6. 测试</h1>
+
+<h2 id="impala-shell">测试 impala-shell</h2>
+
+<p>在启用了 kerberos 之后，运行 impala-shell 时，需要添加 <code class="highlighter-rouge">-k</code> 参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>impala-shell -k
 Starting Impala Shell using Kerberos authentication
-Using service name <span class="s1">&#39;impala&#39;</span>
+Using service name <span class="s1">'impala'</span>
 Connected to cdh1:21000
 Server version: impalad version 1.3.1-cdh4 RELEASE <span class="o">(</span>build 907481bf45b248a7bb3bb077d54831a71f484e5f<span class="o">)</span>
 Welcome to the Impala shell. Press TAB twice to see a list of available commands.
 
-Copyright <span class="o">(</span>c<span class="o">)</span> <span class="m">2012</span> Cloudera, Inc. All rights reserved.
+Copyright <span class="o">(</span>c<span class="o">)</span> 2012 Cloudera, Inc. All rights reserved.
 
-<span class="o">(</span>Shell build version: Impala Shell v1.3.1-cdh4 <span class="o">(</span>907481b<span class="o">)</span> built on Wed Apr <span class="m">30</span> 14:23:48 PDT 2014<span class="o">)</span>
-<span class="o">[</span>cdh1:21000<span class="o">]</span> &gt;
-<span class="o">[</span>cdh1:21000<span class="o">]</span> &gt; show tables<span class="p">;</span>
+<span class="o">(</span>Shell build version: Impala Shell v1.3.1-cdh4 <span class="o">(</span>907481b<span class="o">)</span> built on Wed Apr 30 14:23:48 PDT 2014<span class="o">)</span>
+<span class="o">[</span>cdh1:21000] &gt;
+<span class="o">[</span>cdh1:21000] &gt; show tables;
 Query: show tables
 +------+
-<span class="p">|</span> name <span class="p">|</span>
+| name |
 +------+
-<span class="p">|</span> a    <span class="p">|</span>
-<span class="p">|</span> b    <span class="p">|</span>
-<span class="p">|</span> c    <span class="p">|</span>
-<span class="p">|</span> d    <span class="p">|</span>
+| a    |
+| b    |
+| c    |
+| d    |
 +------+
-Returned <span class="m">4</span> row<span class="o">(</span>s<span class="o">)</span> in 0.08s
-</code></pre></div>
-<h1 id="7-排错">7. 排错</h1>
+Returned 4 row<span class="o">(</span>s<span class="o">)</span> <span class="k">in </span>0.08s
+</code></pre>
+</div>
+
+<h1 id="section-4">7. 排错</h1>
 
 <p>如果出现下面异常：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">[cdh1:21000] &gt; select * from test limit 10;
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[cdh1:21000] &gt; select * from test limit 10;
 Query: select * from test limit 10
 ERROR: AnalysisException: Failed to load metadata for table: default.test
 CAUSED BY: TableLoadingException: Failed to load metadata for table: test
 CAUSED BY: TTransportException: java.net.SocketTimeoutException: Read timed out
 CAUSED BY: SocketTimeoutException: Read timed out
-</code></pre></div>
-<p>则需要在 hive-site.xml 中将 <code class="prettyprint">hive.metastore.client.socket.timeout</code> 值设置大一些：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;property&gt;</span>
+</code></pre>
+</div>
+
+<p>则需要在 hive-site.xml 中将 <code class="highlighter-rouge">hive.metastore.client.socket.timeout</code> 值设置大一些：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
   <span class="nt">&lt;name&gt;</span>hive.metastore.client.socket.timeout<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;value&gt;</span>36000<span class="nt">&lt;/value&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
@@ -363,7 +423,8 @@ CAUSED BY: SocketTimeoutException: Read timed out
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

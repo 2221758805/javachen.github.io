@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -108,48 +102,78 @@
                     <h2 id="hadoop">hadoop</h2>
 
 <p>解压 gz 文件到文本文件</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hadoop fs -text /hdfs_path/compressed_file.gz <span class="p">|</span> hadoop fs -put - /tmp/uncompressed-file.txt
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -text /hdfs_path/compressed_file.gz | hadoop fs -put - /tmp/uncompressed-file.txt
+</code></pre>
+</div>
+
 <p>解压本地文件 gz 文件并上传到 hdfs</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gunzip -c filename.txt.gz <span class="p">|</span> hadoop fs -put - /tmp/filename.txt
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gunzip -c filename.txt.gz | hadoop fs -put - /tmp/filename.txt
+</code></pre>
+</div>
+
 <p>使用 awk 处理 csv 文件，参考 <a href="http://grepalex.com/2013/01/17/awk-with-hadoop-streaming/">Using awk and friends with Hadoop</a>:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hadoop fs -cat people.txt <span class="p">|</span> awk -F<span class="s2">&quot;,&quot;</span> <span class="s1">&#39;{ print $1&quot;,&quot;$2&quot;,&quot;$3$4$5 }&#39;</span> <span class="p">|</span> hadoop fs -put - people-coalesed.txt
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -cat people.txt | awk -F<span class="s2">","</span> <span class="s1">'{ print $1","$2","$3$4$5 }'</span> | hadoop fs -put - people-coalesed.txt
+</code></pre>
+</div>
+
 <p>创建 lzo 文件、上传到 hdfs 并添加索引：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>lzop -Uf data.txt
-<span class="nv">$ </span>hadoop fs -moveFromLocal data.txt.lzo /tmp/
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>lzop -Uf data.txt
+<span class="gp">$ </span>hadoop fs -moveFromLocal data.txt.lzo /tmp/
 <span class="c"># 1. 单机</span>
-<span class="nv">$ </span>hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.LzoIndexer /tmp/data.txt.lzo
+<span class="gp">$ </span>hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.LzoIndexer /tmp/data.txt.lzo
 
 <span class="c"># 2. 运行 mr</span>
-<span class="nv">$ </span>hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.DistributedLzoIndexer /tmp/data.txt.lzo
-</code></pre></div>
+<span class="gp">$ </span>hadoop jar /usr/lib/hadoop/lib/hadoop-lzo.jar com.hadoop.compression.lzo.DistributedLzoIndexer /tmp/data.txt.lzo
+</code></pre>
+</div>
+
 <p>如果 people.txt 通过 lzo 压缩了，则可以使用下面命令解压缩、处理数据、压缩文件：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hadoop fs -cat people.txt.lzo <span class="p">|</span> lzop -dc <span class="p">|</span> awk -F<span class="s2">&quot;,&quot;</span> <span class="s1">&#39;{ print $1&quot;,&quot;$2&quot;,&quot;$3$4$5 }&#39;</span> <span class="p">|</span> lzop -c <span class="p">|</span> hadoop fs -put - people-coalesed.txt.lzo
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hadoop fs -cat people.txt.lzo | lzop -dc | awk -F<span class="s2">","</span> <span class="s1">'{ print $1","$2","$3$4$5 }'</span> | lzop -c | hadoop fs -put - people-coalesed.txt.lzo
+</code></pre>
+</div>
+
 <h2 id="hive">hive</h2>
 
 <p>后台运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>nohup hive -f sample.hql &gt; output.out 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span> 
 
-<span class="nv">$ </span>nohup hive --database <span class="s2">&quot;default&quot;</span> -e <span class="s2">&quot;select * from tablename;&quot;</span> &gt; output.out 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span> 
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>nohup hive -f sample.hql &gt; output.out 2&gt;&amp;1 &amp; 
+
+<span class="gp">$ </span>nohup hive --database <span class="s2">"default"</span> -e <span class="s2">"select * from tablename;"</span> &gt; output.out 2&gt;&amp;1 &amp; 
+</code></pre>
+</div>
+
 <p>替换分隔符：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hive --database <span class="s2">&quot;default&quot;</span> -f query.hql  2&gt; err.txt <span class="p">|</span> sed <span class="s1">&#39;s/[\t]/,/g&#39;</span> 1&gt; output.txt 
-</code></pre></div>
-<p>打印表头：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hive --database <span class="s2">&quot;default&quot;</span> -e <span class="s2">&quot;SHOW COLUMNS FROM table_name;&quot;</span> <span class="p">|</span> tr <span class="s1">&#39;[:lower:]&#39;</span> <span class="s1">&#39;[:upper:]&#39;</span> <span class="p">|</span> tr <span class="s1">&#39;\n&#39;</span> <span class="s1">&#39;,&#39;</span> 1&gt; headers.txt
 
-<span class="nv">$ </span>hive --database <span class="s2">&quot;default&quot;</span> -e <span class="s2">&quot;SET hive.cli.print.header=true; select * from table_name limit 0;&quot;</span> <span class="p">|</span> tr <span class="s1">&#39;[:lower:]&#39;</span> <span class="s1">&#39;[:upper:]&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/[\t]/,/g&#39;</span>  1&gt; headers.txt
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive --database <span class="s2">"default"</span> -f query.hql  2&gt; err.txt | sed <span class="s1">'s/[\t]/,/g'</span> 1&gt; output.txt 
+</code></pre>
+</div>
+
+<p>打印表头：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive --database <span class="s2">"default"</span> -e <span class="s2">"SHOW COLUMNS FROM table_name;"</span> | tr <span class="s1">'[:lower:]'</span> <span class="s1">'[:upper:]'</span> | tr <span class="s1">'\n'</span> <span class="s1">','</span> 1&gt; headers.txt
+
+<span class="gp">$ </span>hive --database <span class="s2">"default"</span> -e <span class="s2">"SET hive.cli.print.header=true; select * from table_name limit 0;"</span> | tr <span class="s1">'[:lower:]'</span> <span class="s1">'[:upper:]'</span> | sed <span class="s1">'s/[\t]/,/g'</span>  1&gt; headers.txt
+</code></pre>
+</div>
+
 <p>查看执行时间：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>hive -e <span class="s2">&quot;select * from tablename;&quot;</span>  2&gt; err.txt  1&gt; out.txt 
-<span class="nv">$ </span>cat err.txt <span class="p">|</span> grep <span class="s2">&quot;Time taken:&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $3,$6}&#39;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive -e <span class="s2">"select * from tablename;"</span>  2&gt; err.txt  1&gt; out.txt 
+<span class="gp">$ </span>cat err.txt | grep <span class="s2">"Time taken:"</span> | awk <span class="s1">'{print $3,$6}'</span>
+</code></pre>
+</div>
+
 <p>hive 中如何避免用科学计数法表示浮点数？参考 <a href="http://www.zhihu.com/question/28887115">http://www.zhihu.com/question/28887115</a> ：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">java_method</span><span class="p">(</span><span class="ss">&quot;String&quot;</span><span class="p">,</span> <span class="ss">&quot;format&quot;</span><span class="p">,</span> <span class="ss">&quot;%f&quot;</span><span class="p">,</span> <span class="n">my_column</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">LIMIT</span> <span class="mi">1</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">java_method</span><span class="p">(</span><span class="nv">"String"</span><span class="p">,</span> <span class="nv">"format"</span><span class="p">,</span> <span class="nv">"%f"</span><span class="p">,</span> <span class="n">my_column</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">LIMIT</span> <span class="mi">1</span>
+</code></pre>
+</div>
+
                     <br/>
                     <div class="well">
                         原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
@@ -195,7 +219,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

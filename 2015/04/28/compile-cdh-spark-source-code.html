@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,53 +101,72 @@
               <div id="post-text">
                     <p>本文以Cloudera维护的Spark分支项目为例，记录跟新Spark分支以及编译Spark源代码的过程。</p>
 
-<h1 id="下载代码">下载代码</h1>
+<h1 id="section">下载代码</h1>
 
 <p>在Github上fork Cloudera维护的<a href="https://github.com/cloudera/spark">Spark</a>项目到自己的github账号里，对应的地址为<a href="https://github.com/javachen/spark">https://github.com/javachen/spark</a>。</p>
 
 <p>下载代码：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>git clone https://github.com/javachen/spark
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/javachen/spark
+</code></pre>
+</div>
+
 <p>然后，切换到最新的分支，当前为 cdh5-1.3.0_5.4.0。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>spark
-<span class="nv">$ </span>git checkout cdh5-1.3.0_5.4.0
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd </span>spark
+<span class="gp">$ </span>git checkout cdh5-1.3.0_5.4.0
+</code></pre>
+</div>
+
 <p>查看当前分支：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">⇒  git branch
-* cdh5-1.3.0_5.4.0
+
+<div class="highlighter-rouge"><pre class="highlight"><code>⇒  git branch
+<span class="k">*</span> cdh5-1.3.0_5.4.0
   master
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>如果spark发布了新的版本，需要同步到我自己维护的spark项目中，可以按以下步骤进行操作:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 添加远程仓库地址</span>
-<span class="nv">$ </span>git remote add cdh git@github.com:cloudera/spark.git
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 添加远程仓库地址</span>
+<span class="gp">$ </span>git remote add cdh git@github.com:cloudera/spark.git
 
 <span class="c"># 抓取远程仓库更新：</span>
-<span class="nv">$ </span>git fetch cdh
+<span class="gp">$ </span>git fetch cdh
 
 <span class="c"># 假设cloudera发布了新的版本 cdh/cdh5-1.3.0_5.4.X</span>
-<span class="nv">$ </span>git checkout -b cdh5-1.3.0_5.4.X cdh/cdh5-1.3.0_5.4.X
+<span class="gp">$ </span>git checkout -b cdh5-1.3.0_5.4.X cdh/cdh5-1.3.0_5.4.X
 
 <span class="c"># 切换到新下载的分支 </span>
-<span class="nv">$ </span>git checkout cdh5-1.3.0_5.4.X
+<span class="gp">$ </span>git checkout cdh5-1.3.0_5.4.X
 
 <span class="c"># 将其提交到自己的远程仓库：</span>
-<span class="nv">$ </span>git push origin cdh5-1.3.0_5.4.X:cdh5-1.3.0_5.4.X
-</code></pre></div>
-<h1 id="编译">编译</h1>
+<span class="gp">$ </span>git push origin cdh5-1.3.0_5.4.X:cdh5-1.3.0_5.4.X
+</code></pre>
+</div>
 
-<h2 id="安装-zinc">安装 zinc</h2>
+<h1 id="section-1">编译</h1>
+
+<h2 id="zinc">安装 zinc</h2>
 
 <p>在mac上安装<a href="https://github.com/typesafehub/zinc">zinc</a>：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew install zinc
-</code></pre></div>
-<h2 id="使用maven编译">使用maven编译</h2>
 
-<p>指定hadoop版本为<code class="prettyprint">2.6.0-cdh5.4.0</code>，并集成yarn和hive：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m&quot;</span>
-<span class="nv">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -DskipTests clean package
-</code></pre></div>
-<p>在CDH的spark中，要想集成<code class="prettyprint">hive-thriftserver</code>进行编译，需要修改 pom.xml 文件，添加一行 <module>sql/hive-thriftserver</module>：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;modules&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew install zinc
+</code></pre>
+</div>
+
+<h2 id="maven">使用maven编译</h2>
+
+<p>指定hadoop版本为<code class="highlighter-rouge">2.6.0-cdh5.4.0</code>，并集成yarn和hive：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">"-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"</span>
+<span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -DskipTests clean package
+</code></pre>
+</div>
+
+<p>在CDH的spark中，要想集成<code class="highlighter-rouge">hive-thriftserver</code>进行编译，需要修改 pom.xml 文件，添加一行 <module>sql/hive-thriftserver</module>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;modules&gt;</span>
     <span class="nt">&lt;module&gt;</span>core<span class="nt">&lt;/module&gt;</span>
     <span class="nt">&lt;module&gt;</span>bagel<span class="nt">&lt;/module&gt;</span>
     <span class="nt">&lt;module&gt;</span>graphx<span class="nt">&lt;/module&gt;</span>
@@ -174,31 +187,49 @@
     <span class="nt">&lt;module&gt;</span>external/mqtt<span class="nt">&lt;/module&gt;</span>
     <span class="nt">&lt;module&gt;</span>examples<span class="nt">&lt;/module&gt;</span>
   <span class="nt">&lt;/modules&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>然后，再执行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m&quot;</span>
-<span class="nv">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -Phive-thriftserver -DskipTests clean package
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">MAVEN_OPTS</span><span class="o">=</span><span class="s2">"-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"</span>
+<span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive -Phive-thriftserver -DskipTests clean package
+</code></pre>
+</div>
+
 <p>运行测试用例：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive  <span class="nb">test</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive  <span class="nb">test</span>
+</code></pre>
+</div>
+
 <p>运行java8测试：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn install -DskipTests -Pjava8-tests
-</code></pre></div>
-<h2 id="使用sbt编译">使用sbt编译</h2>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>build/sbt -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive assembly
-</code></pre></div>
-<h2 id="生成压缩包">生成压缩包</h2>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./make-distribution.sh
-</code></pre></div>
-<h1 id="排错">排错</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn install -DskipTests -Pjava8-tests
+</code></pre>
+</div>
+
+<h2 id="sbt">使用sbt编译</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>build/sbt -Pyarn -Dhadoop.version<span class="o">=</span>2.6.0-cdh5.4.0 -Phive assembly
+</code></pre>
+</div>
+
+<h2 id="section-2">生成压缩包</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./make-distribution.sh
+</code></pre>
+</div>
+
+<h1 id="section-3">排错</h1>
 
 <ol>
-<li><code class="prettyprint">Unable to find configuration file at location scalastyle-config.xml</code> 异常</li>
+  <li><code class="highlighter-rouge"> Unable to find configuration file at location scalastyle-config.xml</code> 异常</li>
 </ol>
 
-<p>在idea中使用maven对examples模块运行<code class="prettyprint">package</code>或者<code class="prettyprint">install</code>命令会出现<code class="prettyprint">Unable to find configuration file at location scalastyle-config.xml</code>异常，解决办法是将根目录下的scalastyle-config.xml拷贝到examples目录下去，这是因为pom.xml中定义的是scalastyle-maven-plugin插件从maven运行的当前目录查找该文件。</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;plugin&gt;</span>
+<p>在idea中使用maven对examples模块运行<code class="highlighter-rouge">package</code>或者<code class="highlighter-rouge">install</code>命令会出现<code class="highlighter-rouge"> Unable to find configuration file at location scalastyle-config.xml</code>异常，解决办法是将根目录下的scalastyle-config.xml拷贝到examples目录下去，这是因为pom.xml中定义的是scalastyle-maven-plugin插件从maven运行的当前目录查找该文件。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugin&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.scalastyle<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>scalastyle-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>0.4.0<span class="nt">&lt;/version&gt;</span>
@@ -222,11 +253,13 @@
       <span class="nt">&lt;/execution&gt;</span>
     <span class="nt">&lt;/executions&gt;</span>
 <span class="nt">&lt;/plugin&gt;</span>
-</code></pre></div>
-<h1 id="参考">参考</h1>
+</code></pre>
+</div>
+
+<h1 id="section-4">参考</h1>
 
 <ul>
-<li><a href="http://spark.apache.org/docs/latest/building-spark.html">Building Spark</a></li>
+  <li><a href="http://spark.apache.org/docs/latest/building-spark.html">Building Spark</a></li>
 </ul>
 
                     <br/>
@@ -274,7 +307,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

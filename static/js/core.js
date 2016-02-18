@@ -88,7 +88,7 @@
         //$('#query');.blur().attr('disabled', true);
         $('#wrap .container').hide();
         if (entries == null) {
-          $.ajax({url: '/atom.xml?r=' + (Math.random() * 99999999999), dataType: 'xml', success: function(data) {
+          $.ajax({url: '/rss.xml?r=' + (Math.random() * 99999999999), dataType: 'xml', success: function(data) {
             entries = data.getElementsByTagName('entry');
             findEntries(query);
           }});

@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,71 +101,101 @@
               <div id="post-text">
                     <p>Confluence是Atlassian公司出品的团队协同与知识管理工具。 Confluence是一个专业的企业知识管理与协同软件，也可以用于构建企业wiki。通过它可以实现团队成员之间的协作和知识共享。</p>
 
-<h1 id="1、下载">1、下载</h1>
+<h1 id="section">1、下载</h1>
 
 <p>下载指定版本Confluence</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ mkdir -p /data/confluence
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ mkdir -p /data/confluence
 $ cd /data/confluence
 $ wget www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.4.2.tar.gz
-</code></pre></div>
-<h1 id="2、安装">2、安装</h1>
+</code></pre>
+</div>
+
+<h1 id="section-1">2、安装</h1>
 
 <p>解压：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ tar -zxvf atlassian-confluence-5.4.2.tar.gz
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ tar -zxvf atlassian-confluence-5.4.2.tar.gz
+</code></pre>
+</div>
+
 <p>进入目录：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd atlassian-confluence-5.4.2
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ cd atlassian-confluence-5.4.2
+</code></pre>
+</div>
+
 <p>配置confluence安装目录：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ vim confluence/WEB-INF/classes/confluence-init.properties
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ vim confluence/WEB-INF/classes/confluence-init.properties
+</code></pre>
+</div>
+
 <p>在属性文件中添加安装目录路径：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">###########################
+
+<div class="highlighter-rouge"><pre class="highlight"><code>###########################
 # Note for Unix Users     #
 ###########################
 # - For example:
 confluence.home=/data/confluence/confluence-data
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>创建目录：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ mkdir confluence-data
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ mkdir confluence-data
+</code></pre>
+</div>
+
 <p>创建完成后，运行启动：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ sh bin/start-confluence.sh
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/start-confluence.sh
+</code></pre>
+</div>
+
 <p>访问ip+portnum，默认端口为8090，如果出现破解界面，以上步骤即为成功</p>
 
-<h1 id="3、启停服务">3、启停服务</h1>
+<h1 id="section-2">3、启停服务</h1>
 
 <p>使用压缩包形式的Confluence无法直接使用服务启停，需要配合目录的sh文件</p>
 
 <p>启动服务：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ sh bin/start-confluence.sh
-</code></pre></div>
-<p>停止服务：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ sh bin/stop-confluence.sh
-</code></pre></div>
-<h1 id="4、修改默认端口">4、修改默认端口</h1>
 
-<p>配置文件位置：<code class="prettyprint">atlassian-confluence-5.4.2/conf/server.xml</code></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/start-confluence.sh
+</code></pre>
+</div>
+
+<p>停止服务：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/stop-confluence.sh
+</code></pre>
+</div>
+
+<h1 id="section-3">4、修改默认端口</h1>
+
+<p>配置文件位置：<code class="highlighter-rouge">atlassian-confluence-5.4.2/conf/server.xml</code></p>
 
 <p>打开文件，</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Connector</span> <span class="na">className=</span><span class="s">&quot;org.apache.coyote.tomcat4.CoyoteConnector&quot;</span> <span class="na">port=</span><span class="s">&quot;8090&quot;</span> <span class="na">minProcessors=</span><span class="s">&quot;5&quot;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;Connector</span> <span class="na">className=</span><span class="s">"org.apache.coyote.tomcat4.CoyoteConnector"</span> <span class="na">port=</span><span class="s">"8090"</span> <span class="na">minProcessors=</span><span class="s">"5"</span>
+</code></pre>
+</div>
+
 <p>修改 port 为需要的端口。</p>
 
-<h1 id="5、更换默认的数据库">5、更换默认的数据库</h1>
+<h1 id="section-4">5、更换默认的数据库</h1>
 
 <p>在完成之前的步骤后，数据库使用的是一个 confluence 默认的 hsql 数据库，此数据库缺陷较多，例如：不支持事务管理。因此需要将数据库迁移为指定的数据库类型。</p>
 
-<p>进入 confluence-data 目录，修改 <code class="prettyprint">confluence-cfg.xml</code> 文件中数据库相关的连接信息。</p>
+<p>进入 confluence-data 目录，修改 <code class="highlighter-rouge">confluence-cfg.xml</code> 文件中数据库相关的连接信息。</p>
 
-<h1 id="6、安装中文字体：">6、安装中文字体：</h1>
+<h1 id="section-5">6、安装中文字体：</h1>
 
 <p>默认情况下 Confluence 导出 PDF 不支持中文，需要修改如下：</p>
 
-<p>管理员登录 &quot;Confluence Admin&quot;，选择左边菜单 &quot;CONFIGURATION&quot;-&quot;PDF Export Language Support&quot;，选择安装中文字体，例如：simsun.ttc</p>
+<p>管理员登录 “Confluence Admin”，选择左边菜单 “CONFIGURATION”-“PDF Export Language Support”，选择安装中文字体，例如：simsun.ttc</p>
 
-<h1 id="7、破解">7、破解</h1>
+<h1 id="section-6">7、破解</h1>
 
 <p>请参考：<a href="http://582033.vicp.net/?p=1085">http://582033.vicp.net/?p=1085</a></p>
 
@@ -220,7 +244,8 @@ confluence.home=/data/confluence/confluence-data
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

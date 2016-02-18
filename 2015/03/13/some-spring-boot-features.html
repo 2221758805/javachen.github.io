@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,197 +101,491 @@
               <div id="post-text">
                     <h1 id="springapplication">SpringApplication</h1>
 
-<p>SpringApplication 类是启动 Spring Boot 应用的入口类，你可以创建一个包含 <code class="prettyprint">main()</code> 方法的类，来运行 <code class="prettyprint">SpringApplication.run</code> 这个静态方法：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div>
+<p>SpringApplication 类是启动 Spring Boot 应用的入口类，你可以创建一个包含 <code class="highlighter-rouge">main()</code> 方法的类，来运行 <code class="highlighter-rouge">SpringApplication.run</code> 这个静态方法：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>public static void main(String[] args) {
+    SpringApplication.run(MySpringConfiguration.class, args);
+}
+</code></pre>
+</div>
+
 <p>运行该类会有如下输出：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">  .   ____          _            __ _ _
- /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+  '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::   v1.2.2.RELEASE
-</code></pre></div>
-<p>上面的输出的图案可以通过 banner.txt 文件进行定制。在你的 classpath 中添加 banner.txt 文件，可以在该文件内设置如下变量：</p>
+</code></pre>
+</div>
+
+<h1 id="banner">自定义Banner</h1>
+
+<p>通过在classpath下添加一个banner.txt或设置banner.location来指定相应的文件可以改变启动过程中打印的banner。如果这个文件有特殊的编码，你可以使用banner.encoding设置它（默认为UTF-8）。</p>
+
+<p>在banner.txt中可以使用如下的变量：</p>
 
 <ul>
-<li><code class="prettyprint">${application.version}</code>：MANIFEST.MF 文件中的应用版本号</li>
-<li><code class="prettyprint">${application.formatted-version}</code></li>
-<li><code class="prettyprint">${spring-boot.version}</code>：你正在使用的 Spring Boot 版本号</li>
-<li><code class="prettyprint">${spring-boot.formatted-version}</code></li>
+  <li><code class="highlighter-rouge">${application.version}</code>：MANIFEST.MF 文件中的应用版本号</li>
+  <li><code class="highlighter-rouge">${application.formatted-version}</code></li>
+  <li><code class="highlighter-rouge">${spring-boot.version}</code>：你正在使用的 Spring Boot 版本号</li>
+  <li><code class="highlighter-rouge">${spring-boot.formatted-version}</code></li>
 </ul>
 
 <p>上面这些变量也可以通过 application.properties  来设置，后面再作介绍。</p>
 
-<p>此外，你还可以通过代码进行设置：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SpringApplication</span> <span class="n">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SpringApplication</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<p>注：如果想以编程的方式产生一个banner，可以使用SpringBootApplication.setBanner(…)方法。使用org.springframework.boot.Banner接口，实现你自己的printBanner()方法。</p>
+
+<h1 id="springapplication-1">自定义SpringApplication</h1>
+
+<p>如果默认的SpringApplication不符合你的口味，你可以创建一个本地的实例并自定义它。例如，关闭banner你可以这样写：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span> <span class="n">app</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SpringApplication</span><span class="o">(</span><span class="n">MySpringConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
     <span class="n">app</span><span class="o">.</span><span class="na">setShowBanner</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
     <span class="n">app</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>或者使用流式 API:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">new</span> <span class="nf">SpringApplicationBuilder</span><span class="o">()</span>
+</code></pre>
+</div>
+
+<h1 id="api">流畅的构建API</h1>
+
+<p>如果你需要创建一个分层的ApplicationContext（多个具有父子关系的上下文），或你只是喜欢使用流畅的构建API，你可以使用SpringApplicationBuilder。SpringApplicationBuilder允许你以链式方式调用多个方法，包括可以创建层次结构的parent和child方法。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="nf">SpringApplicationBuilder</span><span class="p">(</span><span class="o">)</span>
     <span class="o">.</span><span class="na">showBanner</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
     <span class="o">.</span><span class="na">sources</span><span class="o">(</span><span class="n">Parent</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
     <span class="o">.</span><span class="na">child</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
     <span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
-</code></pre></div>
-<p>SpringApplication 启动过程会触发一些事件，你可以针对这些事件通过 <code class="prettyprint">SpringApplication.addListeners(…​)</code> 添加一些监听器:</p>
+</code></pre>
+</div>
+
+<h1 id="application">Application事件和监听器</h1>
+
+<p>SpringApplication 启动过程会触发一些事件，你可以针对这些事件通过 <code class="highlighter-rouge">SpringApplication.addListeners(…​)</code> 添加一些监听器:</p>
 
 <ul>
-<li>ApplicationStartedEvent</li>
-<li>ApplicationEnvironmentPreparedEvent</li>
-<li>ApplicationPreparedEvent</li>
-<li>ApplicationFailedEvent</li>
+  <li>ApplicationStartedEvent</li>
+  <li>ApplicationEnvironmentPreparedEvent</li>
+  <li>ApplicationPreparedEvent</li>
+  <li>ApplicationFailedEvent</li>
 </ul>
 
-<p>SpringApplication 会注册一个 shutdown hook 以便在应用退出的时候能够保证 <code class="prettyprint">ApplicationContext</code> 优雅地关闭，这样能够保证所有 Spring lifecycle 的回调都会被执行，包括 DisposableBean 接口的实现类以及 @PreDestroy 注解。</p>
+<p>SpringApplication 会注册一个 shutdown hook 以便在应用退出的时候能够保证 <code class="highlighter-rouge">ApplicationContext</code> 优雅地关闭，这样能够保证所有 Spring lifecycle 的回调都会被执行，包括 DisposableBean 接口的实现类以及 <code class="highlighter-rouge">@PreDestroy</code> 注解。</p>
 
 <p>另外，你也可以实现 org.springframework.boot.ExitCodeGenerator 接口来定义你自己的退出时候的逻辑。</p>
 
-<h1 id="externalized-configuration">Externalized Configuration</h1>
+<h1 id="web">Web环境</h1>
 
-<p>Spring Boot 允许你针对不同的环境配置不同的配置参数，你可以使用 properties文件、YAML 文件、环境变量或者命令行参数来修改应用的配置。你可以在代码中使用 <code class="prettyprint">@Value</code> 注解来获取配置参数的值。</p>
+<p>一个SpringApplication将尝试为你创建正确类型的ApplicationContext。在默认情况下，使用AnnotationConfigApplicationContext或AnnotationConfigEmbeddedWebApplicationContext取决于你正在开发的是否是web应用。</p>
 
-<p>Spring Boot 使用一个特别的 <code class="prettyprint">PropertySource</code> 来按顺序加载配置，加载顺序如下：</p>
+<p>用于确定一个web环境的算法相当简单（基于是否存在某些类）。如果需要覆盖默认行为，你可以使用<code class="highlighter-rouge">setWebEnvironment(boolean webEnvironment)</code>。通过调用<code class="highlighter-rouge">setApplicationContextClass(…)</code>，你可以完全控制ApplicationContext的类型。</p>
+
+<p>注：当JUnit测试里使用SpringApplication时，调用<code class="highlighter-rouge">setWebEnvironment(false)</code>是可取的。</p>
+
+<h3 id="section">外化配置</h3>
+
+<p>Spring Boot允许你针对不同的环境配置不同的配置参数，你可以使用 properties文件、YAML 文件、环境变量或者命令行参数来修改应用的配置。你可以在代码中使用@Value注解来获取配置参数的值。</p>
+
+<p>Spring Boot使用一个特别的<code class="highlighter-rouge">PropertySource</code>来按顺序加载配置，加载顺序如下：</p>
 
 <ul>
-<li>命令行参数</li>
-<li> <code class="prettyprint">java:comp/env</code> 中的 JNDI 属性</li>
-<li>Java 系统环境变量</li>
-<li>操作系统环境变量</li>
-<li><code class="prettyprint">RandomValuePropertySource</code>，随机值，使用 <code class="prettyprint">random.*</code> 来定义</li>
-<li>jar 包外的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
-<li>jar 包内的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
-<li>jar 包外的 Application 配置，如 application.properties 和 application.yml 文件</li>
-<li>jar 包内的 Application 配置，如 application.properties 和 application.yml 文件</li>
-<li>标有 @Configuration 注解的类上的 @PropertySource 注解</li>
-<li>默认值，使用 <code class="prettyprint">SpringApplication.setDefaultProperties</code> 设置的</li>
+  <li>命令行参数</li>
+  <li><code class="highlighter-rouge">java:comp/env</code> 中的 JNDI 属性</li>
+  <li>Java 系统环境变量</li>
+  <li>操作系统环境变量</li>
+  <li><code class="highlighter-rouge">RandomValuePropertySource</code>，随机值，使用 <code class="highlighter-rouge">random.*</code> 来定义</li>
+  <li>jar 包外的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
+  <li>jar 包内的 Profile 配置文件，如 application-{profile}.properties 和 YAML 文件</li>
+  <li>jar 包外的 Application 配置，如 application.properties 和 application.yml 文件</li>
+  <li>jar 包内的 Application 配置，如 application.properties 和 application.yml 文件</li>
+  <li>标有 @Configuration 注解的类上的 @PropertySource 注解</li>
+  <li>默认值，使用 <code class="highlighter-rouge">SpringApplication.setDefaultProperties</code> 设置的</li>
 </ul>
 
 <p>对于下面的代码：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.stereotype.*</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.stereotype.*</span>
 <span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.*</span>
 
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBean</span> <span class="o">{</span>
 
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">&quot;${name}&quot;</span><span class="o">)</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${name}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
 
     <span class="c1">// ...</span>
-
 <span class="o">}</span>
-</code></pre></div>
-<p>你可以在 application.properties 中定义一个 name 变量，或者在运行该 jar 时候，指定一个命令行参数（以 <code class="prettyprint">--</code> 标识），例如：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">java -jar app.jar --name<span class="o">=</span><span class="s2">&quot;Spring&quot;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
+<p>你可以在 application.properties 中定义一个 name 变量，或者在运行该 jar 时候，指定一个命令行参数（以 <code class="highlighter-rouge">--</code> 标识），例如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>java -jar app.jar --name<span class="o">=</span><span class="s2">"Spring"</span>
+</code></pre>
+</div>
+
 <p>RandomValuePropertySource 类型变量的示例如下：</p>
-<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">my.secret</span><span class="o">=</span><span class="s">${random.value}</span>
-<span class="na">my.number</span><span class="o">=</span><span class="s">${random.int}</span>
-<span class="na">my.bignumber</span><span class="o">=</span><span class="s">${random.long}</span>
-<span class="na">my.number.less.than.ten</span><span class="o">=</span><span class="s">${random.int(10)}</span>
-<span class="na">my.number.in.range</span><span class="o">=</span><span class="s">${random.int[1024,65536]}</span>
-</code></pre></div>
-<p>SpringApplication 会在以下路径查找 <code class="prettyprint">application.properties</code> 并加载该文件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">my.secret</span><span class="p">=</span><span class="s">${random.value}</span>
+<span class="py">my.number</span><span class="p">=</span><span class="s">${random.int}</span>
+<span class="py">my.bignumber</span><span class="p">=</span><span class="s">${random.long}</span>
+<span class="py">my.number.less.than.ten</span><span class="p">=</span><span class="s">${random.int(10)}</span>
+<span class="py">my.number.in.range</span><span class="p">=</span><span class="s">${random.int[1024,65536]}</span>
+</code></pre>
+</div>
+
+<p>SpringApplication 会在以下路径查找 <code class="highlighter-rouge">application.properties</code> 并加载该文件：</p>
 
 <ul>
-<li><code class="prettyprint">/config</code> 目录下</li>
-<li>当前目录</li>
-<li>classpath 中 <code class="prettyprint">/config</code> 包下</li>
-<li>classpath 根路径下</li>
+  <li><code class="highlighter-rouge">/config</code> 目录下</li>
+  <li>当前目录</li>
+  <li>classpath 中 <code class="highlighter-rouge">/config</code> 包下</li>
+  <li>classpath 根路径下</li>
 </ul>
 
-<p>另外，你也可以通过 <code class="prettyprint">spring.config.location</code> 来指定 <code class="prettyprint">application.properties</code> 文件的存放路径，或者通过 <code class="prettyprint">spring.config.name</code> 指定该文件的名称，例如：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
-</code></pre></div>
+<p>另外，你也可以通过 <code class="highlighter-rouge">spring.config.location</code> 来指定 <code class="highlighter-rouge">application.properties</code> 文件的存放路径，或者通过 <code class="highlighter-rouge">spring.config.name</code> 指定该文件的名称，例如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
+</code></pre>
+</div>
+
 <p>或者</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ java -jar myproject.jar --spring.config.name=myproject
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar myproject.jar --spring.config.name=myproject
+</code></pre>
+</div>
+
 <h1 id="profiles">Profiles</h1>
 
-<p>你可以使用 <code class="prettyprint">@Profile</code> 注解来标注应用使用的环境</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
-<span class="nd">@Profile</span><span class="o">(</span><span class="s">&quot;production&quot;</span><span class="o">)</span>
+<p>你可以使用 <code class="highlighter-rouge">@Profile</code> 注解来标注应用使用的环境</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@Profile</span><span class="o">(</span><span class="s">"production"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductionConfiguration</span> <span class="o">{</span>
 
     <span class="c1">// ...</span>
 
 <span class="o">}</span>
-</code></pre></div>
-<p>可以使用 <code class="prettyprint">spring.profiles.active</code> 变量来定义应用激活的 profile：</p>
-<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">spring.profiles.active</span><span class="o">=</span><span class="s">dev,hsqldb</span>
-</code></pre></div>
-<p>还可以通过  SpringApplication 来设置，调用 <code class="prettyprint">SpringApplication.setAdditionalProfiles(…​)</code> 代码即可。</p>
+</code></pre>
+</div>
 
-<h1 id="日志">日志</h1>
+<p>可以使用 <code class="highlighter-rouge">spring.profiles.active</code> 变量来定义应用激活的 profile：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">spring.profiles.active</span><span class="p">=</span><span class="s">dev,hsqldb</span>
+</code></pre>
+</div>
+
+<p>还可以通过  SpringApplication 来设置，调用 <code class="highlighter-rouge">SpringApplication.setAdditionalProfiles(…​)</code> 代码即可。</p>
+
+<h1 id="section-1">日志</h1>
 
 <p>Spring Boot 使用 Commons Logging 作为内部记录日志，你也可以使用 Java Util Logging, Log4J, Log4J2 和 Logback 来记录日志。</p>
 
 <p>默认情况下，如果你使用了 Starter POMs ，则会使用 Logback 来记录日志。</p>
 
-<p>默认情况，是输出 INFO 类型的日志，你可以通过设置命令行参数 <code class="prettyprint">--debug</code> 来设置：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -jar myapp.jar --debug
-</code></pre></div>
-<p>如果你的终端支持 ANSI ，则日志支持彩色输出，这个可以通过 <code class="prettyprint">spring.output.ansi.enabled</code> 设置，可配置的值有：<code class="prettyprint">ALWAYS</code>、<code class="prettyprint">DETECT</code>、<code class="prettyprint">NEVER</code>。</p>
+<p>默认情况，是输出 INFO 类型的日志，你可以通过设置命令行参数<code class="highlighter-rouge">--debug</code>来设置：</p>
 
-<p>可以通过 <code class="prettyprint">logging.file</code> 和 <code class="prettyprint">logging.path</code> 设置日志输出文件名称和路径。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar myapp.jar --debug
+</code></pre>
+</div>
 
-<p>日志级别使用 <code class="prettyprint">logging.level.*=LEVEL</code> 来定义，例如：</p>
-<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">logging.level.org.springframework.web</span><span class="o">:</span> <span class="s">DEBUG</span>
-<span class="na">logging.level.org.hibernate</span><span class="o">:</span> <span class="s">ERROR</span>
-</code></pre></div>
-<p>Spring Boot 通过 <code class="prettyprint">logging.config</code> 来定义日志的配置文件存放路径，对于不同的日志系统，配置文件的名称不同：</p>
+<p>如果你的终端支持 ANSI ，则日志支持彩色输出，这个可以通过 <code class="highlighter-rouge">spring.output.ansi.enabled</code> 设置，可配置的值有：<code class="highlighter-rouge">ALWAYS</code>、<code class="highlighter-rouge">DETECT</code>、<code class="highlighter-rouge">NEVER</code>。</p>
 
-<table><thead>
-<tr>
-<th style="text-align: left">Logging</th>
-<th style="text-align: left">System   Customization</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left">Logback</td>
-<td style="text-align: left">logback.xml or logback.groovy</td>
-</tr>
-<tr>
-<td style="text-align: left">Log4j</td>
-<td style="text-align: left">log4j.properties or log4j.xml</td>
-</tr>
-<tr>
-<td style="text-align: left">Log4j2</td>
-<td style="text-align: left">log4j2.xml</td>
-</tr>
-<tr>
-<td style="text-align: left">JDK (Java Util Logging)</td>
-<td style="text-align: left">logging.properties</td>
-</tr>
-</tbody></table>
+<p>可以通过 <code class="highlighter-rouge">logging.file</code> 和 <code class="highlighter-rouge">logging.path</code> 设置日志输出文件名称和路径。</p>
 
-<h1 id="生产环境的一些特性">生产环境的一些特性</h1>
+<p>日志级别使用 <code class="highlighter-rouge">logging.level.*=LEVEL</code> 来定义，例如：</p>
 
-<p><code class="prettyprint">spring-boot-actuator</code> 模块提供了一些生产环境的特性，使用 <code class="prettyprint">spring-boot-starter-actuator</code> 这个 Starter POM 可以开启该特性。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">logging.level.org.springframework.web</span><span class="p">:</span> <span class="s">DEBUG</span>
+<span class="py">logging.level.org.hibernate</span><span class="p">:</span> <span class="s">ERROR</span>
+</code></pre>
+</div>
+
+<p>Spring Boot 通过 <code class="highlighter-rouge">logging.config</code> 来定义日志的配置文件存放路径，对于不同的日志系统，配置文件的名称不同：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Logging</th>
+      <th style="text-align: left">System   Customization</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Logback</td>
+      <td style="text-align: left">logback.xml or logback.groovy</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Log4j</td>
+      <td style="text-align: left">log4j.properties or log4j.xml</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Log4j2</td>
+      <td style="text-align: left">log4j2.xml</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">JDK (Java Util Logging)</td>
+      <td style="text-align: left">logging.properties</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="section-2">生产环境的一些特性</h1>
+
+<p><code class="highlighter-rouge">spring-boot-actuator</code> 模块提供了一些生产环境的特性，使用 <code class="highlighter-rouge">spring-boot-starter-actuator</code> 这个 Starter POM 可以开启该特性。</p>
 
 <p>对于 Maven ，添加</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencies&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependencies&gt;</span>
     <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;/dependencies&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>对于 Gradle，添加</p>
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">compile</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-actuator&quot;</span><span class="o">)</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">compile</span><span class="o">(</span><span class="s2">"org.springframework.boot:spring-boot-starter-actuator"</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre></div>
-<h1 id="参考文章">参考文章</h1>
+</code></pre>
+</div>
+
+<h1 id="web-1">开发Web应用</h1>
+
+<h2 id="spring-web-mvc">Spring Web MVC框架</h2>
+
+<h3 id="spring-mvc">Spring MVC自动配置</h3>
+
+<p>Spring Boot为Spring MVC提供适用于多数应用的自动配置功能。在Spring默认基础上，自动配置添加了以下特性：</p>
 
 <ul>
-<li><a href="http://docs.spring.io/spring-boot/docs/1.2.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
+  <li>引入ContentNegotiatingViewResolver和BeanNameViewResolver beans。</li>
+  <li>对静态资源的支持，包括对WebJars的支持。</li>
+  <li>自动注册Converter，GenericConverter，Formatter beans。</li>
+  <li>对HttpMessageConverters的支持。</li>
+  <li>自动注册MessageCodeResolver。</li>
+  <li>对静态index.html的支持。</li>
+  <li>对自定义Favicon的支持。</li>
+  <li>如果想全面控制Spring MVC，你可以添加自己的@Configuration，并使用@EnableWebMvc对其注解。如果想保留Spring Boot MVC的特性，并只是添加其他的MVC配置(拦截器，formatters，视图控制器等)，你可以添加自己的WebMvcConfigurerAdapter类型的@Bean（不使用@EnableWebMvc注解）。</li>
+</ul>
+
+<h3 id="httpmessageconverters">HttpMessageConverters</h3>
+
+<p>Spring MVC使用HttpMessageConverter接口转换HTTP请求和响应。合理的缺省值被包含的恰到好处（out of the box），例如对象可以自动转换为JSON（使用Jackson库）或XML（如果Jackson XML扩展可用则使用它，否则使用JAXB）。字符串默认使用UTF-8编码。</p>
+
+<p>如果需要添加或自定义转换器，你可以使用Spring Boot的HttpMessageConverters类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.web.HttpMessageConverters</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.http.converter.*</span><span class="o">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">HttpMessageConverters</span> <span class="n">customConverters</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;</span> <span class="n">additional</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;</span> <span class="n">another</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">HttpMessageConverters</span><span class="o">(</span><span class="n">additional</span><span class="o">,</span> <span class="n">another</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>任何在上下文中出现的HttpMessageConverter bean将会添加到converters列表，你可以通过这种方式覆盖默认的转换器（converters）。</p>
+
+<h3 id="messagecodesresolver">MessageCodesResolver</h3>
+
+<p>Spring MVC有一个策略，用于从绑定的errors产生用来渲染错误信息的错误码：MessageCodesResolver。如果设置<code class="highlighter-rouge">spring.mvc.message-codes-resolver.format</code>属性为<code class="highlighter-rouge">PREFIX_ERROR_CODE</code>或<code class="highlighter-rouge">POSTFIX_ERROR_CODE</code>（具体查看<code class="highlighter-rouge">DefaultMessageCodesResolver.Format</code>枚举值），Spring Boot会为你创建一个MessageCodesResolver。</p>
+
+<h3 id="section-3">静态内容</h3>
+
+<p>默认情况下，Spring Boot从classpath下一个叫/static（/public，/resources或/META-INF/resources）的文件夹或从ServletContext根目录提供静态内容。这使用了Spring MVC的ResourceHttpRequestHandler，所以你可以通过添加自己的WebMvcConfigurerAdapter并覆写addResourceHandlers方法来改变这个行为（加载静态文件）。</p>
+
+<p>在一个单独的web应用中，容器默认的servlet是开启的，如果Spring决定不处理某些请求，默认的servlet作为一个回退（降级）将从ServletContext根目录加载内容。大多数时候，这不会发生（除非你修改默认的MVC配置），因为Spring总能够通过DispatcherServlet处理请求。</p>
+
+<p>此外，上述标准的静态资源位置有个例外情况是Webjars内容。任何在/webjars/**路径下的资源都将从jar文件中提供，只要它们以Webjars的格式打包。</p>
+
+<p>注：如果你的应用将被打包成jar，那就不要使用src/main/webapp文件夹。尽管该文件夹是一个共同的标准，但它仅在打包成war的情况下起作用，并且如果产生一个jar，多数构建工具都会静悄悄的忽略它。</p>
+
+<h3 id="section-4">模板引擎</h3>
+
+<p>正如REST web服务，你也可以使用Spring MVC提供动态HTML内容。Spring MVC支持各种各样的模板技术，包括Velocity,FreeMarker和JSPs。很多其他的模板引擎也提供它们自己的Spring MVC集成。</p>
+
+<p>Spring Boot为以下的模板引擎提供自动配置支持：</p>
+
+<ul>
+  <li>FreeMarker</li>
+  <li>Groovy</li>
+  <li>Thymeleaf</li>
+  <li>Velocity</li>
+</ul>
+
+<p>注：如果可能的话，应该忽略JSPs，因为在内嵌的servlet容器使用它们时存在一些已知的限制。</p>
+
+<p>当你使用这些引擎的任何一种，并采用默认的配置，你的模板将会从src/main/resources/templates目录下自动加载。</p>
+
+<p>注：IntelliJ IDEA根据你运行应用的方式会对classpath进行不同的整理。在IDE里通过main方法运行你的应用跟从Maven或Gradle或打包好的jar中运行相比会导致不同的顺序。这可能导致Spring Boot不能从classpath下成功地找到模板。如果遇到这个问题，你可以在IDE里重新对classpath进行排序，将模块的类和资源放到第一位。或者，你可以配置模块的前缀为classpath*:/templates/，这样会查找classpath下的所有模板目录。</p>
+
+<h3 id="section-5">错误处理</h3>
+
+<p>Spring Boot默认提供一个/error映射用来以合适的方式处理所有的错误，并且它在servlet容器中注册了一个全局的 错误页面。对于机器客户端（相对于浏览器而言，浏览器偏重于人的行为），它会产生一个具有详细错误，HTTP状态，异常信息的JSON响应。对于浏览器客户端，它会产生一个白色标签样式（whitelabel）的错误视图，该视图将以HTML格式显示同样的数据（可以添加一个解析为erro的View来自定义它）。为了完全替换默认的行为，你可以实现ErrorController，并注册一个该类型的bean定义，或简单地添加一个ErrorAttributes类型的bean以使用现存的机制，只是替换显示的内容。</p>
+
+<p>如果在某些条件下需要比较多的错误页面，内嵌的servlet容器提供了一个统一的Java DSL（领域特定语言）来自定义错误处理。 示例：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<span class="kd">public</span> <span class="n">EmbeddedServletContainerCustomizer</span> <span class="nf">containerCustomizer</span><span class="p">(</span><span class="o">){</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">MyCustomizer</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="c1">// ...</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyCustomizer</span> <span class="kd">implements</span> <span class="n">EmbeddedServletContainerCustomizer</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">customize</span><span class="o">(</span><span class="n">ConfigurableEmbeddedServletContainer</span> <span class="n">container</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">container</span><span class="o">.</span><span class="na">addErrorPages</span><span class="o">(</span><span class="k">new</span> <span class="n">ErrorPage</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">BAD_REQUEST</span><span class="o">,</span> <span class="s">"/400"</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>你也可以使用常规的Spring MVC特性来处理错误，比如@ExceptionHandler方法和@ControllerAdvice。ErrorController将会捡起任何没有处理的异常。</p>
+
+<p>N.B. 如果你为一个路径注册一个ErrorPage，最终被一个过滤器（Filter）处理（对于一些非Spring web框架，像Jersey和Wicket这很常见），然后过滤器需要显式注册为一个ERROR分发器（dispatcher）。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<span class="kd">public</span> <span class="n">FilterRegistrationBean</span> <span class="nf">myFilter</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">FilterRegistrationBean</span> <span class="n">registration</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FilterRegistrationBean</span><span class="o">();</span>
+    <span class="n">registration</span><span class="o">.</span><span class="na">setFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">MyFilter</span><span class="o">());</span>
+    <span class="o">...</span>
+    <span class="n">registration</span><span class="o">.</span><span class="na">setDispatcherTypes</span><span class="o">(</span><span class="n">EnumSet</span><span class="o">.</span><span class="na">allOf</span><span class="o">(</span><span class="n">DispatcherType</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+    <span class="k">return</span> <span class="n">registration</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>注：默认的FilterRegistrationBean没有包含ERROR分发器类型。</p>
+
+<h3 id="spring-hateoas">Spring HATEOAS</h3>
+
+<p>如果你正在开发一个使用超媒体的RESTful API，Spring Boot将为Spring HATEOAS提供自动配置，这在多数应用中都工作良好。自动配置替换了对使用@EnableHypermediaSupport的需求，并注册一定数量的beans来简化构建基于超媒体的应用，这些beans包括一个LinkDiscoverer和配置好的用于将响应正确编排为想要的表示的ObjectMapper。ObjectMapper可以根据spring.jackson.*属性或一个存在的Jackson2ObjectMapperBuilder bean进行自定义。</p>
+
+<p>通过使用@EnableHypermediaSupport，你可以控制Spring HATEOAS的配置。注意这会禁用上述的对ObjectMapper的自定义。</p>
+
+<h2 id="jax-rsjersey">JAX-RS和Jersey</h2>
+
+<p>如果喜欢JAX-RS为REST端点提供的编程模型，你可以使用可用的实现替代Spring MVC。如果在你的应用上下文中将Jersey 1.x和Apache Celtix的Servlet或Filter注册为一个@Bean，那它们工作的相当好。Jersey 2.x有一些原生的Spring支持，所以我们会在Spring Boot为它提供自动配置支持，连同一个启动器（starter）。</p>
+
+<p>想要开始使用Jersey 2.x只需要加入spring-boot-starter-jersey依赖，然后你需要一个ResourceConfig类型的@Bean，用于注册所有的端点（endpoints）。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JerseyConfig</span> <span class="kd">extends</span> <span class="n">ResourceConfig</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">JerseyConfig</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">register</span><span class="o">(</span><span class="n">Endpoint</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>所有注册的端点都应该被@Components和HTTP资源annotations（比如@GET）注解。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/hello"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Endpoint</span> <span class="o">{</span>
+    <span class="nd">@GET</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="n">message</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"Hello"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>由于Endpoint是一个Spring组件（@Component），所以它的生命周期受Spring管理，并且你可以使用@Autowired添加依赖及使用@Value注入外部配置。Jersey servlet将被注册，并默认映射到/*。你可以将@ApplicationPath添加到ResourceConfig来改变该映射。</p>
+
+<p>默认情况下，Jersey将在一个ServletRegistrationBean类型的@Bean中被设置成名称为jerseyServletRegistration的Servlet。通过创建自己的相同名称的bean，你可以禁止或覆盖这个bean。你也可以通过设置<code class="highlighter-rouge">spring.jersey.type=filter</code>来使用一个Filter代替Servlet（在这种情况下，被覆盖或替换的@Bean是jerseyFilterRegistration）。该servlet有@Order属性，你可以通过<code class="highlighter-rouge">spring.jersey.filter.order</code>进行设置。不管是Servlet还是Filter注册都可以使用<code class="highlighter-rouge">spring.jersey.init.*</code>定义一个属性集合作为初始化参数传递过去。</p>
+
+<p>这里有一个<a href="http://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-jersey">Jersey</a>示例，你可以查看如何设置相关事项。</p>
+
+<h2 id="section-6">内嵌的容器支持</h2>
+
+<h3 id="servletsfilters">Servlets和Filters</h3>
+
+<p>当使用内嵌的servlet容器时，你可以直接将servlet和filter注册为Spring的beans。在配置期间，如果你想引用来自application.properties的值，这是非常方便的。默认情况下，如果上下文只包含单一的Servlet，那它将被映射到根路径（/）。在多Servlet beans的情况下，bean的名称将被用作路径的前缀。过滤器会被映射到/*。</p>
+
+<p>如果基于约定（convention-based）的映射不够灵活，你可以使用ServletRegistrationBean和FilterRegistrationBean类实现完全的控制。如果你的bean实现了ServletContextInitializer接口，也可以直接注册它们。</p>
+
+<h3 id="embeddedwebapplicationcontext">EmbeddedWebApplicationContext</h3>
+
+<p>Spring Boot底层使用了一个新的ApplicationContext类型，用于对内嵌servlet容器的支持。EmbeddedWebApplicationContext是一个特殊类型的WebApplicationContext，它通过搜索一个单一的EmbeddedServletContainerFactory bean来启动自己。通常，TomcatEmbeddedServletContainerFactory，JettyEmbeddedServletContainerFactory或UndertowEmbeddedServletContainerFactory将被自动配置。</p>
+
+<p>注：你通常不需要知道这些实现类。大多数应用将被自动配置，并根据你的行为创建合适的ApplicationContext和EmbeddedServletContainerFactory。</p>
+
+<h3 id="servlet">自定义内嵌servlet容器</h3>
+
+<p>常见的Servlet容器设置可以通过Spring Environment属性进行配置。通常，你会把这些属性定义到application.properties文件中。 常见的服务器设置包括：</p>
+
+<ul>
+  <li>server.port - 进来的HTTP请求的监听端口号</li>
+  <li>server.address - 绑定的接口地址</li>
+  <li>server.sessionTimeout - session超时时间</li>
+</ul>
+
+<p>具体参考<a href="http://github.com/spring-projects/spring-boot/tree/master/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/web/ServerProperties.java">ServerProperties</a>。</p>
+
+<h4 id="section-7">编程方式的自定义</h4>
+
+<p>如果需要以编程的方式配置内嵌的servlet容器，你可以注册一个实现EmbeddedServletContainerCustomizer接口的Spring bean。EmbeddedServletContainerCustomizer提供对ConfigurableEmbeddedServletContainer的访问，ConfigurableEmbeddedServletContainer包含很多自定义的setter方法。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.boot.context.embedded.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomizationBean</span> <span class="kd">implements</span> <span class="n">EmbeddedServletContainerCustomizer</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">customize</span><span class="o">(</span><span class="n">ConfigurableEmbeddedServletContainer</span> <span class="n">container</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">container</span><span class="o">.</span><span class="na">setPort</span><span class="o">(</span><span class="mi">9000</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h4 id="configurableembeddedservletcontainer">直接自定义ConfigurableEmbeddedServletContainer</h4>
+
+<p>如果上面的自定义手法过于受限，你可以自己注册TomcatEmbeddedServletContainerFactory，JettyEmbeddedServletContainerFactory或UndertowEmbeddedServletContainerFactory。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<span class="kd">public</span> <span class="n">EmbeddedServletContainerFactory</span> <span class="nf">servletContainer</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">TomcatEmbeddedServletContainerFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TomcatEmbeddedServletContainerFactory</span><span class="o">();</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">setPort</span><span class="o">(</span><span class="mi">9000</span><span class="o">);</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">setSessionTimeout</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MINUTES</span><span class="o">);</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">addErrorPages</span><span class="o">(</span><span class="k">new</span> <span class="n">ErrorPage</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">NOT_FOUND</span><span class="o">,</span> <span class="s">"/notfound.html"</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>很多可选的配置都提供了setter方法，也提供了一些受保护的钩子方法以满足你的某些特殊需求。具体参考相关文档。</p>
+
+<h3 id="jsp">JSP的限制</h3>
+
+<p>在内嵌的servlet容器中运行一个Spring Boot应用时（并打包成一个可执行的存档archive），容器对JSP的支持有一些限制。</p>
+
+<ul>
+  <li>tomcat只支持war的打包方式，不支持可执行的jar。</li>
+  <li>内嵌的Jetty目前不支持JSPs。</li>
+  <li>Undertow不支持JSPs。</li>
+</ul>
+
+<p>这里有个<a href="http://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-web-jsp">JSP示例</a>，你可以查看如何设置相关事项。</p>
+
+<h1 id="section-8">参考文章</h1>
+
+<ul>
+  <li><a href="http://docs.spring.io/spring-boot/docs/1.2.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
 </ul>
 
                     <br/>
@@ -347,7 +635,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

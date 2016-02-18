@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -107,7 +101,7 @@
               <div id="post-text">
                     <p>Hive Over HBase是基于Hive的HQL查询引擎支持对hbase表提供及时查询的功能，它并不是将hql语句翻译成mapreduce来运行，其响应时间在秒级别。</p>
 
-<h1 id="特性">特性</h1>
+<h1 id="section">特性</h1>
 
 <p>支持的字段类型：</p>
 
@@ -117,39 +111,39 @@
 <p>支持的sql语法：</p>
 
 <ul>
-<li>where子句</li>
-<li>group by，having子句</li>
-<li>聚合函数: count, max, min, sum, avg</li>
-<li>order by with limit(top N)</li>
-<li>limit 子句</li>
-<li>explain</li>
+  <li>where子句</li>
+  <li>group by，having子句</li>
+  <li>聚合函数: count, max, min, sum, avg</li>
+  <li>order by with limit(top N)</li>
+  <li>limit 子句</li>
+  <li>explain</li>
 </ul>
 
 <p>支持的运算</p>
 
 <ul>
-<li>关系操作：&gt;, &gt;=, &lt;=, &lt;, =</li>
-<li>算术操作：+, - , * , / , %</li>
-<li>逻辑操作：and, or, not</li>
-<li>字符串操作函数: substring, concat</li>
-<li>Distinct : 支持<code class="prettyprint">select distinct &lt;col-list&gt; from &lt;tab&gt; where &lt;expr&gt;, select aggr-fun(distinct &lt;col_list&gt;) from &lt;tab&gt; where &lt;expr&gt;</code></li>
-<li>Like: 通配符’_’, ’%’</li>
-<li>Case when子句</li>
+  <li>关系操作：&gt;, &gt;=, &lt;=, &lt;, =</li>
+  <li>算术操作：+, - , * , / , %</li>
+  <li>逻辑操作：and, or, not</li>
+  <li>字符串操作函数: substring, concat</li>
+  <li>Distinct : 支持<code class="highlighter-rouge">select distinct &lt;col-list&gt; from &lt;tab&gt; where &lt;expr&gt;, select aggr-fun(distinct &lt;col_list&gt;) from &lt;tab&gt; where &lt;expr&gt;</code></li>
+  <li>Like: 通配符’_’, ’%’</li>
+  <li>Case when子句</li>
 </ul>
 
 <p>不支持:</p>
 
 <ul>
-<li>Sub-query</li>
-<li>Join</li>
-<li>Union</li>
+  <li>Sub-query</li>
+  <li>Join</li>
+  <li>Union</li>
 </ul>
 
-<h1 id="原理">原理</h1>
+<h1 id="section-1">原理</h1>
 
 <p>扩展HBase客户端代码，实现<a href="/2014/06/12/hbase-aggregate-client.html">简单聚合计算</a>，基于协作器实现分组计算的功能，并且修改hive的查询引擎，将HQL语句转换成HBase的Task，然后调用HBase中的api实现对HQL语句的解析。</p>
 
-<h1 id="源码">源码</h1>
+<h1 id="section-2">源码</h1>
 
 <p>暂时不公开。</p>
 
@@ -200,7 +194,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

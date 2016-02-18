@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -112,8 +106,8 @@
 <p>在kettle中实现cassandra的输入与输出有以下两种方式:</p>
 
 <ul>
-<li>第一种方式:自己编写cassandra输入输出组件</li>
-<li>第二种方式:使用别人编写好的插件,将其集成进来</li>
+  <li>第一种方式:自己编写cassandra输入输出组件</li>
+  <li>第二种方式:使用别人编写好的插件,将其集成进来</li>
 </ul>
 
 <p>当然还有第三种方法,直接使用4.3版本的pdi.</p>
@@ -125,7 +119,8 @@
 <p>故我们可以将4.3版本中的cassandra相关文件拷贝到4.2.1中.我使用的是pdi-ce-4.2.1-stable.</p>
 
 <p>在pdi-ce-big-data-4.3.0-preview/plugins目录下有以下目录或文件:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.
 |-- databases
 |-- hour-partitioner.jar
 |-- jobentries
@@ -137,9 +132,12 @@
 |-- spoon
 |-- steps
 `-- versioncheck
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>pentaho-big-data-plugin目录是kettle对大数据的集成与支持,我们只需要将该目录拷贝到pdi-ce-4.2.1-stable/plugins目录下即可.最后的结构如下</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.
 |-- databases
 |-- hour-partitioner.jar
 |-- jobentries
@@ -181,16 +179,18 @@
 `-- versioncheck
     |-- kettle-version-checker-0.2.0.jar
     `-- lib
-    `-- pentaho-versionchecker.jar
+	`-- pentaho-versionchecker.jar
 
 13 directories, 29 files
-</code></pre></div>
-<p>启动pdi-ce-4.2.1-stable之后,打开一个转换,在核心对象窗口就可以看到Big Data步骤目录了.
+</code></pre>
+</div>
+
+<p>启动pdi-ce-4.2.1-stable之后,打开一个转换,在核心对象窗口就可以看到Big Data步骤目录了.</p>
 <div class="pic">
 <a href="http://ww4.sinaimg.cn/mw600/48e24b4cjw1dr9zaa66nbj.jpg" target="_blank">
 <img alt="" src="http://ww4.sinaimg.cn/mw600/48e24b4cjw1dr9zaa66nbj.jpg" title="pdi big data plugin in kette 4.2" class="aligncenter" width="600" height="375" />
 </a>
-</div></p>
+</div>
 
 <p><strong>获取pentaho-big-data-plugin源码</strong>
 如果想在eclipse中查看或修改pentaho-big-data-plugin源码,该怎么做呢?
@@ -198,7 +198,8 @@
 
 <p>然后,需要在kettle-steps.xml中注册步骤节点
 例如,下面是MongoDbInput步骤的注册方法,请针对不同插件的不同类路径加以修改.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;step id=&quot;MongoDbInput&quot;&gt;
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;step id="MongoDbInput"&gt;
 &lt;description&gt;i18n:org.pentaho.di.trans.step:BaseStep.TypeLongDesc.MongoDbInput
 &lt;classname&gt;org.pentaho.di.trans.steps.mongodbinput.MongoDbInputMeta
 &lt;category&gt;i18n:org.pentaho.di.trans.step:BaseStep.Category.Input
@@ -209,7 +210,9 @@
 &lt;/classname&gt;
 &lt;/description&gt;
 &lt;/step&gt;
-</code></pre></div>
+</code></pre>
+</div>
+
 <div class="note">
 <h>注意:
 由于pdi-ce-4.2.1-stable中存在hive组件,故添加pentaho-big-data-plugin插件之后有可能会出现找不到类的情况,这是由于jar重复版本不一致导致的,按照异常信息,找到重复的jar并按情况删除一个jar包即可.
@@ -218,10 +221,10 @@
 <p><strong>扩展阅读:</strong></p>
 
 <ul>
-<li>Pentaho Big Data Plugin <a href="http://wiki.pentaho.com/display/BAD/Getting+Started+for+Java+Developers" target="_blank"><a href="http://wiki.pentaho.com/display/BAD/Getting+Started+for+Java+Developers">http://wiki.pentaho.com/display/BAD/Getting+Started+for+Java+Developers</a></a></li>
-<li>pentaho-big-data-plugin ci
+  <li>Pentaho Big Data Plugin <a href="http://wiki.pentaho.com/display/BAD/Getting+Started+for+Java+Developers" target="_blank">http://wiki.pentaho.com/display/BAD/Getting+Started+for+Java+Developers</a></li>
+  <li>pentaho-big-data-plugin ci
 <a href="http://ci.pentaho.com/job/pentaho-big-data-plugin/lastSuccessfulBuild/artifact/pentaho-big-data-plugin/dist/" target="_blank">http://- - ci.pentaho.com/job/pentaho-big-data-plugin/lastSuccessfulBuild/artifact/pentaho-big-data-plugin/dist/</a></li>
-<li>Pentaho Community Edition (CE) downloads <a href="http://wiki.pentaho.com/display/BAD/Downloads" target="_blank"><a href="http://wiki.pentaho.com/display/BAD/Downloads">http://wiki.pentaho.com/display/BAD/Downloads</a></a></li>
+  <li>Pentaho Community Edition (CE) downloads <a href="http://wiki.pentaho.com/display/BAD/Downloads" target="_blank">http://wiki.pentaho.com/display/BAD/Downloads</a></li>
 </ul>
 
                     <br/>
@@ -273,7 +276,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

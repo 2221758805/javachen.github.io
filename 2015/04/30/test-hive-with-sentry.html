@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -109,16 +103,17 @@
 
 <p>关于配置了Kerberos的Hive集群如何集成Sentry，请参考<a href="/2014/11/14/config-secured-hive-with-sentry.html">配置安全的Hive集群集成Sentry</a>。</p>
 
-<h1 id="1-配置sentry">1. 配置Sentry</h1>
+<h1 id="sentry">1. 配置Sentry</h1>
 
 <p>见<a href="/2015/04/30/install-and-config-sentry.html">安装和配置Sentry</a>。</p>
 
-<h1 id="2-配置hive">2. 配置Hive</h1>
+<h1 id="hive">2. 配置Hive</h1>
 
-<h2 id="hive-metastore集成sentry">Hive Metastore集成Sentry</h2>
+<h2 id="hive-metastoresentry">Hive Metastore集成Sentry</h2>
 
 <p>需要在 /etc/hive/conf/hive-site.xml中添加：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
       <span class="nt">&lt;name&gt;</span>hive.metastore.pre.event.listeners<span class="nt">&lt;/name&gt;</span>
       <span class="nt">&lt;value&gt;</span>org.apache.sentry.binding.metastore.MetastoreAuthzBinding<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
@@ -126,11 +121,14 @@
       <span class="nt">&lt;name&gt;</span>hive.metastore.event.listeners<span class="nt">&lt;/name&gt;</span>
       <span class="nt">&lt;value&gt;</span>org.apache.sentry.binding.metastore.SentryMetastorePostEventListener<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
-<h2 id="hive-server2集成sentry">Hive-server2集成Sentry</h2>
+</code></pre>
+</div>
+
+<h2 id="hive-server2sentry">Hive-server2集成Sentry</h2>
 
 <p>修改 /etc/hive/conf/hive-site.xml，添加以下内容：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;property&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
       <span class="nt">&lt;name&gt;</span>hive.server2.enable.impersonation<span class="nt">&lt;/name&gt;</span>
       <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
@@ -146,9 +144,12 @@
         <span class="nt">&lt;name&gt;</span>hive.sentry.conf.url<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;value&gt;</span>file:///etc/hive/conf/sentry-site.xml<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>参考模板<a href="https://github.com/cloudera/sentry/blob/cdh5-1.4.0_5.4.0/conf%2Fsentry-site.xml.hive-client.template">sentry-site.xml.hive-client.template</a>在 /etc/hive/conf/ 目录创建 sentry-site.xml：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
     <span class="nt">&lt;property&gt;</span>
        <span class="nt">&lt;name&gt;</span>sentry.service.client.server.rpc-port<span class="nt">&lt;/name&gt;</span>
@@ -185,40 +186,55 @@
         <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
      <span class="nt">&lt;/property&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
-</code></pre></div>
-<h1 id="3-重启hive">3. 重启Hive</h1>
+</code></pre>
+</div>
+
+<h1 id="hive-1">3. 重启Hive</h1>
 
 <p>在cdh1上启动或重启hiveserver2：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>/etc/init.d/hive-server2 restart
-</code></pre></div>
-<h1 id="4-准备测试数据">4. 准备测试数据</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>/etc/init.d/hive-server2 restart
+</code></pre>
+</div>
+
+<h1 id="section">4. 准备测试数据</h1>
 
 <p>参考 <a href="http://blog.evernote.com/tech/2014/06/09/securing-impala-for-analysts/">Securing Impala for analysts</a>，准备测试数据：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>cat /tmp/events.csv
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>cat /tmp/events.csv
 10.1.2.3,US,android,createNote
 10.200.88.99,FR,windows,updateNote
 10.1.2.3,US,android,updateNote
 10.200.88.77,FR,ios,createNote
 10.1.4.5,US,windows,updateTag
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>然后，在hive中运行下面 sql 语句：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">database</span> <span class="k">sensitive</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">create</span> <span class="k">database</span> <span class="k">sensitive</span><span class="p">;</span>
 
 <span class="k">create</span> <span class="k">table</span> <span class="k">sensitive</span><span class="p">.</span><span class="n">events</span> <span class="p">(</span>
     <span class="n">ip</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">country</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">client</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">action</span> <span class="n">STRING</span>
-  <span class="p">)</span> <span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">&#39;,&#39;</span><span class="p">;</span>
+  <span class="p">)</span> <span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span><span class="p">;</span>
 
-<span class="k">load</span> <span class="k">data</span> <span class="k">local</span> <span class="n">inpath</span> <span class="s1">&#39;/tmp/events.csv&#39;</span> <span class="n">overwrite</span> <span class="k">into</span> <span class="k">table</span> <span class="k">sensitive</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
+<span class="k">load</span> <span class="k">data</span> <span class="k">local</span> <span class="n">inpath</span> <span class="s1">'/tmp/events.csv'</span> <span class="n">overwrite</span> <span class="k">into</span> <span class="k">table</span> <span class="k">sensitive</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
 <span class="k">create</span> <span class="k">database</span> <span class="n">filtered</span><span class="p">;</span>
 <span class="k">create</span> <span class="k">view</span> <span class="n">filtered</span><span class="p">.</span><span class="n">events</span> <span class="k">as</span> <span class="k">select</span> <span class="n">country</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">action</span> <span class="k">from</span> <span class="k">sensitive</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
-<span class="k">create</span> <span class="k">view</span> <span class="n">filtered</span><span class="p">.</span><span class="n">events_usonly</span> <span class="k">as</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">filtered</span><span class="p">.</span><span class="n">events</span> <span class="k">where</span> <span class="n">country</span> <span class="o">=</span> <span class="s1">&#39;US&#39;</span><span class="p">;</span>
-</code></pre></div>
+<span class="k">create</span> <span class="k">view</span> <span class="n">filtered</span><span class="p">.</span><span class="n">events_usonly</span> <span class="k">as</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">filtered</span><span class="p">.</span><span class="n">events</span> <span class="k">where</span> <span class="n">country</span> <span class="o">=</span> <span class="s1">'US'</span><span class="p">;</span>
+</code></pre>
+</div>
+
 <p>在 cdh1上通过 beeline 连接 hiveserver2，运行下面命令创建角色和组：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 注意：我设置了hiveserver2的jdbc端口为10001</span>
-<span class="nv">$ </span> beeline -u <span class="s2">&quot;jdbc:hive2://cdh1:10001/&quot;</span> -n hive -p hive -d org.apache.hive.jdbc.HiveDriver
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 注意：我设置了hiveserver2的jdbc端口为10001</span>
+<span class="gp">$  </span>beeline -u <span class="s2">"jdbc:hive2://cdh1:10001/"</span> -n hive -p hive -d org.apache.hive.jdbc.HiveDriver
+</code></pre>
+</div>
+
 <p>执行下面的 sql 语句创建 role、group等：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">role</span> <span class="n">admin_role</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">create</span> <span class="k">role</span> <span class="n">admin_role</span><span class="p">;</span>
 <span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="n">SERVER</span> <span class="n">server1</span> <span class="k">TO</span> <span class="k">ROLE</span> <span class="n">admin_role</span><span class="p">;</span>
 <span class="k">GRANT</span> <span class="k">ROLE</span> <span class="n">admin_role</span> <span class="k">TO</span> <span class="k">GROUP</span> <span class="k">admin</span><span class="p">;</span>
 <span class="k">GRANT</span> <span class="k">ROLE</span> <span class="n">admin_role</span> <span class="k">TO</span> <span class="k">GROUP</span> <span class="n">hive</span><span class="p">;</span>
@@ -226,147 +242,186 @@
 <span class="k">create</span> <span class="k">role</span> <span class="n">test_role</span><span class="p">;</span>
 <span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="k">DATABASE</span> <span class="n">filtered</span> <span class="k">TO</span> <span class="k">ROLE</span> <span class="n">test_role</span><span class="p">;</span>
 <span class="k">GRANT</span> <span class="k">ROLE</span> <span class="n">test_role</span> <span class="k">TO</span> <span class="k">GROUP</span> <span class="n">test</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>上面创建了两个角色：</p>
 
 <ul>
-<li>admin_role，具有管理员权限，可以读写所有数据库，并授权给 admin 和 hive 组（对应操作系统上的组）</li>
-<li>test_role，只能读写 filtered 数据库，并授权给 test 组。</li>
+  <li>admin_role，具有管理员权限，可以读写所有数据库，并授权给 admin 和 hive 组（对应操作系统上的组）</li>
+  <li>test_role，只能读写 filtered 数据库，并授权给 test 组。</li>
 </ul>
 
 <p>因为系统上没有test用户和组，所以需要手动创建：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>useradd <span class="nb">test</span>
-</code></pre></div>
-<h1 id="5-测试">5. 测试</h1>
 
-<h2 id="测试admin_role角色">测试admin_role角色</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>useradd <span class="nb">test</span>
+</code></pre>
+</div>
+
+<h1 id="section-1">5. 测试</h1>
+
+<h2 id="adminrole">测试admin_role角色</h2>
 
 <p>使用hive用户访问beeline：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>beeline -u <span class="s2">&quot;jdbc:hive2://cdh1:10000/&quot;</span> -n hive -p hive -d org.apache.hive.jdbc.HiveDriver
-</code></pre></div>
-<p>查看当前系统用户是谁：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">set</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------------------+--+</span>
-<span class="o">|</span>          <span class="k">set</span>           <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------------------+--+</span>
-<span class="o">|</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="n">hive</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------------------+--+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">188</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
-<p>hive属于admin_role组，具有管理员权限，可以查看所有角色：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">roles</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-------------+--+</span>
-<span class="o">|</span>    <span class="k">role</span>     <span class="o">|</span>
-<span class="o">+</span><span class="c1">-------------+--+</span>
-<span class="o">|</span> <span class="n">test_role</span>   <span class="o">|</span>
-<span class="o">|</span> <span class="n">admin_role</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">-------------+--+</span>
-<span class="mi">2</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">199</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
-<p>查看所有权限：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">SHOW</span> <span class="k">GRANT</span> <span class="k">ROLE</span> <span class="n">test_role</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+</span>
-<span class="o">|</span> <span class="k">database</span>  <span class="o">|</span> <span class="k">table</span>  <span class="o">|</span> <span class="n">partition</span>  <span class="o">|</span> <span class="k">column</span>  <span class="o">|</span> <span class="n">principal_name</span>  <span class="o">|</span> <span class="n">principal_type</span>  <span class="o">|</span> <span class="n">privilege</span>  <span class="o">|</span> <span class="n">grant_option</span>  <span class="o">|</span> <span class="n">grant_time</span> <span class="o">|</span> 
-<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+</span>
-<span class="o">|</span> <span class="n">filtered</span>   <span class="o">|</span>        <span class="o">|</span>            <span class="o">|</span>         <span class="o">|</span> <span class="n">test_role</span>       <span class="o">|</span> <span class="k">ROLE</span>            <span class="o">|</span> <span class="o">*</span>          <span class="o">|</span> <span class="k">false</span>       <span class="o">|</span> <span class="mi">1430293474047000</span>  <span class="o">|</span> 
-<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+</span>
 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>beeline -u <span class="s2">"jdbc:hive2://cdh1:10000/"</span> -n hive -p hive -d org.apache.hive.jdbc.HiveDriver
+</code></pre>
+</div>
+
+<p>查看当前系统用户是谁：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">set</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------------------------+--+
+</span><span class="o">|</span>          <span class="k">set</span>           <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------+--+
+</span><span class="o">|</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="n">hive</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------+--+
+</span><span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">188</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>hive属于admin_role组，具有管理员权限，可以查看所有角色：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">roles</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-------------+--+
+</span><span class="o">|</span>    <span class="k">role</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------+--+
+</span><span class="o">|</span> <span class="n">test_role</span>   <span class="o">|</span>
+<span class="o">|</span> <span class="n">admin_role</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------+--+
+</span><span class="mi">2</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">199</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>查看所有权限：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">SHOW</span> <span class="k">GRANT</span> <span class="k">ROLE</span> <span class="n">test_role</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+
+</span><span class="o">|</span> <span class="k">database</span>  <span class="o">|</span> <span class="k">table</span>  <span class="o">|</span> <span class="n">partition</span>  <span class="o">|</span> <span class="k">column</span>  <span class="o">|</span> <span class="n">principal_name</span>  <span class="o">|</span> <span class="n">principal_type</span>  <span class="o">|</span> <span class="n">privilege</span>  <span class="o">|</span> <span class="n">grant_option</span>  <span class="o">|</span> <span class="n">grant_time</span> <span class="o">|</span> 
+<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+
+</span><span class="o">|</span> <span class="n">filtered</span>   <span class="o">|</span>        <span class="o">|</span>            <span class="o">|</span>         <span class="o">|</span> <span class="n">test_role</span>       <span class="o">|</span> <span class="k">ROLE</span>            <span class="o">|</span> <span class="o">*</span>          <span class="o">|</span> <span class="k">false</span>       <span class="o">|</span> <span class="mi">1430293474047000</span>  <span class="o">|</span> 
+<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+
+</span>
 <span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">SHOW</span> <span class="k">GRANT</span> <span class="k">ROLE</span> <span class="n">admin_role</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+</span>
-<span class="o">|</span> <span class="k">database</span>  <span class="o">|</span> <span class="k">table</span>  <span class="o">|</span> <span class="n">partition</span>  <span class="o">|</span> <span class="k">column</span>  <span class="o">|</span> <span class="n">principal_name</span>  <span class="o">|</span> <span class="n">principal_type</span>  <span class="o">|</span> <span class="n">privilege</span>  <span class="o">|</span> <span class="n">grant_option</span>  <span class="o">|</span> <span class="n">grant_time</span>  <span class="o">|</span> 
-<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+</span>
-<span class="o">|</span> <span class="o">*</span>         <span class="o">|</span>        <span class="o">|</span>            <span class="o">|</span>         <span class="o">|</span> <span class="n">admin_role</span>      <span class="o">|</span> <span class="k">ROLE</span>            <span class="o">|</span> <span class="o">*</span>          <span class="o">|</span> <span class="k">false</span>       <span class="o">|</span> <span class="mi">1430293473308000</span>  
-<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">16</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
+<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+
+</span><span class="o">|</span> <span class="k">database</span>  <span class="o">|</span> <span class="k">table</span>  <span class="o">|</span> <span class="n">partition</span>  <span class="o">|</span> <span class="k">column</span>  <span class="o">|</span> <span class="n">principal_name</span>  <span class="o">|</span> <span class="n">principal_type</span>  <span class="o">|</span> <span class="n">privilege</span>  <span class="o">|</span> <span class="n">grant_option</span>  <span class="o">|</span> <span class="n">grant_time</span>  <span class="o">|</span> 
+<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+
+</span><span class="o">|</span> <span class="o">*</span>         <span class="o">|</span>        <span class="o">|</span>            <span class="o">|</span>         <span class="o">|</span> <span class="n">admin_role</span>      <span class="o">|</span> <span class="k">ROLE</span>            <span class="o">|</span> <span class="o">*</span>          <span class="o">|</span> <span class="k">false</span>       <span class="o">|</span> <span class="mi">1430293473308000</span>  
+<span class="o">+</span><span class="c1">-----------+--------+------------+---------+-----------------+-----------------+------------+---------------+---------------+
+</span><span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">16</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
 <p>hive用户可以查看所有数据库、访问所有表：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">databases</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">----------------+--+</span>
-<span class="o">|</span> <span class="n">database_name</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------------+--+</span>
-<span class="o">|</span> <span class="k">default</span>        <span class="o">|</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">databases</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----------------+--+
+</span><span class="o">|</span> <span class="n">database_name</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------+--+
+</span><span class="o">|</span> <span class="k">default</span>        <span class="o">|</span>
 <span class="o">|</span> <span class="n">filtered</span>       <span class="o">|</span>
 <span class="o">|</span> <span class="k">sensitive</span>      <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------------+--+</span>
-<span class="mi">3</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">391</span> <span class="n">seconds</span><span class="p">)</span>
+<span class="o">+</span><span class="c1">----------------+--+
+</span><span class="mi">3</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">391</span> <span class="n">seconds</span><span class="p">)</span>
 <span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="n">use</span> <span class="n">filtered</span><span class="p">;</span>
 <span class="k">No</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">101</span> <span class="n">seconds</span><span class="p">)</span>
 <span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">filtered</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+</span>
-<span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">country</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">client</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">action</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+</span>
-<span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+
+</span><span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">country</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">client</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">action</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+
+</span><span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">FR</span>              <span class="o">|</span> <span class="n">windows</span>        <span class="o">|</span> <span class="n">updateNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">updateNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">FR</span>              <span class="o">|</span> <span class="n">ios</span>            <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">windows</span>        <span class="o">|</span> <span class="n">updateTag</span>      <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+</span>
-<span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">431</span> <span class="n">seconds</span><span class="p">)</span>
+<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+
+</span><span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">431</span> <span class="n">seconds</span><span class="p">)</span>
 <span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">sensitive</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">---------------+-----------------+----------------+----------------+--+</span>
-<span class="o">|</span>   <span class="n">events</span><span class="p">.</span><span class="n">ip</span>   <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">country</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">client</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">action</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">---------------+-----------------+----------------+----------------+--+</span>
-<span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">2</span><span class="p">.</span><span class="mi">3</span>      <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------+-----------------+----------------+----------------+--+
+</span><span class="o">|</span>   <span class="n">events</span><span class="p">.</span><span class="n">ip</span>   <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">country</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">client</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">action</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------+-----------------+----------------+----------------+--+
+</span><span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">2</span><span class="p">.</span><span class="mi">3</span>      <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">200</span><span class="p">.</span><span class="mi">88</span><span class="p">.</span><span class="mi">99</span>  <span class="o">|</span> <span class="n">FR</span>              <span class="o">|</span> <span class="n">windows</span>        <span class="o">|</span> <span class="n">updateNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">2</span><span class="p">.</span><span class="mi">3</span>      <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">updateNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">200</span><span class="p">.</span><span class="mi">88</span><span class="p">.</span><span class="mi">77</span>  <span class="o">|</span> <span class="n">FR</span>              <span class="o">|</span> <span class="n">ios</span>            <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">4</span><span class="p">.</span><span class="mi">5</span>      <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">windows</span>        <span class="o">|</span> <span class="n">updateTag</span>      <span class="o">|</span>
-<span class="o">+</span><span class="c1">---------------+-----------------+----------------+----------------+--+</span>
-<span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">247</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="测试test_role角色">测试test_role角色</h2>
+<span class="o">+</span><span class="c1">---------------+-----------------+----------------+----------------+--+
+</span><span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">247</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="testrole">测试test_role角色</h2>
 
 <p>使用test用户访问beeline：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>beeline -u <span class="s2">&quot;jdbc:hive2://cdh1:10000/&quot;</span> -n <span class="nb">test</span> -p <span class="nb">test</span> -d org.apache.hive.jdbc.HiveDriver
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>beeline -u <span class="s2">"jdbc:hive2://cdh1:10000/"</span> -n <span class="nb">test</span> -p <span class="nb">test</span> -d org.apache.hive.jdbc.HiveDriver
+</code></pre>
+</div>
+
 <p>查看当前系统用户是谁：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">set</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------------------+--+</span>
-<span class="o">|</span>          <span class="k">set</span>           <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------------------+--+</span>
-<span class="o">|</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="n">hive</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------------------+--+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">188</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">set</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------------------------+--+
+</span><span class="o">|</span>          <span class="k">set</span>           <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------+--+
+</span><span class="o">|</span> <span class="k">system</span><span class="p">:</span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="n">hive</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------+--+
+</span><span class="mi">1</span> <span class="k">row</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">188</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
 <p>test用户不是管理员，是不能查看所有角色的：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">roles</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">roles</span><span class="p">;</span>
 <span class="n">ERROR</span> <span class="p">:</span> <span class="n">Error</span> <span class="n">processing</span> <span class="n">Sentry</span> <span class="n">command</span><span class="p">:</span> <span class="k">Access</span> <span class="n">denied</span> <span class="k">to</span> <span class="n">test</span><span class="p">.</span> <span class="n">Server</span> <span class="n">Stacktrace</span><span class="p">:</span> <span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">sentry</span><span class="p">.</span><span class="n">provider</span><span class="p">.</span><span class="n">db</span><span class="p">.</span><span class="n">SentryAccessDeniedException</span><span class="p">:</span> <span class="k">Access</span> <span class="n">denied</span> <span class="k">to</span> <span class="n">test</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>test用户可以列出所有数据库：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">databases</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">----------------+--+</span>
-<span class="o">|</span> <span class="n">database_name</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------------+--+</span>
-<span class="o">|</span> <span class="k">default</span>        <span class="o">|</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">show</span> <span class="n">databases</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----------------+--+
+</span><span class="o">|</span> <span class="n">database_name</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------+--+
+</span><span class="o">|</span> <span class="k">default</span>        <span class="o">|</span>
 <span class="o">|</span> <span class="n">filtered</span>       <span class="o">|</span>
 <span class="o">|</span> <span class="k">sensitive</span>      <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------------+--+</span>
-<span class="mi">3</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">079</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
+<span class="o">+</span><span class="c1">----------------+--+
+</span><span class="mi">3</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">079</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
 <p>test用户可以filtered库：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="n">use</span> <span class="n">filtered</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="n">use</span> <span class="n">filtered</span><span class="p">;</span>
 <span class="k">No</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">206</span> <span class="n">seconds</span><span class="p">)</span>
 <span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+</span>
-<span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">country</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">client</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">action</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+</span>
-<span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+
+</span><span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">country</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">client</span>  <span class="o">|</span> <span class="n">events</span><span class="p">.</span><span class="n">action</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+
+</span><span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">FR</span>              <span class="o">|</span> <span class="n">windows</span>        <span class="o">|</span> <span class="n">updateNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">android</span>        <span class="o">|</span> <span class="n">updateNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">FR</span>              <span class="o">|</span> <span class="n">ios</span>            <span class="o">|</span> <span class="n">createNote</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="n">US</span>              <span class="o">|</span> <span class="n">windows</span>        <span class="o">|</span> <span class="n">updateTag</span>      <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+</span>
-<span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">361</span> <span class="n">seconds</span><span class="p">)</span>
-</code></pre></div>
+<span class="o">+</span><span class="c1">-----------------+----------------+----------------+--+
+</span><span class="mi">5</span> <span class="k">rows</span> <span class="n">selected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">361</span> <span class="n">seconds</span><span class="p">)</span>
+</code></pre>
+</div>
+
 <p>但是，test用户没有权限访问sensitive库：</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="n">use</span> <span class="k">sensitive</span><span class="p">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">0</span><span class="p">:</span> <span class="n">jdbc</span><span class="p">:</span><span class="n">hive2</span><span class="p">:</span><span class="o">//</span><span class="n">cdh1</span><span class="p">:</span><span class="mi">10000</span><span class="o">/&gt;</span> <span class="n">use</span> <span class="k">sensitive</span><span class="p">;</span>
 <span class="n">Error</span><span class="p">:</span> <span class="n">Error</span> <span class="n">while</span> <span class="n">compiling</span> <span class="k">statement</span><span class="p">:</span> <span class="n">FAILED</span><span class="p">:</span> <span class="n">SemanticException</span> <span class="k">No</span> <span class="k">valid</span> <span class="k">privileges</span>
  <span class="n">Required</span> <span class="k">privileges</span> <span class="k">for</span> <span class="n">this</span> <span class="n">query</span><span class="p">:</span> <span class="n">Server</span><span class="o">=</span><span class="n">server1</span><span class="o">-&gt;</span><span class="n">Db</span><span class="o">=</span><span class="k">sensitive</span><span class="o">-&gt;</span><span class="k">Table</span><span class="o">=*-&gt;</span><span class="n">action</span><span class="o">=</span><span class="k">insert</span><span class="p">;</span><span class="n">Server</span><span class="o">=</span><span class="n">server1</span><span class="o">-&gt;</span><span class="n">Db</span><span class="o">=</span><span class="k">sensitive</span><span class="o">-&gt;</span><span class="k">Table</span><span class="o">=*-&gt;</span><span class="n">action</span><span class="o">=</span><span class="k">select</span><span class="p">;</span> <span class="p">(</span><span class="k">state</span><span class="o">=</span><span class="mi">42000</span><span class="p">,</span><span class="n">code</span><span class="o">=</span><span class="mi">40000</span><span class="p">)</span>
-</code></pre></div>
-<h1 id="6-排错">6. 排错</h1>
+</code></pre>
+</div>
+
+<h1 id="section-2">6. 排错</h1>
 
 <p>在CDH5的高版本中，hive cli 不建议使用，在hive集成sentry之后，再运行hive cli 会提示找不到sentry的类的遗产，解决办法是，将sentry相关的jar包链接到hive的home目录下的lib目录下：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">ln -s /usr/lib/sentry/lib/sentry-binding-hive.jar /usr/lib/hive/lib/
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ln -s /usr/lib/sentry/lib/sentry-binding-hive.jar /usr/lib/hive/lib/
 ln -s /usr/lib/sentry/lib/sentry-core-common.jar /usr/lib/hive/lib
 ln -s /usr/lib/sentry/lib/sentry-core-common-db.jar /usr/lib/hive/lib
 ln -s /usr/lib/sentry/lib/sentry-policy-common.jar /usr/lib/hive/lib
@@ -376,11 +431,13 @@ ln -s /usr/lib/sentry/lib/sentry-provider-common.jar /usr/lib/hive/lib
 ln -s /usr/lib/sentry/lib/sentry-provider-db.jar /usr/lib/hive/lib
 ln -s /usr/lib/sentry/lib/sentry-provider-cache.jar /usr/lib/hive/lib
 ln -s /usr/lib/sentry/lib/sentry-provider-file.jar /usr/lib/hive/lib
-</code></pre></div>
-<h1 id="7-参考文章">7. 参考文章</h1>
+</code></pre>
+</div>
+
+<h1 id="section-3">7. 参考文章</h1>
 
 <ul>
-<li><a href="http://blog.evernote.com/tech/2014/06/09/securing-impala-for-analysts/">Securing Impala for analysts</a><br></li>
+  <li><a href="http://blog.evernote.com/tech/2014/06/09/securing-impala-for-analysts/">Securing Impala for analysts</a></li>
 </ul>
 
                     <br/>
@@ -430,7 +487,8 @@ ln -s /usr/lib/sentry/lib/sentry-provider-file.jar /usr/lib/hive/lib
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

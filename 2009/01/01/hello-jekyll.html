@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -108,206 +102,268 @@
                     <p>目前，博客使用的是Jekyll搭建的，markdown语法使用的是Redcarpet。Redcarpet支持设置 extensions ，值为一个字符串数组，每个字符串都是 Redcarpet::Markdown 类的扩展，相应的扩展就会设置为 true 。</p>
 
 <p>配置为：</p>
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">highlighter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pygments</span>
-<span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redcarpet</span>  <span class="c1"># [ maruku | rdiscount | kramdown | redcarpet ]</span>
 
-<span class="l-Scalar-Plain">redcarpet</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">extensions</span><span class="p-Indicator">:</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">fenced_code_blocks</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">no_intra_emphasis</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">strikethrough</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">autolink</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">tables</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">superscript</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">highlight</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">prettify</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">with_toc_data</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">highlighter</span><span class="pi">:</span> <span class="s">pygments</span>
+<span class="s">markdown</span><span class="pi">:</span> <span class="s">redcarpet</span>  <span class="c1"># [ maruku | rdiscount | kramdown | redcarpet ]</span>
+
+<span class="s">redcarpet</span><span class="pi">:</span>
+    <span class="s">extensions</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">fenced_code_blocks</span>
+        <span class="pi">-</span> <span class="s">no_intra_emphasis</span>
+        <span class="pi">-</span> <span class="s">strikethrough</span>
+        <span class="pi">-</span> <span class="s">autolink</span>
+        <span class="pi">-</span> <span class="s">tables</span>
+        <span class="pi">-</span> <span class="s">superscript</span>
+        <span class="pi">-</span> <span class="s">highlight</span>
+        <span class="pi">-</span> <span class="s">prettify</span>
+        <span class="pi">-</span> <span class="s">with_toc_data</span>
+</code></pre>
+</div>
+
 <p>redcarpet有几个扩展：</p>
 
 <ul>
-<li><code class="prettyprint">fenced_code_blocks</code> 解析代码块，使用3个或3个以上 ~ 或者 ` 包围起来的文本会被解析为代码块，你可以在开头指定代码的语言类型</li>
-<li><code class="prettyprint">no_intra_emphasis</code> 不解析单词中的下划线</li>
-<li><code class="prettyprint">strikethrough</code> 支持两个 ~ 包围的文本，解析为删除线</li>
-<li><code class="prettyprint">space_after_headers</code> #后面必须加空格，否则不会被解析为标题</li>
-<li><code class="prettyprint">autolink</code> 自动检查文本中 http https ftp 等协议的链接文本，将之解析为链接。没有以 http:// 开头，而是直接以 <a href="http://www">www</a>. 开头的同样会被检查到</li>
-<li><code class="prettyprint">hard_wrap</code> 如果 Markdown 文本中有折行的话，会转换为标签</li>
-<li><code class="prettyprint">tables</code> 表格</li>
-<li><code class="prettyprint">superscript</code> 上标，例如 : <code class="prettyprint">this is the 2^(nd) time</code> ，效果为：this is the 2<sup>nd</sup> time</li>
-<li><code class="prettyprint">with_toc_data</code> 给生成的 Header 标签增加锚点</li>
+  <li><code class="highlighter-rouge">fenced_code_blocks</code> 解析代码块，使用3个或3个以上 ~ 或者 ` 包围起来的文本会被解析为代码块，你可以在开头指定代码的语言类型</li>
+  <li><code class="highlighter-rouge">no_intra_emphasis</code> 不解析单词中的下划线</li>
+  <li><code class="highlighter-rouge">strikethrough</code> 支持两个 ~ 包围的文本，解析为删除线</li>
+  <li><code class="highlighter-rouge">space_after_headers</code> #后面必须加空格，否则不会被解析为标题</li>
+  <li><code class="highlighter-rouge">autolink</code> 自动检查文本中 http https ftp 等协议的链接文本，将之解析为链接。没有以 http:// 开头，而是直接以 www. 开头的同样会被检查到</li>
+  <li><code class="highlighter-rouge">hard_wrap</code> 如果 Markdown 文本中有折行的话，会转换为标签</li>
+  <li><code class="highlighter-rouge">tables</code> 表格</li>
+  <li><code class="highlighter-rouge">superscript</code> 上标，例如 : <code class="highlighter-rouge">this is the 2^(nd) time</code> ，效果为：this is the 2^(nd) time</li>
+  <li><code class="highlighter-rouge">with_toc_data</code> 给生成的 Header 标签增加锚点</li>
 </ul>
 
-<h1 id="语法">语法</h1>
+<p>升级到jekyll3之后，需要修改为kramdown：</p>
 
-<h2 id="标题">标题</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">markdown</span><span class="pi">:</span>    <span class="s">kramdown</span>
+<span class="s">highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+
+<span class="s">kramdown</span><span class="pi">:</span>
+  <span class="s">input</span><span class="pi">:</span> <span class="s">GFM</span>
+  <span class="s">auto_ids</span><span class="pi">:</span>       <span class="s">true</span>
+  <span class="s">footnote_nr</span><span class="pi">:</span>    <span class="s">1</span>
+  <span class="s">entity_output</span><span class="pi">:</span>  <span class="s">as_char</span>
+  <span class="s">toc_levels</span><span class="pi">:</span>     <span class="s">1..6</span>
+  <span class="s">smart_quotes</span><span class="pi">:</span>   <span class="s">lsquo,rsquo,ldquo,rdquo</span>
+  <span class="s">enable_coderay</span><span class="pi">:</span> <span class="s">false</span>
+  <span class="s">syntax_highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+  <span class="s">hard_wrap</span><span class="pi">:</span> <span class="s">false</span>
+
+  <span class="s">extensions</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">autolink</span>
+    <span class="pi">-</span> <span class="s">footnotes</span>
+    <span class="pi">-</span> <span class="s">smart</span>
+    <span class="pi">-</span> <span class="s">table</span>
+</code></pre>
+</div>
+
+<h1 id="section">语法</h1>
+
+<h2 id="section-1">标题</h2>
 
 <p>标题</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># 测试 h1
+
+<div class="highlighter-rouge"><pre class="highlight"><code># 测试 h1
 ## 测试 h2
 ### 测试 h3
 #### 测试 h4
 ##### 测试 h5
 ###### 测试 h6
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>效果：</p>
 
-<h1 id="测试-h1">测试 h1</h1>
+<h1 id="h1">测试 h1</h1>
+<p>## 测试 h2
+### 测试 h3
+#### 测试 h4
+##### 测试 h5
+###### 测试 h6</p>
 
-<h2 id="测试-h2">测试 h2</h2>
-
-<h3 id="测试-h3">测试 h3</h3>
-
-<h4 id="测试-h4">测试 h4</h4>
-
-<h5 id="测试-h5">测试 h5</h5>
-
-<h6 id="测试-h6">测试 h6</h6>
-
-<h2 id="列表">列表</h2>
+<h2 id="section-2">列表</h2>
 
 <p>无序列表：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">* 项目1
+
+<div class="highlighter-rouge"><pre class="highlight"><code>* 项目1
 * 项目2
 * 项目3
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>效果：</p>
 
 <ul>
-<li>项目1</li>
-<li>项目2</li>
-<li>项目3</li>
+  <li>项目1</li>
+  <li>项目2</li>
+  <li>项目3</li>
 </ul>
 
 <p>有序列表：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">1. 项目1
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1. 项目1
 2. 项目2
 3. 项目3
    * 项目1
    * 项目2
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>效果：</p>
 
 <ol>
-<li>项目1</li>
-<li>项目2</li>
-<li>项目3
-
-<ul>
-<li>项目1</li>
-<li>项目2</li>
-</ul></li>
+  <li>项目1</li>
+  <li>项目2</li>
+  <li>项目3
+    <ul>
+      <li>项目1</li>
+      <li>项目2</li>
+    </ul>
+  </li>
 </ol>
 
-<h2 id="粗体与斜体">粗体与斜体</h2>
+<h2 id="section-3">粗体与斜体</h2>
 
 <p>文字格式：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">**这是文字粗体格式**
+
+<div class="highlighter-rouge"><pre class="highlight"><code>**这是文字粗体格式**
 *这是文字斜体格式*
 ~~在文字上添加删除线~~
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>效果：</p>
 
 <p><strong>这是文字粗体格式</strong>
 <em>这是文字斜体格式</em>
-<del>在文字上添加删除线</del></p>
+~~在文字上添加删除线~~</p>
 
-<h2 id="链接与图片">链接与图片</h2>
+<h2 id="section-4">链接与图片</h2>
 
 <p>自动链接</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"> &lt;http://blog.javachen.com&gt;
+
+<div class="highlighter-rouge"><pre class="highlight"><code> &lt;http://blog.javachen.com&gt;
  &lt;XhstormR@foxmail.com&gt;
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>插入链接</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="o">[</span>link text<span class="o">](</span>http://example.com/ <span class="s2">&quot;optional title&quot;</span><span class="o">)</span>
 
- <span class="o">[</span>link text<span class="o">][</span>id<span class="o">]</span>
- <span class="o">[</span>id<span class="o">]</span>: http://example.com/  <span class="s2">&quot;optional title here&quot;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="o">[</span>link text]<span class="o">(</span>http://example.com/ <span class="s2">"optional title"</span><span class="o">)</span>
+
+ <span class="o">[</span>link text][id]
+ <span class="o">[</span>id]: http://example.com/  <span class="s2">"optional title here"</span>
+</code></pre>
+</div>
+
 <p>插入图片</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"> !<span class="o">[](</span>/path/to/img.jpg <span class="s2">&quot;optional title&quot;</span><span class="o">){</span>ImgCap<span class="o">}</span>alt text<span class="o">{</span>/ImgCap<span class="o">}</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> ![]<span class="o">(</span>/path/to/img.jpg <span class="s2">"optional title"</span><span class="o">){</span>ImgCap<span class="o">}</span>alt text<span class="o">{</span>/ImgCap<span class="o">}</span>
+</code></pre>
+</div>
+
 <p>图片链接</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="o">[</span>!<span class="o">[][</span>jane-eyre-pic<span class="o">]{</span>ImgCap<span class="o">}{</span>/ImgCap<span class="o">}][</span>jane-eyre-douban<span class="o">]</span>
 
- <span class="o">[</span>jane-eyre-pic<span class="o">]</span>: http://img3.douban.com/mpic/s1108264.jpg
- <span class="o">[</span>jane-eyre-douban<span class="o">]</span>: http://book.douban.com/subject/1141406/
-</code></pre></div>
-<h2 id="代码">代码</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="o">[</span>![][jane-eyre-pic]<span class="o">{</span>ImgCap<span class="o">}{</span>/ImgCap<span class="o">}][</span>jane-eyre-douban]
 
-<p>行代码： <code class="prettyprint">code</code></p>
+ <span class="o">[</span>jane-eyre-pic]: http://img3.douban.com/mpic/s1108264.jpg
+ <span class="o">[</span>jane-eyre-douban]: http://book.douban.com/subject/1141406/
+</code></pre>
+</div>
+
+<h2 id="section-5">代码</h2>
+
+<p>行代码： <code class="highlighter-rouge">code</code></p>
 
 <p>用TAB键起始的段落，会被认为是代码块，或者使用三个`或~：</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">/* hello world demo */</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="sr">/* hello world demo */</span>
 <span class="c1">#include &lt;stdio.h&gt;</span>
 <span class="n">int</span> <span class="n">main</span><span class="p">(</span><span class="n">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
 <span class="p">{</span>
-        <span class="nb">printf</span><span class="p">(</span><span class="s2">&quot;Hello, World!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+        <span class="nb">printf</span><span class="p">(</span><span class="s2">"Hello, World!</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
         <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<h2 id="表格">表格</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">|head1|head2|head3|head4
+</code></pre>
+</div>
+
+<h2 id="section-6">表格</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|head1|head2|head3|head4
 |---|:---|---:|:---:|
 |row1text1|row1text2|row1text3|row1text4
 |row2text1|row2text2|row2text3|row2text4
 |row3text1|row3text2|row3text3|row3text4
 |row4text1|row4text2|row4text3|row4text4
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>效果：</p>
 
-<table><thead>
-<tr>
-<th>head1</th>
-<th style="text-align: left">head2</th>
-<th style="text-align: right">head3</th>
-<th style="text-align: center">head4</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>row1text1</td>
-<td style="text-align: left">row1text2</td>
-<td style="text-align: right">row1text3</td>
-<td style="text-align: center">row1text4</td>
-</tr>
-<tr>
-<td>row2text1</td>
-<td style="text-align: left">row2text2</td>
-<td style="text-align: right">row2text3</td>
-<td style="text-align: center">row2text4</td>
-</tr>
-<tr>
-<td>row3text1</td>
-<td style="text-align: left">row3text2</td>
-<td style="text-align: right">row3text3</td>
-<td style="text-align: center">row3text4</td>
-</tr>
-<tr>
-<td>row4text1</td>
-<td style="text-align: left">row4text2</td>
-<td style="text-align: right">row4text3</td>
-<td style="text-align: center">row4text4</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>head1</th>
+      <th style="text-align: left">head2</th>
+      <th style="text-align: right">head3</th>
+      <th style="text-align: center">head4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>row1text1</td>
+      <td style="text-align: left">row1text2</td>
+      <td style="text-align: right">row1text3</td>
+      <td style="text-align: center">row1text4</td>
+    </tr>
+    <tr>
+      <td>row2text1</td>
+      <td style="text-align: left">row2text2</td>
+      <td style="text-align: right">row2text3</td>
+      <td style="text-align: center">row2text4</td>
+    </tr>
+    <tr>
+      <td>row3text1</td>
+      <td style="text-align: left">row3text2</td>
+      <td style="text-align: right">row3text3</td>
+      <td style="text-align: center">row3text4</td>
+    </tr>
+    <tr>
+      <td>row4text1</td>
+      <td style="text-align: left">row4text2</td>
+      <td style="text-align: right">row4text3</td>
+      <td style="text-align: center">row4text4</td>
+    </tr>
+  </tbody>
+</table>
 
-<h2 id="引用">引用</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt; 第一行引用文字
+<h2 id="section-7">引用</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; 第一行引用文字
 &gt; 第二行引用文字
-</code></pre></div>
+</code></pre>
+</div>
+
 <blockquote>
-<p>第一行引用文字
+  <p>第一行引用文字
 第二行引用文字</p>
 </blockquote>
 
-<h2 id="水平线">水平线</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">***
-</code></pre></div>
-<hr>
+<h2 id="section-8">水平线</h2>
 
-<h1 id="参考资料">参考资料</h1>
+<div class="highlighter-rouge"><pre class="highlight"><code>***
+</code></pre>
+</div>
+
+<hr />
+
+<h1 id="section-9">参考资料</h1>
 
 <ul>
-<li><a href="http://havee.me/internet/2013-11/jekyll-liquid-designers.html">Jekyll 扩展的 Liquid 设计</a></li>
-<li><a href="http://havee.me/internet/2013-07/jekyll-liquid-extensions.html">Jekyll 扩展的 Liquid 模板</a></li>
+  <li><a href="http://havee.me/internet/2013-11/jekyll-liquid-designers.html">Jekyll 扩展的 Liquid 设计</a></li>
+  <li><a href="http://havee.me/internet/2013-07/jekyll-liquid-extensions.html">Jekyll 扩展的 Liquid 模板</a></li>
+  <li><a href="http://platinhom.github.io/2015/11/06/Kramdown-note/">kramdown和markdown较大的差异比较</a></li>
 </ul>
 
                     <br/>
@@ -357,7 +413,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

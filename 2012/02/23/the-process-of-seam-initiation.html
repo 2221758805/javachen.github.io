@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -105,11 +99,14 @@
               <div id="qr" class="qrcode visible-lg"></div>
 
               <div id="post-text">
-                    <p>了解seam2的人知道，seam是通过在web. xml中配置监听器启动的。注意，本文中的seam是指的seam2，不是seam3. </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;listener&gt;
-    &lt;listenerclass&gt;org. jboss. seam. servlet. SeamListener&lt;/listenerclass&gt;
+                    <p>了解seam2的人知道，seam是通过在web. xml中配置监听器启动的。注意，本文中的seam是指的seam2，不是seam3.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;listener&gt;
+	&lt;listenerclass&gt;org. jboss. seam. servlet. SeamListener&lt;/listenerclass&gt;
 &lt;/listener&gt;
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>该监听器会做哪些事情呢？看看Gavin King对SeamListener类的描述。</p>
 
 <blockquote>Drives certain Seam functionality such as initialization and cleanup of application and session contexts from the web application lifecycle. </blockquote>
@@ -126,33 +123,34 @@
 其中包括：添加命名空间、初始化组件、初始化Properties、初始化jndi信息。这一步，其实主要是读取一些配置文件,加载seam组件。</p>
 
 <ol>
-<li>添加命名空间</li>
-<li>从/WEBINF/components. xml加载组件</li>
-<li>从/WEBINF/events. xml加载组件</li>
-<li>从METAINF/components. xml加载组件</li>
-<li>从ServletContext初始化Properties</li>
-<li>从/seam. properties初始化Properties</li>
-<li>初始化jndi Properties</li>
-<li>从system加载Properties</li>
+  <li>添加命名空间</li>
+  <li>从/WEBINF/components. xml加载组件</li>
+  <li>从/WEBINF/events. xml加载组件</li>
+  <li>从METAINF/components. xml加载组件</li>
+  <li>从ServletContext初始化Properties</li>
+  <li>从/seam. properties初始化Properties</li>
+  <li>初始化jndi Properties</li>
+  <li>从system加载Properties</li>
 </ol>
 
 <p><strong>第三步</strong>，seam初始化过程（Initialization的init方法）。</p>
 
 <ol>
-<li>ServletLifecycle开始初始化</li>
-<li>设置Application上下文</li>
-<li>添加Init组件</li>
-<li>通过standardDeploymentStrategy的注解和xml组件扫描组件</li>
-<li>判断jbpm是否安装</li>
-<li>检查默认拦截器</li>
-<li>添加特别组件</li>
-<li>添加war root部署、热部署</li>
-<li>安装组件</li>
-<li>导入命名空间</li>
-<li>ServletLifecycle结束初始化。启动生命周期为APPLICATION的组件。</li>
+  <li>ServletLifecycle开始初始化</li>
+  <li>设置Application上下文</li>
+  <li>添加Init组件</li>
+  <li>通过standardDeploymentStrategy的注解和xml组件扫描组件</li>
+  <li>判断jbpm是否安装</li>
+  <li>检查默认拦截器</li>
+  <li>添加特别组件</li>
+  <li>添加war root部署、热部署</li>
+  <li>安装组件</li>
+  <li>导入命名空间</li>
+  <li>ServletLifecycle结束初始化。启动生命周期为APPLICATION的组件。</li>
 </ol>
 
 <p>如果组件标注为startup，则会构造其实例进行初始化。例如seam于Hibernate的集成，就可以通过此方法初始化Hibernate，对应的组件类为org. jboss. seam. persistence. HibernateSessionFactory。</p>
+
 
                     <br/>
                     <div class="well">
@@ -201,7 +199,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

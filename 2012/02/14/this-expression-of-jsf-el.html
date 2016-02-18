@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -119,11 +113,11 @@
 3.动态映射功能，即在满足上述基础上可以实现页面和后台实现类的属性和方法的自动映射
 4.兼容标准的EL表达式</p>
 
-<p>我们将上述功能处理为“this”表达式。其功能模型为：
+<p>我们将上述功能处理为“this”表达式。其功能模型为：</p>
 <div class="pic">
-<img src="http://7xnrdo.com1.z0.glb.clouddn.com/2012/02/this-expression-of-el.jpg" alt="" title="this expression of el"/>
+<img src="http://7xnrdo.com1.z0.glb.clouddn.com/2012/02/this-expression-of-el.jpg" alt="" title="this expression of el" />
 </div>
-页面A和页面B分别引用了通用功能T,内含this相关的El表达式，通过分析处理，分别映射到对应的页面动作类的属性A.name和B.name。A和B可以从相同的基类C派生而来，只需C类实现了name属性即可，A类和B类也可以毫不相关，但是它们具有相同的属性name。</p>
+<p>页面A和页面B分别引用了通用功能T,内含this相关的El表达式，通过分析处理，分别映射到对应的页面动作类的属性A.name和B.name。A和B可以从相同的基类C派生而来，只需C类实现了name属性即可，A类和B类也可以毫不相关，但是它们具有相同的属性name。</p>
 
 <p><strong>动作类和页面的一致性保证</strong>
 为了有效实现this表达式，我们实现如下映射规则：
@@ -131,10 +125,10 @@
 2.页面和相应的后台类以相同命名方式，页面的目录转化为后台类的包名，名称通过点分隔包名，如根目录的a.xhtml对应的后台类名称为A.java，其唯一jsf标识名称为“a”，test/b.xhtml的后台类为test/B.java，其唯一jsf标识为“test.b”</p>
 
 <p><strong>“this”EL表达式算法</strong>
-算法流程如下图：
+算法流程如下图：</p>
 <div class="pic">
-<img src="http://7xnrdo.com1.z0.glb.clouddn.com/2012/02/this-expression-flow-of-el.jpg" alt="" title="this expression flow of el"/>
-</div></p>
+<img src="http://7xnrdo.com1.z0.glb.clouddn.com/2012/02/this-expression-flow-of-el.jpg" alt="" title="this expression flow of el" />
+</div>
 
                     <br/>
                     <div class="well">
@@ -181,7 +175,8 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             

@@ -14,11 +14,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-
-      <!-- atom & rss feed -->
-      <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="JavaChen Blog RSS Feed" />
-      <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="JavaChen Blog ATOM Feed" />
-
+        
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -69,8 +65,6 @@
               
               
               
-              <li><a href="https://twitter.com/java_chen" target="_blank" title="twitter"><span class="fa fa-twitter fa-2x"></span></a></li>
-              
               
               
               <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
@@ -110,95 +104,119 @@
 <p>安装storm集群，需要依赖以下组件：</p>
 
 <ul>
-<li>Zookeeper</li>
-<li>Python</li>
-<li>Zeromq</li>
-<li>Storm</li>
-<li>JDK</li>
-<li>JZMQ</li>
+  <li>Zookeeper</li>
+  <li>Python</li>
+  <li>Zeromq</li>
+  <li>Storm</li>
+  <li>JDK</li>
+  <li>JZMQ</li>
 </ul>
 
 <p>故安装过程根据上面的组件分为以下几步：</p>
 
 <ul>
-<li>安装JDK</li>
-<li>安装Zookeeper集群</li>
-<li>安装Python及依赖</li>
-<li>安装Storm</li>
+  <li>安装JDK</li>
+  <li>安装Zookeeper集群</li>
+  <li>安装Python及依赖</li>
+  <li>安装Storm</li>
 </ul>
 
 <p>另外，操作系统环境为：Centos6.4，安装用户为：root。</p>
 
-<h1 id="1-安装jdk">1. 安装JDK</h1>
+<h1 id="jdk">1. 安装JDK</h1>
 
 <p>安装jdk有很多方法，可以参考文博客<a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>中的jdk安装步骤，需要说明的是下面的zookeeper集群安装方法也可以参考此文。</p>
 
 <p>不管你用什么方法，最后需要配置JAVA_HOME并检测当前jdk版本：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>java -version
-java version <span class="s2">&quot;1.6.0_31&quot;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -version
+java version <span class="s2">"1.6.0_31"</span>
 Java<span class="o">(</span>TM<span class="o">)</span> SE Runtime Environment <span class="o">(</span>build 1.6.0_31-b04<span class="o">)</span>
 Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM <span class="o">(</span>build 20.6-b01, mixed mode<span class="o">)</span>
-</code></pre></div>
-<h1 id="2-安装zookeeper集群">2. 安装Zookeeper集群</h1>
+</code></pre>
+</div>
+
+<h1 id="zookeeper">2. 安装Zookeeper集群</h1>
 
 <p>可以参考文博客<a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>中的Zookeeper集群安装步骤。</p>
 
-<h1 id="3-安装python及依赖">3. 安装Python及依赖</h1>
+<h1 id="python">3. 安装Python及依赖</h1>
 
 <p>一般操作系统上都安装了Python，查看当前Python版本：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>python -V
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>python -V
 Python 2.6.6
-</code></pre></div>
-<h2 id="3-1-下载zeromq">3.1 下载Zeromq</h2>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget http://download.zeromq.org/zeromq-4.0.4.tar.gz
-<span class="nv">$ </span>tar zxvf zeromq-4.0.4.tar.gz
-<span class="nv">$ </span>./configure
-<span class="nv">$ </span>make <span class="p">&amp;</span> make install
-</code></pre></div>
-<h2 id="3-2-安装jzmq">3.2 安装Jzmq</h2>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>git clone git://github.com/nathanmarz/jzmq.git
-<span class="nv">$ </span><span class="nb">cd </span>jzmq
-<span class="nv">$ </span>./autogen.sh
-<span class="nv">$ </span>./configure
-<span class="nv">$ </span>make <span class="p">&amp;</span> make install
-</code></pre></div>
-<h1 id="4-安装storm">4. 安装Storm</h1>
+</code></pre>
+</div>
+
+<h2 id="zeromq">3.1 下载Zeromq</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget http://download.zeromq.org/zeromq-4.0.4.tar.gz
+<span class="gp">$ </span>tar zxvf zeromq-4.0.4.tar.gz
+<span class="gp">$ </span>./configure
+<span class="gp">$ </span>make &amp; make install
+</code></pre>
+</div>
+
+<h2 id="jzmq">3.2 安装Jzmq</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone git://github.com/nathanmarz/jzmq.git
+<span class="gp">$ </span><span class="nb">cd </span>jzmq
+<span class="gp">$ </span>./autogen.sh
+<span class="gp">$ </span>./configure
+<span class="gp">$ </span>make &amp; make install
+</code></pre>
+</div>
+
+<h1 id="storm">4. 安装Storm</h1>
 
 <p>下载稳定版本的storm，然后解压将其拷贝到/usr/lib/storm目录：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget https://github.com/downloads/nathanmarz/storm/storm-0.8.1.zip
-<span class="nv">$ </span>unzip storm-0.8.1.zip 
-<span class="nv">$ </span>mv storm-0.8.1 /usr/lib/storm
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>wget https://github.com/downloads/nathanmarz/storm/storm-0.8.1.zip
+<span class="gp">$ </span>unzip storm-0.8.1.zip 
+<span class="gp">$ </span>mv storm-0.8.1 /usr/lib/storm
+</code></pre>
+</div>
+
 <p>接下来，配置环境变量：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">export STORM_HOME=/usr/lib/storm
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export STORM_HOME=/usr/lib/storm
 export PATH=$PATH:$STORM_HOME/bin
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>建立storm存储目录：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir /tmp/storm
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir /tmp/storm
+</code></pre>
+</div>
+
 <p>修改配置文件/usr/lib/storm/conf/storm.yaml，修改为如下：</p>
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"> <span class="l-Scalar-Plain">storm.zookeeper.servers</span><span class="p-Indicator">:</span>
-     <span class="p-Indicator">-</span> <span class="s">&quot;cdh1&quot;</span>
-     <span class="p-Indicator">-</span> <span class="s">&quot;cdh2&quot;</span>
-     <span class="p-Indicator">-</span> <span class="s">&quot;cdh3&quot;</span>
- <span class="l-Scalar-Plain">ui.port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8081</span>
- <span class="l-Scalar-Plain">nimbus.host</span><span class="p-Indicator">:</span> <span class="s">&quot;cdh2&quot;</span>
- <span class="l-Scalar-Plain">storm.local.dir</span><span class="p-Indicator">:</span> <span class="s">&quot;/tmp/storm&quot;</span>
- <span class="l-Scalar-Plain">supervisor.slots.ports</span><span class="p-Indicator">:</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6700</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6701</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6702</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">6703</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="s">storm.zookeeper.servers</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="s2">"</span><span class="s">cdh1"</span>
+     <span class="pi">-</span> <span class="s2">"</span><span class="s">cdh2"</span>
+     <span class="pi">-</span> <span class="s2">"</span><span class="s">cdh3"</span>
+ <span class="s">ui.port</span><span class="pi">:</span> <span class="s">8081</span>
+ <span class="s">nimbus.host</span><span class="pi">:</span> <span class="s2">"</span><span class="s">cdh2"</span>
+ <span class="s">storm.local.dir</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/tmp/storm"</span>
+ <span class="s">supervisor.slots.ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">6700</span>
+    <span class="pi">-</span> <span class="s">6701</span>
+    <span class="pi">-</span> <span class="s">6702</span>
+    <span class="pi">-</span> <span class="s">6703</span>
+</code></pre>
+</div>
+
 <p>其中，配置参数说明：</p>
 
 <ul>
-<li><code class="prettyprint">storm.zookeeper.servers</code>：Storm集群使用的Zookeeper集群地址，如果Zookeeper集群使用的不是默认端口，那么还需要<code class="prettyprint">storm.zookeeper.port</code>选项</li>
-<li><code class="prettyprint">ui.port</code>：Storm UI的服务端口</li>
-<li><code class="prettyprint">storm.local.dir</code>：Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录</li>
-<li><code class="prettyprint">java.library.path</code>: Storm使用的本地库（ZMQ和JZMQ）加载路径，默认为&quot;/usr/local/lib:/opt/local/lib:/usr/lib&quot;，一般来说ZMQ和JZMQ默认安装在<code class="prettyprint">/usr/local/lib</code>下，因此不需要配置即可。</li>
-<li><code class="prettyprint">nimbus.host</code>: Storm集群Nimbus机器地址</li>
-<li><code class="prettyprint">supervisor.slots.ports</code>: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口</li>
+  <li><code class="highlighter-rouge">storm.zookeeper.servers</code>：Storm集群使用的Zookeeper集群地址，如果Zookeeper集群使用的不是默认端口，那么还需要<code class="highlighter-rouge">storm.zookeeper.port</code>选项</li>
+  <li><code class="highlighter-rouge">ui.port</code>：Storm UI的服务端口</li>
+  <li><code class="highlighter-rouge">storm.local.dir</code>：Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录</li>
+  <li><code class="highlighter-rouge">java.library.path</code>: Storm使用的本地库（ZMQ和JZMQ）加载路径，默认为”/usr/local/lib:/opt/local/lib:/usr/lib”，一般来说ZMQ和JZMQ默认安装在<code class="highlighter-rouge">/usr/local/lib</code>下，因此不需要配置即可。</li>
+  <li><code class="highlighter-rouge">nimbus.host</code>: Storm集群Nimbus机器地址</li>
+  <li><code class="highlighter-rouge">supervisor.slots.ports</code>: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口</li>
 </ul>
 
 <p>更多配置参数，请参考<a href="http://www.alidata.org/archives/2118">Storm配置项详解</a>。</p>
@@ -206,14 +224,23 @@ export PATH=$PATH:$STORM_HOME/bin
 <p>最后，启动Storm各个后台进程：</p>
 
 <p>主控节点上启动nimbus：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>storm nimbus &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>storm nimbus &gt;/dev/null 2&gt;&amp;1 &amp;
+</code></pre>
+</div>
+
 <p>在Storm各个工作节点上运行：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>storm supervisor &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>storm supervisor &gt;/dev/null 2&gt;&amp;1 &amp;
+</code></pre>
+</div>
+
 <p>在Storm主控节点上启动ui：</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>storm ui &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>storm ui &gt;/dev/null 2&gt;&amp;1 &amp;
+</code></pre>
+</div>
+
 <p>然后，你可以访问<a href="http://cdh2:8081/">http://cdh2:8081/</a>查看集群的worker资源使用情况、Topologies的运行状态等信息。</p>
 
                     <br/>
@@ -261,7 +288,8 @@ export PATH=$PATH:$STORM_HOME/bin
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2015 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
                     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
             
