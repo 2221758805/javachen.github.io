@@ -65,39 +65,38 @@
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         var title = $(entry.getElementsByTagName('title')[0]).text();
-        var link = $(entry.getElementsByTagName('link')[0]).attr('href');
-        //var title_en = rl.exec(link)[1].replace(/-/g, ' ');
-        var content = $(entry.getElementsByTagName('content')[0]).text();
-        //if (rq.test(title) || rq.test(title_en) || rq.test(content)) {
-        if (rq.test(title) || rq.test(content)) {
-          var updated = formatDate(xmlDateToJavascriptDate($(entry.getElementsByTagName('updated')[0]).text()));
-          matches.push({'title': title, 'link': link, 'date': updated, 'content': content});
+        var link = $(entry.getElementsByTagName('link')[0]).text();
+        var description = $(entry.getElementsByTagName('description')[0]).text();
+        if (rq.test(title) || rq.test(description)) {
+          var pubDate = formatDate(xmlDateToJavascriptDate($(entry.getElementsByTagName('pubDate')[0]).text()));
+          matches.push({'title': title, 'link': link, 'pubDate': pubDate, 'description': description});
         }
       }
       var html = '<h3>Search Result:</h3>';
       for (var i = 0; i < matches.length; i++) {
         var match = matches[i];
-        html += ' <div id="home-post"><h4><a href="' + match.link + '">' + htmlEscape(match.title) + '</a>&nbsp;<small>'+match.date+'</small></h4>';
-        html += '<div id="home-post-text">' + htmlEscape(match.content) + '</div></div>';
+        html += ' <div id="home-post"><h4><a href="' + match.link + '">' + htmlEscape(match.title) + '</a>&nbsp;<small>'+match.pubDate+'</small></h4>';
+        //html += '<div id="home-post-text">' + match.description + '</div>';
+        html+="</div>"
       }
       $('#wrap .container').html(html);
       $('#wrap .container').show();
-      }
-      $('#search-form').submit(function() {
-        var query = $('#query').val();
-        //$('#query');.blur().attr('disabled', true);
-        $('#wrap .container').hide();
-        if (entries == null) {
-          $.ajax({url: '/rss.xml?r=' + (Math.random() * 99999999999), dataType: 'xml', success: function(data) {
-            entries = data.getElementsByTagName('entry');
-            findEntries(query);
-          }});
-        } else {
+    }
+
+    $('#search-form').submit(function() {
+      var query = $('#query').val();
+      $('#wrap .container').hide();
+      if (!entries) {
+        $.ajax({url: '/rss.xml?r=' + (Math.random() * 99999999999), dataType: 'xml', success: function(data) {
+          entries = data.getElementsByTagName('item');
           findEntries(query);
-        }
-        $('#query').blur().attr('disabled', false);
-        return false;
-      });
+        }});
+      } else {
+        findEntries(query);
+      }
+      $('#query').blur().attr('disabled', false);
+      return false;
+    });
 
     });
 
