@@ -82,6 +82,20 @@
            <div class="col-md-9">
   
     <div id="home-post">
+      <h4><a href="/2013/10/28/compile-hbase-source-code-and-apply-patches.html"><strong>编译CDH HBase源代码并打补丁</strong></a>  <small>2013.10.28</small></h4>
+      <div id="home-post-text">
+         写了一篇博客记录编译hbase源代码并打补丁的过程，如有不正确的，欢迎指出！
+      </div>
+    </div>
+   
+    <div id="home-post">
+      <h4><a href="/2013/10/17/run-mapreduce-with-client-user-in-hive-server2.html"><strong>HiveServer2中使用jdbc客户端用户运行mapreduce</strong></a>  <small>2013.10.17</small></h4>
+      <div id="home-post-text">
+         最近做了个web系统访问hive数据库，类似于官方自带的hwi，但是和他们的实现不一样，查询Hive语句走的不是cli而是通过jdbc连接hive-server2。为了实现mapreduce任务中资源按用户调度，需要hive查询自动绑定当前用户、将该用户传到yarn服务端并使mapreduce程序以该用户运行。本文主要是记录实现该功能过程中遇到的一些问题以及解决方法,如果你有更好的方法和建议，欢迎留言发表您的看法！
+      </div>
+    </div>
+   
+    <div id="home-post">
       <h4><a href="/2013/10/17/cartesian-product-in-hive-inner-join.html"><strong>Hive连接产生笛卡尔集</strong></a>  <small>2013.10.17</small></h4>
       <div id="home-post-text">
          工作中遇到一个一场，是关于hive连接产生笛卡尔集
@@ -172,20 +186,6 @@
       </div>
     </div>
    
-    <div id="home-post">
-      <h4><a href="/2013/06/09/note-about-java-singleton-model.html"><strong>Java笔记：单例模式</strong></a>  <small>2013.06.09</small></h4>
-      <div id="home-post-text">
-         什么是单例模式呢？就是在整个系统中，只有一个唯一存在的实例。单例模式的实现方式有五种方法：懒汉，恶汉，双重校验锁，枚举和静态内部类。
-      </div>
-    </div>
-   
-    <div id="home-post">
-      <h4><a href="/2013/06/09/note-about-java-io.html"><strong>Java笔记：IO</strong></a>  <small>2013.06.09</small></h4>
-      <div id="home-post-text">
-         Java库的IO分为输入/输出两部分。
-      </div>
-    </div>
-   
     <!-- Pagination links -->
     <div class="pagination pull-right">
       <li><a href="/">Home</a></li>
@@ -229,7 +229,7 @@
     <li><a href="/categories.html#impala">impala</a>  (6)</li>
     
     
-    <li><a href="/categories.html#java">java</a>  (29)</li>
+    <li><a href="/categories.html#java">java</a>  (31)</li>
     
     
     <li><a href="/categories.html#mahout">mahout</a>  (3)</li>
@@ -262,6 +262,10 @@
   <h3>Recently Posts</h3>
   <ul>
     
+    <li><a href="/2016/02/22/devtools-in-spring-boot.html" title="DevTools in Spring Boot">DevTools in Spring Boot</a></li>
+    
+    <li><a href="/2016/02/19/spring-boot-auto-configuration.html" title="Spring Boot自动配置">Spring Boot自动配置</a></li>
+    
     <li><a href="/2015/07/09/bash-internal-variables.html" title="Bash内部变量">Bash内部变量</a></li>
     
     <li><a href="/2015/07/08/bash-if-else.html" title="Bash条件判断">Bash条件判断</a></li>
@@ -281,10 +285,6 @@
     <li><a href="/2015/06/19/scala-class.html" title="Scala中的类">Scala中的类</a></li>
     
     <li><a href="/2015/06/18/simplify-code-using-scala-higher-order-function.html" title="使用Scala高价函数简化代码">使用Scala高价函数简化代码</a></li>
-    
-    <li><a href="/2015/06/18/fix-anchor-offset-when-using-bootstrap-navbar-fixed-top.html" title="解决固定导航时锚点偏移问题">解决固定导航时锚点偏移问题</a></li>
-    
-    <li><a href="/2015/06/15/note-about-recommendation-system.html" title="推荐系统笔记">推荐系统笔记</a></li>
     
   </ul>
 </section>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Spring Boot自动配置 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2016/02/19/spring-boot-auto-configuration.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/07/09/bash-internal-variables.html" title="Bash内部变量"><i class="fa fa-angle-double-left"></i>&nbsp;Bash内部变量</a></li>
+                
+                
+                <li class="next"><a href="/2016/02/22/devtools-in-spring-boot.html" title="DevTools in Spring Boot">DevTools in Spring Boot&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Spring Boot自动配置  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2016.02.19 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>在上篇文章<a href="/2015/03/13/how-to-run-spring-boot-application.html">如何运行Spring Boot应用</a>中，已经熟悉了如何通过maven或者gradle创建一个Spring Boot应用，这篇文章主要学习Spring Boot的自动配置，包括注解的使用以及一些配置约束等等。</p>
+
+<p>关于Spring Boot的特性介绍，可以参考<a href="/2015/03/13/some-spring-boot-features.html">Spring Boot特性</a>。</p>
+
+<h1 id="section">主应用类</h1>
+
+<p>在Spring Boot应用中，我们通常将主应用类放置于应用的根包中，例如，<code class="highlighter-rouge">com.javachen.example</code>。主应用类有main方法，并且使用了<code class="highlighter-rouge">@EnableAutoConfiguration</code>注解，并暗地里定义了一个基础的包路径，Spring Boot会在该包路径来搜索类。例如，如果你正在编写一个JPA应用，被<code class="highlighter-rouge">@EnableAutoConfiguration</code>注解的类所在包将被用来搜索带有<code class="highlighter-rouge">@Entity</code>注解的实体类。</p>
+
+<p>在主应用类上指定<code class="highlighter-rouge">@ComponentScan</code>，同样也隐式的指定了扫描时basePackage的路径。</p>
+
+<p><a href="/2015/03/13/how-to-run-spring-boot-application.html">如何运行Spring Boot应用</a>中Application.java类声明了main方法，还使用了<code class="highlighter-rouge">@EnableAutoConfiguration</code>注解。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="nd">@EnableAutoConfiguration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+  <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>说明：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">@RestController</code>和<code class="highlighter-rouge">@RequestMapping</code>注解是Spring MVC注解，它们不是Spring Boot的特定部分，具体查看Spring参考文档的MVC章节。</li>
+  <li><code class="highlighter-rouge">@EnableAutoConfiguration</code>这个注解告诉Spring Boot根据添加的jar依赖猜测你想如何配置Spring。由于spring-boot-starter-web添加了Tomcat和Spring MVC，所以auto-configuration将假定你正在开发一个web应用并相应地对Spring进行设置。</li>
+</ul>
+
+<h1 id="section-1">配置类</h1>
+
+<p>在该类上也可以使用<code class="highlighter-rouge">@Configuration</code>注解，用来对spring boot进行配置，当然，你也可以使用一个XML源来调用<code class="highlighter-rouge">SpringApplication.run()</code>进行配置。</p>
+
+<p>标有<code class="highlighter-rouge">@Configuration</code>注解的类为配置类。你不需要将所有的<code class="highlighter-rouge">@Configuration</code>放进一个单独的类。<code class="highlighter-rouge">@Import</code>注解可以用来导入其他配置类。另外，你也可以使用<code class="highlighter-rouge">@ComponentScan</code>注解自动收集所有的Spring组件，包括<code class="highlighter-rouge">@Configuration</code>类。</p>
+
+<p>如果你需要使用基于XML的配置，你可以在注有<code class="highlighter-rouge">@Configuration</code>的类上使用附加的<code class="highlighter-rouge">@ImportResource</code>注解加载XML配置文件。</p>
+
+<p>你可以通过将<code class="highlighter-rouge">@EnableAutoConfiguration</code>或<code class="highlighter-rouge">@SpringBootApplication</code>注解添加到一个<code class="highlighter-rouge">@Configuration</code>类上来选择自动配置。自动配置的意思是Spring Boot尝试根据你添加的jar依赖自动配置你的Spring应用。</p>
+
+<p>如果需要找出当前应用了哪些自动配置及应用的原因，你可以使用<code class="highlighter-rouge">--debug</code>开关启动应用，这将会记录一个自动配置的报告并输出到控制台。</p>
+
+<p>如果发现应用了你不想要的特定自动配置类，你可以使用<code class="highlighter-rouge">@EnableAutoConfiguration</code>注解的排除属性来禁用它们。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.jdbc.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.*</span><span class="o">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@EnableAutoConfiguration</span><span class="o">(</span><span class="n">exclude</span><span class="o">={</span><span class="n">DataSourceAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyConfiguration</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>总结，上面提到了几个注解，用途分别如下：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">@Configuration</code>。标注一个类为配置类。</li>
+  <li><code class="highlighter-rouge">@EnableAutoConfiguration</code>。开启自动配置。</li>
+  <li><code class="highlighter-rouge">@SpringBootApplication</code>。等价于以默认属性使用<code class="highlighter-rouge">@Configuration</code>，<code class="highlighter-rouge">@EnableAutoConfiguration</code>和<code class="highlighter-rouge">@ComponentScan</code>。</li>
+</ul>
+
+<p>如果启动类在根包下面，则你可以在该类上添加<code class="highlighter-rouge">@ComponentScan</code>注解而不需要添加任何参数，Spring Boot会在根包下面搜索注有<code class="highlighter-rouge">@Component</code>, <code class="highlighter-rouge">@Service</code>, <code class="highlighter-rouge">@Repository</code>, <code class="highlighter-rouge">@Controller</code>注解的所有类，并将他们注册为Spring Beans，否则，你需要在<code class="highlighter-rouge">@ComponentScan</code>注解上定义basePackages或者其他属性。</p>
+
+<p>这样Application.java可以定义为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.EnableAutoConfiguration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span>
+<span class="nd">@EnableAutoConfiguration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+  <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>或者：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+  <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h1 id="section-2">命令行参数</h1>
+
+<p>启动类可以实现CommandLineRunner接口，通过run方法处理main方法传入的参数，并且你能够使用<code class="highlighter-rouge">@Value</code>注解将命令行参数传入的值或者properties资源文件中定义的值注入到程序中。例如，创建一个HelloWorldService类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">service</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorldService</span> <span class="o">{</span>
+  <span class="nd">@Value</span><span class="o">(</span><span class="s">"${name:World}"</span><span class="o">)</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="n">String</span> <span class="n">getHelloMessage</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>并添加资源文件application.properties：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">name</span><span class="p">:</span> <span class="s">JavaChen</span>
+</code></pre>
+</div>
+
+<p>修改Application类为如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.javachen.example.service.HelloWorldService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.CommandLineRunner</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="kd">implements</span> <span class="n">CommandLineRunner</span> <span class="o">{</span>
+  <span class="nd">@Autowired</span>
+  <span class="kd">private</span> <span class="n">HelloWorldService</span> <span class="n">helloWorldService</span><span class="o">;</span>
+
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+  <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">helloWorldService</span><span class="o">.</span><span class="na">getHelloMessage</span><span class="o">());</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span><span class="s">"exitcode"</span><span class="o">))</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="n">ExitException</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>运行该类的main方法，则默认会输出：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hello JavaChen
+</code></pre>
+</div>
+
+<p>再次运行main方法，并传入参数<code class="highlighter-rouge">--name=whatever</code>，则会输出：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hello whatever
+</code></pre>
+</div>
+
+<p>如果一些CommandLineRunner beans被定义必须以特定的次序调用，你可以额外实现<code class="highlighter-rouge">org.springframework.core.Ordered</code>接口或使用<code class="highlighter-rouge">@Order</code>注解。</p>
+
+<p>利用command-line runner的这个特性，再配合依赖注入，可以在应用程序启动时后首先引入一些依赖bean，例如data source、rpc服务或者其他模块等等，这些对象的初始化可以放在run方法中。不过，需要注意的是，在run方法中执行初始化动作的时候一旦遇到任何异常，都会使得应用程序停止运行，因此最好利用try/catch语句处理可能遇到的异常。</p>
+
+<p>每个SpringApplication在退出时为了确保ApplicationContext被优雅的关闭，将会注册一个JVM的shutdown钩子。所有标准的Spring生命周期回调（比如，DisposableBean接口或@PreDestroy注解）都能使用。</p>
+
+<p>此外，如果beans想在应用结束时返回一个特定的退出码，可以实现<code class="highlighter-rouge">org.springframework.boot.ExitCodeGenerator</code>接口，例如上面例子中的ExitException异常类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.ExitCodeGenerator</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExitException</span> <span class="kd">extends</span> <span class="n">RuntimeException</span> <span class="kd">implements</span> <span class="n">ExitCodeGenerator</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="n">getExitCode</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="mi">10</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h1 id="section-3">自动配置</h1>
+
+<p>在启动类上使用<code class="highlighter-rouge">@EnableAutoConfiguration</code>注解，就会开启自动配置，简单点说就是它会根据定义在classpath下的类，自动的给你生成一些Bean，并加载到Spring的Context中。</p>
+
+<p>它的神秘之处，不在于它能做什么，而在于它会生成什么样的Bean对于开发人员是不可预知（或者说不容易预知）。</p>
+
+<p>例如，上面例子中引入了对spring-boot-starter-web的依赖，则会开启Spring MVC自动配置，观察启动日志，可以发现应用启动了tomcat和spring mvc。</p>
+
+<p>Spring Boot为Spring MVC提供适用于多数应用的自动配置功能。在Spring默认基础上，自动配置添加了以下特性：</p>
+
+<ul>
+  <li>引入ContentNegotiatingViewResolver和BeanNameViewResolver beans。</li>
+  <li>对静态资源的支持，包括对WebJars的支持。</li>
+  <li>自动注册Converter，GenericConverter，Formatter beans。</li>
+  <li>对HttpMessageConverters的支持。</li>
+  <li>自动注册MessageCodeResolver。</li>
+  <li>对静态index.html的支持。</li>
+  <li>对自定义Favicon的支持。</li>
+</ul>
+
+<p>如果想全面控制Spring MVC，你可以添加自己的@Configuration，并使用<code class="highlighter-rouge">@EnableWebMvc</code>对其注解。如果想保留Spring Boot MVC的特性，并只是添加其他的<a href="http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/htmlsingle#mvc">MVC配置</a>(拦截器，formatters，视图控制器等)，你可以添加自己的WebMvcConfigurerAdapter类型的<code class="highlighter-rouge">@Bean</code>（不使用<code class="highlighter-rouge">@EnableWebMvc</code>注解）。</p>
+
+<p>再举个例子：要开发一个基于Spring JPA的应用，会涉及到下面三个Bean的配置，DataSource，EntityManagerFactory，PlatformTransactionManager。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@EnableJpaRepositories</span>
+<span class="nd">@EnableTransactionManagement</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+  <span class="nd">@Bean</span>
+  <span class="kd">public</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">()</span> <span class="o">{</span>
+      <span class="o">...</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Bean</span>
+  <span class="kd">public</span> <span class="n">EntityManagerFactory</span> <span class="n">entityManagerFactory</span><span class="o">()</span> <span class="o">{</span>
+      <span class="o">..</span>
+      <span class="n">factory</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">());</span>
+      <span class="k">return</span> <span class="n">factory</span><span class="o">.</span><span class="na">getObject</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Bean</span>
+  <span class="kd">public</span> <span class="n">PlatformTransactionManager</span> <span class="n">transactionManager</span><span class="o">()</span> <span class="o">{</span>
+      <span class="n">JpaTransactionManager</span> <span class="n">txManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JpaTransactionManager</span><span class="o">();</span>
+      <span class="n">txManager</span><span class="o">.</span><span class="na">setEntityManagerFactory</span><span class="o">(</span><span class="n">entityManagerFactory</span><span class="o">());</span>
+      <span class="k">return</span> <span class="n">txManager</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>说明：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">@EnableJpaRepositories</code>会查找满足作为Repository条件（继承父类或者使用注解）的类。</li>
+  <li><code class="highlighter-rouge">@EnableTransactionManagement</code>的作用：Enables Spring’s annotation-driven transaction management capability, similar to the support found in Spring’s &lt;tx:*&gt; XML namespace。</li>
+</ul>
+
+<p>但是，如果你使用了<code class="highlighter-rouge">@EnableAutoConfiguration</code>，那么上面三个Bean，你都不需要配置。在classpath下面只引入了MySQL的驱动和SpringJpa。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>compile 'mysql:mysql-connector-java:5.1.18'
+compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+</code></pre>
+</div>
+
+<p>在生产环境中，数据库连接可以使用DataSource池进行自动配置。下面是选取一个特定实现的算法：</p>
+
+<ul>
+  <li>由于Tomcat数据源连接池的性能和并发，在tomcat可用时，我们总是优先使用它。</li>
+  <li>如果HikariCP可用，我们将使用它。</li>
+  <li>如果Commons DBCP可用，我们将使用它，但在生产环境不推荐使用它。</li>
+  <li>最后，如果Commons DBCP2可用，我们将使用它。</li>
+</ul>
+
+<p>如果你使用spring-boot-starter-jdbc或spring-boot-starter-data-jpa，你将会自动获取对tomcat-jdbc的依赖。</p>
+
+<p>DataSource配置通过外部配置文件的<code class="highlighter-rouge">spring.datasource.*</code>属性控制。示例中，你可能会在<code class="highlighter-rouge">application.properties</code>中声明下面的片段：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>spring.datasource.url=jdbc:mysql://localhost/test
+spring.datasource.username=dbuser
+spring.datasource.password=dbpass
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+</code></pre>
+</div>
+
+<p>其他可选的配置可以查看<a href="http://github.com/spring-projects/spring-boot/tree/master/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/jdbc/DataSourceProperties.java">DataSourceProperties</a>。同时注意你可以通过<code class="highlighter-rouge">spring.datasource.*</code>配置任何DataSource实现相关的特定属性：具体参考你使用的连接池实现的文档。</p>
+
+<blockquote>
+  <p>既然Spring Boot能够从大多数数据库的url上推断出driver-class-name，那么你就不需要再指定它了。对于一个将要创建的DataSource连接池，我们需要能够验证Driver是否可用，所以我们会在做任何事情之前检查它。比如，如果你设置<code class="highlighter-rouge">spring.datasource.driverClassName=com.mysql.jdbc.Driver</code>，然后这个类就会被加载。</p>
+</blockquote>
+
+<p>Spring的JdbcTemplate和NamedParameterJdbcTemplate类是被自动配置的，你可以在自己的beans中通过<code class="highlighter-rouge">@Autowire</code>直接注入它们。</p>
+
+<p>如果数据源是jndi，则定义：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>spring.datasource.jndi-name=java:jboss/datasources/customers
+</code></pre>
+</div>
+
+<h1 id="xml">XML配置</h1>
+
+<p>如果不想使用注解进行配置，则可以使用xml配置文件，修改main方法如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="s">"classpath:/META-INF/application-context.xml"</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>META-INF/application-context.xml文件如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+       <span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span> <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+        <span class="err">http://www.springframework.org/schema/context</span> <span class="err">http://www.springframework.org/schema/context/spring-context.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;context:annotation-config/&gt;</span>
+    <span class="nt">&lt;context:property-placeholder/&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"helloService"</span> <span class="na">class=</span><span class="s">"com.javachen.example.service.HelloWorldService"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"application"</span> <span class="na">class=</span><span class="s">"com.javachen.example.Application"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2016/02/19/spring-boot-auto-configuration.html">http://blog.javachen.com/2016/02/19/spring-boot-auto-configuration.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2016/02/19/spring-boot-auto-configuration.html">Spring Boot自动配置</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#java">java</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#spring+boot">spring boot</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#spring">spring</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#java">java</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2016/02/19/spring-boot-auto-configuration.html" data-url="http://blog.javachen.com/2016/02/19/spring-boot-auto-configuration.html" data-title="Spring Boot自动配置"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2016/02/19/spring-boot-auto-configuration.html'
+      });
+      </script>
+  </body>
+</html>

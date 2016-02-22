@@ -179,6 +179,8 @@
 </code></pre>
 </div>
 
+<p>删除掉创建的App类和单元测试。</p>
+
 <p>然后修改 pom.xml 为如下：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
@@ -322,6 +324,8 @@
 </code></pre>
 </div>
 
+<h1 id="spring-boot-cli-">Spring Boot CLI 使用方法</h1>
+
 <h2 id="spring-boot-cli">安装 Spring Boot CLI</h2>
 
 <p>你可以手动安装：[https://github.com/spring-projects/spring-boot/releases]</p>
@@ -330,7 +334,7 @@
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gvm install springboot
 <span class="gp">$ </span>spring --version
-Spring Boot v1.2.2.RELEASE
+Spring Boot v1.3.2.RELEASE
 </code></pre>
 </div>
 
@@ -398,49 +402,6 @@ Available commands are:
 </code></pre>
 </div>
 
-<p>也可以创建一个java文件类测试，Maven默认会编译src/main/java下的源码，所以你需要创建那样的文件结构，然后添加一个名为src/main/java/Example.java的文件：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.boot.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.stereotype.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.*</span><span class="o">;</span>
-
-<span class="nd">@RestController</span>
-<span class="nd">@EnableAutoConfiguration</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
-
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-    <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Example</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>由于使用了spring-boot-starter-parent POM，这样我们就有了一个非常有用的run目标，我们可以用它启动程序。在项目根目录下输入<code class="highlighter-rouge">mvn spring-boot:run</code>来启动应用：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn spring-boot:run
-
-  .   ____          _            __ _ _
- /<span class="se">\\</span> / ___<span class="s1">'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '</span>_ | <span class="s1">'_| | '</span>_ <span class="se">\/</span> _ | <span class="se">\ \ \ \</span>
- <span class="se">\\</span>/  ___<span class="o">)</span>| |_<span class="o">)</span>| | | | | <span class="o">||</span> <span class="o">(</span>_| |  <span class="o">)</span> <span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
-  <span class="s1">'  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::  (v1.2.2.BUILD-SNAPSHOT)
-....... . . .
-....... . . . (log output here)
-....... . . .
-........ Started Example in 2.222 seconds (JVM running for 6.514)
-</span></code></pre>
-</div>
-
-<h1 id="spring-boot-cli-">Spring Boot CLI 使用方法</h1>
-
 <h1 id="spring-boot-">部署 Spring Boot 应用</h1>
 
 <h2 id="maven-">Maven 项目</h2>
@@ -450,6 +411,40 @@ Available commands are:
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn dependency:tree
 </code></pre>
 </div>
+
+<p>在src/main/java/com/javachen/example下面添加Example类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javachen</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.EnableAutoConfiguration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@EnableAutoConfiguration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+  <span class="n">String</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"Hello World!"</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>说明：</p>
+
+<ul>
+  <li>@RestController和@RequestMapping注解是Spring MVC注解（它们不是Spring Boot的特定部分）。具体查看Spring参考文档的<a href="http://docs.spring.io/spring/docs/4.1.5.RELEASE/spring-framework-reference/htmlsingle#mvc">MVC章节</a>。</li>
+  <li>@EnableAutoConfiguration。这个注解告诉Spring Boot根据添加的jar依赖猜测你想如何配置Spring。由于spring-boot-starter-web添加了Tomcat和Spring MVC，所以auto-configuration将假定你正在开发一个web应用并相应地对Spring进行设置。</li>
+  <li>main方法通过调用run，将业务委托给了Spring Boot的SpringApplication类。SpringApplication将引导我们的应用，启动Spring，相应地启动被自动配置的Tomcat web服务器。</li>
+</ul>
 
 <p>如果你的 pom.xml 使用了 spring-boot-starter-parent，则我们可以运行 <code class="highlighter-rouge">mvn spring-boot:run</code> 命令启动应用：</p>
 
@@ -463,29 +458,94 @@ Available commands are:
 </code></pre>
 </div>
 
+<p>点击ctrl-c，可以关闭应用程序。</p>
+
+<p>添加<code class="highlighter-rouge">-Ddebug</code>参数可以查看加载了哪些配置类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn spring-boot:run -Ddebug
+…
+<span class="o">=========================</span>
+AUTO-CONFIGURATION REPORT
+<span class="o">=========================</span>
+
+
+Positive matches:
+-----------------
+
+   DispatcherServletAutoConfiguration
+      - @ConditionalOnClass classes found: org.springframework.web.servlet.DispatcherServlet <span class="o">(</span>OnClassCondition<span class="o">)</span>
+      - found web application StandardServletEnvironment <span class="o">(</span>OnWebApplicationCondition<span class="o">)</span>
+
+...
+</code></pre>
+</div>
+
+<p>加载了太多的配置类，会影响程序性能，故可以自定义导入需要的配置类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@Import</span><span class="o">({</span>
+        <span class="n">DispatcherServletAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">EmbeddedServletContainerAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">ErrorMvcAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">HttpEncodingAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">HttpMessageConvertersAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">JacksonAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">JmxAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">MultipartAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">ServerPropertiesAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">PropertyPlaceholderAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">ThymeleafAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">WebMvcAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">WebSocketAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+<span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleWebUiApplication</span> <span class="o">{</span>
+</code></pre>
+</div>
+
 <p>如果你的 pom.xml 中添加了 <code class="highlighter-rouge">spring-boot-maven-plugin</code> 插件，你可以运行 <code class="highlighter-rouge">mvn package</code> 命令在 target 目录生成一个可执行的 jar 文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mvn package
-
+<div class="highlighter-rouge"><pre class="highlight"><code>➜  spring-boot-example  mvn package
+Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding<span class="o">=</span>UTF-8
 <span class="o">[</span>INFO] Scanning <span class="k">for </span>projects...
 <span class="o">[</span>INFO]
 <span class="o">[</span>INFO] ------------------------------------------------------------------------
-<span class="o">[</span>INFO] Building myproject 0.0.1-SNAPSHOT
+<span class="o">[</span>INFO] Building spring-boot-example 0.0.1-SNAPSHOT
 <span class="o">[</span>INFO] ------------------------------------------------------------------------
-<span class="o">[</span>INFO] .... ..
-<span class="o">[</span>INFO] --- maven-jar-plugin:2.4:jar <span class="o">(</span>default-jar<span class="o">)</span> @ myproject ---
-<span class="o">[</span>INFO] Building jar: /Users/developer/example/spring-boot-example/target/myproject-0.0.1-SNAPSHOT.jar
 <span class="o">[</span>INFO]
-<span class="o">[</span>INFO] --- spring-boot-maven-plugin:1.2.2.RELEASE:repackage <span class="o">(</span>default<span class="o">)</span> @ myproject ---
+<span class="o">[</span>INFO] --- maven-resources-plugin:2.6:resources <span class="o">(</span>default-resources<span class="o">)</span> @ spring-boot-example ---
+<span class="o">[</span>INFO] Using <span class="s1">'UTF-8'</span> encoding to copy filtered resources.
+<span class="o">[</span>INFO] skip non existing resourceDirectory /Users/yuke/workspace/idea/spring-boot-example/src/main/resources
+<span class="o">[</span>INFO] skip non existing resourceDirectory /Users/yuke/workspace/idea/spring-boot-example/src/main/resources
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- maven-compiler-plugin:3.1:compile <span class="o">(</span>default-compile<span class="o">)</span> @ spring-boot-example ---
+<span class="o">[</span>INFO] Nothing to compile - all classes are up to date
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- maven-resources-plugin:2.6:testResources <span class="o">(</span>default-testResources<span class="o">)</span> @ spring-boot-example ---
+<span class="o">[</span>INFO] Using <span class="s1">'UTF-8'</span> encoding to copy filtered resources.
+<span class="o">[</span>INFO] skip non existing resourceDirectory /Users/yuke/workspace/idea/spring-boot-example/src/test/resources
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- maven-compiler-plugin:3.1:testCompile <span class="o">(</span>default-testCompile<span class="o">)</span> @ spring-boot-example ---
+<span class="o">[</span>INFO] Nothing to compile - all classes are up to date
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- maven-surefire-plugin:2.18.1:test <span class="o">(</span>default-test<span class="o">)</span> @ spring-boot-example ---
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- maven-jar-plugin:2.5:jar <span class="o">(</span>default-jar<span class="o">)</span> @ spring-boot-example ---
+<span class="o">[</span>INFO] Building jar: /Users/yuke/workspace/idea/spring-boot-example/target/spring-boot-example-0.0.1-SNAPSHOT.jar
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] --- spring-boot-maven-plugin:1.3.2.RELEASE:repackage <span class="o">(</span>default<span class="o">)</span> @ spring-boot-example ---
 <span class="o">[</span>INFO] ------------------------------------------------------------------------
 <span class="o">[</span>INFO] BUILD SUCCESS
+<span class="o">[</span>INFO] ------------------------------------------------------------------------
+<span class="o">[</span>INFO] Total <span class="nb">time</span>: 4.379s
+<span class="o">[</span>INFO] Finished at: Fri Feb 19 11:35:04 CST 2016
+<span class="o">[</span>INFO] Final Memory: 15M/226M
 <span class="o">[</span>INFO] ------------------------------------------------------------------------
 </code></pre>
 </div>
 
 <p>然后，你可以运行项目命令执行生成的 jar 文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar target/myproject-0.0.1-SNAPSHOT.jar
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -jar target/spring-boot-example-0.0.1-SNAPSHOT.jar
 
   .   ____          _            __ _ _
  /<span class="se">\\</span> / ___<span class="s1">'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -493,7 +553,7 @@ Available commands are:
  <span class="se">\\</span>/  ___<span class="o">)</span>| |_<span class="o">)</span>| | | | | <span class="o">||</span> <span class="o">(</span>_| |  <span class="o">)</span> <span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
   <span class="s1">'  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::  (v1.2.2.RELEASE)
+ :: Spring Boot ::  (v1.3.2.RELEASE)
 ....... . . .
 ....... . . . (log output here)
 ....... . . .
@@ -513,29 +573,31 @@ Available commands are:
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">JAVA_OPTS</span><span class="o">=</span>-Xmx1024m -XX:MaxPermSize<span class="o">=</span>128M -Djava.security.egd<span class="o">=</span>file:/dev/./urandom
 
-<span class="gp">$ </span>./gradlew bootRun
+<span class="gp">$ </span>gradle bootRun
 </code></pre>
 </div>
 
+<p>然后，通过浏览器访问 http://localhost:8080/ 。</p>
+
 <p>也可以先 build 生成一个 jar 文件，然后执行该 jar 文件：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./gradlew build <span class="o">&amp;&amp;</span> java -jar build/libs/myproject-0.0.1-SNAPSHOT.jar
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gradle build <span class="o">&amp;&amp;</span> java -jar build/libs/spring-boot-example-0.0.1-SNAPSHOT.jar
 </code></pre>
 </div>
 
 <p>你也可以启动远程调试：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./gradlew build 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gradle build 
 
 <span class="gp">$ </span>java -Xdebug -Xrunjdwp:server<span class="o">=</span>y,transport<span class="o">=</span>dt_socket,address<span class="o">=</span>8000,suspend<span class="o">=</span>n <span class="se">\</span>
-       -jar build/libs/myproject-0.0.1-SNAPSHOT.jar
+       -jar build/libs/spring-boot-example-0.0.1-SNAPSHOT.jar
 </code></pre>
 </div>
 
 <h1 id="section-3">参考文章</h1>
 
 <ul>
-  <li><a href="http://docs.spring.io/spring-boot/docs/1.2.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
+  <li><a href="http://docs.spring.io/spring-boot/docs/1.3.2.RELEASE/reference/htmlsingle">Spring Boot Reference Guide</a></li>
 </ul>
 
                     <br/>

@@ -75,7 +75,7 @@
       var html = '<h3>Search Result:</h3>';
       for (var i = 0; i < matches.length; i++) {
         var match = matches[i];
-        html += ' <div id="home-post"><h4><a href="' + match.link + '">' + htmlEscape(match.title) + '</a>&nbsp;<small>'+match.pubDate+'</small></h4>';
+        html += ' <div id="home-post"><h4><a href="' + match.link + '" target="_blank">' + htmlEscape(match.title) + '</a>&nbsp;<small>'+match.pubDate+'</small></h4>';
         //html += '<div id="home-post-text">' + match.description + '</div>';
         html+="</div>"
       }
