@@ -569,6 +569,19 @@
 
 <p>默认情况下，Spring Boot从classpath下一个叫<code class="highlighter-rouge">/static</code>（<code class="highlighter-rouge">/public</code>，<code class="highlighter-rouge">/resources</code>或<code class="highlighter-rouge">/META-INF/resources</code>）的文件夹或从<code class="highlighter-rouge">ServletContext</code>根目录提供静态内容。这使用了Spring MVC的<code class="highlighter-rouge">ResourceHttpRequestHandler</code>，所以你可以通过添加自己的<code class="highlighter-rouge">WebMvcConfigurerAdapter</code>并覆写<code class="highlighter-rouge">addResourceHandlers</code>方法来改变这个行为（加载静态文件）。</p>
 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="kd">class</span> <span class="nc">ClientResourcesConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">addResourceHandlers</span><span class="o">(</span><span class="n">ResourceHandlerRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">registry</span><span class="o">.</span><span class="na">addResourceHandler</span><span class="o">(</span><span class="s">"/**"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">addResourceLocations</span><span class="o">(</span><span class="s">"/WEB-INF/resources/"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">setCachePeriod</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
 <p>在一个单独的web应用中，容器默认的servlet是开启的，如果Spring决定不处理某些请求，默认的servlet作为一个回退（降级）将从ServletContext根目录加载内容。大多数时候，这不会发生（除非你修改默认的MVC配置），因为Spring总能够通过<code class="highlighter-rouge">DispatcherServlet</code>处理请求。</p>
 
 <p>此外，上述标准的静态资源位置有个例外情况是Webjars内容。任何在<code class="highlighter-rouge">/webjars/**</code>路径下的资源都将从jar文件中提供，只要它们以Webjars的格式打包。</p>
@@ -579,8 +592,8 @@
 
 <p>为此，需要使用以下配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>spring.resources.chain.strategy.content.enabled=true
-spring.resources.chain.strategy.content.paths=/**
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">spring.resources.chain.strategy.content.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.resources.chain.strategy.content.paths</span><span class="p">=</span><span class="s">/**</span>
 </code></pre>
 </div>
 
@@ -590,11 +603,11 @@ spring.resources.chain.strategy.content.paths=/**
 
 <p>当资源文件自动加载的时候，javascript模块加载器会重命名静态文件。还有一种“固定”的策略来修改文件名称。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>spring.resources.chain.strategy.content.enabled=true
-spring.resources.chain.strategy.content.paths=/**
-spring.resources.chain.strategy.fixed.enabled=true
-spring.resources.chain.strategy.fixed.paths=/js/lib/
-spring.resources.chain.strategy.fixed.version=v12
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">spring.resources.chain.strategy.content.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.resources.chain.strategy.content.paths</span><span class="p">=</span><span class="s">/**</span>
+<span class="py">spring.resources.chain.strategy.fixed.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.resources.chain.strategy.fixed.paths</span><span class="p">=</span><span class="s">/js/lib/</span>
+<span class="py">spring.resources.chain.strategy.fixed.version</span><span class="p">=</span><span class="s">v12</span>
 </code></pre>
 </div>
 
@@ -644,6 +657,9 @@ spring.resources.chain.strategy.fixed.version=v12
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="n">customize</span><span class="o">(</span><span class="n">ConfigurableEmbeddedServletContainer</span> <span class="n">container</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">container</span><span class="o">.</span><span class="na">addErrorPages</span><span class="o">(</span><span class="k">new</span> <span class="n">ErrorPage</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">BAD_REQUEST</span><span class="o">,</span> <span class="s">"/400"</span><span class="o">));</span>
+        <span class="n">container</span><span class="o">.</span><span class="na">addErrorPages</span><span class="o">(</span><span class="k">new</span> <span class="n">ErrorPage</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">NOT_FOUND</span><span class="o">,</span> <span class="s">"/404"</span><span class="o">));</span>
+        <span class="n">container</span><span class="o">.</span><span class="na">addErrorPages</span><span class="o">(</span><span class="k">new</span> <span class="n">ErrorPage</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">INTERNAL_SERVER_ERROR</span><span class="o">,</span> <span class="s">"/500"</span><span class="o">));</span>
+    <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>

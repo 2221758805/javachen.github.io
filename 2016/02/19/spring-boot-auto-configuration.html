@@ -234,7 +234,7 @@
   <span class="nd">@Value</span><span class="o">(</span><span class="s">"${name:World}"</span><span class="o">)</span>
   <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
 
-  <span class="kd">public</span> <span class="n">String</span> <span class="n">getHelloMessage</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="n">getMessage</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
   <span class="o">}</span>
 <span class="o">}</span>
@@ -272,7 +272,7 @@
 
   <span class="nd">@Override</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">helloWorldService</span><span class="o">.</span><span class="na">getHelloMessage</span><span class="o">());</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">helloWorldService</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span><span class="s">"exitcode"</span><span class="o">))</span> <span class="o">{</span>
       <span class="k">throw</span> <span class="k">new</span> <span class="n">ExitException</span><span class="o">();</span>
     <span class="o">}</span>
