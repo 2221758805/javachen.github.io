@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>BroadLeaf项目集成SolrCloud - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2014/03/14/broadleaf-project-with-solrcloud.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2014/03/13/improve-the-search-function-in-broadleaf-project.html" title="BroadLeaf项目搜索功能改进"><i class="fa fa-angle-double-left"></i>&nbsp;BroadLeaf项目搜索功能改进</a></li>
+                
+                
+                <li class="next"><a href="/2014/03/14/split-chinese-in-solr.html" title="在Solr中使用中文分词">在Solr中使用中文分词&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> BroadLeaf项目集成SolrCloud  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2014.03.14 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>《<a href="/2014/03/13/improve-the-search-function-in-broadleaf-project.html">BroadLeaf项目搜索功能改进</a>》一文中介绍了 BroadLeaf 项目中如何改进搜索引擎这一块的代码，其中使用的是单节点的 solr 服务器，这篇文章主要介绍 BroadLeaf 项目如何集成 SolrCloud 集群。</p>
+
+<h1 id="solrcloud">1、SolrCloud环境搭建</h1>
+
+<p>参考 《<a href="/2014/03/10/how-to-install-solrcloud.html">Apache SolrCloud安装</a>》，搭建Solr集群环境，将 Demosite 所用的 Solr 配置文件 solrconfig.xml 和 schema.xml 上传到 zookeeper 集群中，保证成功启动 Solr 集群。</p>
+
+<h1 id="searcheservice">2、扩展SearcheService类</h1>
+
+<p>扩展SearchService类的步骤与单节点集成一致，此处不再叙述。</p>
+
+<h1 id="solr">3、修改Solr相关配置文件</h1>
+
+<p>a) 删除site模块中的site/src/main/webapp/WEB-INF/applicationContext.xml中的以下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"solrEmbedded"</span> <span class="na">class=</span><span class="s">"java.lang.String"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"solrhome"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"blSearchService"</span> <span class="na">class=</span><span class="s">"org.broadleafcommerce.core.search.service.solr.SolrSearchServiceImpl"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"solrServer"</span> <span class="na">ref=</span><span class="s">"${solr.source}"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"reindexServer"</span> <span class="na">ref=</span><span class="s">"${solr.source.reindex}"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre>
+</div>
+
+<p>b)删除site模块的site/src/main/resources/runtime-properties/common.properties中以下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">solr.source</span><span class="p">=</span><span class="s">solrEmbedded</span>
+<span class="py">solr.source.reindex</span><span class="p">=</span><span class="s">solrEmbedded</span>
+</code></pre>
+</div>
+
+<p>c)在core模块中core/src/main/resources/applicationContext.xml添加如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"solrServer"</span> <span class="na">class=</span><span class="s">"org.apache.solr.client.solrj.impl.CloudSolrServer"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"${solr.url}"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultCollection"</span> <span class="na">value=</span><span class="s">"product"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"zkClientTimeout"</span> <span class="na">value=</span><span class="s">"20000"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"zkConnectTimeout"</span> <span class="na">value=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"solrReindexServer"</span> <span class="na">class=</span><span class="s">"org.apache.solr.client.solrj.impl.CloudSolrServer"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"${solr.url.reindex}"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultCollection"</span> <span class="na">value=</span><span class="s">"product"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"zkClientTimeout"</span> <span class="na">value=</span><span class="s">"20000"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"zkConnectTimeout"</span> <span class="na">value=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"blSearchService"</span>         <span class="na">class=</span><span class="s">"org.broadleafcommerce.core.search.service.solr.ExtSolrSearchServiceImpl"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"solrServer"</span> <span class="na">ref=</span><span class="s">"${solr.source}"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"reindexServer"</span> <span class="na">ref=</span><span class="s">"${solr.source.reindex}"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre>
+</div>
+
+<blockquote>
+  <p>注：上述配置中的defaultCollection的值product对应solr集群的collection名字，根据实际情况修改此处的值。</p>
+</blockquote>
+
+<p>d) 在 core模块中core/src/main/resources/runtime-properties/common-shared.properties添加如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">solr.url</span><span class="p">=</span><span class="s">192.168.56.121</span><span class="se">\:</span><span class="s">2181,192.168.56.122</span><span class="se">\:</span><span class="s">2181,1192.168.56.123</span><span class="se">\:</span><span class="s">2181</span>
+<span class="py">solr.url.reindex</span><span class="p">=</span><span class="s">192.168.56.121</span><span class="se">\:</span><span class="s">2181,192.168.56.122</span><span class="se">\:</span><span class="s">2181,1192.168.56.123</span><span class="se">\:</span><span class="s">2181</span>
+<span class="py">solr.source</span><span class="p">=</span><span class="s">solrServer</span>
+<span class="py">solr.source.reindex</span><span class="p">=</span><span class="s">solrReindexServer</span>
+</code></pre>
+</div>
+
+<h1 id="rebuildindex">4、重写rebuildIndex方法</h1>
+
+<p>在core模块的org.broadleafcommerce.core.search.service.solr包下添加LLSolrIndexServiceImpl，重写源码broadleaf-framework/SolrIndexServiceImpl中的rebuildIndex()方法，屏蔽如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//      // Swap the active and the reindex cores</span>
+<span class="c1">//      shs.swapActiveCores();</span>
+<span class="c1">//      // If we are not in single core mode, we delete the documents for the unused core after swapping</span>
+<span class="c1">//      if (!SolrContext.isSingleCoreMode()) {</span>
+<span class="c1">//          deleteAllDocuments();</span>
+<span class="c1">//      }</span>
+</code></pre>
+</div>
+
+<h1 id="section">5、修改定时任务</h1>
+
+<p>web系统启动时候，会查询数据库中商品，然后重建索引。该功能在applicationContext.xml中已经定义了定时任务，修改rebuildIndexJobDetail中的targetObject，对应rebuildIndex所在的服务类，如下：</p>
+
+<p>~~~xml</p>
+<bean id="rebuildIndexJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="llSolrIndexService" />
+        <property name="targetMethod" value="rebuildIndex" />
+    </bean>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+如果需要手动创建索引，则需要取消applicationContext.xml中定义的定时任务，步骤如下：
+
+  a）去掉如下代码：
+
+~~~xml  
+&lt;bean id="rebuildIndexJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"&gt;
+    &lt;property name="targetObject" ref="blSearchService" /&gt;
+    &lt;property name="targetMethod" value="rebuildIndex" /&gt;
+&lt;/bean&gt;
+&lt;bean id="rebuildIndexTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"&gt;
+    &lt;property name="jobDetail" ref="rebuildIndexJobDetail" /&gt;
+    &lt;property name="startDelay" value="${solr.index.start.delay}" /&gt;
+    &lt;property name="repeatInterval" value="${solr.index.repeat.interval}" /&gt;
+&lt;/bean&gt;
+&lt;bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"&gt;
+    &lt;property name="triggers"&gt;
+     &lt;list&gt;
+        &lt;ref bean="rebuildIndexTrigger" /&gt;
+     &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+</div>
+
+<p>b）编写main方法，打成jar包，然后编写shell脚本，用于手动重建索引或者设置定时任务。该类需要获取一个名称为blSearchService的bean，然后调用该bean的rebuildIndex方法，主要代码如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Resource</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"blSearchService"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">SearchService</span> <span class="n">extSolrSe</span> <span class="n">earchService</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doRebuild</span><span class="p">(</span><span class="o">){</span>
+    <span class="n">extSolrSearchService</span><span class="o">.</span><span class="na">rebuildIndex</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>6、扩展CatalogService</p>
+
+<p>添加如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Resource</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"blSearchService"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">ExtSolrSearchService</span> <span class="n">extSolrSearchService</span><span class="o">;</span>
+</code></pre>
+</div>
+
+<p>修改该类的saveProduct方法如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="nd">@Transactional</span><span class="o">(</span><span class="s">"blTransactionManager"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">Product</span> <span class="nf">saveProduct</span><span class="p">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Product</span> <span class="n">dbProduct</span> <span class="o">=</span> <span class="n">catalogService</span><span class="o">.</span><span class="na">saveProduct</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">extSolrSearchService</span><span class="o">.</span><span class="na">addProductIndex</span><span class="o">(</span><span class="n">dbProduct</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">dbProduct</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2014/03/14/broadleaf-project-with-solrcloud.html">http://blog.javachen.com/2014/03/14/broadleaf-project-with-solrcloud.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2014/03/14/broadleaf-project-with-solrcloud.html">BroadLeaf项目集成SolrCloud</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#search-engine">search-engine</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#solr">solr</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#solrcloud">solrcloud</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#broadleaf">broadleaf</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2014/03/14/broadleaf-project-with-solrcloud.html" data-url="http://blog.javachen.com/2014/03/14/broadleaf-project-with-solrcloud.html" data-title="BroadLeaf项目集成SolrCloud"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2014/03/14/broadleaf-project-with-solrcloud.html'
+      });
+      </script>
+  </body>
+</html>

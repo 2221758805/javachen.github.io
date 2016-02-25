@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>安装和配置Sentry - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2015/04/30/install-and-config-sentry.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/04/29/apache-sentry-architecture.html" title="Apache Sentry架构介绍"><i class="fa fa-angle-double-left"></i>&nbsp;Apache Sentry架构介绍</a></li>
+                
+                
+                <li class="next"><a href="/2015/04/30/test-hive-with-sentry.html" title="测试Hive集成Sentry">测试Hive集成Sentry&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> 安装和配置Sentry  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2015.04.30 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>本文主要记录安装和配置Sentry的过程，关于Sentry的介绍，请参考<a href="/2015/04/29/apache-sentry-architecture.html">Apache Sentry架构介绍</a>。</p>
+
+<h1 id="section">1. 环境说明</h1>
+
+<p>系统环境：</p>
+
+<ul>
+  <li>操作系统：CentOs 6.6</li>
+  <li>Hadoop版本：<code class="highlighter-rouge">CDH5.4</code></li>
+  <li>运行用户：root</li>
+</ul>
+
+<p>这里，我参考<a href="/2013/04/06/install-cloudera-cdh-by-yum.html">使用yum安装CDH Hadoop集群</a>一文搭建了一个测试集群，并选择cdh1节点来安装sentry服务。</p>
+
+<h1 id="section-1">2. 安装</h1>
+
+<p>在cdh1节点上运行下面命令查看Sentry的相关组件有哪些:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum list sentry<span class="k">*</span>
+
+sentry.noarch                        1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6                            @cdh
+sentry-hdfs-plugin.noarch        1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6                            @cdh
+sentry-store.noarch                1.4.0+cdh5.4.0+155-1.cdh5.4.0.p0.47.el6                            @cdh
+</code></pre>
+</div>
+
+<p>以上组件说明：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">sentry</code>：sentry的基本包</li>
+  <li><code class="highlighter-rouge">sentry-hdfs-plugin</code>：hdfs插件</li>
+  <li><code class="highlighter-rouge">sentry-store</code>：sentry store组件</li>
+</ul>
+
+<p>这里安装以上所有组件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>yum install sentry<span class="k">*</span> -y
+</code></pre>
+</div>
+
+<h1 id="section-2">3. 配置</h1>
+
+<p>参考<a href="https://github.com/cloudera/sentry/blob/cdh5-1.4.0_5.4.0/conf/sentry-site.xml.service.template">sentry-site.xml.service.template</a>，来修改Sentry的配置文件 /etc/sentry/conf/sentry-site.xml。</p>
+
+<h2 id="sentry-service-">配置 sentry service 相关的参数</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.admin.group<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>impala,hive,solr,hue<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.allow.connect<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>impala,hive,solr,hue<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.verify.schema.version<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>false<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.reporting<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>JMX<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.server.rpc-address<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>cdh1<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.server.rpc-port<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>8038<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.web.enable<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+</code></pre>
+</div>
+
+<p>如果需要使用kerberos认证，则还需要配置以下参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.security.mode<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>kerberos<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+       <span class="nt">&lt;name&gt;</span>sentry.service.server.principal<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.service.server.keytab<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="sentry-store-">配置 sentry store 相关参数</h2>
+
+<p>sentry store可以使用两种方式，如果使用基于SimpleDbProviderBackend的方式，则需要设置jdbc相关的参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.store.jdbc.url<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>jdbc:postgresql://cdh1:5432/sentry<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.store.jdbc.driver<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>org.postgresql.Driver<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.store.jdbc.user<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>sentry<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.store.jdbc.password<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>sentry<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+</code></pre>
+</div>
+
+<p>Sentry store的组映射<code class="highlighter-rouge">sentry.store.group.mapping</code>有些两种配置方式：<code class="highlighter-rouge">org.apache.sentry.provider.common.HadoopGroupMappingService</code>或者<code class="highlighter-rouge">org.apache.sentry.provider.file.LocalGroupMapping</code>，当使用后者的时候，还需要配置<code class="highlighter-rouge">sentry.store.group.mapping.resource</code>参数，即设置Policy file的路径。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.store.group.mapping<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>org.apache.sentry.provider.common.HadoopGroupMappingService<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.store.group.mapping.resource<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span> <span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;description&gt;</span> Policy file for group mapping. Policy file path for local group mapping, when sentry.store.group.mapping is set to LocalGroupMapping Service class.<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="section-3">配置客户端的参数：</h2>
+
+<p>配置Sentry和hive集成时的服务名称，默认值为<code class="highlighter-rouge">HS2</code>，这里设置为server1：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>sentry.hive.server<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>server1<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="section-4">初始化数据库</h2>
+
+<p>如果配置 sentry store 使用 <code class="highlighter-rouge">posrgres</code> 数据库，当然你也可以使用其他的数据库，则需要创建并初始化数据库。数据库的创建过程，请参考 <a href="/2013/08/02/hadoop-install-script/">Hadoop自动化安装shell脚本</a>，下面列出关键脚本。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yum install postgresql-server postgresql-jdbc -y
+
+ln -s /usr/share/java/postgresql-jdbc.jar /usr/lib/hive/lib/postgresql-jdbc.jar
+ln -s /usr/share/java/postgresql-jdbc.jar /usr/lib/sentry/lib/postgresql-jdbc.jar
+
+su -c <span class="s2">"cd ; /usr/bin/pg_ctl start -w -m fast -D /var/lib/pgsql/data"</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">create user sentry with password 'sentry'; </span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">drop database sentry;</span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">CREATE DATABASE sentry owner=sentry;</span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/psql --command </span><span class="se">\"</span><span class="s2">GRANT ALL privileges ON DATABASE sentry TO sentry;</span><span class="se">\"</span><span class="s2"> "</span> postgres
+su -c <span class="s2">"cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsql/data"</span> postgres
+</code></pre>
+</div>
+
+<p>然后，修改 /var/lib/pgsql/data/pg_hba.conf 内容如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+
+# "local" is for Unix domain socket connections only
+local   all         all                               md5
+# IPv4 local connections:
+#host    all         all         0.0.0.0/0             trust
+host    all         all         127.0.0.1/32          md5
+
+# IPv6 local connections:
+#host    all         all         ::1/128               nd5
+</code></pre>
+</div>
+
+<p>如果是第一次安装，则初始化 sentry 的元数据库：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sentry --command schema-tool --conffile /etc/sentry/conf/sentry-site.xml --dbType postgres --initSchema
+Sentry store connection URL:     jdbc:postgresql://cdh1/sentry
+Sentry store Connection Driver :     org.postgresql.Driver
+Sentry store connection User:    sentry
+Starting sentry store schema initialization to 1.4.0-cdh5-2
+Initialization script sentry-postgres-1.4.0-cdh5-2.sql
+Connecting to jdbc:postgresql://cdh1/sentry
+Connected to: PostgreSQL <span class="o">(</span>version 8.4.18<span class="o">)</span>
+Driver: PostgreSQL Native Driver <span class="o">(</span>version PostgreSQL 9.0 JDBC4 <span class="o">(</span>build 801<span class="o">))</span>
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+Autocommit status: <span class="nb">true
+</span>1 row affected <span class="o">(</span>0.002 seconds<span class="o">)</span>
+No rows affected <span class="o">(</span>0.004 seconds<span class="o">)</span>
+Closing: 0: jdbc:postgresql://cdh1/sentry
+Initialization script completed
+Sentry schemaTool completed
+</code></pre>
+</div>
+
+<p>如果是更新，则执行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sentry --command schema-tool --conffile /etc/sentry/conf/sentry-site.xml --dbType postgres --upgradeSchema
+</code></pre>
+</div>
+
+<h1 id="section-5">4. 启动</h1>
+
+<p>在cdh1上启动sentry-store服务：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>/etc/init.d/sentry-store start
+</code></pre>
+</div>
+
+<p>查看日志：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>cat /var/log/sentry/sentry-store.out
+</code></pre>
+</div>
+
+<p>查看sentry的web监控界面<a href="http://cdh1:51000/">http://cdh1:51000/</a>。</p>
+
+<h1 id="section-6">5. 参考文章</h1>
+
+<ul>
+  <li><a href="http://www.cloudera.com/content/cloudera/en/documentation/cloudera-manager/v4-8-0/Cloudera-Manager-Managing-Clusters/cmmc_sentry_config.html">Setting Up Hive Authorization with Sentry</a></li>
+</ul>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2015/04/30/install-and-config-sentry.html">http://blog.javachen.com/2015/04/30/install-and-config-sentry.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2015/04/30/install-and-config-sentry.html">安装和配置Sentry</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#hadoop">hadoop</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#sentry">sentry</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2015/04/30/install-and-config-sentry.html" data-url="http://blog.javachen.com/2015/04/30/install-and-config-sentry.html" data-title="安装和配置Sentry"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2015/04/30/install-and-config-sentry.html'
+      });
+      </script>
+  </body>
+</html>

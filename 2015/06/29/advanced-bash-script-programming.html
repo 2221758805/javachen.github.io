@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>高级Bash脚本编程入门 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2015/06/29/advanced-bash-script-programming.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/06/26/spark-shell-command.html" title="spark-shell脚本分析"><i class="fa fa-angle-double-left"></i>&nbsp;spark-shell脚本分析</a></li>
+                
+                
+                <li class="next"><a href="/2015/06/30/jekyll-kramdown-config.html" title="Jekyll kramdown配置">Jekyll kramdown配置&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> 高级Bash脚本编程入门  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2015.06.29 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>最近在看《Advanced Bash Scripting Guide》这本书，第二章举了一个清除日志的例子，来讲述如何使用Bash进行编程并聊到了一些编程规范。本文主要是基于这部分内容记录我的读书笔记并整理一些相关知识点。</p>
+
+<p>说到清除日志，你可以使用下面命令来完成清除/var/log下的log文件这件事情：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">cd</span> /var/log
+cat /dev/null &gt; messages 
+cat /dev/null &gt; wtmp
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
+</code></pre>
+</div>
+
+<p>更简单的清除日志方法是：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">""</span> &gt;messages 
+<span class="c">#或者</span>
+&gt;messages 
+</code></pre>
+</div>
+
+<blockquote>
+  <p>注意：
+/var/log/messages 记录系统报错信息
+/var/log/wtmp 记录系统登录信息</p>
+</blockquote>
+
+<p>在Bash编程时，脚本通常都是放到一个文件里面，该文件可以有后缀名也可以没有，例如，你可以将该文件命名为cleanlog，然后在文件头声明一个命令解释器，这里是<code class="highlighter-rouge"><span class="c">#!/bin/bash</span></code>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="nv">LOG_DIR</span><span class="o">=</span>/var/log
+<span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
+cat /dev/null &gt; messages
+cat /dev/null &gt; wtmp
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
+<span class="nb">exit</span>
+</code></pre>
+</div>
+
+<p>当然，还可以使用其他的命令行解释器，例如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
+<span class="c">#!/bin/bash</span>
+<span class="c">#!/usr/bin/perl </span>
+<span class="c">#!/usr/bin/tcl </span>
+<span class="c">#!/bin/sed -f</span>
+<span class="c">#!/usr/awk -f</span>
+
+<span class="c">#自删除脚本</span>
+<span class="c">#!/bin/rm</span>
+</code></pre>
+</div>
+
+<p>说明：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">#!</code> 后面的路径必须真实存在，否则运行时会提示<code class="highlighter-rouge">Command not found的错误</code>。</li>
+  <li>在UNIX系统中，在<code class="highlighter-rouge">!</code>后边需要一个空格。</li>
+  <li>如果脚本中还包含有其他的<code class="highlighter-rouge">#!</code>行，那么bash将会把它看成是一个一般的注释行。</li>
+</ul>
+
+<p>上面代码将/var/log定义为变量，这样会比把代码写死好很多，因为如果你可能想修改为其他目录，只需要修改变量的值就可以。</p>
+
+<p>对于/var/log目录，一般用户没有访问权限，故需要使用root用户来运行上面脚本，另外，用户不一定有修改目录的权限，所以需要增强代码，做一些判断。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">LOG_DIR</span><span class="o">=</span>/var/log
+<span class="nv">ROOT_UID</span><span class="o">=</span>0
+<span class="nv">LINES</span><span class="o">=</span>50
+<span class="nv">E_XCD</span><span class="o">=</span>66
+<span class="nv">E_NOTROOT</span><span class="o">=</span>67
+
+<span class="c"># 当然要使用root 用户来运行.</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$UID</span><span class="s2">"</span> -ne <span class="s2">"</span><span class="nv">$ROOT_UID</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Must be root to run this script."</span>
+    <span class="nb">exit</span> <span class="nv">$E_NOTROOT</span>
+<span class="k">fi
+
+</span><span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
+
+<span class="k">if</span><span class="o">[</span> <span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"</span><span class="nv">$LOG_DIR</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Can't change to </span><span class="nv">$LOG_DIR</span><span class="s2">."</span>
+    <span class="nb">exit</span> <span class="nv">$E_XCD</span>
+<span class="k">fi
+
+</span>cat /dev/null &gt; messages
+cat /dev/null &gt; wtmp
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
+
+<span class="c">#返回0表示成功</span>
+<span class="nb">exit </span>0
+</code></pre>
+</div>
+
+<p>上面代码一样定义了一些变量，然后加了两个判断，去检查脚本运行中可能出现的错误并打印错误说明。如果脚本运行错误，则程序会退出并返回一个错误码，不同类型的错误对应的错误码不一样，这样便于识别错误原因；如果脚本运行正常，则正常退出，默认返回码为0。</p>
+
+<p>对于<code class="highlighter-rouge">cd $LOG_DIR</code>操作判断是否执行成功，更有效的做法是：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#使用或操作替代if else判断</span>
+<span class="nb">cd</span> /var/log <span class="o">||</span> <span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">"Cannot change to necessary directory."</span> &gt;&amp;2
+    <span class="nb">exit</span> <span class="nv">$E_XCD</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>通常，我们可能不想全部清除日志，而是保留最后几行日志，这样就需要给脚本传入参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">LOG_DIR</span><span class="o">=</span>/var/log
+<span class="nv">ROOT_UID</span><span class="o">=</span>0
+<span class="nv">LINES</span><span class="o">=</span>50
+<span class="nv">E_XCD</span><span class="o">=</span>66
+<span class="nv">E_NOTROOT</span><span class="o">=</span>67
+
+<span class="c"># 当然要使用root 用户来运行.</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$UID</span><span class="s2">"</span> -ne <span class="s2">"</span><span class="nv">$ROOT_UID</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Must be root to run this script."</span>
+    <span class="nb">exit</span> <span class="nv">$E_NOTROOT</span>
+<span class="k">fi
+
+</span><span class="nb">cd</span> <span class="nv">$LOG_DIR</span>
+
+<span class="k">if</span><span class="o">[</span> <span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"</span><span class="nv">$LOG_DIR</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Can't change to </span><span class="nv">$LOG_DIR</span><span class="s2">."</span>
+    <span class="nb">exit</span> <span class="nv">$E_XCD</span>
+<span class="k">fi</span>
+
+<span class="c"># 测试是否有命令行参数，非空判断</span>
+<span class="k">if</span> <span class="o">[</span> -n <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nv">lines</span><span class="o">=</span><span class="nv">$1</span>
+<span class="k">else
+    </span><span class="nv">lines</span><span class="o">=</span><span class="nv">$LINES</span> <span class="c"># 默认，如果不在命令行中指定</span>
+<span class="k">fi</span>
+
+<span class="c"># 保存log file消息的最后部分</span>
+tail -<span class="nv">$lines</span> messages &gt; mesg.temp
+mv mesg.temp messages
+
+cat /dev/null &gt; wtmp
+<span class="nb">echo</span> <span class="s2">"Logs cleaned up."</span>
+
+<span class="c">#返回0表示成功</span>
+<span class="nb">exit </span>0
+</code></pre>
+</div>
+
+<p>上面使用if else来判断是否有输入参数，一个更好的检测命令行参数的方式是使用正则表达式做判断，以检查输入参数的合法性：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">E_WRONGARGS</span><span class="o">=</span>65 <span class="c"># 非数值参数(错误的参数格式)</span>
+
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">in</span>
+    <span class="s2">""</span> <span class="p">)</span> <span class="nv">lines</span><span class="o">=</span>50;;
+    <span class="k">*</span><span class="o">[</span>!0-9]<span class="k">*</span><span class="o">)</span> <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="sb">`</span>basename <span class="nv">$0</span><span class="sb">`</span><span class="s2"> file-to-cleanup"</span>; <span class="nb">exit</span> <span class="nv">$E_WRONGARGS</span><span class="p">;;</span> 
+    <span class="k">*</span> <span class="p">)</span> <span class="nv">lines</span><span class="o">=</span><span class="nv">$1</span><span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre>
+</div>
+
+<p>编写完脚本之后，你可以使用<code class="highlighter-rouge">sh scriptname</code>或者<code class="highlighter-rouge">bash scriptname</code>来调用这个脚本。不推荐使用<code class="highlighter-rouge">sh &lt;scriptname</code>，因为这禁用了脚本从stdin中读数据的功能。更方便的方法是让脚本本身就具有 可执行权限，通过<code class="highlighter-rouge">chmod</code>命令可以修改。比如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>chmod 555 scriptname  <span class="c">#允许任何人都具有可读和执行权限</span>
+</code></pre>
+</div>
+
+<p>或者：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>chmod +rx scriptname <span class="c">#允许任何人都具有可读和执行权限 </span>
+chmod u+rx scriptname <span class="c">#只给脚本的所有者可读和执行权限</span>
+</code></pre>
+</div>
+
+<p>既然脚本已经具有了可执行权限，现在你可以使用<code class="highlighter-rouge">./scriptname</code>来测试这个脚本了。如果这个脚本以一个<code class="highlighter-rouge">#!</code>行开头，那么脚本将会调用合适的命令解释器来运行。</p>
+
+<p>这样一个简单的脚本就编写完成并能运行了，从这个例子中，我们可以学到bash编程的一些代码规范：</p>
+
+<ul>
+  <li>使用变量</li>
+  <li>脚本运行中，需要做一些异常判断</li>
+</ul>
+
+<p>除此之外，google公司还定义了一份<a href="https://google-styleguide.googlecode.com/svn/trunk/shell.xml">Shell Style Guide</a>，可以仔细阅读并约束自己去遵循这些规范。</p>
+
+<h1 id="section">参考文章</h1>
+
+<ul>
+  <li><a href="http://blog.javachen.com/static/doc/abs-guide/html/index.html">高级Bash脚本编程指南-中文版</a></li>
+</ul>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2015/06/29/advanced-bash-script-programming.html">http://blog.javachen.com/2015/06/29/advanced-bash-script-programming.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2015/06/29/advanced-bash-script-programming.html">高级Bash脚本编程入门</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#devops">devops</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#bash">bash</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2015/06/29/advanced-bash-script-programming.html" data-url="http://blog.javachen.com/2015/06/29/advanced-bash-script-programming.html" data-title="高级Bash脚本编程入门"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2015/06/29/advanced-bash-script-programming.html'
+      });
+      </script>
+  </body>
+</html>

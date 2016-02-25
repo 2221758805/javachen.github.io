@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Hadoop自动化安装shell脚本 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2013/08/02/hadoop-install-script.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2013/08/01/remote-debug-hadoop.html" title="远程调试Hadoop各组件"><i class="fa fa-angle-double-left"></i>&nbsp;远程调试Hadoop各组件</a></li>
+                
+                
+                <li class="next"><a href="/2013/08/17/some-problems-about-hadoop.html" title="使用Hadoop中遇到的一些问题">使用Hadoop中遇到的一些问题&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Hadoop自动化安装shell脚本  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2013.08.02 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>之前写过一些如何安装Cloudera Hadoop的文章，安装hadoop过程中，最开始是手动安装apache版本的hadoop，其次是使用Intel的IDH管理界面安装IDH的hadoop，再然后分别手动和通过cloudera manager安装hadoop，也使用bigtop-util yum方式安装过apache的hadoop。</p>
+
+<p>安装过程中参考了很多网上的文章，解压缩过cloudera的<code class="highlighter-rouge">cloudera-manager-installer.bin</code>，发现并修复了IDH shell脚本中关于puppt的自认为是bug的一个bug，最后整理出了一个自动安装hadoop的shell脚本，脚本托管在github上面: <a href="https://github.com/javachen/hadoop-install">hadoop-install</a>。</p>
+
+<!-- more -->
+
+<h1 id="hadoop">hadoop安装文章</h1>
+<p>博客中所有关于安装hadoop的文章列出如下：</p>
+
+<ol>
+  <li>
+    <p><a href="/2013/03/08/note-about-installing-hadoop-cluster.html">【笔记】Hadoop安装部署</a></p>
+  </li>
+  <li>
+    <p><a href="/2013/03/24/manual-install-Cloudera-hive-CDH.html">手动安装Cloudera Hive CDH</a></p>
+  </li>
+  <li>
+    <p><a href="/2013/03/24/manual-install-Cloudera-hbase-CDH.html">手动安装Cloudera HBase CDH</a></p>
+  </li>
+  <li>
+    <p><a href="/2013/03/24/manual-install-Cloudera-Hadoop-CDH.html">手动安装Cloudera Hadoop CDH</a></p>
+  </li>
+  <li>
+    <p><a href="/2013/03/29/install-impala.html">安装impala过程</a></p>
+  </li>
+  <li>
+    <p><a href="/2013/04/06/install-cloudera-cdh-by-yum.html">从yum安装Cloudera CDH集群</a></p>
+  </li>
+  <li>
+    <p><a href="/2013/06/24/install-cdh-by-cloudera-manager.html">通过Cloudera Manager安装CDH</a></p>
+  </li>
+</ol>
+
+<h1 id="hadoop-install">hadoop-install</h1>
+<p><a href="https://github.com/javachen/hadoop-install">hadoop-install</a>上脚本，all-in-one-install.sh是在一个节点上安装hdfs、hive、yarn、zookeeper和hbase，编写该脚本是为了在本机（fedora19系统）上调试mapreduce、hive和hbase；cluster-install.sh是在多个节点上安装hadoop集群，同样目前完成了hdfs、hive、yarn、zookeeper和hbase的自动安装。</p>
+
+<h1 id="section">脚本片段</h1>
+<p>IDH安装脚本中有一些写的比较好的shell代码片段，摘出如下，供大家学习。</p>
+
+<h2 id="section-1">检测操作系统版本</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>( grep -i "CentOS" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=centos
+( grep -i "Red[[:blank:]]*Hat[[:blank:]]*Enterprise[[:blank:]]*Linux" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=rhel
+( grep -i "Oracle[[:blank:]]*Linux" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=oel
+( grep -i "Asianux[[:blank:]]*Server" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=an
+( grep -i "SUSE[[:blank:]]*Linux[[:blank:]]*Enterprise[[:blank:]]*Server" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=sles
+( grep -i "Fedora" /etc/issue &gt; /dev/null ) &amp;&amp; OS_DISTRIBUTOR=fedora
+
+major_revision=`grep -oP '\d+' /etc/issue | sed -n "1,1p"`
+minor_revision=`grep -oP '\d+' /etc/issue | sed -n "2,2p"`
+OS_RELEASE="$major_revision.$minor_revision"
+</code></pre>
+</div>
+
+<h2 id="root">修改root密码</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo 'redhat'|passwd root --stdin
+</code></pre>
+</div>
+
+<h2 id="dns">修改dns</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Set up nameservers.
+# http://ithelpblog.com/os/linux/redhat/centos-redhat/howto-fix-couldnt-resolve-host-on-centos-redhat-rhel-fedora/
+# http://stackoverflow.com/a/850731/1486325
+echo "nameserver 8.8.8.8" | tee -a /etc/resolv.conf
+echo "nameserver 8.8.4.4" | tee -a /etc/resolv.conf
+</code></pre>
+</div>
+
+<h2 id="section-2">修改操作系统时区</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</code></pre>
+</div>
+
+<h2 id="hosts">修改hosts文件</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat &gt; /etc/hosts &lt;&lt;EOF
+127.0.0.1       localhost
+
+192.168.56.121 cdh1
+192.168.56.122 cdh2
+192.168.56.123 cdh3
+EOF
+</code></pre>
+</div>
+
+<h2 id="ba">去掉b文件中包括a文件的内容</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>grep -vf a b &gt;result.log
+</code></pre>
+</div>
+
+<h2 id="file-max">修改file-max</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo -e "Global file limit ..."
+rst=`grep "^fs.file-max" /etc/sysctl.conf`
+if [ "x$rst" = "x" ] ; then
+	echo "fs.file-max = 727680" &gt;&gt; /etc/sysctl.conf || exit $?
+else
+	sed -i "s:^fs.file-max.*:fs.file-max = 727680:g" /etc/sysctl.conf
+fi
+</code></pre>
+</div>
+
+<h2 id="ssh">生成ssh公要</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[ ! -d ~/.ssh ] &amp;&amp; ( mkdir ~/.ssh ) &amp;&amp; ( chmod 600 ~/.ssh )
+yes|ssh-keygen -f ~/.ssh/id_rsa -t rsa -N "" &amp;&amp; ( chmod 600 ~/.ssh/id_rsa.pub )
+</code></pre>
+</div>
+
+<h2 id="ssh-1">ssh设置无密码登陆</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>set timeout 20
+
+set host [lindex $argv 0]
+set password [lindex $argv 1]
+set pubkey [exec cat /root/.ssh/id_rsa.pub]
+set localsh [exec cat ./config_ssh_local.sh]
+
+#spawn ssh-copy-id -i /root/.ssh/id_rsa.pub root@$host
+spawn ssh root@$host "
+umask 022
+mkdir -p  /root/.ssh
+echo \'$pubkey\' &gt; /root/.ssh/authorized_keys
+echo \'$localsh\' &gt;  /root/.ssh/config_ssh_local.sh
+cd /root/.ssh/; sh config_ssh_local.sh
+"
+expect {
+	timeout exit
+	yes/no  {send "yes\r";exp_continue}
+	assword {send "$password\r"}
+}
+expect eof
+#interact
+</code></pre>
+</div>
+
+<h2 id="javahome">配置JAVA_HOME</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>### JAVA_HOME ###
+if [ -f ~/.bashrc ] ; then
+    sed -i '/^export[[:space:]]\{1,\}JAVA_HOME[[:space:]]\{0,\}=/d' ~/.bashrc
+    sed -i '/^export[[:space:]]\{1,\}CLASSPATH[[:space:]]\{0,\}=/d' ~/.bashrc
+    sed -i '/^export[[:space:]]\{1,\}PATH[[:space:]]\{0,\}=/d' ~/.bashrc
+fi
+echo "" &gt;&gt;~/.bashrc
+echo "export JAVA_HOME=/usr/java/latest" &gt;&gt;~/.bashrc
+echo "export CLASSPATH=.:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar"&gt;&gt;~/.bashrc
+echo "export PATH=\$JAVA_HOME/bin:\$PATH" &gt;&gt; ~/.bashrc
+
+alternatives --install /usr/bin/java java /usr/java/latest 5
+alternatives --set java /usr/java/latest 
+source ~/.bashrc
+</code></pre>
+</div>
+
+<h2 id="section-3">格式化集群</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>su -s /bin/bash hdfs -c 'yes Y | hadoop namenode -format &gt;&gt; /tmp/format.log 2&gt;&amp;1'
+</code></pre>
+</div>
+
+<h2 id="hadoop-1">创建hadoop目录</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>su -s /bin/bash hdfs -c "hadoop fs -chmod a+rw /"
+while read dir user group perm
+do
+     su -s /bin/bash hdfs -c "hadoop fs -mkdir -R $dir &amp;&amp; hadoop fs -chmod -R $perm $dir &amp;&amp; hadoop fs -chown -R $user:$group $dir"
+     echo "."
+done &lt;&lt; EOF
+/tmp hdfs hadoop 1777 
+/tmp/hadoop-yarn mapred mapred 777
+/var hdfs hadoop 755 
+/var/log yarn mapred 1775 
+/var/log/hadoop-yarn/apps yarn mapred 1777
+/hbase hbase hadoop 755
+/user hdfs hadoop 777
+/user/history mapred hadoop 1777
+/user/root root hadoop 777
+/user/hive hive hadoop 777
+EOF
+</code></pre>
+</div>
+
+<h2 id="hivepostgresql">hive中安装并初始化postgresql</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yum install postgresql-server postgresql-jdbc -y &gt;/dev/null
+chkconfig postgresql on
+rm -rf /var/lib/pgsql/data
+rm -rf /var/run/postgresql/.s.PGSQL.5432
+service postgresql initdb
+
+sed -i "s/max_connections = 100/max_connections = 600/" /var/lib/pgsql/data/postgresql.conf
+sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/data/postgresql.conf
+sed -i "s/shared_buffers = 32MB/shared_buffers = 256MB/" /var/lib/pgsql/data/postgresql.conf
+sed -i "s/127.0.0.1\/32/0.0.0.0\/0/" /var/lib/pgsql/data/pg_hba.conf
+
+sudo cat /var/lib/pgsql/data/postgresql.conf | grep -e listen -e standard_conforming_strings
+
+rm -rf /usr/lib/hive/lib/postgresql-jdbc.jar
+ln -s /usr/share/java/postgresql-jdbc.jar /usr/lib/hive/lib/postgresql-jdbc.jar
+
+su -c "cd ; /usr/bin/pg_ctl start -w -m fast -D /var/lib/pgsql/data" postgres
+su -c "cd ; /usr/bin/psql --command \"create user hiveuser with password 'redhat'; \" " postgres
+su -c "cd ; /usr/bin/psql --command \"CREATE DATABASE metastore owner=hiveuser;\" " postgres
+su -c "cd ; /usr/bin/psql --command \"GRANT ALL privileges ON DATABASE metastore TO hiveuser;\" " postgres
+su -c "cd ; /usr/bin/psql -U hiveuser -d metastore -f /usr/lib/hive/scripts/metastore/upgrade/postgres/hive-schema-0.10.0.postgres.sql" postgres
+su -c "cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsql/data" postgres
+</code></pre>
+</div>
+
+<h1 id="section-4">总结</h1>
+
+<p>更多脚本，请关注github：<a href="https://github.com/javachen/hadoop-install">hadoop-install</a>，你可以下载、使用并修改其中代码！</p>
+
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2013/08/02/hadoop-install-script.html">http://blog.javachen.com/2013/08/02/hadoop-install-script.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2013/08/02/hadoop-install-script.html">Hadoop自动化安装shell脚本</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#hadoop">hadoop</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#hadoop">hadoop</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#hive">hive</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#hbase">hbase</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#mapreduce">mapreduce</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2013/08/02/hadoop-install-script.html" data-url="http://blog.javachen.com/2013/08/02/hadoop-install-script.html" data-title="Hadoop自动化安装shell脚本"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2013/08/02/hadoop-install-script.html'
+      });
+      </script>
+  </body>
+</html>

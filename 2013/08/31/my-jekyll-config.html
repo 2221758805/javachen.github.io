@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>我的jekyll配置和修改 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2013/08/31/my-jekyll-config.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2013/08/23/publish-proerties-using-zookeeper.html" title="使用ZooKeeper实现配置同步"><i class="fa fa-angle-double-left"></i>&nbsp;使用ZooKeeper实现配置同步</a></li>
+                
+                
+                <li class="next"><a href="/2013/09/04/how-to-decide-map-number.html" title="Hive中如何确定map数">Hive中如何确定map数&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> 我的jekyll配置和修改  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2013.08.31 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>主要记录使用jekyll搭建博客时的一些配置和修改。</p>
+
+<p>注意：
+&gt;使用时请删除{和%以及{和{之间的空格。</p>
+
+<h1 id="section">预览文章</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>source ~/.bash_profile
+jekyll server
+</code></pre>
+</div>
+
+<h1 id="about-me-">添加about me 边栏</h1>
+
+<p>参考<a href="http://www.the5fire.com/">the5fire的技术博客</a>在index.html页面加入如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;section&gt;
+&lt;h4&gt;About me&lt;/h4&gt;
+&lt;div&gt;
+ 一个Java方案架构师，主要从事hadoop相关工作。&lt;a href="/about.html"&gt;更多信息&lt;/a&gt; 
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;strong&gt;&lt;font color="red"&gt;&lt;a href="/atom.xml" target="_blank"&gt;订阅本站&lt;/a&gt;&lt;/font&gt;&lt;/strong&gt;
+&lt;br/&gt;&lt;br/&gt;
+联系博主：javachen.june[a]gmail.com
+&lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+</div>
+
+<h1 id="about">添加about页面</h1>
+
+<p>在根目录创建about.md并修改，注意：文件开头几行内容如下</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>title: About
+layout: page
+group: navigation
+</code></pre>
+</div>
+
+<h1 id="section-1">设置固定链接</h1>
+
+<p>在 _config.yml 里，找到 permalink，设置如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>permalink: /:categories/:year/:month/:day/:title 
+</code></pre>
+</div>
+
+<h1 id="markdownredcarpet">修改，markdown实现为redcarpet</h1>
+
+<p>首先通过gem安装redcarpet，然后修改_config.yml：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify"]
+</code></pre>
+</div>
+
+<h1 id="section-2">首页添加最近文章</h1>
+
+<p>在index.html页面</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;section&gt;
+&lt;h4&gt;Recent Posts&lt;/h4&gt;
+&lt;ul id="recent_posts"&gt;{ % for rpost in site.posts limit: 15 %}
+&lt;li class="post"&gt;
+&lt;a href=""&gt;&lt;/a&gt;
+&lt;/li&gt;{ % endfor %}
+&lt;/ul&gt;
+&lt;/section&gt;
+</code></pre>
+</div>
+
+<h1 id="section-3">首页为每篇文章添加分类、标签、发表日期以及评论连接</h1>
+
+<p>在index.html页面找到<code class="highlighter-rouge">&lt;h3&gt;&lt;a href="{ { BASE_PATH }}{ { post.url }}"&gt;{ { post.title }}&lt;/a&gt;&lt;/h3&gt;</code>，在下面添加：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> &lt;div class="c9"&gt;
+	Categories：
+		{ %for cg in post.categories % }
+		&lt;a href="/categories.html#-ref"&gt;&lt;/a&gt;
+		{ %if forloop.index &lt; forloop.length % }
+		,
+		{ %endif%}
+		{ %endfor%}
+	|
+	Tags：
+		{ %for cg in post.tags %}
+		&lt;a href="/tags.html#-ref"&gt;&lt;/a&gt;
+		{ %if forloop.index &lt; forloop.length %}
+		,
+		{ %endif%}
+		{ %endfor%}
+	|
+	Time：&lt;time date="{ { post.date|date: '%Y-%m-%d' }}"&gt;&lt;/time&gt;
+	&lt;a href='#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;"&gt;Comments&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
+
+<h1 id="h1h2">修改h1、h2等标题字体</h1>
+
+<p>主要是参考<a href="http://www.ituring.com.cn/">图灵社区</a>的css，在<code class="highlighter-rouge">assets/themes/twitter/css/style.css</code>中添加如下css代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>h1,h2,h3,h4,h5,h6{margin:18px 0 9px;font-family:inherit;font-weight:normal;color:inherit;text-rendering:optimizelegibility;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{font-weight:normal;color:#999999;}
+h1{font-size:30px;line-height:36px;}h1 small{font-size:18px;}
+h2{font-size:24px;line-height:36px;}h2 small{font-size:18px;}
+h3{font-size:18px;line-height:27px;}h3 small{font-size:14px;}
+h4,h5,h6{line-height:18px;}
+h4{font-size:14px;}h4 small{font-size:12px;}
+h5{font-size:12px;}
+h6{font-size:11px;color:#999999;text-transform:uppercase;}
+</code></pre>
+</div>
+
+<h1 id="section-4">添加返回顶部功能</h1>
+
+<p>同样是参考了<a href="http://www.ituring.com.cn/">图灵社区</a>的css和网上的一篇js实现。在<code class="highlighter-rouge">assets/themes/twitter/css/style.css</code>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.backToTop {
+    display: block;
+    width: 40px;
+    height: 32px;
+    font-size: 26px;
+    line-height: 32px;
+    font-family: verdana, arial;
+    padding: 5px 0;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    _position: absolute;
+    right: 10px;
+    bottom: 100px;
+    _bottom: "auto";
+    cursor: pointer;
+    opacity: .6;
+    filter: Alpha(opacity=60);
+}
+</code></pre>
+</div>
+
+<p>在<code class="highlighter-rouge">assets/themes/twitter/js</code>添加jquery和main.js，main.js内容如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>jQuery.noConflict();
+jQuery(document).ready(function(){
+	var backToTopTxt = "▲", backToTopEle = jQuery('&lt;div class="backToTop"&gt;&lt;/div&gt;').appendTo(jQuery("body")).text(backToTopTxt).attr("title","Back top top").click(function() {
+	    jQuery("html, body").animate({ scrollTop: 0 }, 120);
+	}), backToTopFun = function() {
+		var st = jQuery(document).scrollTop(), winh = jQuery(window).height();
+		(st &gt; 200)? backToTopEle.show(): backToTopEle.hide();    
+		//IE6下的定位
+		if (!window.XMLHttpRequest) {
+		    backToTopEle.css("top", st + winh - 166); 
+		}
+	};
+
+	backToTopEle.hide(); 
+    	jQuery(window).bind("scroll", backToTopFun);
+	jQuery('div.main a,div.pic a').attr('target', '_blank');
+});
+</code></pre>
+</div>
+
+<h1 id="section-5">添加文章版权说明</h1>
+
+<p>在<code class="highlighter-rouge">_includes/themes/twitter/post.html</code>中文章主体下面添加如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;hr&gt;
+&lt;div class="copyright"&gt;
+&lt;p&gt;&lt;strong&gt;本文固定链接：&lt;/strong&gt;&lt;a href='{ {page.url}}'&gt;http://blog.javachen.com/2013/08/31/my-jekyll-config.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;原创文章,转载请注明出处：&lt;/strong&gt;&lt;a href='{ {page.url}}'&gt;JavaChen Blog&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
+
+<p>并在<code class="highlighter-rouge">assets/themes/twitter/css/style.css</code>中添加如下css代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.copyright {
+margin: 10px 0;
+padding: 10px 20px;
+line-height: 1;
+border-radius: 5px;
+background: #f5f5f5;
+}
+</code></pre>
+</div>
+
+<h1 id="read-more">添加read more功能</h1>
+<p>参考<a href="http://truongtx.me/2013/05/01/jekyll-read-more-feature-without-any-plugin/">Jekyll - Read More without plugin</a>，在index.html找到 ，然后修改为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">if</span><span class="w"> </span><span class="err">post.content</span><span class="w"> </span><span class="err">contains</span><span class="w"> </span><span class="nt">"&lt;!-- more --&gt;"</span><span class="w"> </span><span class="err">%}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="err">post.content</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">split:</span><span class="nt">"&lt;!-- more --&gt;"</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">first</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">}}</span><span class="w">
+</span><span class="err">&lt;h</span><span class="mi">4</span><span class="err">&gt;&lt;a</span><span class="w"> </span><span class="err">href='</span><span class="p">{</span><span class="w"> </span><span class="err">{post.url</span><span class="p">}</span><span class="err">}'</span><span class="w"> </span><span class="err">title='Read</span><span class="w"> </span><span class="err">more...'&gt;Read</span><span class="w"> </span><span class="err">more...&lt;/a&gt;&lt;/h</span><span class="mi">4</span><span class="err">&gt;</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">else</span><span class="w"> </span><span class="err">%</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="err">post.content</span><span class="p">}</span><span class="err">}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="err">endif</span><span class="w"> </span><span class="err">%</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>然后，在文章中添加<code class="highlighter-rouge">&lt;!-- more --&gt;</code>即可。</p>
+
+<h1 id="section-6">添加搜索栏</h1>
+
+<p>参考<a href="http://truongtx.me/2012/12/28/jekyll-create-simple-search-box/">Jekyll Bootstrap - Create Simple Search box</a>，在<code class="highlighter-rouge">_includes/themes/twitter/default.html</code>导航菜单下面添加：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;form class="navbar-search pull-left" id="search-form"&gt;
+  &lt;input type="text" id="google-search" class="search-query" placeholder="Search"&gt;
+&lt;/form
+</code></pre>
+</div>
+
+<p>添加js：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>jQuery("#search-form").submit(function(){
+	var query = document.getElementById("google-search").value;
+	window.open("http://google.com/search?q=" + query+ "%20site:" + "http://blog.javachen.com");
+});
+</code></pre>
+</div>
+
+<h1 id="section-7">其他</h1>
+
+<ul>
+  <li>添加404页面</li>
+  <li>使用多说评论</li>
+  <li>修改博客主体为宽屏模式</li>
+</ul>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+  <li>添加语法高亮，参考<a href="http://truongtx.me/2012/12/28/jekyll-bootstrap-syntax-highlighting/">Jekyll - Syntax highlighting</a></li>
+</ul>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2013/08/31/my-jekyll-config.html">http://blog.javachen.com/2013/08/31/my-jekyll-config.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2013/08/31/my-jekyll-config.html">我的jekyll配置和修改</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#devops">devops</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#jekyll">jekyll</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2013/08/31/my-jekyll-config.html" data-url="http://blog.javachen.com/2013/08/31/my-jekyll-config.html" data-title="我的jekyll配置和修改"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2013/08/31/my-jekyll-config.html'
+      });
+      </script>
+  </body>
+</html>

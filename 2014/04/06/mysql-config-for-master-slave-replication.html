@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>RHEL系统安装MySQL主备环境 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2014/04/06/mysql-config-for-master-slave-replication.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2014/04/06/install-mysql-on-rhel-system.html" title="RHEL系统安装MySql"><i class="fa fa-angle-double-left"></i>&nbsp;RHEL系统安装MySql</a></li>
+                
+                
+                <li class="next"><a href="/2014/04/07/install-postgresql-on-rhel-system.html" title="RHEL系统安装PostgreSQL">RHEL系统安装PostgreSQL&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> RHEL系统安装MySQL主备环境  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2014.04.06 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <h1 id="section">环境准备</h1>
+
+<ul>
+  <li>操作系统： rhel6.4</li>
+  <li>数据库： percona 5.6.14</li>
+  <li>使用3306端口保证端口未被占用，selinux关闭状态</li>
+</ul>
+
+<h1 id="section-1">原理说明</h1>
+
+<p>mysql的复制（Replication)是一个异步的复制，从一个mysql instance(称之为master)复制到另一个mysql instance(称之为slave).实现整个复制操作主要由三个进程完成的，其中俩个进程在slave(sql进程和io进程），另外一个进程在master（IO进程）上。</p>
+
+<p>要实施复制，首先要打开master端的binary log(bin-log)功能，否则无法实现。因为整个复制过程实际上就是slave从master端获取该日志然后在自己升上完全顺序的执行日志中所记录的各种操作。</p>
+
+<h1 id="section-2">配置说明</h1>
+
+<h2 id="master">1. 配置master并启动</h2>
+
+<p>拷贝配置文件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
+</code></pre>
+</div>
+
+<p>编辑<code class="highlighter-rouge">/etc/my.cnf</code>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[mysqld]
+explicit_defaults_for_timestamp=true   ##开启查询缓存
+# log_bin
+log_bin = mysql-bin
+server_id = 36
+</code></pre>
+</div>
+
+<p>启动mysql服务：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>service mysql start 
+</code></pre>
+</div>
+
+<h2 id="slave">2. 配置slave并启动</h2>
+
+<p>拷贝配置文件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp /usr/share/doc/Percona-Server-server-56-5.6.14/my-default.cnf /etc/my.cnf
+</code></pre>
+</div>
+
+<p>编辑<code class="highlighter-rouge">/etc/my.cnf</code>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[mysqld]
+explicit_defaults_for_timestamp=true 
+log_bin = mysql-bin
+server_id = 37
+relay_log=/var/lib/mysql/mysql-relay-bin ##传送过来的日志存放目录
+log_slave_updates=1
+read_only=1 ##这个参数只对普通用户生效，超级用户和复制用户无效
+</code></pre>
+</div>
+
+<p>启动mysql服务：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>service mysql start 
+</code></pre>
+</div>
+
+<h2 id="section-3">3. 主从分别授权用户</h2>
+
+<p>在master,slave分别执行以下命令：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#mysql
+mysql-&gt;grant replication slave,replication client on *.* to repl@'%' identified by  '123456';
+mysql-&gt;flush priviledges;
+</code></pre>
+</div>
+
+<h2 id="section-4">4. 主库数据备份到从库</h2>
+
+<p>master上运行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># mysqldump -A &gt;all.sql
+</code></pre>
+</div>
+
+<p>slave上运行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># mysql &lt;all.sql
+</code></pre>
+</div>
+
+<h2 id="section-5">5. 根据主状态启动从库</h2>
+
+<p>(1) 查询主库状态</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;show master status \G
+ *************************** 1. row ***************************
+             File: mysql-bin.000001
+         Position: 697
+     Binlog_Do_DB: 
+ Binlog_Ignore_DB: 
+Executed_Gtid_Set: 
+1 row in set (0.00 sec)
+</code></pre>
+</div>
+
+<p>(2) 从库启动复制</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#mysql
+mysql-&gt;change master to
+        -&gt;master_host="192.168.0.114",master_port=3306,master_user="repl",master_password="123456",master_log_file="mysql-bin.000001",master_log_pos=697;
+mysql-&gt;start slave;
+</code></pre>
+</div>
+
+<p>(3) 从库状态</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql&gt; show slave status \G
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 192.168.0.114
+                  Master_User: repl
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000001
+          Read_Master_Log_Pos: 697
+               Relay_Log_File: mysql-relay-bin.000002
+                Relay_Log_Pos: 563
+        Relay_Master_Log_File: mysql-bin.000001
+         ....Exec_Master_Log_Pos: 697
+         ....
+</code></pre>
+</div>
+
+<h2 id="section-6">6. 主从用于复制的进程</h2>
+
+<p>在master上查看进程：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;show processlist
+</code></pre>
+</div>
+
+<p>1个如下状态的进程:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Master has sent all binlog to slave; waiting for binlog to be updated
+</code></pre>
+</div>
+
+<p>在slave上查看进程：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;show processlist
+</code></pre>
+</div>
+
+<p>2个如下状态的进程</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Waiting for master to send event
+Slave has read all relay log; waiting for the slave I/O thread to update it
+</code></pre>
+</div>
+
+<h1 id="section-7">7. 主从状态监控</h1>
+
+<p>常规做法是slave上<code class="highlighter-rouge">show slave status\G</code>中的两个变量的差值（<code class="highlighter-rouge">Read_Master_Log_Pos</code>，<code class="highlighter-rouge">Exec_Master_Log_Pos</code>),也可以使用percona提供的工具包<code class="highlighter-rouge">pt-heartbeat</code>。</p>
+
+<h2 id="percona-tookit-pg-heartbeat">8. Percona-tookit 安装及pg-heartbeat使用</h2>
+
+<p>工具集中包含<code class="highlighter-rouge">pt-heartbeat</code>, 安装依赖perl-DBD-MySQL， perl-IO-Socket-SSL:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>% rpm -ivh percona-toolkit-2.2.6-1.noarch.rpm
+</code></pre>
+</div>
+
+<p><strong>pg-heartbeat功能介绍：</strong></p>
+
+<ul>
+  <li>监控复制延迟</li>
+  <li>测量复制落后时间</li>
+</ul>
+
+<p><em>实现机制：</em></p>
+
+<ul>
+  <li>第一步，pt-heartbeat的–update线程会在指定的时间间隔更新一个时间戳。</li>
+  <li>第二步，pt-heartbeat的–monitor线程或者–check线程连接到从上检查前面更新的时间戳，和主当地时间做比较，得出时间差。</li>
+</ul>
+
+<p><em>使用例子：</em></p>
+
+<p>1）初始化环境，创建一个后台进程定期更新主上的test库heartbeat表,默认是一秒可以–interval指定，执行后会生成一个heartbeat表，test为需要监控的同步库</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pt-heartbeat -D test --update -u repl -p 123456 -h 192.168.0.108 --create-table --daemonize
+</code></pre>
+</div>
+
+<p>2）监控并输出slave落后时间</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pt-heartbeat -D test --monitor -u repl -p 123456 -h 192.168.0.115
+0.00s [  0.00s,  0.00s,  0.00s ]           ###瞬时延迟 [一分钟平均延迟，五分钟平均延迟，十五分钟平均延迟]
+0.00s [  0.00s,  0.00s,  0.00s ]
+0.00s [  0.00s,  0.00s,  0.00s ]
+</code></pre>
+</div>
+
+<p>结果如下 会一直输出,断开一下连接得到如下结果，最后同步</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.00s [  0.34s,  0.07s,  0.02s ]
+0.00s [  0.00s,  0.07s,  0.02s ]
+</code></pre>
+</div>
+
+<p>3）只输出瞬时的差值</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#pt-heartbeat -D test --test -u repl -p 123456 -h 192.168.0.115
+0.00 ###只代表瞬时延迟
+</code></pre>
+</div>
+
+<h2 id="mysql">9. mysql主从互换</h2>
+
+<p>(1) 停止从库复制,从新设置状态</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;stop slave;
+mysql-&gt;reset master;
+mysql-&gt;reset slave;
+</code></pre>
+</div>
+
+<p>(2) 如配置文件相同的情况下，配置文件无需更改。否者主备的配置文件交换。</p>
+
+<p>(3) 原先的主变为备</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql-&gt;reset master;
+mysql-&gt;reset slave;
+</code></pre>
+</div>
+
+<p>从新配置change master to参数</p>
+
+<p>(4) 服务器重启</p>
+
+<p>如原先的主中有bin日志在从上为实现同步，可以认为读取bin日志的内容，在新的主中执行</p>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2014/04/06/mysql-config-for-master-slave-replication.html">http://blog.javachen.com/2014/04/06/mysql-config-for-master-slave-replication.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2014/04/06/mysql-config-for-master-slave-replication.html">RHEL系统安装MySQL主备环境</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#database">database</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#mysql">mysql</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2014/04/06/mysql-config-for-master-slave-replication.html" data-url="http://blog.javachen.com/2014/04/06/mysql-config-for-master-slave-replication.html" data-title="RHEL系统安装MySQL主备环境"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2014/04/06/mysql-config-for-master-slave-replication.html'
+      });
+      </script>
+  </body>
+</html>

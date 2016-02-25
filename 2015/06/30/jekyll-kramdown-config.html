@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Jekyll kramdown配置 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2015/06/30/jekyll-kramdown-config.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+        
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand">
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2015/06/29/advanced-bash-script-programming.html" title="高级Bash脚本编程入门"><i class="fa fa-angle-double-left"></i>&nbsp;高级Bash脚本编程入门</a></li>
+                
+                
+                <li class="next"><a href="/2015/07/06/bash-special-characters.html" title="Bash中的特殊字符">Bash中的特殊字符&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> Jekyll kramdown配置  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2015.06.30 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>之前博客是使用的redcarpet的markdown语法，其在_config.yml中的配置方式为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">markdown</span><span class="pi">:</span> <span class="s">redcarpet</span>
+<span class="s">redcarpet</span><span class="pi">:</span>
+    <span class="s">extensions</span><span class="pi">:</span> <span class="pi">[</span> <span class="s2">"</span><span class="s">fenced_code_blocks"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">hard_wrap"</span><span class="pi">,</span><span class="s2">"</span><span class="s">autolink"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">tables"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">strikethrough"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">superscript"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">with_toc_data"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">highlight"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">prettify"</span><span class="pi">,</span><span class="s2">"</span><span class="s">no_intra_emphasis"</span><span class="pi">]</span>
+</code></pre>
+</div>
+
+<p>这种配置支持使用 ~~~ 高亮代码块、自动链接、表格等特性。</p>
+
+<p>现在，想尝试使用karkdown的语法。kramdown是一个Markdown解析器，它能够正确解释公式内部的符号，不会与Markdown语法冲突，比如不会将^符号变成<sup></sup>标签。</p>
+
+<p>kramdown支持MathJax，见<a href="http://www.pkuwwt.tk/linux/2013-12-03-jekyll-using-mathjax/">Jekyll中使用MathJax</a>。</p>
+
+<p>kramdown默认是支持TOC，你可以进一步设置TOC相关的参数，见 <a href="http://loudou.info/blog/2014/08/01/wei-octopress-tian-jia-toc/">为 Octopress 添加 TOC</a>。</p>
+
+<p>安装kramdown：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install kramdown
+</code></pre>
+</div>
+
+<p>在_config.yml中的配置方式为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">markdown</span><span class="pi">:</span> <span class="s">kramdown</span>
+<span class="s">kramdown</span><span class="pi">:</span>
+  <span class="s">input</span><span class="pi">:</span>  <span class="s">GFM</span>
+  <span class="s">use_coderay</span><span class="pi">:</span> <span class="s">true</span>
+</code></pre>
+</div>
+
+<p>在编写文章时，插入下面代码，渲染之后就可以生成TOC了：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>* TOC
+{:toc}
+</code></pre>
+</div>
+
+<p>krmadown支持和github一样的语法高亮，用三个 ~~~，但是需要安装coderay，而github pages上不支持coderay，所以该方式无法搞定，可行的解决方法是上传本地编译好的html。如果是本地或者自己的空间，可以安装coderay。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install coderay
+</code></pre>
+</div>
+
+<p>使用 ~~~ 引用代码块：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AdView</span> <span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">test</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'admin'</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="bp">True</span>
+</code></pre>
+</div>
+
+<p>更多语法，见<a href="http://blog.will6run.com/tool/2014/11/22/kramdown/">kramdown语法小记</a>。</p>
+
+<p>最后的配置为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">kramdown</span><span class="pi">:</span>
+  <span class="s">input</span><span class="pi">:</span> <span class="s">GFM</span>
+  <span class="s">extensions</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">autolink</span>
+    <span class="pi">-</span> <span class="s">footnotes</span>
+    <span class="pi">-</span> <span class="s">smart</span>
+  <span class="s">use_coderay</span><span class="pi">:</span> <span class="s">true</span>
+  <span class="s">syntax_highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+  <span class="s">coderay</span><span class="pi">:</span>
+    <span class="s">coderay_line_numbers</span><span class="pi">:</span>  <span class="s">nil</span>
+</code></pre>
+</div>
+
+<p>coderay支持的语言有限，并且rouge兼容Pygments，故这里使用rouge：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install rouge
+</code></pre>
+</div>
+
+<h1 id="section">参考文章</h1>
+
+<ul>
+  <li><a href="http://noyobo.com/2014/10/19/jekyll-kramdown-highlight.html">jekyll kramdown 语法高亮配置</a></li>
+  <li><a href="http://www.quts.me/2015/03/05/kramdown-highlight.html">jekyll kramdown 语法高亮</a></li>
+  <li><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-4.html/">Octopress 精益修改 (4)</a></li>
+  <li><a href="http://pikipity.github.io/blog/kramdown-syntax-chinese-1.html">Kramdown 语法文档翻译（一）</a></li>
+  <li><a href="http://www.pchou.info/open-source/2014/07/07/something-about-markdown.html">Markdown的各种扩展</a></li>
+</ul>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2015/06/30/jekyll-kramdown-config.html">http://blog.javachen.com/2015/06/30/jekyll-kramdown-config.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2015/06/30/jekyll-kramdown-config.html">Jekyll kramdown配置</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#devops">devops</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#jekyll">jekyll</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#kramdown">kramdown</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#markdown">markdown</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2015/06/30/jekyll-kramdown-config.html" data-url="http://blog.javachen.com/2015/06/30/jekyll-kramdown-config.html" data-title="Jekyll kramdown配置"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
+">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+                    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=52032901" charset="UTF-8"></script>
+            
+
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2015/06/30/jekyll-kramdown-config.html'
+      });
+      </script>
+  </body>
+</html>
