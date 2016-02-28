@@ -5,6 +5,8 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
       <title>AngularJS基本知识点 - JavaChen Blog</title>
       <meta name="author" content="JavaChen"/>
+      <meta name="description" content="整理 AngularJS 相关的一些知识点，方便快速理解和入门 AngularJS。文中涉及的内容有：AngularJS 指令、控制器、模型和服务定义方法、路由定义等内容，不包括 AngularJS 的介绍、历史以及依赖注入等原理。">
+      <meta name="keywords" content="java,spring,spring mvc,spring boot,mybatis,hibernate,jdbc,hadoop,hive,mapreduce,hbase,hdfs,spark,yarn,impala,presto,impala,sentry,zookeeper,pentaho,kettle,solr,scala,python,javascript,angular,jquery,postgresql">
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       <link rel="canonical" href="http://blog.javachen.com/2015/01/08/basic-concepts-of-angularjs.html" />
@@ -14,7 +16,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-        
+
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -477,7 +479,7 @@ currency(货币)、date(日期)、filter(子串匹配)、json(格式化json对�
 
 <p>过滤器使用示例：</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// 使用currency可以将数字格式化为货币，默认是美元符号，你可以自己传入所需的符号</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// 使用currency可以将数字格式化为货币，默认是美元符号，你可以自己传入所需的符号</span>
 <span class="p">{{</span><span class="nx">num</span> <span class="o">|</span> <span class="nx">currency</span> <span class="err">:</span> <span class="s1">'￥'</span><span class="p">}}</span>
 
 <span class="c1">// 参数用来指定所要的格式，y M d h m s E 分别表示 年 月 日 时 分 秒 星期，你可以自由组合它们。也可以使用不同的个数来限制格式化的位数。另外参数也可以使用特定的描述性字符串，例如“shortTime”将会把时间格式为12:05 pm这样的。</span>
@@ -507,7 +509,7 @@ currency(货币)、date(日期)、filter(子串匹配)、json(格式化json对�
 
 <span class="p">{{</span> <span class="nx">childrenArray</span> <span class="o">|</span> <span class="nx">orderBy</span> <span class="err">:</span> <span class="s1">'age'</span> <span class="p">}}</span>       <span class="c1">//按age属性值进行排序，若是-age，则倒序</span>
 <span class="p">{{</span> <span class="nx">childrenArray</span> <span class="o">|</span> <span class="nx">orderBy</span> <span class="err">:</span> <span class="nx">orderFunc</span> <span class="p">}}</span>   <span class="c1">//按照函数的返回值进行排序</span>
-<span class="p">{{</span> <span class="nx">childrenArray</span> <span class="o">|</span> <span class="nx">orderBy</span> <span class="err">:</span> <span class="p">[</span><span class="s1">'age'</span><span class="p">,</span><span class="s1">'name'</span><span class="p">]</span> <span class="p">}}</span>  <span class="c1">//如果age相同，按照name进行排序</span></code></pre></figure>
+<span class="p">{{</span> <span class="nx">childrenArray</span> <span class="o">|</span> <span class="nx">orderBy</span> <span class="err">:</span> <span class="p">[</span><span class="s1">'age'</span><span class="p">,</span><span class="s1">'name'</span><span class="p">]</span> <span class="p">}}</span>  <span class="c1">//如果age相同，按照name进行排序</span></code></pre></div>
 
 <h2 id="section-6">过滤器使用方式</h2>
 
@@ -525,7 +527,7 @@ currency(货币)、date(日期)、filter(子串匹配)、json(格式化json对�
 
 <p>然后，在模板中使用：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;p&gt;</span>示例数据: {{ a | map }}<span class="nt">&lt;/p&gt;</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;p&gt;</span>示例数据: {{ a | map }}<span class="nt">&lt;/p&gt;</span></code></pre></div>
 
 <h1 id="angularjs-ajax">4. AngularJS Ajax</h1>
 
@@ -605,7 +607,7 @@ currency(货币)、date(日期)、filter(子串匹配)、json(格式化json对�
 
 <p>示例如下：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">""</span> <span class="na">ng-controller=</span><span class="s">"personController"</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">""</span> <span class="na">ng-controller=</span><span class="s">"personController"</span><span class="nt">&gt;</span>
 
 名： <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"person.firstName"</span><span class="nt">&gt;&lt;br&gt;</span>
 姓： <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"person.lastName"</span><span class="nt">&gt;&lt;br&gt;</span>
@@ -626,7 +628,7 @@ currency(货币)、date(日期)、filter(子串匹配)、json(格式化json对�
          <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">x</span><span class="p">.</span><span class="nx">lastName</span><span class="p">;</span>
      <span class="p">};</span>
 <span class="p">}</span>
-<span class="nt">&lt;/script&gt;</span></code></pre></figure>
+<span class="nt">&lt;/script&gt;</span></code></pre></div>
 
 <p>$scope 是一个把 view（一个DOM元素）连结到 controller 上的对象。在我们的 MVC 结构里，这个 $scope 将成为 model，它提供一个绑定到DOM元素（以及其子元素）上的excecution context。</p>
 
@@ -877,8 +879,7 @@ currency(货币)、date(日期)、filter(子串匹配)、json(格式化json对�
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
-">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
 
             

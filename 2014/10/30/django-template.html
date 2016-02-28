@@ -5,6 +5,8 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
       <title>Django中的模板 - JavaChen Blog</title>
       <meta name="author" content="JavaChen"/>
+      <meta name="description" content="主要介绍 Django 中模板相关的知识点，包括模板标签、模板过滤器，以及如何在试图中使用模板等等。">
+      <meta name="keywords" content="java,spring,spring mvc,spring boot,mybatis,hibernate,jdbc,hadoop,hive,mapreduce,hbase,hdfs,spark,yarn,impala,presto,impala,sentry,zookeeper,pentaho,kettle,solr,scala,python,javascript,angular,jquery,postgresql">
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       <link rel="canonical" href="http://blog.javachen.com/2014/10/30/django-template.html" />
@@ -14,7 +16,7 @@
       <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
       <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
       <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
-        
+
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
         <link rel="shortcut icon" href="images/favicon.ico">
@@ -201,17 +203,17 @@
 
 <p>if 标签检查一个变量，如果这个变量为真（即，变量存在，非空，不是布尔值假），系统会显示在 if 和 endif 之间的任何内容，例如：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% if today_is_weekend %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% if today_is_weekend %}
     <span class="nt">&lt;p&gt;</span>Welcome to the weekend<span class="nt">&lt;/p&gt;</span>
-{% endif %}</code></pre></figure>
+{% endif %}</code></pre></div>
 
 <p>else 标签是可选的：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% if today_is_weekend %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% if today_is_weekend %}
     <span class="nt">&lt;p&gt;</span>Welcome to the weekend<span class="nt">&lt;/p&gt;</span>
 {% else %}
     <span class="nt">&lt;p&gt;</span>Get back to work.<span class="nt">&lt;/p&gt;</span>
-{% endif %}</code></pre></figure>
+{% endif %}</code></pre></div>
 
 <p>一些注意事项：</p>
 
@@ -244,35 +246,35 @@
 
 <p>给定一个运动员列表 <code class="highlighter-rouge">athlete_list</code> 变量，我们可以使用下面的代码来显示这个列表：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul&gt;</span>
 {% for athlete in athlete_list %}
     <span class="nt">&lt;li&gt;</span>{{ athlete.name }}<span class="nt">&lt;/li&gt;</span>
 {% endfor %}
-<span class="nt">&lt;/ul&gt;</span></code></pre></figure>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
 <p>给标签增加一个 <code class="highlighter-rouge">reversed</code> 使得该列表被反向迭代：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% for athlete in athlete_list reversed %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% for athlete in athlete_list reversed %}
         <span class="nt">&lt;li&gt;</span>{{ athlete.name }}<span class="nt">&lt;/li&gt;</span>
-{% endfor %}</code></pre></figure>
+{% endfor %}</code></pre></div>
 
 <p>在执行循环之前先检测列表的大小是一个通常的做法，当列表为空时输出一些特别的提示。</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% if athlete_list %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% if athlete_list %}
     {% for athlete in athlete_list %}
         <span class="nt">&lt;p&gt;</span>{{ athlete.name }}<span class="nt">&lt;/p&gt;</span>
     {% endfor %}
 {% else %}
     <span class="nt">&lt;p&gt;</span>There are no athletes. Only computer programmers.<span class="nt">&lt;/p&gt;</span>
-{% endif %}</code></pre></figure>
+{% endif %}</code></pre></div>
 
 <p>因为这种做法十分常见，所以 <code class="highlighter-rouge">for</code> 标签支持一个可选的 empty 分句，通过它我们可以定义当列表为空时的输出内容 下面的例子与之前那个等价：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% for athlete in athlete_list %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% for athlete in athlete_list %}
     <span class="nt">&lt;p&gt;</span>{{ athlete.name }}<span class="nt">&lt;/p&gt;</span>
 {% empty %}
     <span class="nt">&lt;p&gt;</span>There are no athletes. Only computer programmers.<span class="nt">&lt;/p&gt;</span>
-{% endfor %}</code></pre></figure>
+{% endfor %}</code></pre></div>
 
 <p>Django不支持退出循环操作。</p>
 
@@ -282,9 +284,9 @@
   <p>forloop.counter 总是一个表示当前循环的执行次数的整数计数器。 这个计数器是从1开始的，所以在第一次循环时 forloop.counter 将会被设置为1。</p>
 </blockquote>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% for item in todo_list %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% for item in todo_list %}
     <span class="nt">&lt;p&gt;</span>{{ forloop.counter }}: {{ item }}<span class="nt">&lt;/p&gt;</span>
-{% endfor %}</code></pre></figure>
+{% endfor %}</code></pre></div>
 
 <blockquote>
   <p>forloop.counter0 类似于 forloop.counter ，但是它是从0计数的。 第一次执行循环时这个变量会被设置为0。</p>
@@ -304,13 +306,13 @@
 
 <p>ifequal 标签比较两个值，当他们相等时，显示在 ifequal 和 endifequal 之中所有的值。参数可以是硬编码的字符串，随便用单引号或者双引号引起来。</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% ifequal user currentuser %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% ifequal user currentuser %}
     <span class="nt">&lt;h1&gt;</span>Welcome<span class="nt">&lt;/h1&gt;</span>
 {% endifequal %}
 
 {% ifequal section "community" %}
     <span class="nt">&lt;h1&gt;</span>Community<span class="nt">&lt;/h1&gt;</span>
-{% endifequal %}</code></pre></figure>
+{% endifequal %}</code></pre></div>
 
 <p>和 if 类似，ifequal 支持可选的 else 标签。</p>
 
@@ -320,26 +322,26 @@
 
 <p>每当我们使用一次这个标签后，标签中的值就会变化，如上，每使用一次下面的 cycle 标签，输出的就会在 row1 和 row2 之间切换。</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% for o in some_list %}  
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% for o in some_list %}  
     <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">"{% cycle 'row1' 'row2' %}"</span><span class="nt">&gt;</span>  
         ...  
     <span class="nt">&lt;/tr&gt;</span>  
-{% endfor %} </code></pre></figure>
+{% endfor %}</code></pre></div>
 
 <p>一些情况下，我们希望将cycle当做一个变量一样来使用，那么我们可以这样：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;tr&gt;</span>  
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;tr&gt;</span>  
     <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"{% cycle 'row1' 'row2' as rowcolors %}"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/td&gt;</span>  
     <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"{{ rowcolors }}"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/td&gt;</span>  
 <span class="nt">&lt;/tr&gt;</span>  
 <span class="nt">&lt;tr&gt;</span>  
     <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"{% cycle rowcolors %}"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/td&gt;</span>  
     <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"{{ rowcolors }}"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/td&gt;</span>  
-<span class="nt">&lt;/tr&gt;</span> </code></pre></figure>
+<span class="nt">&lt;/tr&gt;</span></code></pre></div>
 
 <p>最后，当出现我们不希望 cycle 主动输出的时候，也就是我么只希望它作为一个变量的时候，我们可以这样设置。</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">cycle</span> <span class="s">'row1'</span> <span class="s">'row2'</span> <span class="k">as</span> <span class="n">rowcolors</span> <span class="n">silent</span> <span class="o">%</span><span class="p">}</span>  </code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">cycle</span> <span class="s">'row1'</span> <span class="s">'row2'</span> <span class="k">as</span> <span class="n">rowcolors</span> <span class="n">silent</span> <span class="o">%</span><span class="p">}</span></code></pre></div>
 
 <h2 id="url">url</h2>
 
@@ -355,11 +357,11 @@
 
 <p>对于上面的定义，可以在模板里通过 hello 名称来应用 <code class="highlighter-rouge">hello/</code> 这个 url。</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'hello' %}"</span><span class="nt">&gt;</span>Hello World<span class="nt">&lt;/a&gt;</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'hello' %}"</span><span class="nt">&gt;</span>Hello World<span class="nt">&lt;/a&gt;</span></code></pre></div>
 
 <p>这样使用的好处是，无论你怎么修改 urlpatterns 的地址，Template 都会随着改变，省事了不少。<strong>在模版中调用url标签的时候，需要添加下面代码：</strong></p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">url</span> <span class="kn">from</span> <span class="nn">future</span> <span class="err">%}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">url</span> <span class="kn">from</span> <span class="nn">future</span> <span class="err">%}</span></code></pre></div>
 
 <p>需要注意的是：name是全局的，你整个 urlpatterns 里只能一个唯一的name。</p>
 
@@ -379,8 +381,8 @@
 
 <p>有两个参数，最终的地址如归档的地址 http://blog.javachen.com/2014/10 ，这时候的标签使用如下：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{%url 'news_archive' 2014  10%}"</span><span class="nt">&gt;</span>2014年10月<span class="nt">&lt;/a&gt;</span> 
-<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{%url 'news_archive' year=2014  month=10%}"</span><span class="nt">&gt;</span>2014年10月<span class="nt">&lt;/a&gt;</span> </code></pre></figure>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{%url 'news_archive' 2014  10%}"</span><span class="nt">&gt;</span>2014年10月<span class="nt">&lt;/a&gt;</span> 
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{%url 'news_archive' year=2014  month=10%}"</span><span class="nt">&gt;</span>2014年10月<span class="nt">&lt;/a&gt;</span></code></pre></div>
 
 <p>当然，在你后台的 views.py 中的方法上也必须有这两个参数。</p>
 
@@ -403,15 +405,15 @@
 
 <p>控制HTML转义，参数是：on 或 off。效果和使用 safe 或 escape 过滤器相同。</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">autoescape</span> <span class="n">on</span> <span class="o">%</span><span class="p">}</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">autoescape</span> <span class="n">on</span> <span class="o">%</span><span class="p">}</span>
     <span class="p">{{</span> <span class="n">body</span> <span class="p">}}</span>
-<span class="p">{</span><span class="o">%</span> <span class="n">endautoescape</span> <span class="o">%</span><span class="p">}</span></code></pre></figure>
+<span class="p">{</span><span class="o">%</span> <span class="n">endautoescape</span> <span class="o">%</span><span class="p">}</span></code></pre></div>
 
 <h2 id="csrftoken">csrf_token</h2>
 
 <p>防止跨站请求伪造。</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"."</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>{% csrf_token %}</code></pre></figure>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"."</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>{% csrf_token %}</code></pre></div>
 
 <h2 id="debug">debug</h2>
 
@@ -425,9 +427,9 @@
 
 <p>例：</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="nb">filter</span> <span class="n">force_escape</span><span class="o">|</span><span class="n">lower</span> <span class="o">%</span><span class="p">}</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="nb">filter</span> <span class="n">force_escape</span><span class="o">|</span><span class="n">lower</span> <span class="o">%</span><span class="p">}</span>
     <span class="n">This</span> <span class="n">text</span> <span class="n">will</span> <span class="n">be</span> <span class="n">HTML</span><span class="o">-</span><span class="n">escaped</span><span class="p">,</span> <span class="ow">and</span> <span class="n">will</span> <span class="n">appear</span> <span class="ow">in</span> <span class="nb">all</span> <span class="n">lowercase</span><span class="o">.</span>
-<span class="p">{</span><span class="o">%</span> <span class="n">endfilter</span> <span class="o">%</span><span class="p">}</span></code></pre></figure>
+<span class="p">{</span><span class="o">%</span> <span class="n">endfilter</span> <span class="o">%</span><span class="p">}</span></code></pre></div>
 
 <blockquote>
   <p>注意： 
@@ -438,17 +440,17 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
 
 <p>输出传入的第一个不是 False 的变量，如果被传递变量都是 False ，则什么也不输出。例：</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">firstof</span> <span class="n">var1</span> <span class="n">var2</span> <span class="n">var3</span> <span class="o">%</span><span class="p">}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="n">firstof</span> <span class="n">var1</span> <span class="n">var2</span> <span class="n">var3</span> <span class="o">%</span><span class="p">}</span></code></pre></div>
 
 <p>等价于:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">var1</span> <span class="o">%</span><span class="p">}</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">var1</span> <span class="o">%</span><span class="p">}</span>
     <span class="p">{{</span> <span class="n">var1</span><span class="o">|</span><span class="n">safe</span> <span class="p">}}</span>
 <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}{</span><span class="o">%</span> <span class="k">if</span> <span class="n">var2</span> <span class="o">%</span><span class="p">}</span>
     <span class="p">{{</span> <span class="n">var2</span><span class="o">|</span><span class="n">safe</span> <span class="p">}}</span>
 <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}{</span><span class="o">%</span> <span class="k">if</span> <span class="n">var3</span> <span class="o">%</span><span class="p">}</span>
     <span class="p">{{</span> <span class="n">var3</span><span class="o">|</span><span class="n">safe</span> <span class="p">}}</span>
-<span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span></code></pre></figure>
+<span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span></code></pre></div>
 
 <h2 id="extends">extends</h2>
 
@@ -456,7 +458,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
 
 <p>例如：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% extends "base.html" %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block css %} 
@@ -467,7 +469,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
 {% block content %}
 <span class="nt">&lt;p&gt;</span>Hello world<span class="nt">&lt;/p&gt;</span>
 {% include "partial/index/product_list.html" %}
-{% endblock %}</code></pre></figure>
+{% endblock %}</code></pre></div>
 
 <p>上面代码中，首先用extends标签声明这个模板继承的父模板（必须保证其为模板中的第一个模板标记）。接着重定义 css 这个 block，在包含了父模板的基础上（block.super）引入了新的 CSS 文件；替换了 content 这个 block。这就是子模板所做的全部工作。</p>
 
@@ -475,7 +477,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
 
 <p>所有的 block 标签告诉模板引擎，子模板可以重载这些部分，如果子模板不重载这些部分，则将按默认的内容显示。例如：</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">{% load staticfiles %}
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% load staticfiles %}
 <span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;head&gt;</span>
     <span class="nt">&lt;title&gt;</span>
@@ -502,7 +504,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
     {% block js %} 
     <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"{% static 'js/jquery.min.js' %}"</span><span class="nt">&gt;&lt;/script&gt;</span>
     {% endblock %}
-<span class="nt">&lt;/body&gt;</span></code></pre></figure>
+<span class="nt">&lt;/body&gt;</span></code></pre></div>
 
 <p>顺便提一下，模板中的 <code class="highlighter-rouge">load staticfiles</code> 表示加载静态资源，这个一般用于加载 CSS、JS 等静态文件时用到</p>
 
@@ -514,7 +516,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
 
 <p>注释使用：</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="c"># This is a comment #}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span><span class="c"># This is a comment #}</span></code></pre></div>
 
 <p>如果要实现多行注释，可以使用 comment 模板标签。</p>
 
@@ -522,23 +524,23 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
 
 <p>模板过滤器是在变量被显示前修改它的值的一个简单方法，过滤器使用管道字符，例如：</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">name</span><span class="o">|</span><span class="n">lower</span> <span class="p">}}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">name</span><span class="o">|</span><span class="n">lower</span> <span class="p">}}</span></code></pre></div>
 
 <p>显示的内容是变量  被过滤器 lower 处理后的结果，它功能是转换文本为小写。</p>
 
 <p>过滤管道可以 <em>套接</em> ：</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">my_list</span><span class="o">|</span><span class="n">first</span><span class="o">|</span><span class="n">upper</span> <span class="p">}}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">my_list</span><span class="o">|</span><span class="n">first</span><span class="o">|</span><span class="n">upper</span> <span class="p">}}</span></code></pre></div>
 
 <p>有些过滤器有参数。 过滤器的参数跟随冒号之后并且总是以双引号包含。 例如：</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">bio</span><span class="o">|</span><span class="n">truncatewords</span><span class="p">:</span><span class="s">"30"</span> <span class="p">}}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">bio</span><span class="o">|</span><span class="n">truncatewords</span><span class="p">:</span><span class="s">"30"</span> <span class="p">}}</span></code></pre></div>
 
 <p>这个将显示变量 bio 的前30个词。</p>
 
 <p>当我们使用了网页编辑器的时候，我们通过编辑器得到的是一串 HTML 代码，如果字节输出，那么 django 会将它默认输出为字符串，从而不能显示出样式。这时候，我们可以使用过滤器来实现我们想要的。</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span><span class="n">myHtml</span><span class="o">|</span><span class="n">safe</span><span class="p">}}</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span><span class="n">myHtml</span><span class="o">|</span><span class="n">safe</span><span class="p">}}</span></code></pre></div>
 
 <p>这样，我们的字符串就被当做 HTML 代码来输出了。safe 表示这段代码是安全的。</p>
 
@@ -553,7 +555,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
   </li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">pub_date</span><span class="o">|</span><span class="n">date</span><span class="p">:</span><span class="s">"F j, Y"</span> <span class="p">}}</span> </code></pre></figure>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{{</span> <span class="n">pub_date</span><span class="o">|</span><span class="n">date</span><span class="p">:</span><span class="s">"F j, Y"</span> <span class="p">}}</span></code></pre></div>
 
 <h1 id="section-4">参考文章</h1>
 
@@ -610,8 +612,7 @@ escape 和safe 过滤器不能接受参数，而使用 autoescape 标签用来�
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="JavaChen Blog
-">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
   	            
 
             
