@@ -23,7 +23,7 @@ git commit -m "update at `date` $msg"
 git push origin master
 
 echo "post sitemap.txt to baidu"
-curl -H 'Content-Type:text/plain' --data-binary @_site/sitemap.txt "http://data.zz.baidu.com/urls?site=blog.javachen.com&token=2CeQfTIrbOgmAqpv"
+curl -H 'Content-Type:text/plain' --data-binary @_site/sitemap.txt "http://data.zz.baidu.com/update?site=blog.javachen.com&token=2CeQfTIrbOgmAqpv"
 
 cd ../javachen.github.io
 git pull

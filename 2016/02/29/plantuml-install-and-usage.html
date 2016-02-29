@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>PlantUML安装和使用 - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="keywords" content="plantuml,uml,java,sublime text"/>
+      <meta name="description" content="主要介绍什么是PlantUML，以及PlantUML的安装和使用。">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2016/02/29/plantuml-install-and-usage.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand"/>
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2016/02/26/source-code-analytic-of-mybatis-configuration.html" title="MyBatis源码分析：Configuration"><i class="fa fa-angle-double-left"></i>&nbsp;MyBatis源码分析：Configuration</a></li>
+                
+                
+                <li class="next disabled"><a href="#">Next <i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> PlantUML安装和使用  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2016.02.29 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <h1 id="plantuml">什么是PlantUML</h1>
+
+<p>PlantUML是一个快速创建UML图形的组件，PlantUML支持的图形有：</p>
+
+<ul>
+  <li>sequence diagram,</li>
+  <li>use case diagram,</li>
+  <li>class diagram,</li>
+  <li>activity diagram,</li>
+  <li>component diagram,</li>
+  <li>state diagram,</li>
+  <li>object diagram,</li>
+  <li>wireframe graphical interface</li>
+</ul>
+
+<p>PlantUML通过简单和直观的语言来定义图形，语法参见<a href="http://plantuml.com/PlantUML_Language_Reference_Guide.pdf">PlantUML Language Reference Guide</a>，它支持很多<a href="http://plantuml.com/running.html">工具</a>，可以生成PNG、SVG、LaTeX和二进制图片。例如，下面的例子是通过<a href="http://plantuml.com/plantuml/">在线示例工具</a>生成的。</p>
+
+<p><img src="http://plantuml.com/plantuml/png/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000" alt="" /></p>
+
+<p>ASCII Art格式：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>     ┌───┐          ┌─────┐
+     │Bob│          │Alice│
+     └─┬─┘          └──┬──┘
+       │    hello      │   
+       │──────────────&gt;│   
+     ┌─┴─┐          ┌──┴──┐
+     │Bob│          │Alice│
+     └───┘          └─────┘
+</code></pre>
+</div>
+
+<p><a href="http://www.planttext.com/planttext">http://www.planttext.com/planttext</a>也是一个类似的导出工具，甚至你可以自建一个服务器生成图片。使用在线生成工具的好处是不用保存图片，可以直接应用生成的图片地址。</p>
+
+<h1 id="section">主页</h1>
+
+<p>官网地址：<a href="http://plantuml.com/">http://plantuml.com/</a>。</p>
+
+<h1 id="section-1">安装</h1>
+
+<p>PlantUML下载地址：<a href="http://plantuml.com/download.html">http://plantuml.com/download.html</a>。你可以下载jar包和java的开发工具集成使用，更多的安装或者集成方式见<a href="http://plantuml.com/running.html">http://plantuml.com/running.html</a>。</p>
+
+<p>对于我来说，有用的是在Chrome上集成<a href="https://chrome.google.com/webstore/detail/plantuml-viewer/legbfeljfbjgfifnkmpoajgpgejojooj">PlantUML插件</a>和在Sublime Text中集成。</p>
+
+<h2 id="sublime-textplantuml">Sublime Text集成PlantUML</h2>
+
+<p>PlantUML依赖<code class="highlighter-rouge">Graphviz</code>，故先安装：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>brew install graphviz
+</code></pre>
+</div>
+
+<p>Sublime Text 的集成使用的是<code class="highlighter-rouge">sublime_diagram_plugin</code>因为默认的包管理中没有，所以需要自己添加源。</p>
+
+<ul>
+  <li>使用 <code class="highlighter-rouge">Command-Shift-P</code> 打开 <code class="highlighter-rouge">Command Palette</code></li>
+  <li>输入 <code class="highlighter-rouge">add repository</code> 找到 <code class="highlighter-rouge">Package Control:Add Repository</code>
+在下方出现的输入框中输入 <a href="https://github.com/jvantuyl/sublime_diagram_plugin.git">https://github.com/jvantuyl/sublime_diagram_plugin.git</a>， 然后回车</li>
+  <li>等待添加完成后再次使用<code class="highlighter-rouge">Command-Shift-P</code>打开<code class="highlighter-rouge">Command Palette</code></li>
+  <li>输入<code class="highlighter-rouge">install package</code>找到<code class="highlighter-rouge">Package Control:Install Package</code></li>
+  <li>等待列表加载完毕，输入<code class="highlighter-rouge">diagram</code>找到<code class="highlighter-rouge">sublime_diagram_plugin</code> 安装</li>
+  <li>重启<code class="highlighter-rouge">Sublime Text</code></li>
+</ul>
+
+<p>重启后可以在<code class="highlighter-rouge">Preferences -&gt; Packages Setting</code>看到<code class="highlighter-rouge">Diagram</code>，默认绑定的渲染快捷键是<code class="highlighter-rouge">super + m</code>也就是<code class="highlighter-rouge">Command + m</code>如果不冲突直接使用即可。</p>
+
+<p>为了简化使用，可以在 Sublime 里配置个快捷键。打开 <code class="highlighter-rouge">Preferences -&gt; Key Binding - User</code>，添加一个快捷键：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="nt">"keys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"alt+d"</span><span class="p">],</span><span class="w"> </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"display_diagrams"</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>上面的代码配置成按住 <code class="highlighter-rouge">Alt + d</code> 来生成 PlantUML 图片，你可以修改成你自己喜欢的按键。</p>
+
+<h1 id="section-2">简单使用</h1>
+
+<p>使用的话比较简单，绘图的内容需要包含在<code class="highlighter-rouge">@startuml</code>和<code class="highlighter-rouge">@enduml</code>中，不然会报错。</p>
+
+<p>在文本中输入以下内容：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>@startuml
+Bob -&gt; Alice : Hello, how are you
+Alice -&gt; Bob : Fine, thank you, and you?
+@enduml
+</code></pre>
+</div>
+
+<p>按<code class="highlighter-rouge">Command + m</code>会在当前工作目录下生成这个图片文件，同时自动弹出窗口显示如下图片。</p>
+
+<p><img src="http://plantuml.com:80/plantuml/png/SyfFKj2rKt3CoKnELR1Iy4ZDoSdNKSZ8BrT8B4fLgCmlvO980TKu0PLQARXbvgNgA9Ha9EPbWwHr51BpKa0CUm00" alt="" /></p>
+
+<p>将其保存为basic.txt之后，可以在命令行运行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">jar</span><span class="o">/</span><span class="n">plantuml</span><span class="o">.</span><span class="na">jar</span> <span class="o">-</span><span class="n">tsvg</span> <span class="n">basic</span><span class="o">.</span><span class="na">txt</span>
+</code></pre>
+</div>
+
+<p>这样会在当前路径生成了名为 basic.svg 的图片。</p>
+
+<p>命令行使用参见：<a href="http://plantuml.sourceforge.net/command_line.html">http://plantuml.sourceforge.net/command_line.html</a> 。</p>
+
+<h1 id="section-3">参考文章</h1>
+
+<ul>
+  <li><a href="http://blog.yourtion.com/use-plantuml-on-mac.html">在 Mac 上使用 PlantUML 高效画图</a></li>
+</ul>
+
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2016/02/29/plantuml-install-and-usage.html">http://blog.javachen.com/2016/02/29/plantuml-install-and-usage.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2016/02/29/plantuml-install-and-usage.html">PlantUML安装和使用</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#devops">devops</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#plantuml">plantuml</a>
+                          
+                            <a class="btn btn-default btn-sm" href="/tags.html#uml">uml</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2016/02/29/plantuml-install-and-usage.html" data-url="http://blog.javachen.com/2016/02/29/plantuml-install-and-usage.html" data-title="PlantUML安装和使用"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Rumblings by a coder on Java、Web、BigData、BI、Python and so on">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+
+            
+            <script>
+              var _hmt = _hmt || [];
+              (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?50bc6f5d9b045b5895ff44f8bbdbc611";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+              })();
+            </script>
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2016/02/29/plantuml-install-and-usage.html'
+      });
+      </script>
+  </body>
+</html>
