@@ -890,7 +890,7 @@ drwxrwxrwt   - yarn   mapred        0 2014-04-19 15:31 /yarn/apps
 </code></pre>
 </div>
 
-<p>##4.3  同步配置文件</p>
+<h2 id="section-16">4.3  同步配置文件</h2>
 
 <p>将配置文件同步到其他节点：</p>
 
@@ -899,7 +899,7 @@ drwxrwxrwt   - yarn   mapred        0 2014-04-19 15:31 /yarn/apps
 </code></pre>
 </div>
 
-<h2 id="section-16">4.4 初始化并启动服务</h2>
+<h2 id="section-17">4.4 初始化并启动服务</h2>
 
 <p>在每个节点上初始化并启动 zookeeper，注意 n 的值需要和 zoo.cfg 中的编号一致。</p>
 
@@ -924,7 +924,7 @@ $ service zookeeper-server start
 </code></pre>
 </div>
 
-<h2 id="section-17">4.5 测试</h2>
+<h2 id="section-18">4.5 测试</h2>
 
 <p>通过下面命令测试是否启动成功：</p>
 
@@ -936,7 +936,7 @@ $ service zookeeper-server start
 
 <p>HBase 依赖 ntp 服务，故需要提前安装好 ntp。</p>
 
-<h2 id="section-18">5.1 安装前设置</h2>
+<h2 id="section-19">5.1 安装前设置</h2>
 
 <p>1）修改系统 ulimit 参数，在 <code class="highlighter-rouge">/etc/security/limits.conf</code> 中添加下面两行并使其生效：</p>
 
@@ -954,7 +954,7 @@ hbase -       nofile  32768
 </code></pre>
 </div>
 
-<h2 id="section-19">5.2 安装</h2>
+<h2 id="section-20">5.2 安装</h2>
 
 <p>在每个节点上安装 master 和 regionserver，如果需要你可以安装 hbase-rest、hbase-solr-indexer、hbase-thrift</p>
 
@@ -962,7 +962,7 @@ hbase -       nofile  32768
 </code></pre>
 </div>
 
-<h2 id="section-20">5.3 修改配置文件</h2>
+<h2 id="section-21">5.3 修改配置文件</h2>
 
 <p>修改 <code class="highlighter-rouge">hbase-site.xml</code>文件，关键几个参数及含义如下：</p>
 
@@ -1049,7 +1049,7 @@ hbase -       nofile  32768
 </code></pre>
 </div>
 
-<h2 id="section-21">5.4 同步配置文件</h2>
+<h2 id="section-22">5.4 同步配置文件</h2>
 
 <p>将配置文件同步到其他节点：</p>
 
@@ -1058,7 +1058,7 @@ hbase -       nofile  32768
 </code></pre>
 </div>
 
-<h2 id="section-22">5.5 创建本地目录</h2>
+<h2 id="section-23">5.5 创建本地目录</h2>
 
 <p>在 hbase-site.xml 配置文件中配置了 <code class="highlighter-rouge">hbase.tmp.dir</code> 值为 <code class="highlighter-rouge">/data/hbase</code>，现在需要在每个 hbase 节点创建该目录并设置权限：</p>
 
@@ -1073,7 +1073,7 @@ hbase -       nofile  32768
 </code></pre>
 </div>
 
-<h2 id="section-23">5.7 测试</h2>
+<h2 id="section-24">5.7 测试</h2>
 
 <p>通过 <a href="http://cdh1:60030/">http://cdh1:60030/</a> 可以访问 RegionServer 页面，然后通过该页面可以知道哪个节点为 Master，然后再通过 60010 端口访问 Master 管理界面。</p>
 
@@ -1336,7 +1336,7 @@ su -c <span class="s2">"cd ; /usr/bin/pg_ctl restart -w -m fast -D /var/lib/pgsq
 </code></pre>
 </div>
 
-<h2 id="section-24">测试</h2>
+<h2 id="section-25">测试</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>hive -e <span class="s1">'create table t(id int);'</span>
 <span class="gp">$ </span>hive -e <span class="s1">'select * from t limit 2;'</span>
@@ -1385,7 +1385,7 @@ ADD JAR /usr/lib/hbase/hbase-server.jar;
 
 <p>以上你也可以在 hive-site.xml 中通过 <code class="highlighter-rouge">hive.aux.jars.path</code> 参数来配置，或者你也可以在 hive-env.sh 中通过 <code class="highlighter-rouge">export HIVE_AUX_JARS_PATH=</code> 来设置。</p>
 
-<h1 id="section-25">7. 参考文章</h1>
+<h1 id="section-26">7. 参考文章</h1>
 
 <ul>
   <li>[1] <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/CDH5-Installation-Guide.html">CDH5-Installation-Guide</a></li>

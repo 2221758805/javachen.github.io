@@ -1,6 +1,8 @@
 
 http://blog.javachen.com/2016/02/29/plantuml-install-and-usage.html
 
+http://blog.javachen.com/2016/02/29/plantuml-class-diagram.html
+
 http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html
 
 http://blog.javachen.com/2016/02/22/profile-usage-in-spring-boot.html

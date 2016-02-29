@@ -11,6 +11,13 @@
   </url>
   
   <url>
+    <loc>http://blog.javachen.com/2016/02/29/plantuml-class-diagram.html</loc>
+    <changefreq>daily</changefreq>
+    <lastmod>Mon, 29 Feb 2016 00:00:00 +0800</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html</loc>
     <changefreq>daily</changefreq>
     <lastmod>Fri, 26 Feb 2016 00:00:00 +0800</lastmod>
