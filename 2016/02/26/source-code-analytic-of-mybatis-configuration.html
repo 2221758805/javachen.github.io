@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>MyBatis源码分析：Configuration - JavaChen Blog</title>
+      <meta name="author" content="JavaChen"/>
+      <meta name="keywords" content="java"/>
+      <meta name="description" content="MyBatis的最基础和常用的是Configuration类，它负责保存MyBatis的一些设置参数。">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html" />
+
+      <link rel="stylesheet" href="/static/contrib/bootstrap/css/bootstrap.min.css" media="all" />
+      <link rel="stylesheet" href="/static/css/style.css" media="all" />
+      <link rel="stylesheet" href="/static/css/pygments.css" media="all" />
+      <link rel="stylesheet" href="/static/contrib/font-awesome/css/font-awesome.min.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="/static/contrib/showup/showup.css" />
+
+        <!-- fav and touch icons  -->
+        <!-- Update these with your own images
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        -->
+
+      <meta name="renderer" content="webkit|ie-stand"/>
+      <meta name="baidu-site-verification" content="3HAhaWRiyR" />
+      <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+      <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+      <meta property="wb:webmaster" content="b6081b2b8ab84c60" />
+    </head>
+
+    <body>
+      <!--[if lte IE 9]>
+<div class="alert alert-warning">
+  <p>Your Internet Explorer is not supported. Please upgrade your Internet Explorer to version 9+, or use latest <a href="http://www.google.com/chrome/" target="_blank" class="alert-link">Google chrome</a>、<a href="http://www.mozilla.org/firefox/" target="_blank" class="alert-link">Mozilla Firefox</a>.</p>
+  <p>If you are using IE 9 or later, make sure you <a href="http://windows.microsoft.com/en-us/internet-explorer/use-compatibility-view#ie=ie-8" target="_blank" class="alert-link">turn off "Compatibility view"</a>.</p>
+</div>
+<![endif]-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">JavaChen Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form id="search-form" class="form-group navbar-form navbar-right" role="search">
+                  <div class="form-group">
+                    <input type="text" name="q" value=""  id="query" class="form-control" placeholder="搜索" required autocomplete="off" ></input>
+                    <input type="submit" class="btn btn-default" value=" Go" ></input>
+                  </div>
+              </form>
+            <ul class="nav navbar-nav">
+              <li><a href="/archive.html" title="Archive"><span class='fa fa-archive fa-2x'></span></a></li>
+              <li><a href="/categories.html" title="Categories"><span class='fa fa-navicon fa-2x'></span></a></li>
+              <li><a href="/tags.html" title="Tags"><span class='fa fa-tags fa-2x'></span></a></li>
+              <li><a href="/about.html" title="About"><span class='fa fa-user fa-2x'></span></a></li>
+              
+              <li><a href="https://github.com/javachen" target="_blank" title="Github"><span class='fa fa-github fa-2x'></span></a></li>
+              
+              
+              
+              
+              
+              <li><a href="http://weibo.com/chenzhijun" target="_blank" title="Weibo"><span class="fa fa-weibo fa-2x"></span></a></li>
+              
+              <li><a href="/rss.xml" target="_blank" title="RSS"><span class='fa fa-rss fa-2x'></span></a></li>
+            </ul>
+        </div>
+
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+      <div id="wrap">
+          <div class="container">
+                 <div id="content">
+          <ul class="pager hidden-print">
+               
+                <li class="previous"><a href="/2016/02/22/profile-usage-in-spring-boot.html" title="Spring Boot Profile使用"><i class="fa fa-angle-double-left"></i>&nbsp;Spring Boot Profile使用</a></li>
+                
+                
+                <li class="next disabled"><a href="#">Next <i class="fa fa-angle-double-right"></i></a></li>
+                
+          </ul>
+
+           <div id="post" class="clearfix">
+              <div id="post-title" class="page-header text-center">
+                  <h1> MyBatis源码分析：Configuration  </h1>
+              </div>
+              <p class="text-muted clearfix">
+                  <span class="pull-right">2016.02.26 | <a href="#comments">Comments</a></span>
+              </p>
+              <div id="qr" class="qrcode visible-lg"></div>
+
+              <div id="post-text">
+                    <p>MyBatis依赖的jar不多，而且代码行数也没多少，其中使用了大量的设计模式，值得好好学习。下图是MyBatis的一张架构图，来自<a href="http://www.imooc.com/article/1291">Java框架篇—Mybatis 入门</a>。</p>
+
+<p><img src="http://img.mukewang.com/55b1dbbd00016b6407090390.png" alt="" /></p>
+
+<p>Mybatis的功能架构分为三层：</p>
+
+<ul>
+  <li>API接口层：提供给外部使用的接口API，开发人员通过这些本地API来操纵数据库。接口层一接收到调用请求就会调用数据处理层来完成具体的数据处理。</li>
+  <li>数据处理层：负责具体的SQL查找、SQL解析、SQL执行和执行结果映射处理等。它主要的目的是根据调用的请求完成一次数据库操作。</li>
+  <li>基础支撑层：负责最基础的功能支撑，包括连接管理、事务管理、配置加载和缓存处理，这些都是共用的东西，将他们抽取出来作为最基础的组件。为上层的数据处理层提供最基础的支撑。</li>
+</ul>
+
+<p>MyBatis整个项目的包结构如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.
+└── org
+    └── apache
+        └── ibatis
+            ├── annotations
+            ├── binding
+            ├── builder
+            ├── cache
+            ├── cursor
+            ├── datasource
+            ├── exceptions
+            ├── executor
+            ├── io
+            ├── jdbc
+            ├── logging
+            ├── mapping
+            ├── parsing
+            ├── plugin
+            ├── reflection
+            ├── scripting
+            ├── session
+            ├── transaction
+            └── type
+</code></pre>
+</div>
+
+<p>MyBatis的最基础和常用的是Configuration类，它负责保存MyBatis的一些设置参数，它依赖或者相关的包有：</p>
+
+<ul>
+  <li>mapping：通过Environment设置应用环境，Environment依赖datasource和transaction包</li>
+  <li>transaction：事务</li>
+  <li>logging：设置日志</li>
+  <li>type：管理type注册器，默认添加了很多常用类的注册器</li>
+  <li>reflection：反射相关基础类</li>
+  <li>cache：管理缓存</li>
+  <li>scripting：运行脚本</li>
+  <li>plugin：管理插件</li>
+  <li>execution：获取execution</li>
+</ul>
+
+<p>Configuration类的所有属性都是protected，其中一些属性是final的，主要提供了两个构造方法：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">this</span><span class="o">();</span>
+  <span class="k">this</span><span class="o">.</span><span class="na">environment</span> <span class="o">=</span> <span class="n">environment</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="nf">Configuration</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"JDBC"</span><span class="o">,</span> <span class="n">JdbcTransactionFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"MANAGED"</span><span class="o">,</span> <span class="n">ManagedTransactionFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"JNDI"</span><span class="o">,</span> <span class="n">JndiDataSourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"POOLED"</span><span class="o">,</span> <span class="n">PooledDataSourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"UNPOOLED"</span><span class="o">,</span> <span class="n">UnpooledDataSourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"PERPETUAL"</span><span class="o">,</span> <span class="n">PerpetualCache</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"FIFO"</span><span class="o">,</span> <span class="n">FifoCache</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"LRU"</span><span class="o">,</span> <span class="n">LruCache</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"SOFT"</span><span class="o">,</span> <span class="n">SoftCache</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"WEAK"</span><span class="o">,</span> <span class="n">WeakCache</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"DB_VENDOR"</span><span class="o">,</span> <span class="n">VendorDatabaseIdProvider</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"XML"</span><span class="o">,</span> <span class="n">XMLLanguageDriver</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"RAW"</span><span class="o">,</span> <span class="n">RawLanguageDriver</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"SLF4J"</span><span class="o">,</span> <span class="n">Slf4jImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"COMMONS_LOGGING"</span><span class="o">,</span> <span class="n">JakartaCommonsLoggingImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"LOG4J"</span><span class="o">,</span> <span class="n">Log4jImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"LOG4J2"</span><span class="o">,</span> <span class="n">Log4j2Impl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"JDK_LOGGING"</span><span class="o">,</span> <span class="n">Jdk14LoggingImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"STDOUT_LOGGING"</span><span class="o">,</span> <span class="n">StdOutImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"NO_LOGGING"</span><span class="o">,</span> <span class="n">NoLoggingImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"CGLIB"</span><span class="o">,</span> <span class="n">CglibProxyFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"JAVASSIST"</span><span class="o">,</span> <span class="n">JavassistProxyFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="n">languageRegistry</span><span class="o">.</span><span class="na">setDefaultDriverClass</span><span class="o">(</span><span class="n">XMLLanguageDriver</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">languageRegistry</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">RawLanguageDriver</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>说明：</p>
+
+<ul>
+  <li>第一个构造方法是通过Environment进行初始化，并调用第二个构造方法，Environment封装了数据源和事务，不同Environment下使用的数据源和事务不一样，例如，实际使用中会有生产和测试环境。</li>
+  <li>第二个构造方法，主要是注册一些别名并设置默认的语言驱动。</li>
+</ul>
+
+<p>Configuration内部维护了以下几种注册器：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">MapperRegistry</code>：管理Mapper接口</li>
+  <li><code class="highlighter-rouge">TypeHandlerRegistry</code>：管理类型处理器</li>
+  <li><code class="highlighter-rouge">TypeAliasRegistry</code>：注册别名，别名都是用的大写</li>
+  <li><code class="highlighter-rouge">LanguageDriverRegistry</code>：管理语言驱动</li>
+</ul>
+
+<p>这些注册器内部都会维护一个或多个map，然后提供注册<code class="highlighter-rouge">register</code>的方法，并且他们都是需要实例化才能使用的，而不是单例的。在一个MyBatis应用的整个生命周期中，只会存在一个Configuration实例。</p>
+
+<p>Configuration内部有一些Map类型的属性：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">protected</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">MappedStatement</span><span class="o">&gt;</span> <span class="n">mappedStatements</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StrictMap</span><span class="o">&lt;</span><span class="n">MappedStatement</span><span class="o">&gt;(</span><span class="s">"Mapped Statements collection"</span><span class="o">);</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Cache</span><span class="o">&gt;</span> <span class="n">caches</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StrictMap</span><span class="o">&lt;</span><span class="n">Cache</span><span class="o">&gt;(</span><span class="s">"Caches collection"</span><span class="o">);</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">ResultMap</span><span class="o">&gt;</span> <span class="n">resultMaps</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StrictMap</span><span class="o">&lt;</span><span class="n">ResultMap</span><span class="o">&gt;(</span><span class="s">"Result Maps collection"</span><span class="o">);</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">ParameterMap</span><span class="o">&gt;</span> <span class="n">parameterMaps</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StrictMap</span><span class="o">&lt;</span><span class="n">ParameterMap</span><span class="o">&gt;(</span><span class="s">"Parameter Maps collection"</span><span class="o">);</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">KeyGenerator</span><span class="o">&gt;</span> <span class="n">keyGenerators</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StrictMap</span><span class="o">&lt;</span><span class="n">KeyGenerator</span><span class="o">&gt;(</span><span class="s">"Key Generators collection"</span><span class="o">);</span>
+
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">XNode</span><span class="o">&gt;</span> <span class="n">sqlFragments</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StrictMap</span><span class="o">&lt;</span><span class="n">XNode</span><span class="o">&gt;(</span><span class="s">"XML fragments parsed from previous mappers"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<p>可以看到，实际上是使用的<code class="highlighter-rouge">StrictMap</code>。每一个<code class="highlighter-rouge">StrictMap</code>都有一个名称，<code class="highlighter-rouge">put</code>和<code class="highlighter-rouge">get</code>操作时需要判断<code class="highlighter-rouge">key</code>是否为空，如果为空，则抛出异常。</p>
+
+<p>Configuration内部有一些Collection类型的属性：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">protected</span> <span class="kd">final</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">XMLStatementBuilder</span><span class="o">&gt;</span> <span class="n">incompleteStatements</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">XMLStatementBuilder</span><span class="o">&gt;();</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">CacheRefResolver</span><span class="o">&gt;</span> <span class="n">incompleteCacheRefs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">CacheRefResolver</span><span class="o">&gt;();</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">ResultMapResolver</span><span class="o">&gt;</span> <span class="n">incompleteResultMaps</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">ResultMapResolver</span><span class="o">&gt;();</span>
+<span class="kd">protected</span> <span class="kd">final</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">MethodResolver</span><span class="o">&gt;</span> <span class="n">incompleteMethods</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">MethodResolver</span><span class="o">&gt;();</span>
+</code></pre>
+</div>
+
+<blockquote>
+  <p>为什么接口使用的是Collection而不是List？为什么实现类使用的是LinkedList而不是ArrayList？</p>
+</blockquote>
+
+<p>更多的配置参数说明，见<a href="http://www.mybatis.org/mybatis-3/zh/configuration.html">XML 映射配置文件</a>。</p>
+
+<p>Configuration使用的一个例子：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">DataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="n">TransactionFactory</span> <span class="n">transactionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JdbcTransactionFactory</span><span class="o">();</span>
+<span class="n">Environment</span> <span class="n">environment</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Environment</span><span class="o">(</span><span class="s">"Production"</span><span class="o">,</span> <span class="n">transactionFactory</span><span class="o">,</span> <span class="n">dataSource</span><span class="o">);</span>
+<span class="n">Configuration</span> <span class="n">configuration</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">(</span><span class="n">environment</span><span class="o">);</span>
+<span class="n">configuration</span><span class="o">.</span><span class="na">setLazyLoadingEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+<span class="n">configuration</span><span class="o">.</span><span class="na">getTypeAliasRegistry</span><span class="o">().</span><span class="na">registerAlias</span><span class="o">(</span><span class="n">Blog</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">configuration</span><span class="o">.</span><span class="na">addMapper</span><span class="o">(</span><span class="n">BlogMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">configuration</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<p>总结：</p>
+
+<p>Configuration类保存着MyBatis的所有配置参数，并以此为入口为其他服务，如缓存、执行器等等，提供了一些接口，这样方便集中管理和维护代码，但似乎又违背了单一原则？所有配置参数都可以通过Configuration来设置，意味着所有的配置都是可替代的，这样就非常灵活了。</p>
+
+<h1 id="section">参考文章</h1>
+
+<ul>
+  <li><a href="http://www.imooc.com/article/1291">Java框架篇—Mybatis 入门</a></li>
+  <li><a href="http://sukerz.scse.cn/index.php/2016/02/01/mybatis-framework/">【mybatis源码解析】整体架构解析</a></li>
+</ul>
+
+                    <br/>
+                    <div class="well">
+                        原创文章，转载请注明： 转载自<a href="http://blog.javachen.com">JavaChen Blog</a>，作者：<a href="http://blog.javachen.com/about.html">JavaChen</a><br/>
+                        本文链接地址：<a href="/2016/02/26/source-code-analytic-of-mybatis-configuration.html">http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html</a><br/>
+                        本文基于<a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名2.5中国大陆许可协议</a>发布，欢迎转载、演绎或用于商业目的，但是必须保留本文署名和文章链接。
+                        如您有任何疑问或者授权方面的协商，请邮件联系我</a>。
+                    </div>
+                    <div class="col-md-6">
+                      <p class="text-success hidden-print"><i class="fa fa-external-link"></i> <a href="/2016/02/26/source-code-analytic-of-mybatis-configuration.html">MyBatis源码分析：Configuration</a></p>
+                    </div>
+                    <div class="col-md-6">
+                       <p class="meta hidden-print pull-right">
+                        
+                            <i class="fa fa-folder-open"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/categories.html#java">java</a>
+                          
+                        
+                        
+                            <i class="fa fa-tags"></i>
+                            
+                            <a class="btn btn-default btn-sm" href="/tags.html#mybatis">mybatis</a>
+                          
+                        </p>
+                    </div>
+               </div><!--#post-text-->
+          </div><!--#post-->
+      </div> <!--#content-->
+
+      <div id="post-comment" class="hidden-print">
+      
+<div id="comments">
+  <div class="ds-thread" data-thread-key="/2016/02/26/source-code-analytic-of-mybatis-configuration.html" data-url="http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html" data-title="MyBatis源码分析：Configuration"></div>
+</div>
+
+
+
+      </div>
+
+
+          </div>
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+      </div>
+      <div id="footer">
+          <div class="container hidden-print">
+              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Rumblings by a coder on Java、Web、BigData、BI、Python and so on">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+  	            
+
+            
+            <script>
+              var _hmt = _hmt || [];
+              (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?50bc6f5d9b045b5895ff44f8bbdbc611";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+              })();
+            </script>
+            
+    </p>
+          </div>
+      </div>
+
+      <script type="text/javascript" src="/static/contrib/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/qrcode/jquery.qrcode.min.js"></script>
+      <script type="text/javascript" src="/static/contrib/showup/showup.js"></script>
+      <script type="text/javascript" src="/static/js/core.js"></script>
+      
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"javachen"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      
+
+      <script type="text/javascript">
+      $('#qr').qrcode({
+          width: 128,
+          height: 128,
+          text: 'http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html'
+      });
+      </script>
+  </body>
+</html>

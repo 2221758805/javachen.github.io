@@ -4,6 +4,13 @@
   xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">
   
   <url>
+    <loc>http://blog.javachen.com/2016/02/26/source-code-analytic-of-mybatis-configuration.html</loc>
+    <changefreq>daily</changefreq>
+    <lastmod>Fri, 26 Feb 2016 00:00:00 +0800</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.javachen.com/2016/02/22/profile-usage-in-spring-boot.html</loc>
     <changefreq>daily</changefreq>
     <lastmod>Mon, 22 Feb 2016 00:00:00 +0800</lastmod>
