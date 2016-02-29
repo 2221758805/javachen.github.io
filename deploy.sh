@@ -26,7 +26,7 @@ echo "post sitemap.txt to baidu"
 curl -H 'Content-Type:text/plain' --data-binary @_site/sitemap.txt "http://data.zz.baidu.com/urls?site=blog.javachen.com&token=2CeQfTIrbOgmAqpv"
 
 cd ../javachen.github.io
-
+git pull
 rm -rf {20*,page*,*.html,*.xml,*.txt,*.sh}
 cp -r ../javachen-blog/_site/* .
 
@@ -35,7 +35,7 @@ git commit -m "update at `date` $msg"
 git push origin master
 
 cd ../javachen.gitcafe.io
-
+git pull
 rm -rf {20*,page*,*.html,*.xml,*.txt,*.sh}
 cp -r ../javachen-blog/_site/* .
 
