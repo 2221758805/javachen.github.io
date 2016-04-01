@@ -345,11 +345,10 @@ hive.error.on.empty.partition
 
 <p>扩展语法（多个insert）：</p>
 
-<p>~~~~~~
-FROM from_statement
+<pre><code class="language-~~~">FROM from_statement
 INSERT OVERWRITE [LOCAL] DIRECTORY directory1 select_statement1
-[INSERT OVERWRITE [LOCAL] DIRECTORY directory2 select_statement2] …
-~~~</p>
+[INSERT OVERWRITE [LOCAL] DIRECTORY directory2 select_statement2] ...
+</code></pre>
 
 <p>row_format相关语法：</p>
 

@@ -943,12 +943,12 @@ values_list 函数</p>
  
   <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
     <span class="n">db_table</span> <span class="o">=</span> <span class="s">"Student"</span>
- <span class="o">~~~</span>   
+</code></pre>
+</div>
 
-<span class="err">方式三：代理模型，为子类增加方法，但不能增加属性</span>
+<p>方式三：代理模型，为子类增加方法，但不能增加属性</p>
 
- <span class="o">~~~</span> <span class="n">python</span>  
-<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
  
 <span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">User</span><span class="p">):</span>
   <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
