@@ -5,6 +5,8 @@ echo `date`
 msg="update:$*"
 
 
+rm -rf .jekyll-metadata
+
 qrsync qiniu-images.json
 
 
