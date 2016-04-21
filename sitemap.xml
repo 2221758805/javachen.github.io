@@ -4,6 +4,20 @@
   xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">
   
   <url>
+    <loc>http://blog.javachen.com/2016/04/21/mybatis-sqlSession-source-code.html</loc>
+    <changefreq>daily</changefreq>
+    <lastmod>Thu, 21 Apr 2016 00:00:00 +0800</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.javachen.com/2016/04/21/how-to-parse-mybatis-configuration.html</loc>
+    <changefreq>daily</changefreq>
+    <lastmod>Thu, 21 Apr 2016 00:00:00 +0800</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.javachen.com/2016/04/01/uml-class-realation.html</loc>
     <changefreq>daily</changefreq>
     <lastmod>Fri, 01 Apr 2016 00:00:00 +0800</lastmod>

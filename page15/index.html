@@ -84,6 +84,20 @@
            <div class="col-md-9">
   
     <div id="home-post">
+      <h4><a href="/2012/02/17/step-error-handling-in-kettle.html"><strong>Kettle中定义错误处理</strong></a>  <small>2012.02.17</small></h4>
+      <div id="home-post-text">
+         在kettle执行的过程中，如果遇到错误，kettle会停止运行。在某些时候，并不希望kettle停止运行，这时候可以使用错误处理（Step Error Handling）。错误处理允许你配置一个步骤来取代出现错误时停止运行一个转换，出现错误的记录行将会传递给另一个步骤。在Step error handling settings对话框里，需要设置启用错误处理。
+      </div>
+    </div>
+   
+    <div id="home-post">
+      <h4><a href="/2012/02/14/this-expression-of-jsf-el.html"><strong>JSF中EL表达式之this扩展</strong></a>  <small>2012.02.14</small></h4>
+      <div id="home-post-text">
+         本篇文章来自以前公司的一套jsf+seam+Hibernate的一套框架，其对jsf进行了一些改进，其中包括:EL表达式中添加this，通过jsf的渲染实现权限控制到按钮等等。JSF表达式中添加this，主要是为了在facelets页面使用this关键字引用（JSF自动查找）到当前页面对应的pojo类，详细说明见下午。因为，本文的文章是公司同事整理的，本文作者仅仅是将其分享出来，供大家参考思路，如果有什么不妥的话，请告知。
+      </div>
+    </div>
+   
+    <div id="home-post">
       <h4><a href="/2012/01/05/add-primary-keys-and-indexes-when-migrating-datas-whith-kettle.html"><strong>使用Kettle数据迁移添加主键和索引</strong></a>  <small>2012.01.05</small></h4>
       <div id="home-post-text">
          Kettle是一款国外开源的etl工具，纯java编写，绿色无需安装，主要用于<strong>数据抽取、转换、装载</strong>。kettle兼容了市面上几十种数据库，故用kettle来做数据库的迁移视乎是个不错的选择。kettle的数据抽取主要在于抽取数据，而没有考虑数据库的<strong>函数、存储过程、视图、表结构以及索引、约束</strong>等等，而这些东西恰恰都是数据迁移需要考虑的事情。当然，如果在不考虑数据库中的函数、存储过程、视图的情况下，使用kettle进行数据的迁移还算是一个可行的方案。
@@ -174,20 +188,6 @@
       </div>
     </div>
    
-    <div id="home-post">
-      <h4><a href="/2011/06/26/opennebula-2-2-features.html"><strong>OpenNebula 2.2的特性</strong></a>  <small>2011.06.26</small></h4>
-      <div id="home-post-text">
-         OpenNebula 2.2的特性
-      </div>
-    </div>
-   
-    <div id="home-post">
-      <h4><a href="/2011/06/22/the-technology-used-in-eucalyptus.html"><strong>Eucalyptus使用的技术</strong></a>  <small>2011.06.22</small></h4>
-      <div id="home-post-text">
-         Eucalyptus使用的技术
-      </div>
-    </div>
-   
     <!-- Pagination links -->
     <div class="pagination pull-right">
       <li><a href="/">Home</a></li>
@@ -231,7 +231,7 @@
     <li><a href="/categories.html#impala">impala</a>  (6)</li>
     
     
-    <li><a href="/categories.html#java">java</a>  (33)</li>
+    <li><a href="/categories.html#java">java</a>  (35)</li>
     
     
     <li><a href="/categories.html#mahout">mahout</a>  (3)</li>
@@ -264,6 +264,10 @@
   <h3>Recently Posts</h3>
   <ul>
     
+    <li><a href="/2016/04/21/mybatis-sqlSession-source-code.html" title="MyBatis源码分析：SqlSession">MyBatis源码分析：SqlSession</a></li>
+    
+    <li><a href="/2016/04/21/how-to-parse-mybatis-configuration.html" title="MyBatis源码分析：如何解析配置文件">MyBatis源码分析：如何解析配置文件</a></li>
+    
     <li><a href="/2016/04/01/uml-class-realation.html" title="UML类之间关系">UML类之间关系</a></li>
     
     <li><a href="/2016/02/29/plantuml-install-and-usage.html" title="PlantUML安装和使用">PlantUML安装和使用</a></li>
@@ -283,10 +287,6 @@
     <li><a href="/2015/07/09/bash-internal-variables.html" title="Bash内部变量">Bash内部变量</a></li>
     
     <li><a href="/2015/07/08/bash-if-else.html" title="Bash条件判断">Bash条件判断</a></li>
-    
-    <li><a href="/2015/07/07/bash-variable.html" title="Bash中的变量">Bash中的变量</a></li>
-    
-    <li><a href="/2015/07/06/bash-special-characters.html" title="Bash中的特殊字符">Bash中的特殊字符</a></li>
     
   </ul>
 </section>
